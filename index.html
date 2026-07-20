@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experimental Architectures — ckluis</title>
+<meta name="description" content="A field index of experimental architectures, substrates, languages, and tools by Chris Kluis — built in the open.">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f9f4ea; --paper-deep:#f1eadd; --card:#fdfaf3;
+    --ink:#1a160f; --muted:#6e6455; --faint:#a89c86;
+    --line:#ddd3c1; --line-soft:#e7dfce;
+    --accent:#6b4ec2; --accent-ink:#5540a3; --ember:#c56a3a;
+    --shipped:#3f7d55; --spec:#8a6d2f; --local:#9a5a3c;
+    --display:"Fraunces","Charter",Georgia,serif;
+    --body:"Inter","Helvetica Neue",system-ui,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  img,svg{display:block}
+  ::selection{background:rgba(107,78,194,.18)}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(22px,5vw,64px)}
+  .mono{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+
+  .reveal{transition:opacity 1s cubic-bezier(.2,.7,.3,1),transform 1s cubic-bezier(.2,.7,.3,1)}
+  html.js .reveal{opacity:0;transform:translateY(26px)}
+  html.js .reveal.in{opacity:1;transform:none}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    html.js .reveal{opacity:1!important;transform:none!important}
+  }
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:80;background:rgba(249,244,234,.72);backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid var(--line-soft)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{font-family:var(--mono);font-size:13px;letter-spacing:.04em;font-weight:500}
+  .brand b{color:var(--accent-ink)}
+  .navlinks{display:flex;gap:26px}.navlinks a{color:var(--muted);font-size:13.5px;font-weight:500;transition:color .18s}.navlinks a:hover{color:var(--ink)}
+  @media(max-width:860px){.navlinks{display:none}}
+
+  /* ===== HERO 1 ===== */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:96px 0 60px}
+  .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(110% 70% at 80% -8%,rgba(197,106,58,.12),transparent 55%);pointer-events:none}
+  .hero .wrap{position:relative;display:grid;grid-template-columns:1fr 1.06fr;gap:clamp(30px,5vw,74px);align-items:center;width:100%}
+  @media(max-width:900px){.hero .wrap{grid-template-columns:1fr;gap:44px}}
+  .h1eyebrow{color:var(--accent-ink);margin-bottom:26px}
+  .h1eyebrow::before{content:"";display:inline-block;width:26px;height:1.5px;background:var(--ember);vertical-align:middle;margin-right:12px;margin-bottom:4px}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(44px,6.1vw,90px);line-height:.92;letter-spacing:-.03em}
+  h1 .dim{color:var(--muted);display:block}
+  h1 em{font-style:italic;color:var(--accent-ink)}
+  .lede{margin-top:clamp(24px,3vw,36px);max-width:46ch;font-size:clamp(17px,1.5vw,20px);color:#3a342a}
+  .lede b{font-weight:600;color:var(--ink)}
+  .herostats{display:flex;gap:32px;margin-top:36px;flex-wrap:wrap}
+  .herostats .n{font-weight:800;font-size:32px;letter-spacing:-.02em;line-height:1}
+  .herostats .l{color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-top:6px}
+  .cta{display:inline-flex;align-items:center;gap:9px;margin-top:38px;background:var(--ink);color:var(--paper);font-weight:600;font-size:15px;padding:15px 26px;border-radius:100px;transition:transform .18s,background .18s}
+  .cta:hover{transform:translateY(-2px);background:#000}.cta .a{transition:transform .3s}.cta:hover .a{transform:translateY(3px)}
+
+  .specimen{position:relative;aspect-ratio:5/4.5;border-radius:24px;background:
+      radial-gradient(90% 70% at 22% 18%,rgba(107,78,194,.36),transparent 58%),
+      radial-gradient(80% 80% at 84% 90%,rgba(197,106,58,.32),transparent 55%),
+      linear-gradient(160deg,#1c160d,#0f0b06);
+    border:1px solid rgba(255,255,255,.08);overflow:hidden;box-shadow:0 50px 100px -50px rgba(20,16,9,.9),inset 0 1px 0 rgba(255,255,255,.06)}
+  .specimen .lab{position:absolute;left:24px;right:24px;top:22px;display:flex;justify-content:space-between;color:rgba(255,255,255,.42);font-family:var(--mono);font-size:11px;letter-spacing:.14em}
+  .rows{position:absolute;left:8%;right:8%;top:29%;display:flex;flex-direction:column;gap:12px}
+  .rows .r{height:13px;border-radius:7px;background:linear-gradient(90deg,rgba(255,255,255,.16),rgba(255,255,255,.05));position:relative;transform-origin:left center;animation:draw 1s cubic-bezier(.2,.7,.3,1) both}
+  .rows .r:nth-child(1){animation-delay:.1s}.rows .r:nth-child(2){animation-delay:.18s}.rows .r:nth-child(3){animation-delay:.26s}.rows .r:nth-child(4){animation-delay:.34s}.rows .r:nth-child(5){animation-delay:.42s}.rows .r:nth-child(6){animation-delay:.5s}.rows .r:nth-child(7){animation-delay:.58s}
+  .rows .r::after{content:"";position:absolute;right:0;top:0;bottom:0;width:8px;border-radius:6px;background:rgba(255,255,255,.5);filter:blur(2px)}
+  .rows .r.hot{background:linear-gradient(90deg,rgba(180,154,245,.55),rgba(107,78,194,.92));animation:draw 1s cubic-bezier(.2,.7,.3,1) both,pulse 3.4s ease-in-out 1.1s infinite}
+  .rows .r.hot::after{background:#e6dcff}
+  .rows .r.ember{background:linear-gradient(90deg,rgba(197,106,58,.35),rgba(197,106,58,.78))}
+  .specimen::after{content:"";position:absolute;top:0;bottom:0;width:38%;left:-50%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.06),transparent);animation:sweep 7.5s ease-in-out 1.4s infinite;pointer-events:none}
+  .specimen .stat{position:absolute;left:8%;bottom:9%}
+  .specimen .stat .big{font-weight:800;font-size:clamp(48px,6vw,74px);color:#fff;line-height:.9;letter-spacing:-.03em}
+  .specimen .stat .cap{color:rgba(255,255,255,.5);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-top:10px}
+  .specimen .whisper{position:absolute;right:8%;bottom:10%;max-width:15ch;text-align:right;color:rgba(255,255,255,.62);font-family:var(--display);font-style:italic;font-size:15px;line-height:1.35}
+  @keyframes draw{from{transform:scaleX(0);opacity:0}to{transform:scaleX(1);opacity:1}}
+  @keyframes pulse{0%,100%{box-shadow:0 0 18px rgba(123,90,220,.45)}50%{box-shadow:0 0 36px rgba(123,90,220,.85)}}
+  @keyframes sweep{0%{left:-50%}55%,100%{left:120%}}
+  @keyframes drift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,40px)}}
+  @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,-40px)}}
+
+  /* ===== HERO 2 — person (more room) ===== */
+  .person{position:relative;min-height:100vh;display:flex;align-items:center;color:#f2e9da;overflow:hidden;padding:120px 0;
+    background:linear-gradient(125deg,#140f08 0%,#3a2416 30%,#2a1836 58%,#140f08 100%);background-size:300% 300%;animation:drift 22s ease-in-out infinite}
+  .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;pointer-events:none}
+  .orb.a{width:520px;height:520px;background:rgba(107,78,194,.5);top:-120px;left:-80px;animation:float1 20s ease-in-out infinite}
+  .orb.b{width:460px;height:460px;background:rgba(197,106,58,.45);bottom:-140px;right:-60px;animation:float2 24s ease-in-out infinite}
+  .person .wrap{position:relative;z-index:2;max-width:1000px}
+  .person .peyebrow{color:rgba(242,233,218,.6);margin-bottom:30px}
+  .person .peyebrow::before{content:"";display:inline-block;width:26px;height:1.5px;background:var(--ember);vertical-align:middle;margin-right:12px;margin-bottom:4px}
+  .person h2{font-family:var(--display);font-weight:600;font-size:clamp(40px,6.4vw,88px);line-height:1;letter-spacing:-.02em;max-width:16ch}
+  .person h2 .glow{color:#fff;font-style:italic}
+  .person .pbody{margin-top:34px;max-width:60ch;font-size:clamp(17px,1.55vw,21px);color:rgba(242,233,218,.82);line-height:1.62}
+  .person .pbody + .pbody{margin-top:20px}
+  .person .pbody b{color:#fff;font-weight:600}
+  .chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:38px}
+  .chip{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:rgba(242,233,218,.85);border:1px solid rgba(242,233,218,.22);border-radius:100px;padding:8px 15px;background:rgba(255,255,255,.04)}
+  .chip b{color:#fff;font-weight:600}
+
+  /* ===== sections ===== */
+  section.sec{padding:clamp(70px,9vw,128px) 0;position:relative}
+  section.sec.alt{background:linear-gradient(180deg,var(--paper),#f4ecdd)}
+  .sechero{margin-bottom:clamp(40px,5vw,66px)}
+  .sechero .snum{font-family:var(--mono);font-size:13px;letter-spacing:.2em;color:var(--ember)}
+  .sechero h2{font-family:var(--display);font-weight:600;font-size:clamp(38px,6vw,80px);line-height:.98;letter-spacing:-.02em;margin-top:18px}
+  .sechero h2 em{font-style:italic;color:var(--muted);font-weight:400}
+  .sechero p{margin-top:22px;max-width:60ch;font-size:clamp(18px,1.6vw,21px);color:#3a342a;line-height:1.5}
+
+  /* tech pills */
+  .spills{display:flex;gap:7px;flex-wrap:wrap}
+  .spill{font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:var(--paper-deep);white-space:nowrap}
+
+  /* feature tile */
+  .feature{position:relative;border-radius:26px;overflow:hidden;padding:clamp(30px,4vw,56px);display:grid;grid-template-columns:1fr 1.12fr;gap:clamp(24px,4vw,54px);align-items:center;min-height:440px;margin-bottom:clamp(20px,2.4vw,28px);
+    background:radial-gradient(80% 90% at 8% 10%,rgba(107,78,194,.34),transparent 55%),radial-gradient(70% 90% at 96% 100%,rgba(197,106,58,.28),transparent 55%),linear-gradient(155deg,#1a140c,#100b06);
+    border:1px solid rgba(255,255,255,.08);box-shadow:0 50px 100px -55px rgba(20,16,9,.85)}
+  @media(max-width:840px){.feature{grid-template-columns:1fr;gap:28px}}
+  .feature .fL{color:#f2e9da;z-index:2}
+  .fflag{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,233,218,.8);margin-bottom:18px}
+  .fflag .dot{width:7px;height:7px;border-radius:50%;background:#6ee0a0;box-shadow:0 0 10px #6ee0a0}
+  .feature h3{font-family:var(--display);font-weight:600;font-size:clamp(42px,5vw,66px);line-height:1;letter-spacing:-.02em}
+  .feature .ftag{margin-top:18px;font-size:clamp(16px,1.4vw,19px);color:rgba(242,233,218,.8);max-width:42ch;line-height:1.55}
+  .feature .spills{margin-top:22px}
+  .feature .spill{color:rgba(242,233,218,.82);border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.05)}
+  .feature .flinks{display:flex;gap:22px;margin-top:26px;font-family:var(--mono);font-size:13px}
+  .feature .flinks a{color:#e6dcff;position:relative;z-index:3;transition:color .15s}.feature .flinks a:hover{color:#fff}.feature .flinks a.ghost{color:rgba(242,233,218,.62)}
+  .feature .fR{position:relative;z-index:2}
+  .fshot{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 40px 80px -40px rgba(0,0,0,.7);transform:perspective(1400px) rotateY(-9deg) rotateX(3deg);transition:transform .5s cubic-bezier(.2,.7,.3,1);background:#f1eadd}
+  .feature:hover .fshot{transform:perspective(1400px) rotateY(-5deg) rotateX(2deg) translateY(-6px)}
+  .fshot img{width:100%}
+  .feature .fprimary{position:absolute;inset:0;z-index:1}
+
+  /* 2-up framed tiles */
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,2.4vw,28px)}
+  @media(max-width:760px){.tiles{grid-template-columns:1fr}}
+  .tile{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s,border-color .3s}
+  .tile:hover{transform:translateY(-6px);box-shadow:0 34px 70px -34px rgba(26,22,15,.5)}
+  .tile.ship{border-color:rgba(107,78,194,.42)}
+  .tile.ship:hover{border-color:var(--accent);box-shadow:0 34px 74px -32px rgba(107,78,194,.5)}
+  .tshot{position:relative;height:248px;overflow:hidden;background:radial-gradient(80% 90% at 15% 8%,rgba(107,78,194,.22),transparent 55%),radial-gradient(70% 90% at 95% 100%,rgba(197,106,58,.18),transparent 55%),linear-gradient(155deg,#1a140c,#0f0b06)}
+  .tshot .panel{position:absolute;left:7%;right:7%;top:30px;bottom:-46px;border-radius:12px 12px 0 0;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 60px -30px rgba(0,0,0,.75);transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+  .tile:hover .tshot .panel{transform:translateY(-7px)}
+  .tshot .panel img{width:100%;height:100%;object-fit:cover;object-position:top center}
+  .tbody{padding:22px 24px 24px;display:flex;flex-direction:column;gap:11px;flex:1}
+  .ttop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .tname{font-family:var(--display);font-weight:600;font-size:27px;letter-spacing:-.01em}
+  .pill{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid currentColor;font-weight:500;white-space:nowrap}
+  .pill.shipped{color:var(--shipped)}.pill.spec{color:var(--spec)}.pill.local{color:var(--local)}
+  .ttag{color:var(--muted);font-size:14.5px;line-height:1.5;flex:1}
+  .tlinks{display:flex;gap:16px;margin-top:4px;padding-top:14px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:12.5px;font-weight:500}
+  .tlinks a{color:var(--accent-ink);position:relative;z-index:3}.tlinks a:hover{text-decoration:underline}
+  .tlinks .nolink{color:var(--faint)}
+  .tprimary{position:absolute;inset:0;z-index:1}
+
+  /* footer */
+  .foot{position:relative;overflow:hidden;color:#f0e7d8;padding:clamp(96px,13vw,180px) 0 66px;background:linear-gradient(160deg,#140f08,#3a2416 55%,#1a1033);background-size:200% 200%;animation:drift 20s ease-in-out infinite}
+  .foot .orb.fa{width:480px;height:480px;background:rgba(107,78,194,.5);top:-160px;left:-60px;animation:float1 20s ease-in-out infinite}
+  .foot .orb.fb{width:420px;height:420px;background:rgba(197,106,58,.42);bottom:-180px;right:-40px;animation:float2 24s ease-in-out infinite}
+  .foot .wrap{position:relative;z-index:2}
+  .footkick{color:rgba(240,231,216,.6);margin-bottom:24px}
+  .footkick::before{content:"";display:inline-block;width:26px;height:1.5px;background:var(--ember);vertical-align:middle;margin-right:12px;margin-bottom:4px}
+  .foot h2{font-family:var(--display);font-weight:600;font-size:clamp(40px,6.2vw,90px);line-height:1;letter-spacing:-.025em;max-width:15ch}
+  .foot h2 .fade{color:rgba(240,231,216,.42)}
+  .foot h2 .ask{color:#e0c9ff;font-style:italic}
+  .foolede{margin-top:28px;max-width:52ch;font-size:clamp(17px,1.6vw,20px);color:rgba(240,231,216,.8);line-height:1.55}
+  .footcta{display:flex;gap:16px;flex-wrap:wrap;margin-top:36px}
+  .cta2{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:14px 24px;border-radius:100px;transition:transform .18s,background .18s,border-color .18s,color .18s}
+  .cta2:not(.ghost){background:#f6efe2;color:#1a130b}
+  .cta2:not(.ghost):hover{transform:translateY(-2px);background:#fff}
+  .cta2.ghost{border:1px solid rgba(240,231,216,.3);color:rgba(240,231,216,.85)}
+  .cta2.ghost:hover{border-color:rgba(240,231,216,.55);color:#fff;transform:translateY(-2px)}
+  .foot .links{display:flex;gap:24px;margin-top:48px;font-family:var(--mono);font-size:13px;flex-wrap:wrap}
+  .foot .links a{color:rgba(240,231,216,.72)}.foot .links a:hover{color:#fff}
+  .foot .fine{margin-top:38px;font-family:var(--mono);font-size:11.5px;color:rgba(240,231,216,.4)}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <div class="brand"><b>ckluis</b> / experimental-architectures</div>
+  <div class="navlinks"><a href="#substrate">Substrate</a><a href="#frameworks">Frameworks</a><a href="#languages">Languages</a><a href="#interfaces">Interfaces</a><a href="#tools">Tools</a></div>
+</div></nav>
+
+<!-- HERO 1 -->
+<header class="hero"><div class="wrap">
+  <div class="heroL">
+    <div class="mono h1eyebrow reveal">A field of experiments · 2026</div>
+    <h1 class="reveal d1"><span class="dim">Experiments used to be expensive.</span><em>Now they cost a weekend.</em></h1>
+    <p class="lede reveal d2">So I run a lot of them. Everything here is an idea I gave a night or two —
+      substrates, frameworks, languages, and tools, most built solo in spare hours. The barrier to trying
+      something didn't move. <b>It disappeared.</b></p>
+    <div class="herostats reveal d3">
+      <div><div class="n">16</div><div class="l">Experiments</div></div>
+      <div><div class="n">6</div><div class="l">Shipped</div></div>
+      <div><div class="n">5</div><div class="l">Themes</div></div>
+    </div>
+    <a href="#substrate" class="cta reveal d4">See the experiments <span class="a">↓</span></a>
+  </div>
+  <div class="specimen reveal d2" aria-hidden="true">
+    <div class="lab"><span>FIELD INDEX · CK</span><span>SPECIMEN 00 / 16</span></div>
+    <div class="rows">
+      <div class="r" style="width:82%"></div><div class="r" style="width:64%"></div>
+      <div class="r hot" style="width:93%"></div><div class="r" style="width:47%"></div>
+      <div class="r ember" style="width:71%"></div><div class="r" style="width:58%"></div>
+      <div class="r" style="width:38%"></div>
+    </div>
+    <div class="stat"><div class="big">16</div><div class="cap">experiments · 6 shipped</div></div>
+    <div class="whisper">The code is rows. A few of them run.</div>
+  </div>
+</div></header>
+
+<!-- HERO 2 -->
+<section class="person">
+  <div class="orb a"></div><div class="orb b"></div>
+  <div class="wrap">
+    <div class="mono peyebrow reveal">The person behind the index</div>
+    <h2 class="reveal d1">I build software that <span class="glow">questions its own foundation.</span></h2>
+    <p class="pbody reveal d2">I'm <b>Chris Kluis</b>. For nearly two decades I've worked the seam where
+      product, marketing, and go-to-market meet in B2B SaaS — I took an enterprise software company from
+      on-prem to SaaS to acquisition, and turned one too many <em>"there has to be a better way"</em> posts
+      into co-founding <b>SaaSRock</b>. Back then I was the idea guy; a developer built everything.</p>
+    <p class="pbody reveal d2">So for years the deal was the same: dream it, write it up, hand it off. A
+      <b>new UX paradigm</b> for relationship-aware data, <b>APIs</b> that could teach an LLM agent
+      themselves — things I had no way to build myself. The tooling finally changed that. Everything here
+      is me building the ideas I used to have to give away — and an open invitation for every other idea
+      person to start experimenting too.</p>
+    <div class="chips reveal d3">
+      <span class="chip"><b>18+ yrs</b> B2B SaaS</span><span class="chip">30% → 80% ARR</span>
+      <span class="chip">1 acquisition</span><span class="chip">Co-founded SaaSRock</span><span class="chip">Palm Harbor, FL</span>
+    </div>
+  </div>
+</section>
+
+<!-- 01 SUBSTRATE -->
+<section class="sec" id="substrate"><div class="wrap">
+  <div class="sechero">
+    <div class="snum reveal">01 — Substrate</div>
+    <h2 class="reveal d1">The code is <em>rows.</em></h2>
+    <p class="reveal d2">Data platforms where the application itself lives in the database. One kernel, one Postgres, governance as a first-class citizen — three different bets on the same idea.</p>
+  </div>
+
+  <div class="feature reveal">
+    <a href="https://ckluis.github.io/regel/" target="_blank" rel="noopener" class="fprimary" aria-label="regel — live"></a>
+    <div class="fL">
+      <div class="fflag"><span class="dot"></span>Shipped · live site + repo</div>
+      <h3>regel</h3>
+      <p class="ftag">A Go kernel runs strict-TypeScript apps admitted as content-addressed Postgres rows. Deploy is a commit; rollback is an as-of WHERE clause — and nothing lands unverified.</p>
+      <div class="spills"><span class="spill">Go</span><span class="spill">TypeScript</span><span class="spill">Postgres</span></div>
+      <div class="flinks"><a href="https://ckluis.github.io/regel/" target="_blank" rel="noopener">Live ↗</a><a href="regel.html">Spec →</a><a href="https://github.com/ckluis/regel" target="_blank" rel="noopener" class="ghost">Code ↗</a></div>
+    </div>
+    <div class="fR"><div class="fshot"><img src="previews/live-regel.png" alt="regel"></div></div>
+  </div>
+
+  <div class="tiles">
+    <article class="tile reveal">
+      <a href="kern.html" class="tprimary" aria-label="kern"></a>
+      <div class="tshot"><div class="panel"><img src="previews/kern.png" alt="kern"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">kern</div><span class="pill spec">Spec</span></div>
+        <p class="ttag">A homoiconic SaaS substrate in Lisp — every view, workflow, policy, and even agent-written patch is a versioned row, evaluated by a tiny kernel.</p>
+        <div class="spills"><span class="spill">Lisp</span><span class="spill">Postgres</span></div>
+        <div class="tlinks"><a href="kern.html">Read the spec →</a></div></div>
+    </article>
+    <article class="tile reveal d1">
+      <a href="eigen.html" class="tprimary" aria-label="eigen"></a>
+      <div class="tshot"><div class="panel"><img src="previews/eigen.png" alt="eigen"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">eigen</div><span class="pill spec">Spec</span></div>
+        <p class="ttag">A local-first hypermedia framework for Rust — one static binary is the app, desktop, and API; Postgres holds everything; PII stays hidden offline.</p>
+        <div class="spills"><span class="spill">Rust</span><span class="spill">Postgres</span></div>
+        <div class="tlinks"><a href="eigen.html">Read the spec →</a></div></div>
+    </article>
+  </div>
+</div></section>
+
+<!-- 02 FRAMEWORKS -->
+<section class="sec alt" id="frameworks"><div class="wrap">
+  <div class="sechero">
+    <div class="snum reveal">02 — Frameworks</div>
+    <h2 class="reveal d1">Platforms to <em>build on.</em></h2>
+    <p class="reveal d2">Opinionated ways to ship products faster — a hypothetical G# ecosystem of full-stack frameworks, and one shipped foundry for launching many SaaS products on a single substrate.</p>
+  </div>
+
+  <div class="feature reveal">
+    <a href="https://ckluis.github.io/samen/" target="_blank" rel="noopener" class="fprimary" aria-label="samen — live"></a>
+    <div class="fL">
+      <div class="fflag"><span class="dot"></span>Shipped · live site + repo</div>
+      <h3>samen</h3>
+      <p class="ftag">A governed B2B-SaaS foundry that presets the boring 80% — identity, CRM, billing, support, and the product UI — as six governed idioms on one Postgres per product. Support your tenants without ever seeing their customers.</p>
+      <div class="spills"><span class="spill">Elixir</span><span class="spill">Ash</span><span class="spill">Oban</span><span class="spill">Postgres</span></div>
+      <div class="flinks"><a href="https://ckluis.github.io/samen/" target="_blank" rel="noopener">Live ↗</a><a href="samen.html">Spec →</a><a href="https://github.com/ckluis/samen" target="_blank" rel="noopener" class="ghost">Code ↗</a></div>
+    </div>
+    <div class="fR"><div class="fshot"><img src="previews/live-samen.png" alt="samen"></div></div>
+  </div>
+
+  <div class="tiles">
+    <article class="tile reveal">
+      <a href="chord.html" class="tprimary" aria-label="chord"></a>
+      <div class="tshot"><div class="panel"><img src="previews/chord.png" alt="chord"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">chord</div><span class="pill spec">Spec</span></div>
+        <p class="ttag">The omakase full-stack for G# — every decision made for you, batteries included, one blessed way to do each thing.</p>
+        <div class="spills"><span class="spill">G#</span><span class="spill">Full-stack</span></div>
+        <div class="tlinks"><a href="chord.html">Read the spec →</a></div></div>
+    </article>
+    <article class="tile reveal d1">
+      <a href="fugue.html" class="tprimary" aria-label="fugue"></a>
+      <div class="tshot"><div class="panel"><img src="previews/fugue.png" alt="fugue"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">fugue</div><span class="pill spec">Spec</span></div>
+        <p class="ttag">The Phoenix of G#, on Orleans — a distributed-by-default app framework built on virtual actors.</p>
+        <div class="spills"><span class="spill">G#</span><span class="spill">Orleans</span></div>
+        <div class="tlinks"><a href="fugue.html">Read the spec →</a></div></div>
+    </article>
+    <article class="tile reveal">
+      <a href="realbook.html" class="tprimary" aria-label="realbook"></a>
+      <div class="tshot"><div class="panel"><img src="previews/realbook.png" alt="realbook"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">realbook</div><span class="pill spec">Spec</span></div>
+        <p class="ttag">The WordPress of G#, with a gate — content and commerce, governed by admission instead of a plugin free-for-all.</p>
+        <div class="spills"><span class="spill">G#</span><span class="spill">CMS</span></div>
+        <div class="tlinks"><a href="realbook.html">Read the spec →</a></div></div>
+    </article>
+  </div>
+</div></section>
+
+<!-- 03 LANGUAGES -->
+<section class="sec" id="languages"><div class="wrap">
+  <div class="sechero">
+    <div class="snum reveal">03 — Languages</div>
+    <h2 class="reveal d1">Small languages, <em>strong opinions.</em></h2>
+    <p class="reveal d2">Little languages with strong beliefs about the world they compile into.</p>
+  </div>
+  <div class="tiles">
+    <article class="tile reveal">
+      <a href="taal.html" class="tprimary" aria-label="taal"></a>
+      <div class="tshot"><div class="panel"><img src="previews/taal.png" alt="taal"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">taal</div><span class="pill spec">Spec</span></div>
+        <p class="ttag">A small language for building the BEAM on Go — Erlang-style actors and supervision trees, without the VM.</p>
+        <div class="spills"><span class="spill">Go</span><span class="spill">Actor model</span></div>
+        <div class="tlinks"><a href="taal.html">Read the spec →</a></div></div>
+    </article>
+    <article class="tile reveal d1">
+      <a href="streng.html" class="tprimary" aria-label="streng"></a>
+      <div class="tshot"><div class="panel"><img src="previews/streng.png" alt="streng"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">streng</div><span class="pill spec">Spec</span></div>
+        <p class="ttag">A closed-world TypeScript — all of the corpus, none of the supply chain, checked by a vendored native compiler in milliseconds.</p>
+        <div class="spills"><span class="spill">TypeScript</span><span class="spill">Native compiler</span></div>
+        <div class="tlinks"><a href="streng.html">Read the spec →</a></div></div>
+    </article>
+  </div>
+</div></section>
+
+<!-- 04 INTERFACES -->
+<section class="sec alt" id="interfaces"><div class="wrap">
+  <div class="sechero">
+    <div class="snum reveal">04 — Interfaces</div>
+    <h2 class="reveal d1">Where the substrate <em>meets the eye.</em></h2>
+    <p class="reveal d2">Layout systems and UI laboratories — the surface where all the rest becomes visible.</p>
+  </div>
+  <div class="tiles">
+    <article class="tile ship reveal">
+      <a href="https://ckluis.github.io/uiExplorer/" target="_blank" rel="noopener" class="tprimary" aria-label="uiExplorer — live"></a>
+      <div class="tshot"><div class="panel"><img src="previews/live-uiExplorer.png" alt="uiExplorer"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">uiExplorer</div><span class="pill shipped">Shipped</span></div>
+        <p class="ttag">The UI Lab — a forkable, zero-dependency framework where every interface experiment is pure HTML/CSS and documents its own making: prompt, model, agents, version lineage.</p>
+        <div class="spills"><span class="spill">HTML/CSS</span><span class="spill">Zero-dep</span><span class="spill">AI-native</span></div>
+        <div class="tlinks"><a href="https://ckluis.github.io/uiExplorer/" target="_blank" rel="noopener">Live ↗</a><a href="https://github.com/ckluis/uiExplorer" target="_blank" rel="noopener">Code ↗</a></div></div>
+    </article>
+    <article class="tile reveal d1">
+      <a href="lui.html" class="tprimary" aria-label="lui"></a>
+      <div class="tshot"><div class="panel"><img src="previews/lui.png" alt="lui"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">lui</div><span class="pill spec">Spec</span></div>
+        <p class="ttag">Layout User Interface — a layout-first UI framework with an AI sidecar that composes screens from intent.</p>
+        <div class="spills"><span class="spill">UI framework</span><span class="spill">AI sidecar</span></div>
+        <div class="tlinks"><a href="lui.html">Read the spec →</a></div></div>
+    </article>
+  </div>
+</div></section>
+
+<!-- 05 TOOLS -->
+<section class="sec" id="tools"><div class="wrap">
+  <div class="sechero">
+    <div class="snum reveal">05 — Tools &amp; products</div>
+    <h2 class="reveal d1">The experiments that <em>grew up.</em></h2>
+    <p class="reveal d2">Shipped software people can actually run — and two that stay home for good reasons.</p>
+  </div>
+
+  <div class="feature reveal">
+    <a href="https://ckluis.github.io/aiCRO/" target="_blank" rel="noopener" class="fprimary" aria-label="aiCRO — live"></a>
+    <div class="fL">
+      <div class="fflag"><span class="dot"></span>Shipped · live site + open source</div>
+      <h3>aiCRO</h3>
+      <p class="ftag">A full growth engagement from one URL — analysis, positioning, a rebuilt site inside a guided preview, and a GTM kit per customer group. Evidence-graded and self-contained: it opens from a file, no server, no AI slop.</p>
+      <div class="spills"><span class="spill">Node.js</span><span class="spill">Claude</span><span class="spill">Self-contained HTML</span></div>
+      <div class="flinks"><a href="https://ckluis.github.io/aiCRO/" target="_blank" rel="noopener">Live ↗</a><a href="https://github.com/ckluis/aiCRO" target="_blank" rel="noopener" class="ghost">Code ↗</a></div>
+    </div>
+    <div class="fR"><div class="fshot"><img src="previews/live-aiCRO.png" alt="aiCRO"></div></div>
+  </div>
+
+  <div class="tiles">
+    <article class="tile ship reveal">
+      <a href="https://ckluis.github.io/senkani" target="_blank" rel="noopener" class="tprimary" aria-label="senkani — live"></a>
+      <div class="tshot"><div class="panel"><img src="previews/live-senkani.png" alt="senkani"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">senkani</div><span class="pill shipped">Shipped</span></div>
+        <p class="ttag">Token compression for AI coding agents — a native macOS binary that compresses every file read and filters shell output from a local index before a token reaches Claude Code, Cursor, or any MCP agent.</p>
+        <div class="spills"><span class="spill">Swift</span><span class="spill">macOS</span><span class="spill">MCP</span></div>
+        <div class="tlinks"><a href="https://ckluis.github.io/senkani" target="_blank" rel="noopener">Live ↗</a><a href="https://github.com/ckluis/senkani" target="_blank" rel="noopener">Code ↗</a></div></div>
+    </article>
+    <article class="tile ship reveal d1">
+      <a href="terminalHelper.html" class="tprimary" aria-label="terminalHelper"></a>
+      <div class="tshot"><div class="panel"><img src="previews/terminalHelper-spec.png" alt="terminalHelper"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">terminalHelper</div><span class="pill shipped">Shipped</span></div>
+        <p class="ttag">A searchable, browsable command reference for your terminal — a Miller-column TUI, full-text search, and an ask-Claude escape hatch that saves answers to your library.</p>
+        <div class="spills"><span class="spill">Go</span><span class="spill">Bubble Tea</span><span class="spill">SQLite</span></div>
+        <div class="tlinks"><a href="terminalHelper.html">Read the spec →</a><a href="https://github.com/ckluis/terminalHelper" target="_blank" rel="noopener">Code ↗</a></div></div>
+    </article>
+    <article class="tile reveal">
+      <a href="nonprofitEventPlanner.html" class="tprimary" aria-label="nonprofitEventPlanner"></a>
+      <div class="tshot"><div class="panel"><img src="previews/nonprofitEventPlanner.png" alt="nonprofitEventPlanner"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">nonprofitEventPlanner</div><span class="pill local">Local</span></div>
+        <p class="ttag">One place for a volunteer to run a whole youth trip — rooming, chaperones, money tracked (not chased), and parents onboarded by magic link.</p>
+        <div class="spills"><span class="spill">Rails 8</span><span class="spill">Hotwire</span><span class="spill">Postgres</span></div>
+        <div class="tlinks"><a href="nonprofitEventPlanner.html">Read the spec →</a><span class="nolink">Private code</span></div></div>
+    </article>
+    <article class="tile reveal d1">
+      <a href="customCMS.html" class="tprimary" aria-label="customCMS"></a>
+      <div class="tshot"><div class="panel"><img src="previews/customCMS.png" alt="customCMS"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">customCMS</div><span class="pill local">Local</span></div>
+        <p class="ttag">BookEngine — one local brain that researches, writes, compiles, and runs many niche book-review sites on cheap VPSes, driven by Claude at zero marginal cost.</p>
+        <div class="spills"><span class="spill">Go</span><span class="spill">SQLite</span><span class="spill">Claude Code</span></div>
+        <div class="tlinks"><a href="customCMS.html">Read the spec →</a><span class="nolink">Local only</span></div></div>
+    </article>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="orb fa"></div><div class="orb fb"></div>
+  <div class="wrap">
+    <div class="mono footkick reveal">Your turn</div>
+    <h2 class="reveal d1">Most of these are ideas.<br><span class="fade">A few became experiments.</span><br><span class="ask">What do you dream of?</span></h2>
+    <p class="foolede reveal d2">The tools finally caught up. A dream is a weekend away from a working
+      experiment now — so start one.</p>
+    <div class="footcta reveal d2">
+      <a href="#substrate" class="cta2">Explore the experiments ↑</a>
+      <a href="https://github.com/ckluis" target="_blank" rel="noopener" class="cta2 ghost">See how they're built ↗</a>
+    </div>
+    <div class="links reveal d3">
+      <a href="https://github.com/ckluis" target="_blank" rel="noopener">GitHub ↗</a><a href="https://ckluis.com" target="_blank" rel="noopener">ckluis.com ↗</a>
+      <a href="https://kilofeet.com" target="_blank" rel="noopener">kilofeet ↗</a><a href="https://www.linkedin.com/in/ckluis" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://medium.com/@ckluis" target="_blank" rel="noopener">Medium ↗</a><a href="https://x.com/ckluis" target="_blank" rel="noopener">X ↗</a>
+    </div>
+    <div class="fine">© 2026 Chris Kluis · Experimental Architectures · built in the open</div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

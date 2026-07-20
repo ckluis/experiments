@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Realbook — the WordPress of G#, with a gate</title>
+<style>
+  :root{
+    --paper:#f8f3ea;
+    --paper-deep:#f1eadd;
+    --ink:#1c1811;
+    --muted:#6e6455;
+    --line:#d9cfbd;
+    --orange:#31589e;
+    --orange-ink:#27477f;
+    --code-bg:#171321;
+    --code-ink:#e2dcf0;
+    --code-dim:#7d7494;
+    --code-key:#93b4e8;
+    --code-str:#c9b458;
+    --code-typ:#9fc0a8;
+    --code-com:#6a6180;
+    --display:"Fraunces","Charter","Iowan Old Style",Georgia,serif;
+    --body:"Inter","Helvetica Neue",system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--orange);color:#fff}
+  a{color:var(--orange-ink);text-decoration:none;border-bottom:1px solid var(--line)}
+  a:hover{border-bottom-color:var(--orange-ink)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--orange-ink);outline-offset:3px;border-radius:2px}
+
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px}
+
+  .topbar{
+    border-bottom:1px solid var(--line);
+    background:var(--paper);
+    position:sticky;top:0;z-index:20;
+  }
+  .topbar .wrap{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding-top:14px;padding-bottom:14px;
+  }
+  .wordmark{font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:-.01em;border:none}
+  .wordmark .dot{color:var(--orange)}
+  .topnav{display:flex;gap:22px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+  .topnav a{color:var(--muted);border:none}
+  .topnav a:hover{color:var(--orange-ink)}
+  @media(max-width:720px){.topnav{display:none}}
+
+  .hero{padding:84px 0 60px;border-bottom:1px solid var(--line)}
+  .eyebrow{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--orange-ink);margin-bottom:26px;display:flex;align-items:center;gap:12px;
+  }
+  .eyebrow::before{content:"";display:inline-block;width:34px;height:2px;background:var(--orange)}
+  h1{
+    font-family:var(--display);font-weight:560;font-variation-settings:"opsz" 72;
+    font-size:clamp(2.5rem,6.4vw,4.4rem);line-height:1.04;letter-spacing:-.022em;
+    max-width:17ch;
+  }
+  h1 em{font-style:italic;color:var(--orange-ink)}
+  .hero p.dek{
+    margin-top:28px;max-width:58ch;font-size:1.12rem;color:var(--muted);line-height:1.7;
+  }
+  .hero p.dek strong{color:var(--ink);font-weight:600}
+
+  .pipeline{
+    margin-top:56px;display:flex;align-items:stretch;gap:0;
+    font-family:var(--mono);font-size:.8rem;flex-wrap:nowrap;max-width:900px;
+  }
+  .pipe-node{
+    border:1px solid var(--line);background:var(--paper-deep);
+    padding:14px 18px;display:flex;flex-direction:column;gap:4px;
+    flex:1 1 0;min-width:0;justify-content:center;
+  }
+  .pipe-node.hot{flex:1.25 1 0}
+  .pipe-node .t{font-weight:700;color:var(--ink)}
+  .pipe-node .s{color:var(--muted);font-size:.68rem;line-height:1.5}
+  .pipe-node.hot{background:var(--orange);border-color:var(--orange)}
+  .pipe-node.hot .t{color:#fff}
+  .pipe-node.hot .s{color:#cadbf5}
+  .pipe-arrow{
+    display:flex;align-items:center;padding:0 12px;color:var(--orange-ink);
+    font-size:1rem;user-select:none;
+  }
+  @media(max-width:720px){
+    .pipeline{flex-direction:column}
+    .pipe-node,.pipe-node.hot{flex:none}
+    .pipe-arrow{padding:6px 0 6px 20px;transform:rotate(90deg);transform-origin:20px center;width:20px}
+  }
+
+  section{padding:72px 0;border-bottom:1px solid var(--line)}
+  .kicker{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--orange-ink);margin-bottom:14px;
+  }
+  h2{
+    font-family:var(--display);font-weight:560;font-size:clamp(1.7rem,3.4vw,2.4rem);
+    letter-spacing:-.015em;line-height:1.15;max-width:26ch;margin-bottom:22px;
+  }
+  section p{max-width:66ch;margin-bottom:18px}
+  section p:last-child{margin-bottom:0}
+  .lede{font-size:1.08rem}
+  .note{
+    border-left:3px solid var(--orange);background:var(--paper-deep);
+    padding:16px 20px;max-width:66ch;margin:26px 0;font-size:.95rem;color:var(--muted);
+  }
+  .note strong{color:var(--ink)}
+
+  pre{
+    background:var(--code-bg);color:var(--code-ink);
+    font-family:var(--mono);font-size:.82rem;line-height:1.62;
+    padding:22px 24px;overflow-x:auto;border-radius:0;
+    margin:0;
+  }
+  .codeblock{margin:30px 0;max-width:860px}
+  .codelabel{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    background:var(--ink);color:#cbbfa8;padding:8px 16px;
+  }
+  .codelabel .lang{color:var(--code-key)}
+  .k{color:var(--code-key)}
+  .s{color:var(--code-str)}
+  .ty{color:var(--code-typ)}
+  .c{color:var(--code-com);font-style:italic}
+  .dim{color:var(--code-dim)}
+  .err{color:#e88070}
+  .ok{color:#8fc98f}
+
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:34px 0;position:relative}
+  .duo .codeblock{margin:0}
+  .duo .seam{
+    position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--orange);
+    transform:translateX(-1px);z-index:2;
+  }
+  .duo .seamlabel{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+    background:var(--orange);color:#fff;font-family:var(--mono);font-size:.66rem;
+    letter-spacing:.1em;padding:5px 10px;text-transform:uppercase;white-space:nowrap;
+  }
+  @media(max-width:860px){
+    .duo{grid-template-columns:1fr}
+    .duo .seam{display:none}
+    .duo .seamlabel{position:static;transform:none;display:inline-block;margin:0}
+    .duo .seamwrap{display:flex;justify-content:center;padding:10px 0}
+  }
+  @media(min-width:861px){.duo .seamwrap{display:contents}}
+
+  .stack{margin:40px 0 10px;max-width:860px}
+  .layer{
+    border:1px solid var(--line);border-bottom:none;background:var(--paper);
+    display:grid;grid-template-columns:170px 1fr;gap:0;
+  }
+  .layer:last-child{border-bottom:1px solid var(--line)}
+  .layer .name{
+    padding:20px 22px;border-right:1px solid var(--line);
+    font-family:var(--display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;
+    display:flex;flex-direction:column;gap:4px;justify-content:center;
+  }
+  .layer .name .nl{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--orange-ink);font-weight:500}
+  .layer .body{padding:20px 24px;font-size:.94rem;color:var(--muted)}
+  .layer .body strong{color:var(--ink)}
+  .layer .body .analog{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--orange-ink);display:block;margin-bottom:6px;
+  }
+  .layer.substrate{background:var(--paper-deep)}
+  .layer.regel-layer{background:var(--ink);color:var(--paper)}
+  .layer.regel-layer .name{color:var(--paper);border-right-color:#3a3226}
+  .layer.regel-layer .body{color:#b8ac95}
+  .layer.regel-layer .body strong{color:var(--paper)}
+  .layer.regel-layer .name .nl,.layer.regel-layer .body .analog{color:#9db9e8}
+  @media(max-width:680px){
+    .layer{grid-template-columns:1fr}
+    .layer .name{border-right:none;border-bottom:1px solid var(--line);flex-direction:row;align-items:baseline;gap:12px}
+    .layer.regel-layer .name{border-bottom-color:#3a3226}
+  }
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+    border:1px solid var(--line);margin:34px 0;max-width:860px}
+  .cell{background:var(--paper);padding:24px 26px}
+  .cell h3{font-family:var(--display);font-weight:600;font-size:1.06rem;margin-bottom:8px;letter-spacing:-.01em}
+  .cell p{font-size:.9rem;color:var(--muted);max-width:none;margin:0}
+  .cell .conf{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--orange-ink);display:block;margin-bottom:8px;
+  }
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+
+  .edges{margin:30px 0;max-width:860px}
+  .edge{border-top:1px solid var(--line);padding:18px 0}
+  .edge:last-child{border-bottom:1px solid var(--line)}
+  .edge h3{font-family:var(--display);font-weight:600;font-size:1.02rem;letter-spacing:-.01em;margin-bottom:6px}
+  .edge p{font-size:.92rem;color:var(--muted);max-width:72ch;margin:0}
+
+  footer{padding:56px 0 72px}
+  .family{
+    font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:lowercase;
+    color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;
+  }
+  .family .this{color:var(--orange-ink);font-weight:700}
+  footer p{margin-top:22px;font-size:.85rem;color:var(--muted);max-width:60ch}
+</style>
+</head>
+<body>
+<!-- xa-back: back-to-index affordance (injected by the experiments hub; safe to re-run) -->
+<style>
+  .xa-back{position:fixed;left:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:7px;
+    font-family:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;font-size:12px;font-weight:500;letter-spacing:.02em;
+    color:#1c1811;background:#fbf7ee;border:1px solid #d9cfbd;border-radius:100px;padding:8px 15px;text-decoration:none;
+    box-shadow:0 6px 20px -8px rgba(28,24,17,.4);transition:transform .18s ease,box-shadow .18s ease;}
+  .xa-back:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(28,24,17,.55);}
+  .xa-back .xa-arrow{transition:transform .18s ease;}
+  .xa-back:hover .xa-arrow{transform:translateX(-2px);}
+  @media (prefers-reduced-motion: reduce){.xa-back,.xa-back .xa-arrow{transition:none}}
+</style>
+<a href="index.html" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+
+
+<nav class="topbar" aria-label="Page">
+  <div class="wrap">
+    <a class="wordmark" href="#top">realbook<span class="dot">.</span></a>
+    <div class="topnav">
+      <a href="#tension">Tension</a>
+      <a href="#runs">How it runs</a>
+      <a href="#stack">The stack</a>
+      <a href="#admission">Admission</a>
+      <a href="#honest">Honest</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">realbook · the jazz fake book · open it to any tune, play it instantly</div>
+    <h1>Point it at a schema.<br>Get the whole <em>product</em>.</h1>
+    <p class="dek">
+      WordPress ate the web on two moats: a deployment story anyone could execute, and a
+      plugin economy — and its permanent wound is that every plugin is a root shell. Directus
+      and PocketBase modernized the derive-from-schema idea, but each kept only half.
+      Realbook is the full set: PocketBase's deployment, Directus's data platform,
+      WordPress's economy — behind a gate. <strong>One binary you scp. One Postgres. Plugins
+      that can't name what they weren't granted.</strong>
+    </p>
+
+    <div class="pipeline" aria-label="Derivation pipeline">
+      <div class="pipe-node">
+        <span class="t">postgres://</span>
+        <span class="s">your schema — existing, or declared in G#</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node hot">
+        <span class="t">derive</span>
+        <span class="s">admin UI · REST + realtime APIs · auth · roles · files</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node">
+        <span class="t">one binary</span>
+        <span class="s">self-contained · scp it, run it</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node">
+        <span class="t">plugins</span>
+        <span class="s">signed · capability-scoped · hot-loaded</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="tension">
+  <div class="wrap">
+    <div class="kicker">The tension nobody resolved</div>
+    <h2>The economy that ate the web is also its wound</h2>
+    <p class="lede">
+      The pattern keeps winning: give me a schema, I'll give you the product. WordPress ran it
+      on posts and pages and took forty percent of the web. Directus and PocketBase ran it on
+      real databases and took the developers who'd sworn off PHP. And every winner kept a
+      fatal flaw — because the three things that matter have never fit in one runtime.
+      <strong>Each kept one:</strong>
+    </p>
+
+    <div class="grid2">
+      <div class="cell">
+        <span class="conf">wordpress kept</span>
+        <h3>The economy.</h3>
+        <p>60,000 plugins, each one arbitrary PHP with database root. The economy is why it
+        won; the trust model is why it's the most attacked application surface on the
+        internet. Every install is an act of faith, renewed on every update.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">directus kept</span>
+        <h3>The clean data platform.</h3>
+        <p>Point it at Postgres, get the admin and the APIs — the right idea, on Node: a
+        runtime, a node_modules tree, a compose file. Deployment is someone's job again, and
+        the someone is you.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">pocketbase kept</span>
+        <h3>The single binary.</h3>
+        <p>Brilliant, SQLite-shaped, scp-and-run — the WordPress install story finally
+        modernized. But the extension story tops out at hooks compiled into your own build.
+        There is no economy, and by design there can't be one.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">nobody kept</span>
+        <h3>All three at once.</h3>
+        <p>The economy, the platform, and the binary — because nobody had a runtime that
+        could load governed native plugins into one process. Interpreters can't gate what
+        they can't see; compiled binaries can't load what they didn't ship.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>The one-sentence mind-blow:</strong> the CLR can. Assemblies are the plugin
+      format, AssemblyLoadContext is the isolation seam, and a capability manifest is the
+      contract — so the plugin economy gets what npm never had: a gate. This is the
+      streng/kern discipline arriving through the side door, wearing a .NET badge.
+    </div>
+  </div>
+</section>
+
+<section id="runs">
+  <div class="wrap">
+    <div class="kicker">How it runs</div>
+    <h2>Introspect. Derive. Serve. Admit.</h2>
+    <p>
+      Four verbs, one binary. Realbook is written in G# — David Obando's modern .NET
+      language, real and public at v0.3 with a compiler, an MSBuild SDK, and VS Code
+      tooling — and compiles to ordinary CLR assemblies, which means every BCL
+      type and NuGet package is already inside the tent. The framework ships no scaffolds
+      and generates no code you own. It derives, continuously.
+    </p>
+    <div class="grid2">
+      <div class="cell">
+        <h3>introspect — the schema is the score</h3>
+        <p>Point it at an existing Postgres, or declare data classes in G# and let it create
+        the tables. Either way: tables, relations, and enums become the catalog — the single
+        model everything downstream is derived from. Legacy databases walk in as they are.</p>
+      </div>
+      <div class="cell">
+        <h3>derive — the product follows the schema</h3>
+        <p>The admin UI, REST + realtime APIs over SignalR, auth, roles, row-level rules,
+        and file handling — derived, not scaffolded. There is no generated code to drift.
+        Change the schema and the product follows, the same way a view follows a table.</p>
+      </div>
+      <div class="cell">
+        <h3>serve — the WordPress install story, no PHP</h3>
+        <p>One self-contained binary: <code style="font-family:var(--mono);font-size:.88em">realbook serve</code>.
+        scp it to a $4 VPS, write a systemd unit, done. No runtime to install, no
+        node_modules to ship, no compose file to explain. The deployment story is the
+        onboarding story.</p>
+      </div>
+      <div class="cell">
+        <h3>admit — plugins enter through a gate</h3>
+        <p>Signature checked against the publisher's key. Capability manifest read aloud —
+        <code style="font-family:var(--mono);font-size:.88em">charges.write</code>, not
+        <code style="font-family:var(--mono);font-size:.88em">contacts.read</code> — and
+        granted explicitly. Then loaded hot into an isolated AssemblyLoadContext, without a
+        restart. Revoke unloads it just as cleanly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="kicker">The stack</div>
+    <h2>What each ancestor contributes — and what only realbook has</h2>
+
+    <div class="stack">
+      <div class="layer regel-layer">
+        <div class="name">Realbook <span class="nl">the framework's own</span></div>
+        <div class="body">
+          <span class="analog">wordpress economy · directus platform · pocketbase deploy — one artifact</span>
+          <strong>The derivation engine plus the plugin gate.</strong> Everything below is a
+          known good idea; what's new is that they cohabit one process — a product derived
+          from your schema, extended by an economy of strangers, without handing the
+          strangers root. Nobody has shipped that combination, because nobody had the runtime.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Charts <span class="nl">the catalog</span></div>
+        <div class="body">
+          <span class="analog">the real book metaphor — every table gets a chart</span>
+          Schema introspection produces the catalog: for every table, a chart — the admin
+          view, the API surface, the permission grid. Like the fake book, a chart is enough
+          to play the tune competently on sight; virtuosity comes later, in owned code.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Plugins <span class="nl">the economy</span></div>
+        <div class="body">
+          <span class="analog">clr assemblies · signed · capability-manifested</span>
+          A plugin is a G# or C# data class plus hooks, compiled to an ordinary assembly,
+          signed by its publisher, and hot-loaded into an isolated AssemblyLoadContext. Its
+          manifest names the capabilities it needs; the gate hands it those objects and
+          <strong>nothing else exists in its world.</strong>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Wire <span class="nl">the surface</span></div>
+        <div class="body">
+          <span class="analog">rest + signalr realtime · webhooks out</span>
+          Every chart is a REST resource and a realtime subscription: query it, page it,
+          subscribe to its changes over SignalR. Webhooks fire outward on the same events
+          the plugins hook inward. One event stream, two audiences.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Data <span class="nl">the truth</span></div>
+        <div class="body">
+          <span class="analog">postgres as truth · rls compiled from roles</span>
+          Postgres is not a backend detail — it is the product's memory and the source the
+          catalog is derived from. The roles model compiles down to row-level security, so
+          a rule declared once in the admin holds even for a connection that bypasses realbook.
+        </div>
+      </div>
+      <div class="layer substrate">
+        <div class="name">Substrate <span class="nl">substrate</span></div>
+        <div class="body">
+          <span class="analog">the only two things on the server</span>
+          One self-contained CLR binary and one Postgres. No Node, no PHP, no sidecar, no
+          orchestrator. The entire operational surface of the product is a process and a
+          database — which is to say, the two things your operator already knows how to keep alive.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="admission">
+  <div class="wrap">
+    <div class="kicker">Admission</div>
+    <h2>A plugin can't name what it wasn't granted</h2>
+    <p>
+      The canonical exchange: a publisher ships an assembly, and the gate answers — before
+      anything runs — with a transcript. Everything on the left is plain G#, faithful to the
+      shipped language tour — <code style="font-family:var(--mono);font-size:.88em">@</code>-style
+      attributes, Go-style parameters, <code style="font-family:var(--mono);font-size:.88em">if let</code>
+      over a nullable result; everything on the right happens before the plugin's first
+      instruction executes.
+    </p>
+
+    <div class="duo">
+      <div class="codeblock">
+        <div class="codelabel"><span>a plugin</span><span class="lang">stripe-payments.gs</span></div>
+        <pre><span class="k">package</span> Stripe.Payments
+
+<span class="k">import</span> Realbook.Plugin
+<span class="k">import</span> Stripe
+
+@<span class="ty">Plugin</span>(<span class="s">"stripe-payments"</span>,
+  Capabilities: [<span class="s">"charges.write"</span>, <span class="s">"orders.read"</span>])
+<span class="k">class</span> <span class="ty">StripePayments</span> {
+  <span class="k">let</span> charges <span class="ty">Granted</span>[<span class="ty">Charges</span>]  <span class="c">// injected by the gate</span>
+
+  <span class="k">async func</span> onOrderPaid(order <span class="ty">Order</span>) {
+    <span class="k">if let</span> charge = <span class="k">await</span> charges.create(order.total) {
+      order.receipt = charge.id ?? <span class="s">""</span>
+    }
+  }
+}</pre>
+      </div>
+      <div class="seamwrap"><div class="seam" aria-hidden="true"></div><div class="seamlabel">the gate</div></div>
+      <div class="codeblock">
+        <div class="codelabel"><span>the transcript</span><span class="lang">realbook install stripe-payments</span></div>
+        <pre>install stripe-payments <span class="dim">v1.4.2 · publisher: acme-labs</span>
+
+signature        <span class="ok">✓</span> <span class="dim">acme-labs key · pinned</span>
+manifest         charges.write <span class="ok">✓</span>  orders.read <span class="ok">✓</span>
+                 <span class="dim">contacts.* — not requested, not granted</span>
+load             <span class="ok">✓</span> <span class="dim">isolated AssemblyLoadContext · no restart</span>
+hooks            <span class="ok">✓</span> <span class="dim">onOrderPaid ⇠ orders.paid</span>
+admin            <span class="ok">✓</span> <span class="dim">new card: Payments</span>
+
+<span class="ok">→ live.</span> <span class="dim">revoke = unload —
+no orphaned tables, no zombie hooks.</span></pre>
+      </div>
+    </div>
+
+    <p>
+      The capability object is the only door. An ungranted API isn't rejected at runtime —
+      it is absent from the plugin's world at load time; the code that would call it has
+      nothing to call it on. And because plugins are CLR assemblies — and gsc really does
+      emit ordinary managed assemblies, this is a fact about the shipped compiler, not a
+      hope — the economy is polyglot
+      from day one: C# shops publish, G# shops publish, F# shops publish if they like —
+      <strong>the gate doesn't care what compiled you, only what you're asking to touch.</strong>
+    </p>
+  </div>
+</section>
+
+<section id="honest">
+  <div class="wrap">
+    <div class="kicker">What we won't pretend</div>
+    <h2>What the gate costs</h2>
+    <div class="edges">
+      <div class="edge">
+        <h3>In-process isolation is not a security boundary.</h3>
+        <p>Code Access Security died for a reason; AssemblyLoadContext isolates loading, not
+        malice. The capability gate is discipline plus review plus signing — a strong deterrent
+        and a clean contract, not a sandbox. Real sandboxing means out-of-process or WASM
+        plugin hosts, and realbook holds that lane in reserve for hostile-plugin tiers,
+        stated plainly rather than implied away.</p>
+      </div>
+      <div class="edge">
+        <h3>Hot-loading forecloses Native AOT.</h3>
+        <p>An AOT-compiled binary cannot load assemblies at runtime. So realbook with plugins
+        ships as self-contained CoreCLR — roughly 80 MB, still one file — and a lean AOT build
+        exists only for plugin-free deploys. Two artifacts, one honest tradeoff, chosen in
+        favor of the economy.</p>
+      </div>
+      <div class="edge">
+        <h3>Economies cold-start.</h3>
+        <p>WordPress's moat is twenty years of plugins solving twenty years of niches. Realbook
+        starts at zero, and its gate — the whole point — is also a barrier to the sloppy long
+        tail that made WordPress huge. The bet is that a smaller, vouched-for catalog beats a
+        vast untrusted one; the bet is not yet won.</p>
+      </div>
+      <div class="edge">
+        <h3>Derivation has a ceiling.</h3>
+        <p>Real products outgrow generic admin. The escape hatch — eject a chart into owned G#
+        code, chord's territory — must be genuinely first-class, or realbook becomes a
+        prototype trap: wonderful for the first month, resented by the twelfth.</p>
+      </div>
+      <div class="edge">
+        <h3>Zero training corpus, v0.3 language.</h3>
+        <p>Models write C# fluently and G# barely. The language is further along than a
+        sketch — a full written spec, a compiler, dozens of releases — but it is v0.3 from
+        one primary maintainer, and no model has trained on it. Plugins can be C#, and the
+        G# surface a plugin author touches is thin — but the loss is real and stated, not
+        waved away with "the models will catch up."</p>
+      </div>
+      <div class="edge">
+        <h3>Schema-first inherits your schema's sins.</h3>
+        <p>A bad legacy schema derives a bad product: cryptic column names become cryptic
+        admin labels, missing foreign keys become missing relations. Introspection is honest,
+        not redemptive — realbook shows you your database as it is, and fixing it is still
+        your job.</p>
+      </div>
+    </div>
+
+    <p>
+      The pitch, in one sentence: <strong>point realbook at a Postgres and get the admin, the
+      APIs, the auth, and the files as one binary you scp — then grow it through a plugin
+      economy where every extension is signed, capability-scoped, and unable to name a single
+      thing it wasn't granted.</strong>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="family">
+      <span>chord</span><span>·</span>
+      <span>fugue</span><span>·</span>
+      <span class="this">realbook</span>
+    </div>
+    <p>
+      Realbook — a concept study in the G# ecosystem, cousin to the samen · eigen · kern ·
+      streng · taal · regel family. Code samples are faithful to the shipped G# tour (v0.3).
+      The schema is the score, the binary is the book, and the plugins audition before they
+      play.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

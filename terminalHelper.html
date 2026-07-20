@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>terminalHelper — the command you forgot, one keystroke away</title>
+<meta name="description" content="th (Terminal Helper): a searchable, browsable command reference for your terminal — Miller-column TUI, full-text search, and an ask-Claude escape hatch. Go + Bubble Tea.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f8f3ea; --paper-deep:#f1eadd; --paper-band:#f4ede0; --card:#fbf7ee;
+    --ink:#1c1811; --muted:#6e6455; --faint:#a89c86;
+    --line:#d9cfbd; --line-soft:#e5dccb;
+    --accent:#2b8a7a; --accent-ink:#1f6a5d;
+    --display:"Fraunces","Charter",Georgia,serif;
+    --body:"Inter","Helvetica Neue",system-ui,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  a{color:inherit} ::selection{background:rgba(43,138,122,.18)}
+  .wrap{max-width:940px;margin:0 auto;padding:0 clamp(22px,5vw,48px)}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(248,243,234,.82);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line-soft)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;max-width:940px}
+  .brand{font-family:var(--display);font-weight:600;font-size:19px}
+  .brand b{color:var(--accent-ink)}
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:4px 11px}
+
+  header.hero{padding:clamp(56px,11vw,120px) 0 clamp(36px,6vw,60px)}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:26px}
+  .eyebrow::before{content:"";display:inline-block;width:26px;height:1.5px;background:var(--accent);vertical-align:middle;margin-right:12px;margin-bottom:4px}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(40px,7.5vw,78px);line-height:.98;letter-spacing:-.02em;max-width:15ch}
+  h1 em{font-style:italic;color:var(--accent-ink)}
+  .lede{margin-top:clamp(24px,4vw,36px);max-width:60ch;font-size:clamp(18px,2vw,21px);line-height:1.55;color:#3a342a}
+  .lede b{font-weight:600;color:var(--ink)}
+
+  /* terminal demo */
+  .demo{margin-top:40px;border-radius:14px;overflow:hidden;border:1px solid #0f0d09;box-shadow:0 40px 80px -46px rgba(20,16,9,.8)}
+  .demo .bar{background:#2a2519;padding:11px 16px;display:flex;gap:7px;align-items:center}
+  .demo .bar i{width:11px;height:11px;border-radius:50%;display:block}
+  .demo .bar .r{background:#c98b7a}.demo .bar .y{background:#cbb98a}.demo .bar .g{background:#8fae86}
+  .demo .bar span{margin-left:12px;font-family:var(--mono);font-size:12px;color:#8a7f68}
+  .demo pre{background:#1c1811;color:#e2dcf0;font-family:var(--mono);font-size:13.5px;line-height:1.7;padding:22px 20px;overflow-x:auto;margin:0}
+  .demo .p{color:#7dd6bf}.demo .c{color:#b49af5}.demo .s{color:#c9b458}.demo .dim{color:#6a6180}
+
+  section.band{padding:clamp(44px,7vw,78px) 0;border-top:1px solid var(--line-soft)}
+  section.band.alt{background:var(--paper-band)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(27px,4.4vw,42px);line-height:1.05;letter-spacing:-.015em;max-width:20ch}
+  h2 + .sub{margin-top:14px;max-width:60ch;color:var(--muted);font-size:17px}
+
+  .features{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:34px}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  .feat .num{font-family:var(--display);font-style:italic;font-size:26px;color:var(--accent);line-height:1}
+  .feat h3{font-family:var(--display);font-weight:600;font-size:19px;margin:10px 0 6px}
+  .feat p{font-size:14.5px;color:var(--muted);line-height:1.55}
+  .feat code{font-family:var(--mono);font-size:12.5px;background:var(--paper-deep);padding:1px 6px;border-radius:5px;color:var(--accent-ink)}
+
+  .stack{margin-top:32px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .stack .row{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:16px;padding:13px 20px;border-bottom:1px solid var(--line-soft);font-size:15px}
+  .stack .row:last-child{border-bottom:0}
+  .stack .row:nth-child(odd){background:var(--card)}
+  .stack .k{font-family:var(--mono);font-size:12.5px;color:var(--accent-ink);align-self:center}
+  .stack .v{color:#3a342a}.stack .v b{color:var(--ink);font-weight:600}
+
+  .statusnote{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;font-size:15.5px;color:#3a342a}
+  .statusnote b{color:var(--ink)}
+  .statusnote .pill{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);border:1px solid var(--accent);border-radius:100px;padding:3px 10px;margin-bottom:12px}
+  .statusnote a{color:var(--accent-ink);font-weight:500}
+
+  footer{border-top:1px solid var(--line);padding:44px 0 90px;color:var(--faint);font-family:var(--mono);font-size:12px}
+
+  .xa-back{position:fixed;left:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.02em;color:#1c1811;background:#fbf7ee;border:1px solid #d9cfbd;border-radius:100px;padding:8px 15px;text-decoration:none;box-shadow:0 6px 20px -8px rgba(28,24,17,.4);transition:transform .18s ease,box-shadow .18s ease}
+  .xa-back:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(28,24,17,.55)}
+  .xa-back .xa-arrow{transition:transform .18s ease}.xa-back:hover .xa-arrow{transform:translateX(-2px)}
+  @media (prefers-reduced-motion: reduce){.xa-back,.xa-back .xa-arrow{transition:none}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <div class="brand"><b>terminal</b>Helper</div>
+  <div class="tag">Shipped · Go</div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">A searchable command reference for your terminal</div>
+  <h1>The command you forgot, <em>one keystroke</em> away.</h1>
+  <p class="lede"><b>th</b> keeps your CLI knowledge organized and searchable so you stop digging through
+    man pages. Browse tools by category, search across every command, or ask Claude in plain English and
+    save the answer back to your own library — all in a fast native terminal UI.</p>
+  <div class="demo">
+    <div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>th — terminal helper</span></div>
+<pre><span class="dim"># browse, search, or just ask</span>
+<span class="p">$</span> th search <span class="s">"undo last commit"</span>
+  git reset --soft HEAD~1        <span class="dim">git · undo staged commit, keep changes</span>
+  git revert HEAD                <span class="dim">git · new commit that undoes the last</span>
+
+<span class="p">$</span> th ask <span class="s">"find files larger than 100MB"</span>
+  <span class="c">›</span> find . -type f -size +100M
+  <span class="dim">saved to your library ✓</span></pre>
+  </div>
+</div></header>
+
+<section class="band alt"><div class="wrap">
+  <div class="kicker">What it does</div>
+  <h2>Learn a command once. Keep it forever.</h2>
+  <div class="features">
+    <div class="feat"><div class="num">01</div><h3>Miller-column TUI</h3>
+      <p>Browse tools by category with instant command previews — a native, keyboard-driven interface, not a wall of text.</p></div>
+    <div class="feat"><div class="num">02</div><h3>Full-text search</h3>
+      <p>SQLite <code>FTS5</code> search across every tool and command. Type what you mean; get the command you need.</p></div>
+    <div class="feat"><div class="num">03</div><h3>Ask Claude</h3>
+      <p>Ask a terminal question in plain English, get runnable commands back, and save them straight into your library.</p></div>
+    <div class="feat"><div class="num">04</div><h3>Yours to keep</h3>
+      <p>Copy any command with a keypress, ship with a starter library (git, curl…), and <code>export</code> any tool as JSON to share or back up.</p></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="kicker">The surface</div>
+  <h2>One binary, a handful of verbs.</h2>
+  <div class="stack">
+    <div class="row"><div class="k">th</div><div class="v">Launch the <b>TUI</b> — browse tools by category</div></div>
+    <div class="row"><div class="k">th ask</div><div class="v">Ask Claude about a terminal task, save the answer</div></div>
+    <div class="row"><div class="k">th search</div><div class="v">Full-text search across all tools and commands</div></div>
+    <div class="row"><div class="k">th export</div><div class="v">Dump any tool as JSON for sharing or backup</div></div>
+    <div class="row"><div class="k">th doctor</div><div class="v">Check your setup and dependencies</div></div>
+  </div>
+</div></section>
+
+<section class="band alt"><div class="wrap">
+  <div class="kicker">How it's built</div>
+  <h2>A native TUI that stays out of your way.</h2>
+  <div class="stack">
+    <div class="row"><div class="k">Language</div><div class="v"><b>Go</b> — one static binary, cross-compiles anywhere, no runtime to install</div></div>
+    <div class="row"><div class="k">Interface</div><div class="v"><b>Bubble Tea</b> + Lip Gloss (Charm) — the Miller-column TUI and keybindings</div></div>
+    <div class="row"><div class="k">Storage</div><div class="v"><b>SQLite</b> with <b>FTS5</b> — your command library, searchable and local</div></div>
+    <div class="row"><div class="k">The ask</div><div class="v"><b>Claude Code</b> — optional; plain-English questions become runnable commands</div></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="kicker">Status</div>
+  <h2>Shipped and open source.</h2>
+  <div class="statusnote">
+    <span class="pill">Shipped · MIT</span>
+    <p>A finished, installable tool — <code style="font-family:var(--mono);font-size:12.5px">go build</code>,
+      drop <code style="font-family:var(--mono);font-size:12.5px">th</code> in your <code style="font-family:var(--mono);font-size:12.5px">$PATH</code>,
+      and it's useful immediately thanks to the starter library. The source lives on
+      <a href="https://github.com/ckluis/terminalHelper" target="_blank" rel="noopener">GitHub ↗</a>.</p>
+  </div>
+</div></section>
+
+<footer><div class="wrap">terminalHelper · a concept explainer · part of ckluis / experimental-architectures</div></footer>
+
+<a href="index.html" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+</body>
+</html>
