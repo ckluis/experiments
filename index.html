@@ -161,6 +161,23 @@
   .tlinks .nolink{color:var(--faint)}
   .tprimary{position:absolute;inset:0;z-index:1}
 
+  /* ===== mobile preview fixes ===== */
+  /* Flatten the perspective tilt so feature product shots read flat & clean
+     (and never skew off-frame) once the feature stacks to one column. */
+  @media(max-width:840px){
+    .fshot,.feature:hover .fshot{transform:none}
+    .feature{min-height:0}
+  }
+  /* When 2-up tiles go full-width, the fixed-inset peeking panel turns
+     portrait and object-fit:cover crops the screenshot's left/right edges,
+     cutting headlines mid-word. Give the frame a landscape aspect-ratio that
+     scales with width so the panel matches the 1200x760 shots and cover crops
+     top/bottom instead — full width stays visible, text intact. */
+  @media(max-width:760px){
+    .tshot{height:auto;aspect-ratio:1.85}
+    .tshot .panel{left:5%;right:5%;top:22px;bottom:-32px}
+  }
+
   /* footer */
   .foot{position:relative;overflow:hidden;color:#f0e7d8;padding:clamp(96px,13vw,180px) 0 66px;background:linear-gradient(160deg,#140f08,#3a2416 55%,#1a1033);background-size:200% 200%;animation:drift 20s ease-in-out infinite}
   .foot .orb.fa{width:480px;height:480px;background:rgba(107,78,194,.5);top:-160px;left:-60px;animation:float1 20s ease-in-out infinite}
