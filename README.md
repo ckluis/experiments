@@ -6,7 +6,7 @@ one question at a time — *what if the foundation were different?*
 By **Chris Kluis** — [ckluis.com](https://ckluis.com) · [kilofeet](https://kilofeet.com) ·
 [LinkedIn](https://www.linkedin.com/in/ckluis) · [X](https://x.com/ckluis)
 
-**→ [Open the index](https://ckluis.github.io/experimentalArchitectures/)** *(once Pages is enabled)*
+**→ [Open the index](https://ckluis.github.io/experiments/)**
 
 Locally: open `index.html` in a browser. It links out to each experiment's spec page
 and, where one exists, its source repository. Each spec links back to the index.
