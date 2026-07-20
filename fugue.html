@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fugue — the Phoenix of G#, on Orleans</title>
+<style>
+  :root{
+    --paper:#f8f3ea;
+    --paper-deep:#f1eadd;
+    --ink:#1c1811;
+    --muted:#6e6455;
+    --line:#d9cfbd;
+    --orange:#c05621;
+    --orange-ink:#9a4419;
+    --code-bg:#171321;
+    --code-ink:#e2dcf0;
+    --code-dim:#7d7494;
+    --code-key:#f2b380;
+    --code-str:#c9b458;
+    --code-typ:#9fc0a8;
+    --code-com:#6a6180;
+    --display:"Fraunces","Charter","Iowan Old Style",Georgia,serif;
+    --body:"Inter","Helvetica Neue",system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--orange);color:#fff}
+  a{color:var(--orange-ink);text-decoration:none;border-bottom:1px solid var(--line)}
+  a:hover{border-bottom-color:var(--orange-ink)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--orange-ink);outline-offset:3px;border-radius:2px}
+
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px}
+
+  .topbar{
+    border-bottom:1px solid var(--line);
+    background:var(--paper);
+    position:sticky;top:0;z-index:20;
+  }
+  .topbar .wrap{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding-top:14px;padding-bottom:14px;
+  }
+  .wordmark{font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:-.01em;border:none}
+  .wordmark .dot{color:var(--orange)}
+  .topnav{display:flex;gap:22px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+  .topnav a{color:var(--muted);border:none}
+  .topnav a:hover{color:var(--orange-ink)}
+  @media(max-width:720px){.topnav{display:none}}
+
+  .hero{padding:84px 0 60px;border-bottom:1px solid var(--line)}
+  .eyebrow{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--orange-ink);margin-bottom:26px;display:flex;align-items:center;gap:12px;
+  }
+  .eyebrow::before{content:"";display:inline-block;width:34px;height:2px;background:var(--orange)}
+  h1{
+    font-family:var(--display);font-weight:560;font-variation-settings:"opsz" 72;
+    font-size:clamp(2.5rem,6.4vw,4.4rem);line-height:1.04;letter-spacing:-.022em;
+    max-width:17ch;
+  }
+  h1 em{font-style:italic;color:var(--orange-ink)}
+  .hero p.dek{
+    margin-top:28px;max-width:58ch;font-size:1.12rem;color:var(--muted);line-height:1.7;
+  }
+  .hero p.dek strong{color:var(--ink);font-weight:600}
+
+  .pipeline{
+    margin-top:56px;display:flex;align-items:stretch;gap:0;
+    font-family:var(--mono);font-size:.8rem;flex-wrap:nowrap;max-width:900px;
+  }
+  .pipe-node{
+    border:1px solid var(--line);background:var(--paper-deep);
+    padding:14px 18px;display:flex;flex-direction:column;gap:4px;
+    flex:1 1 0;min-width:0;justify-content:center;
+  }
+  .pipe-node.hot{flex:1.25 1 0}
+  .pipe-node .t{font-weight:700;color:var(--ink)}
+  .pipe-node .s{color:var(--muted);font-size:.68rem;line-height:1.5}
+  .pipe-node.hot{background:var(--orange);border-color:var(--orange)}
+  .pipe-node.hot .t{color:#fff}
+  .pipe-node.hot .s{color:#f6d9c8}
+  .pipe-arrow{
+    display:flex;align-items:center;padding:0 12px;color:var(--orange-ink);
+    font-size:1rem;user-select:none;
+  }
+  @media(max-width:720px){
+    .pipeline{flex-direction:column}
+    .pipe-node,.pipe-node.hot{flex:none}
+    .pipe-arrow{padding:6px 0 6px 20px;transform:rotate(90deg);transform-origin:20px center;width:20px}
+  }
+
+  section{padding:72px 0;border-bottom:1px solid var(--line)}
+  .kicker{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--orange-ink);margin-bottom:14px;
+  }
+  h2{
+    font-family:var(--display);font-weight:560;font-size:clamp(1.7rem,3.4vw,2.4rem);
+    letter-spacing:-.015em;line-height:1.15;max-width:26ch;margin-bottom:22px;
+  }
+  section p{max-width:66ch;margin-bottom:18px}
+  section p:last-child{margin-bottom:0}
+  .lede{font-size:1.08rem}
+  .note{
+    border-left:3px solid var(--orange);background:var(--paper-deep);
+    padding:16px 20px;max-width:66ch;margin:26px 0;font-size:.95rem;color:var(--muted);
+  }
+  .note strong{color:var(--ink)}
+
+  pre{
+    background:var(--code-bg);color:var(--code-ink);
+    font-family:var(--mono);font-size:.82rem;line-height:1.62;
+    padding:22px 24px;overflow-x:auto;border-radius:0;
+    margin:0;
+  }
+  .codeblock{margin:30px 0;max-width:860px}
+  .codelabel{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    background:var(--ink);color:#cbbfa8;padding:8px 16px;
+  }
+  .codelabel .lang{color:var(--code-key)}
+  .k{color:var(--code-key)}
+  .s{color:var(--code-str)}
+  .ty{color:var(--code-typ)}
+  .c{color:var(--code-com);font-style:italic}
+  .dim{color:var(--code-dim)}
+  .err{color:#e88070}
+  .ok{color:#8fc98f}
+
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:34px 0;position:relative}
+  .duo .codeblock{margin:0}
+  .duo .seam{
+    position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--orange);
+    transform:translateX(-1px);z-index:2;
+  }
+  .duo .seamlabel{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+    background:var(--orange);color:#fff;font-family:var(--mono);font-size:.66rem;
+    letter-spacing:.1em;padding:5px 10px;text-transform:uppercase;white-space:nowrap;
+  }
+  @media(max-width:860px){
+    .duo{grid-template-columns:1fr}
+    .duo .seam{display:none}
+    .duo .seamlabel{position:static;transform:none;display:inline-block;margin:0}
+    .duo .seamwrap{display:flex;justify-content:center;padding:10px 0}
+  }
+  @media(min-width:861px){.duo .seamwrap{display:contents}}
+
+  .stack{margin:40px 0 10px;max-width:860px}
+  .layer{
+    border:1px solid var(--line);border-bottom:none;background:var(--paper);
+    display:grid;grid-template-columns:170px 1fr;gap:0;
+  }
+  .layer:last-child{border-bottom:1px solid var(--line)}
+  .layer .name{
+    padding:20px 22px;border-right:1px solid var(--line);
+    font-family:var(--display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;
+    display:flex;flex-direction:column;gap:4px;justify-content:center;
+  }
+  .layer .name .nl{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--orange-ink);font-weight:500}
+  .layer .body{padding:20px 24px;font-size:.94rem;color:var(--muted)}
+  .layer .body strong{color:var(--ink)}
+  .layer .body .analog{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--orange-ink);display:block;margin-bottom:6px;
+  }
+  .layer.substrate{background:var(--paper-deep)}
+  .layer.regel-layer{background:var(--ink);color:var(--paper)}
+  .layer.regel-layer .name{color:var(--paper);border-right-color:#3a3226}
+  .layer.regel-layer .body{color:#b8ac95}
+  .layer.regel-layer .body strong{color:var(--paper)}
+  .layer.regel-layer .name .nl,.layer.regel-layer .body .analog{color:#f2b380}
+  @media(max-width:680px){
+    .layer{grid-template-columns:1fr}
+    .layer .name{border-right:none;border-bottom:1px solid var(--line);flex-direction:row;align-items:baseline;gap:12px}
+    .layer.regel-layer .name{border-bottom-color:#3a3226}
+  }
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+    border:1px solid var(--line);margin:34px 0;max-width:860px}
+  .cell{background:var(--paper);padding:24px 26px}
+  .cell h3{font-family:var(--display);font-weight:600;font-size:1.06rem;margin-bottom:8px;letter-spacing:-.01em}
+  .cell p{font-size:.9rem;color:var(--muted);max-width:none;margin:0}
+  .cell .conf{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--orange-ink);display:block;margin-bottom:8px;
+  }
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+
+  .edges{margin:30px 0;max-width:860px}
+  .edge{border-top:1px solid var(--line);padding:18px 0}
+  .edge:last-child{border-bottom:1px solid var(--line)}
+  .edge h3{font-family:var(--display);font-weight:600;font-size:1.02rem;letter-spacing:-.01em;margin-bottom:6px}
+  .edge p{font-size:.92rem;color:var(--muted);max-width:72ch;margin:0}
+
+  footer{padding:56px 0 72px}
+  .family{
+    font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:lowercase;
+    color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;
+  }
+  .family .this{color:var(--orange-ink);font-weight:700}
+  footer p{margin-top:22px;font-size:.85rem;color:var(--muted);max-width:60ch}
+</style>
+</head>
+<body>
+<!-- xa-back: back-to-index affordance (injected by the experiments hub; safe to re-run) -->
+<style>
+  .xa-back{position:fixed;left:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:7px;
+    font-family:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;font-size:12px;font-weight:500;letter-spacing:.02em;
+    color:#1c1811;background:#fbf7ee;border:1px solid #d9cfbd;border-radius:100px;padding:8px 15px;text-decoration:none;
+    box-shadow:0 6px 20px -8px rgba(28,24,17,.4);transition:transform .18s ease,box-shadow .18s ease;}
+  .xa-back:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(28,24,17,.55);}
+  .xa-back .xa-arrow{transition:transform .18s ease;}
+  .xa-back:hover .xa-arrow{transform:translateX(-2px);}
+  @media (prefers-reduced-motion: reduce){.xa-back,.xa-back .xa-arrow{transition:none}}
+</style>
+<a href="index.html" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+
+
+<nav class="topbar" aria-label="Page">
+  <div class="wrap">
+    <a class="wordmark" href="#top">fugue<span class="dot">.</span></a>
+    <div class="topnav">
+      <a href="#tension">Tension</a>
+      <a href="#runs">How it runs</a>
+      <a href="#stack">The stack</a>
+      <a href="#killtest">The kill test</a>
+      <a href="#honest">Honest</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">fugue · independent voices, one score · rhymes with “few”</div>
+    <h1>The BEAM's shape.<br>The CLR's <em>engine</em>.</h1>
+    <p class="dek">
+      Elixir proved the shape: millions of cheap stateful processes, let-it-crash, presence
+      for free. <strong>Orleans</strong> — built for Halo, running Azure-scale for a decade —
+      proved the CLR can do that shape with durability OTP never had. And almost nobody uses
+      it, because it never got its Phoenix. Fugue is that Phoenix, written in G#: grains as
+      processes, <strong>scope</strong> as supervision, LiveView over SignalR. One binary. One
+      Postgres. <strong>Every process immortal — kill the node and the user never knows.</strong>
+    </p>
+
+    <div class="pipeline" aria-label="Grain pipeline">
+      <div class="pipe-node">
+        <span class="t">Cart, Room, Doc</span>
+        <span class="s">every stateful thing is a grain · durable · addressable</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node hot">
+        <span class="t">fugue</span>
+        <span class="s">view-grains render HTML · diff · stream</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node">
+        <span class="t">SignalR</span>
+        <span class="s">diffs over the wire · presence · pubsub</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node">
+        <span class="t">postgres://</span>
+        <span class="s">grain state · truth · history</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="tension">
+  <div class="wrap">
+    <div class="kicker">The tension nobody resolved</div>
+    <h2>The best actor runtime never met the best actor framework</h2>
+    <p class="lede">
+      For a decade the two halves lived on different runtimes. Phoenix and LiveView are the
+      best full-stack story alive — on a dynamically-typed runtime your model writes
+      hesitantly and your CFO has never heard of. Orleans is the most battle-tested
+      virtual-actor system alive — wearing an enterprise C# suit, with no web story, no
+      generators, no taste. <strong>Each half spent ten years missing exactly what the other
+      half had:</strong>
+    </p>
+
+    <div class="grid2">
+      <div class="cell">
+        <span class="conf">elixir has</span>
+        <h3>The shape.</h3>
+        <p>Cheap processes, supervision trees, presence and pubsub as birthrights — the actor
+        model as a way of life, not a library. And a small ecosystem on a niche runtime: the
+        shape is right, the gravity is missing.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">orleans has</span>
+        <h3>Virtual actors — durable and location-transparent by default.</h3>
+        <p>An Orleans grain never really dies: it persists, reactivates anywhere, and is
+        addressable without knowing where it lives — things raw OTP makes you build yourself.
+        And it has zero full-stack story. It is an engine sold without a car.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">phoenix proved</span>
+        <h3>The actor model is a web framework waiting to happen.</h3>
+        <p>LiveView, presence, channels: every hard web problem — realtime, collaboration,
+        state per user — collapses when a process holds the state and the wire carries diffs.
+        Phoenix is the proof that this is not a niche trick. It is the trick.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">g# provides</span>
+        <h3>The cultural reset.</h3>
+        <p><code style="font-family:var(--mono);font-size:.88em">scope</code> structured
+        concurrency, Go-ergonomics, Swift-clarity — a fresh surface over the whole CLR with
+        no enterprise expectations attached. Orleans behind a G# face is not "enterprise
+        C#." It is a new thing that happens to be ten years old and bulletproof.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>The one-sentence mind-blow:</strong> virtual actors mean the process never dies —
+      fugue is Phoenix where every GenServer is immortal, every restart is a reactivation from
+      persisted state, and placement is nobody's job.
+    </div>
+  </div>
+</section>
+
+<section id="runs">
+  <div class="wrap">
+    <div class="kicker">How it runs</div>
+    <h2>Everything stateful is a grain. Every view is a grain too.</h2>
+    <p>
+      Orleans' shape, kept exactly; Phoenix's moves, translated faithfully. There is no cache
+      tier, no message broker, no session store, no orchestration layer — the grain directory
+      and the Postgres behind it are the entire topology.
+    </p>
+    <div class="grid2">
+      <div class="cell">
+        <h3>grains — every entity is a process</h3>
+        <p>A Cart, a Document, a GameRoom is a virtual actor: always addressable by identity,
+        activated on demand, single-threaded so it never needs a lock, persisted to Postgres,
+        placed by the runtime across the cluster. You write a class; the runtime decides where
+        it lives and keeps it alive forever.</p>
+      </div>
+      <div class="cell">
+        <h3>views — the LiveView move</h3>
+        <p>Each connected user's view is itself a grain: it renders HTML on the server, keeps
+        the socket's state, and streams DOM diffs over SignalR as the grains it watches
+        change. Reconnect is just reactivation — the view-grain remembers exactly where the
+        user was, because it never actually went away.</p>
+      </div>
+      <div class="cell">
+        <h3>supervise — scope blocks as trees</h3>
+        <p>G#'s structured concurrency is the supervision model: children cannot outlive
+        their parent <code style="font-family:var(--mono);font-size:.88em">scope</code>, so
+        the failure domain is visible in the indentation. A crashed grain is reactivated from
+        its persisted state — let-it-crash without hand-building the tree plumbing.</p>
+      </div>
+      <div class="cell">
+        <h3>cluster — add a node, that's the runbook</h3>
+        <p>A new node joins the silo ring; grains rebalance onto it; a lost node's grains
+        reactivate elsewhere from Postgres. No orchestration layer, no broker, no Redis —
+        Postgres is the only externality, and one binary per node is the only artifact.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="kicker">The stack</div>
+    <h2>What Orleans contributes, what Phoenix taught, what only fugue has</h2>
+
+    <div class="stack">
+      <div class="layer regel-layer">
+        <div class="name">Fugue <span class="nl">the framework's own</span></div>
+        <div class="body">
+          <span class="analog">phoenix : otp :: fugue : orleans</span>
+          <strong>View-grains, generators, taste.</strong>
+          <code style="font-family:var(--mono);font-size:.88em">fugue g live deal</code>
+          scaffolds a grain, its live view, and its route in one move; presence and pubsub are
+          conventions, not packages; the whole framework exists to make the right grain the
+          obvious one to write. Orleans supplied the engine. Fugue is the car.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Voices <span class="nl">from orleans</span></div>
+        <div class="body">
+          <span class="analog">grains · the independent voices</span>
+          Virtual actors: durable, single-threaded, location-transparent, activated on demand
+          and never truly gone. A decade of Azure-scale production hardening arrives as a
+          dependency, not a bet.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Score <span class="nl">from g#</span></div>
+        <div class="body">
+          <span class="analog">scope · unions · supervision as syntax</span>
+          Structured concurrency as the failure model: a <code style="font-family:var(--mono);font-size:.88em">scope</code>
+          block joins every async child before returning, so the failure domain is lexical.
+          And payload-bearing <code style="font-family:var(--mono);font-size:.88em">enum</code>s
+          are the message protocol — a grain's commands are one union, matched with an
+          exhaustive <code style="font-family:var(--mono);font-size:.88em">switch</code>, so
+          adding a message the handler forgot is a compile error, not a dead letter. The
+          score keeps the voices in time.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Wire <span class="nl">from phoenix, via signalr</span></div>
+        <div class="body">
+          <span class="analog">channels · presence · html diffs</span>
+          SignalR carries what Phoenix taught the world to carry: rendered-HTML diffs instead
+          of JSON, channels instead of ad-hoc websockets, presence as a first-class primitive.
+          The client is a thin patcher; the app lives on the server, in grains.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Data <span class="nl">grain state · relational truth</span></div>
+        <div class="body">
+          <span class="analog">postgres is the only externality</span>
+          Grain state persists to Postgres on write; EF Core handles the relational queries
+          grains shouldn't do — reports, joins, search. Grains are behavior wrapped around
+          state; Postgres is the state's home and its history.
+        </div>
+      </div>
+      <div class="layer substrate">
+        <div class="name">Substrate <span class="nl">clr</span></div>
+        <div class="body">
+          <span class="analog">one binary per node · one postgres</span>
+          G# compiles straight to CLR assemblies — every BCL type, every NuGet package, every
+          dotnet tool just works. One self-contained binary per node, roles chosen at boot;
+          one Postgres; nothing else on the invoice.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="killtest">
+  <div class="wrap">
+    <div class="kicker">The demo that sells it</div>
+    <h2>Kill the node. The user never knows.</h2>
+    <p>
+      The canonical exchange: on the left, a room and its live view in plain G# — faithful
+      to the shipped tour: a primary-constructor data class, Go-flavored slices,
+      <code style="font-family:var(--mono);font-size:.88em">scope</code> joining its
+      children, <code style="font-family:var(--mono);font-size:.88em">await for</code> over
+      an async sequence. On the right, what happens when you murder the machine it runs on.
+    </p>
+
+    <div class="duo">
+      <div class="codeblock">
+        <div class="codelabel"><span>room.gs · a grain and its live view</span><span class="lang">g#</span></div>
+        <pre><span class="k">package</span> App.Rooms
+
+<span class="k">import</span> Fugue.Live
+<span class="k">import</span> Gsharp.Extensions.Go   <span class="c">// slices, append</span>
+
+<span class="k">data class</span> <span class="ty">Message</span>(user <span class="ty">UserId</span>, body <span class="ty">string</span>)
+
+<span class="k">class</span> <span class="ty">Room</span> : <span class="ty">Grain</span> {
+    <span class="k">var</span> members = []<span class="ty">UserId</span>{}
+
+    <span class="k">func</span> join(user <span class="ty">UserId</span>) {
+        members = append(members, user)   <span class="c">// single-threaded — no lock</span>
+    }
+    <span class="c">// fugue derives posts() async sequence[Message] from grain writes</span>
+}
+
+<span class="k">async func</span> roomLive(view <span class="ty">LiveView</span>, room <span class="ty">Room</span>) {
+    <span class="k">scope</span> {                                <span class="c">// supervision, as syntax</span>
+        <span class="k">await for</span> msg <span class="k">in</span> room.posts() {     <span class="c">// the tour's async streams</span>
+            <span class="k">await</span> view.push(view.diff(render(msg)))
+        }
+    }
+}</pre>
+      </div>
+      <div class="seamwrap"><div class="seam" aria-hidden="true"></div><div class="seamlabel">kill -9</div></div>
+      <div class="codeblock">
+        <div class="codelabel"><span>the kill test · one transcript</span><span class="lang">production</span></div>
+        <pre>$ kill -9 silo-2
+
+silo-2             <span class="err">✗ gone</span> <span class="dim">· heartbeat lost</span>
+grains on silo-2     <span class="dim">1,204 active</span>
+
+reactivating       <span class="ok">✓</span> <span class="dim">silo-1, silo-3 · 380ms</span>
+  state loaded       <span class="dim">postgres · last persisted turn</span>
+liveview sockets   <span class="ok">✓</span> <span class="dim">812 reconnected</span>
+diff resync        <span class="ok">✓</span> <span class="dim">server re-renders · client patches</span>
+
+<span class="ok">the user saw: nothing</span>
+<span class="dim">no session store consulted. no cache warmed.
+placement was nobody's job.</span></pre>
+      </div>
+    </div>
+
+    <p>
+      This is the demo Elixir people say the CLR can't do. And the part that OTP itself does
+      not give you free — the durability, the placement, the reactivation from persisted state —
+      is exactly the part Orleans has been running at Halo scale for a decade.
+      <strong>Fugue doesn't have to prove the hard part. It has to make the hard part
+      pleasant.</strong>
+    </p>
+  </div>
+</section>
+
+<section id="honest">
+  <div class="wrap">
+    <div class="kicker">What we won't pretend</div>
+    <h2>What the fusion costs</h2>
+    <div class="edges">
+      <div class="edge">
+        <h3>Virtual actors are not OTP.</h3>
+        <p>No selective receive, different mailbox semantics, activation latency on the first
+        call to a cold grain. Erlang veterans will find the corners where the metaphor bends —
+        fugue names the differences instead of papering over them.</p>
+      </div>
+      <div class="edge">
+        <h3>Orleans and Native AOT are still negotiating.</h3>
+        <p>Orleans leans on codegen and reflection; single-file AOT is not a settled story.
+        Fugue ships self-contained CoreCLR builds first — still one binary, still one
+        artifact — and treats AOT as a destination, not a day-one claim.</p>
+      </div>
+      <div class="edge">
+        <h3>One grain, one thread.</h3>
+        <p>Single-threaded grains delete locks, and they cap per-entity throughput. The
+        million-follower Room and the flash-sale Cart need sharding patterns — worker grains,
+        fan-out — that fugue must make conventional and generated, not clever and folkloric.</p>
+      </div>
+      <div class="edge">
+        <h3>LiveView took Phoenix years.</h3>
+        <p>Reconnect semantics, diff replay, form recovery, latency masking — these were
+        earned across releases, not designed in an afternoon. Fugue inherits the design
+        homework, not the answers, and the view-grain layer is its deepest original bet.</p>
+      </div>
+      <div class="edge">
+        <h3>Zero training corpus + a v0.3 language.</h3>
+        <p>Models write C# and Elixir fluently; they write G# barely. The language is real —
+        a compiler, a full spec, a tour small enough to hold in a context window — but it is
+        v0.3 with one primary maintainer, and no model has trained on it. The guts are C#
+        assemblies and the G# surface is deliberately thin, but day-one agent fluency is
+        lost. Stated plainly.</p>
+      </div>
+      <div class="edge">
+        <h3>“Just put it in a grain” is a seduction.</h3>
+        <p>Cross-grain consistency is not transactional by default: two grains updated in one
+        gesture can land in two states. Postgres remains truth, grains remain
+        cache-with-behavior, and fugue says so on page one instead of in a postmortem.</p>
+      </div>
+    </div>
+
+    <p>
+      The pitch, in one sentence: <strong>every stateful thing in your product is an immortal,
+      addressable process; every user's screen is one too; the wire carries HTML diffs; the
+      cluster heals itself from one Postgres — and all of it is written in a language that
+      feels like Go and runs on the runtime your CFO already pays for.</strong>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="family">
+      <span>chord</span><span>·</span>
+      <span class="this">fugue</span><span>·</span>
+      <span>realbook</span>
+    </div>
+    <p>
+      Fugue — a concept study in the G# ecosystem: Orleans virtual actors as the unit of
+      state, LiveView-over-SignalR as the unit of interface. Code samples are faithful to
+      the shipped G# tour (v0.3). Cousins to the samen · eigen · kern · streng · taal ·
+      regel family. Independent voices, one score — and every voice immortal.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

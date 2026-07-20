@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>customCMS — one brain, many storefronts</title>
+<meta name="description" content="BookEngine: a single local brain that researches, writes, compiles, and runs many niche book-affiliate sites across cheap VPS instances — driven by Claude Code at zero API cost.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f8f3ea; --paper-deep:#f1eadd; --paper-band:#f4ede0; --card:#fbf7ee;
+    --ink:#1c1811; --muted:#6e6455; --faint:#a89c86;
+    --line:#d9cfbd; --line-soft:#e5dccb;
+    --accent:#a86a2c; --accent-ink:#875421;
+    --display:"Fraunces","Charter","Iowan Old Style",Georgia,serif;
+    --body:"Inter","Helvetica Neue",system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  a{color:inherit}
+  ::selection{background:rgba(168,106,44,.18)}
+  .wrap{max-width:940px;margin:0 auto;padding:0 clamp(22px,5vw,48px)}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(248,243,234,.82);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line-soft)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;max-width:940px}
+  .brand{font-family:var(--display);font-weight:600;font-size:19px}
+  .brand b{color:var(--accent-ink)}
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:4px 11px}
+
+  header.hero{padding:clamp(56px,11vw,120px) 0 clamp(36px,6vw,64px)}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:26px}
+  .eyebrow::before{content:"";display:inline-block;width:26px;height:1.5px;background:var(--accent);vertical-align:middle;margin-right:12px;margin-bottom:4px}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(40px,7.5vw,80px);line-height:.98;letter-spacing:-.02em;max-width:14ch}
+  h1 em{font-style:italic;color:var(--accent-ink)}
+  .lede{margin-top:clamp(24px,4vw,38px);max-width:60ch;font-size:clamp(18px,2vw,21px);line-height:1.55;color:#3a342a}
+  .lede b{font-weight:600;color:var(--ink)}
+  .aka{margin-top:18px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .aka b{color:var(--accent-ink)}
+
+  section.band{padding:clamp(44px,7vw,80px) 0;border-top:1px solid var(--line-soft)}
+  section.band.alt{background:var(--paper-band)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(27px,4.4vw,42px);line-height:1.05;letter-spacing:-.015em;max-width:20ch}
+  h2 + .sub{margin-top:14px;max-width:60ch;color:var(--muted);font-size:17px}
+
+  /* one brain many storefronts */
+  .topo{margin-top:36px;display:grid;gap:22px;justify-items:center}
+  .brain{background:var(--card);border:1.5px solid var(--accent);border-radius:16px;padding:20px 26px;text-align:center;max-width:420px;width:100%}
+  .brain .t{font-family:var(--display);font-weight:600;font-size:20px}
+  .brain .d{font-size:14px;color:var(--muted);margin-top:4px}
+  .spokes{font-family:var(--mono);color:var(--accent);font-size:22px;line-height:1}
+  .stores{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));width:100%}
+  .store{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+  .store .dom{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:500}
+  .store .niche{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .store .vps{font-family:var(--mono);font-size:10.5px;color:var(--accent-ink);margin-top:8px;border-top:1px solid var(--line-soft);padding-top:7px}
+
+  /* pipeline */
+  .pipe{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin-top:34px}
+  .stage{flex:1 1 120px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px;position:relative}
+  .stage .n{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.06em}
+  .stage .s{font-family:var(--display);font-weight:600;font-size:17px;margin-top:6px}
+  .stage .g{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.45}
+  .pipe .arrow{display:flex;align-items:center;color:var(--accent);font-family:var(--mono);font-size:18px}
+  @media(max-width:640px){.pipe .arrow{display:none}}
+
+  .cols{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:32px}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  .col h3{font-family:var(--display);font-weight:600;font-size:19px;margin-bottom:8px}
+  .col p{font-size:14.5px;color:var(--muted);line-height:1.55}
+  .col code{font-family:var(--mono);font-size:12.5px;background:var(--paper-deep);padding:1px 6px;border-radius:5px;color:var(--accent-ink)}
+
+  .stack{margin-top:32px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .stack .row{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:16px;padding:13px 20px;border-bottom:1px solid var(--line-soft);font-size:15px}
+  .stack .row:last-child{border-bottom:0}
+  .stack .row:nth-child(odd){background:var(--card)}
+  .stack .k{font-family:var(--mono);font-size:12.5px;color:var(--accent-ink);align-self:center}
+  .stack .v{color:#3a342a}
+  .stack .v b{color:var(--ink);font-weight:600}
+
+  .statusnote{margin-top:32px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;font-size:15.5px;color:#3a342a}
+  .statusnote b{color:var(--ink)}
+  .statusnote .pill{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9a5a3c;border:1px solid #9a5a3c;border-radius:100px;padding:3px 10px;margin-bottom:12px}
+
+  footer{border-top:1px solid var(--line);padding:44px 0 90px;color:var(--faint);font-family:var(--mono);font-size:12px}
+
+  .xa-back{position:fixed;left:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.02em;color:#1c1811;background:#fbf7ee;border:1px solid #d9cfbd;border-radius:100px;padding:8px 15px;text-decoration:none;box-shadow:0 6px 20px -8px rgba(28,24,17,.4);transition:transform .18s ease,box-shadow .18s ease}
+  .xa-back:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(28,24,17,.55)}
+  .xa-back .xa-arrow{transition:transform .18s ease}
+  .xa-back:hover .xa-arrow{transform:translateX(-2px)}
+  @media (prefers-reduced-motion: reduce){.xa-back,.xa-back .xa-arrow{transition:none}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <div class="brand"><b>custom</b>CMS</div>
+  <div class="tag">Local · Concept</div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">An autonomous, multi-domain content engine</div>
+  <h1>One brain. <em>Many</em> storefronts.</h1>
+  <p class="lede">A single local program that researches, writes, evaluates, compiles, and runs a whole
+    portfolio of niche book-review sites — each on its own five-dollar VPS. The writing and judgment run
+    through <b>Claude Code</b> on a subscription, so the marginal cost of another article, or another
+    entire site, is effectively zero.</p>
+  <p class="aka">Internally: <b>BookEngine</b> — the "customCMS" experiment, a content-management system with no CMS to log into.</p>
+</div></header>
+
+<section class="band alt"><div class="wrap">
+  <div class="kicker">The shape</div>
+  <h2>The CMS lives on your machine. The sites are just output.</h2>
+  <p class="sub">There is no admin panel on the internet. One local brain owns the database, does the
+    thinking, compiles static HTML, and pushes it out. Each domain is a dumb, fast binary that only serves.</p>
+  <div class="topo">
+    <div class="brain">
+      <div class="t">Local brain</div>
+      <div class="d">Domain manager · pipeline engine · persona engine · analytics — one SQLite DB per domain, plus a global one</div>
+    </div>
+    <div class="spokes">▼ &nbsp; ▼ &nbsp; ▼</div>
+    <div class="stores">
+      <div class="store"><div class="dom">scifi-reads.com</div><div class="niche">Sci-Fi &amp; Fantasy</div><div class="vps">VPS · $5/mo</div></div>
+      <div class="store"><div class="dom">biz-books.co</div><div class="niche">Business &amp; Investing</div><div class="vps">VPS · $5/mo</div></div>
+      <div class="store"><div class="dom">selfhelp-shelf.com</div><div class="niche">Self-Help &amp; Psychology</div><div class="vps">VPS · $5/mo</div></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="kicker">The pipeline</div>
+  <h2>Every article runs the same six steps.</h2>
+  <p class="sub">Per domain, per book, on a schedule — the brain turns a title into a published, cross-linked review.</p>
+  <div class="pipe">
+    <div class="stage"><div class="n">01</div><div class="s">Research</div><div class="g">Open Library &amp; Google Books — facts, editions, metadata.</div></div>
+    <div class="arrow">→</div>
+    <div class="stage"><div class="n">02</div><div class="s">Synthesize</div><div class="g">Draft the review against the domain's voice.</div></div>
+    <div class="arrow">→</div>
+    <div class="stage"><div class="n">03</div><div class="s">Review</div><div class="g">Edit and fact-check the draft.</div></div>
+    <div class="arrow">→</div>
+    <div class="stage"><div class="n">04</div><div class="s">Eval</div><div class="g">Score it; regenerate until it clears the bar.</div></div>
+    <div class="arrow">→</div>
+    <div class="stage"><div class="n">05</div><div class="s">Compile</div><div class="g">Render to static HTML with internal links.</div></div>
+    <div class="arrow">→</div>
+    <div class="stage"><div class="n">06</div><div class="s">Push</div><div class="g">Ship the files to the domain's VPS.</div></div>
+  </div>
+</div></section>
+
+<section class="band alt"><div class="wrap">
+  <div class="kicker">The two engines around it</div>
+  <h2>Not just a writer — a librarian and a community member.</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>A book knowledge graph</h3>
+      <p>Reviews aren't standalone pages. Every book cross-references the whole library, so a review can
+        say "if you liked this, try…" and mean it. Tables carry a typed prefix —
+        <code>BK_books</code>, <code>AU_authors</code>, <code>BR_book_relationships</code> — so the schema
+        reads like a map.</p>
+    </div>
+    <div class="col">
+      <h3>A social persona engine</h3>
+      <p>Personas that watch videos and read threads on TikTok, YouTube, Reddit, and X — engaging
+        authentically to build credibility first, and only promoting once they've earned it. The
+        analytics loop pulls data back from every VPS for cross-domain insight.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="kicker">How it's built</div>
+  <h2>One Go binary, two modes.</h2>
+  <div class="stack">
+    <div class="row"><div class="k">Language</div><div class="v"><b>Go</b> with pure-Go SQLite (<code style="font-family:var(--mono);font-size:12.5px">modernc.org/sqlite</code>, no CGo) — cross-compiles to Linux trivially</div></div>
+    <div class="row"><div class="k">Two modes</div><div class="v"><b>CLI</b> (local): research, write, compile, push. &nbsp;<b>Server</b> (VPS): serve static files + analytics endpoints</div></div>
+    <div class="row"><div class="k">The LLM</div><div class="v"><b>Claude Code CLI</b> — <code style="font-family:var(--mono);font-size:12.5px">claude -p --output-format json</code>. Subscription, not metered API — zero marginal cost</div></div>
+    <div class="row"><div class="k">Data</div><div class="v">One SQLite DB per domain plus a global one; the book knowledge graph with a <code style="font-family:var(--mono);font-size:12.5px">TBL_</code> prefix convention</div></div>
+    <div class="row"><div class="k">Research</div><div class="v">API-only for v1 — Open Library, Google Books. Single domain first, then fan out</div></div>
+    <div class="row"><div class="k">Hosting</div><div class="v">Cheap VPS per storefront (~$5/mo) serving a static binary. The expensive thinking stays on one machine</div></div>
+  </div>
+</div></section>
+
+<section class="band alt"><div class="wrap">
+  <div class="kicker">Status</div>
+  <h2>A local experiment that outgrew its language.</h2>
+  <div class="statusnote">
+    <span class="pill">Local · not published</span>
+    <p>Filed under <b>customCMS</b> because that's the question it started as — what does a content
+      management system look like with no CMS to log into? It began as a pure-Zig concept and became a
+      working Go engine with a real pipeline, database layer, and compiler. It stays local: the interesting
+      part isn't code anyone needs, it's the <b>idea</b> — move the whole editorial operation to one brain,
+      and let the internet only ever see the output.</p>
+  </div>
+</div></section>
+
+<footer><div class="wrap">customCMS · BookEngine · a concept explainer · part of ckluis / experimental-architectures</div></footer>
+
+<a href="index.html" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+</body>
+</html>

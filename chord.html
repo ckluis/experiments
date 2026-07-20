@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Chord — a concept study: the omakase, convention-over-configuration full-stack for G#. Rails' covenant on Kestrel's engine; one CLI, one binary, one Postgres.">
+<title>Chord — the omakase full-stack for G#</title>
+<style>
+  :root{
+    --paper:#f8f3ea;
+    --paper-deep:#f1eadd;
+    --ink:#1c1811;
+    --muted:#6e6455;
+    --line:#d9cfbd;
+    --orange:#b3403a;
+    --orange-ink:#8f322d;
+    --code-bg:#171321;
+    --code-ink:#e2dcf0;
+    --code-dim:#7d7494;
+    --code-key:#f0a8a0;
+    --code-str:#c9b458;
+    --code-typ:#9fc0a8;
+    --code-com:#6a6180;
+    --display:"Fraunces","Charter","Iowan Old Style",Georgia,serif;
+    --body:"Inter","Helvetica Neue",system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--orange);color:#fff}
+  a{color:var(--orange-ink);text-decoration:none;border-bottom:1px solid var(--line)}
+  a:hover{border-bottom-color:var(--orange-ink)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--orange-ink);outline-offset:3px;border-radius:2px}
+
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px}
+
+  .topbar{
+    border-bottom:1px solid var(--line);
+    background:var(--paper);
+    position:sticky;top:0;z-index:20;
+  }
+  .topbar .wrap{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding-top:14px;padding-bottom:14px;
+  }
+  .wordmark{font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:-.01em;border:none}
+  .wordmark .dot{color:var(--orange)}
+  .topnav{display:flex;gap:22px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+  .topnav a{color:var(--muted);border:none}
+  .topnav a:hover{color:var(--orange-ink)}
+  @media(max-width:720px){.topnav{display:none}}
+
+  .hero{padding:84px 0 60px;border-bottom:1px solid var(--line)}
+  .eyebrow{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--orange-ink);margin-bottom:26px;display:flex;align-items:center;gap:12px;
+  }
+  .eyebrow::before{content:"";display:inline-block;width:34px;height:2px;background:var(--orange)}
+  h1{
+    font-family:var(--display);font-weight:560;font-variation-settings:"opsz" 72;
+    font-size:clamp(2.5rem,6.4vw,4.4rem);line-height:1.04;letter-spacing:-.022em;
+    max-width:17ch;
+  }
+  h1 em{font-style:italic;color:var(--orange-ink)}
+  .hero p.dek{
+    margin-top:28px;max-width:58ch;font-size:1.12rem;color:var(--muted);line-height:1.7;
+  }
+  .hero p.dek strong{color:var(--ink);font-weight:600}
+
+  .pipeline{
+    margin-top:56px;display:flex;align-items:stretch;gap:0;
+    font-family:var(--mono);font-size:.8rem;flex-wrap:nowrap;max-width:900px;
+  }
+  .pipe-node{
+    border:1px solid var(--line);background:var(--paper-deep);
+    padding:14px 18px;display:flex;flex-direction:column;gap:4px;
+    flex:1 1 0;min-width:0;justify-content:center;
+  }
+  .pipe-node.hot{flex:1.25 1 0}
+  .pipe-node .t{font-weight:700;color:var(--ink)}
+  .pipe-node .s{color:var(--muted);font-size:.68rem;line-height:1.5}
+  .pipe-node.hot{background:var(--orange);border-color:var(--orange)}
+  .pipe-node.hot .t{color:#fff}
+  .pipe-node.hot .s{color:#f5d3ce}
+  .pipe-arrow{
+    display:flex;align-items:center;padding:0 12px;color:var(--orange-ink);
+    font-size:1rem;user-select:none;
+  }
+  @media(max-width:720px){
+    .pipeline{flex-direction:column}
+    .pipe-node,.pipe-node.hot{flex:none}
+    .pipe-arrow{padding:6px 0 6px 20px;transform:rotate(90deg);transform-origin:20px center;width:20px}
+  }
+
+  section{padding:72px 0;border-bottom:1px solid var(--line)}
+  .kicker{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--orange-ink);margin-bottom:14px;
+  }
+  h2{
+    font-family:var(--display);font-weight:560;font-size:clamp(1.7rem,3.4vw,2.4rem);
+    letter-spacing:-.015em;line-height:1.15;max-width:26ch;margin-bottom:22px;
+  }
+  section p{max-width:66ch;margin-bottom:18px}
+  section p:last-child{margin-bottom:0}
+  .lede{font-size:1.08rem}
+  .note{
+    border-left:3px solid var(--orange);background:var(--paper-deep);
+    padding:16px 20px;max-width:66ch;margin:26px 0;font-size:.95rem;color:var(--muted);
+  }
+  .note strong{color:var(--ink)}
+
+  pre{
+    background:var(--code-bg);color:var(--code-ink);
+    font-family:var(--mono);font-size:.82rem;line-height:1.62;
+    padding:22px 24px;overflow-x:auto;border-radius:0;
+    margin:0;
+  }
+  .codeblock{margin:30px 0;max-width:860px}
+  .codelabel{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    background:var(--ink);color:#cbbfa8;padding:8px 16px;
+  }
+  .codelabel .lang{color:var(--code-key)}
+  .k{color:var(--code-key)}
+  .s{color:var(--code-str)}
+  .ty{color:var(--code-typ)}
+  .c{color:var(--code-com);font-style:italic}
+  .dim{color:var(--code-dim)}
+  .err{color:#e88070}
+  .ok{color:#8fc98f}
+
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:34px 0;position:relative}
+  .duo .codeblock{margin:0}
+  .duo .seam{
+    position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--orange);
+    transform:translateX(-1px);z-index:2;
+  }
+  .duo .seamlabel{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;
+    background:var(--orange);color:#fff;font-family:var(--mono);font-size:.66rem;
+    letter-spacing:.1em;padding:5px 10px;text-transform:uppercase;white-space:nowrap;
+  }
+  @media(max-width:860px){
+    .duo{grid-template-columns:1fr}
+    .duo .seam{display:none}
+    .duo .seamlabel{position:static;transform:none;display:inline-block;margin:0}
+    .duo .seamwrap{display:flex;justify-content:center;padding:10px 0}
+  }
+  @media(min-width:861px){.duo .seamwrap{display:contents}}
+
+  .stack{margin:40px 0 10px;max-width:860px}
+  .layer{
+    border:1px solid var(--line);border-bottom:none;background:var(--paper);
+    display:grid;grid-template-columns:170px 1fr;gap:0;
+  }
+  .layer:last-child{border-bottom:1px solid var(--line)}
+  .layer .name{
+    padding:20px 22px;border-right:1px solid var(--line);
+    font-family:var(--display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;
+    display:flex;flex-direction:column;gap:4px;justify-content:center;
+  }
+  .layer .name .nl{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--orange-ink);font-weight:500}
+  .layer .body{padding:20px 24px;font-size:.94rem;color:var(--muted)}
+  .layer .body strong{color:var(--ink)}
+  .layer .body .analog{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--orange-ink);display:block;margin-bottom:6px;
+  }
+  .layer.substrate{background:var(--paper-deep)}
+  .layer.regel-layer{background:var(--ink);color:var(--paper)}
+  .layer.regel-layer .name{color:var(--paper);border-right-color:#3a3226}
+  .layer.regel-layer .body{color:#b8ac95}
+  .layer.regel-layer .body strong{color:var(--paper)}
+  .layer.regel-layer .name .nl,.layer.regel-layer .body .analog{color:#eba59f}
+  @media(max-width:680px){
+    .layer{grid-template-columns:1fr}
+    .layer .name{border-right:none;border-bottom:1px solid var(--line);flex-direction:row;align-items:baseline;gap:12px}
+    .layer.regel-layer .name{border-bottom-color:#3a3226}
+  }
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+    border:1px solid var(--line);margin:34px 0;max-width:860px}
+  .cell{background:var(--paper);padding:24px 26px}
+  .cell h3{font-family:var(--display);font-weight:600;font-size:1.06rem;margin-bottom:8px;letter-spacing:-.01em}
+  .cell p{font-size:.9rem;color:var(--muted);max-width:none;margin:0}
+  .cell .conf{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--orange-ink);display:block;margin-bottom:8px;
+  }
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+
+  .ledger{margin:34px 0;max-width:860px;border:1px solid var(--line);background:var(--paper)}
+  .drow{display:grid;grid-template-columns:58px 1fr 1.15fr;border-top:1px solid var(--line)}
+  .drow:first-child{border-top:none}
+  .drow.head{background:var(--paper-deep);font-family:var(--mono);font-size:.66rem;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .drow.head>div{padding:10px 18px}
+  .drow .dn{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--orange-ink);
+    padding:16px 0 16px 18px}
+  .drow .dq{padding:15px 18px;font-size:.92rem;font-weight:600;letter-spacing:-.005em}
+  .drow .da{padding:15px 18px;font-size:.9rem;color:var(--muted);border-left:1px solid var(--line)}
+  .drow .da strong{color:var(--ink)}
+  .ledger-tail{border-top:1px solid var(--line);background:var(--paper-deep);
+    padding:13px 18px;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;color:var(--muted)}
+  .ledger-tail .n{color:var(--orange-ink);font-weight:700}
+  @media(max-width:680px){
+    .drow{grid-template-columns:44px 1fr}
+    .drow.head .da{display:none}
+    .drow .da{grid-column:1/-1;border-left:none;border-top:1px dashed var(--line);padding-top:12px}
+  }
+
+  .edges{margin:30px 0;max-width:860px}
+  .edge{border-top:1px solid var(--line);padding:18px 0}
+  .edge:last-child{border-bottom:1px solid var(--line)}
+  .edge h3{font-family:var(--display);font-weight:600;font-size:1.02rem;letter-spacing:-.01em;margin-bottom:6px}
+  .edge p{font-size:.92rem;color:var(--muted);max-width:72ch;margin:0}
+
+  footer{padding:56px 0 72px}
+  .family{
+    font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:lowercase;
+    color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;
+  }
+  .family .this{color:var(--orange-ink);font-weight:700}
+  footer p{margin-top:22px;font-size:.85rem;color:var(--muted);max-width:60ch}
+</style>
+</head>
+<body>
+<!-- xa-back: back-to-index affordance (injected by the experiments hub; safe to re-run) -->
+<style>
+  .xa-back{position:fixed;left:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:7px;
+    font-family:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;font-size:12px;font-weight:500;letter-spacing:.02em;
+    color:#1c1811;background:#fbf7ee;border:1px solid #d9cfbd;border-radius:100px;padding:8px 15px;text-decoration:none;
+    box-shadow:0 6px 20px -8px rgba(28,24,17,.4);transition:transform .18s ease,box-shadow .18s ease;}
+  .xa-back:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(28,24,17,.55);}
+  .xa-back .xa-arrow{transition:transform .18s ease;}
+  .xa-back:hover .xa-arrow{transform:translateX(-2px);}
+  @media (prefers-reduced-motion: reduce){.xa-back,.xa-back .xa-arrow{transition:none}}
+</style>
+<a href="index.html" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+
+
+<nav class="topbar" aria-label="Page">
+  <div class="wrap">
+    <a class="wordmark" href="#top">chord<span class="dot">.</span></a>
+    <div class="topnav">
+      <a href="#tension">Tension</a>
+      <a href="#runs">How it runs</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#stack">The stack</a>
+      <a href="#loop">The loop</a>
+      <a href="#honest">Honest</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">chord · notes sounded together · the omakase full-stack for G#</div>
+    <h1>Twenty years of parts.<br>Finally a <em>whole</em>.</h1>
+    <p class="dek">
+      .NET has every world-class ingredient — Kestrel, among the fastest web servers alive;
+      EF Core; SignalR; Hangfire; Native AOT — and in twenty years it never produced a Rails:
+      an omakase, convention-over-configuration framework that decides for you. Chord is that
+      framework, written in and for <strong>G#</strong> — Go, Kotlin, and Swift ergonomics on
+      the CLR, real and public at v0.3, young enough to be unburdened by history or by
+      anyone's expectations. One CLI. One
+      binary. One Postgres. <strong>The best ingredients in the industry, finally sounded
+      together — and every decision you didn't have to make is the product.</strong>
+    </p>
+
+    <div class="pipeline" aria-label="The chord loop">
+      <div class="pipe-node">
+        <span class="t">chord new</span>
+        <span class="s">a decided app in one command</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node hot">
+        <span class="t">conventions</span>
+        <span class="s">routing, models, views — derived from names</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node">
+        <span class="t">one binary</span>
+        <span class="s">native aot · a few MB</span>
+      </div>
+      <div class="pipe-arrow" aria-hidden="true">→</div>
+      <div class="pipe-node">
+        <span class="t">postgres://</span>
+        <span class="s">the only other thing</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="tension">
+  <div class="wrap">
+    <div class="kicker">The tension nobody resolved</div>
+    <h2>The Rails-shaped hole is twenty years old</h2>
+    <p class="lede">
+      .NET's problem was never engineering. It was culture. Enterprise C# demands explicit
+      dependency injection, configuration ceremony, Clean Architecture rituals — every team
+      re-decides forty questions before hello-world, and calls the re-deciding rigor.
+      Meanwhile Rails and Laravel proved, for two decades and across two ecosystems, that
+      omakase wins for product teams. <strong>The stack was never the obstacle. Permission
+      was:</strong>
+    </p>
+
+    <div class="grid2">
+      <div class="cell">
+        <span class="conf">asp.net core says</span>
+        <h3>“Here are forty decisions; make them all before hello world.”</h3>
+        <p>DI container shape, project layout, ORM posture, auth story, front-end strategy,
+        mediator-or-not, test topology. Every one is documented, none is decided. The
+        framework is world-class at everything except having an opinion.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">the c# community says</span>
+        <h3>Omakase gets rejected as magic.</h3>
+        <p>Convention-driven frameworks have been tried in .NET and culturally vetoed —
+        “too much magic,” “not enterprise-ready,” “where's the interface?” The culture
+        forbids exactly what Rails proved. The parts stayed parts because nobody was
+        allowed to plate them.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">laravel proved</span>
+        <h3>You don't build the infrastructure. You build the opinion.</h3>
+        <p>Laravel is taste layered over Symfony components — the engineering was already
+        done; the product was the deciding. Chord makes the same move over a far stronger
+        substrate: Kestrel, EF Core, SignalR, Hangfire are the Symfony beneath it.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">g# changes</span>
+        <h3>A new language is a cultural reset.</h3>
+        <p>Nobody has expectations of G# yet. No style guide, no architecture priesthood,
+        no “that's not how we do it here.” The language is real — a compiler, a spec, a
+        tour — but its culture hasn't formed. A G# framework gets to decide for you on day
+        one, and day one is still in progress: the conventions can land before the culture
+        that would veto them exists.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>The one-sentence mind-blow:</strong> the best web infrastructure on earth has
+      been waiting twenty years for someone culturally permitted to have opinions about it.
+    </div>
+  </div>
+</section>
+
+<section id="runs">
+  <div class="wrap">
+    <div class="kicker">How it runs</div>
+    <h2>Convention over configuration, on the fastest mainstream runtime</h2>
+    <p>
+      Chord's covenant is Rails': names carry meaning, structure is derived, and the
+      framework fills every silence with a default. The difference is what's underneath —
+      not MRI, but the CLR with Native AOT; not WEBrick's descendants, but Kestrel. The
+      slow-framework tax that omakase always paid is simply not owed here.
+    </p>
+    <div class="grid2">
+      <div class="cell">
+        <h3>generate — code you can read, not macros you can't</h3>
+        <p><code style="font-family:var(--mono);font-size:.88em">chord g scaffold deal
+        title:string amount:money</code> emits the model, the migration, the handlers, the
+        views, and the tests — as plain G# in your tree. Chord has no
+        <em>method_missing</em>; its magic is legible, diffable, and yours to edit.</p>
+      </div>
+      <div class="cell">
+        <h3>route — files and func names are the routes</h3>
+        <p>A file at <code style="font-family:var(--mono);font-size:.88em">app/handlers/deals.gs</code>
+        with a <code style="font-family:var(--mono);font-size:.88em">func create</code> is
+        POST /deals. Handlers take a data class as their params object — one typed shape for
+        the request — and <code style="font-family:var(--mono);font-size:.88em">if let</code> /
+        <code style="font-family:var(--mono);font-size:.88em">guard let</code> guard the
+        null-heavy edge where web input actually lives.</p>
+      </div>
+      <div class="cell">
+        <h3>render — HTML over the wire, zero WASM</h3>
+        <p>Server-driven UI over SignalR, Hotwire-shaped: the server renders HTML, the wire
+        carries HTML, a small client morphs the DOM. No client build step, no hydration, no
+        multi-megabyte payload. Explicitly not Blazor — the browser gets documents, not a
+        runtime.</p>
+      </div>
+      <div class="cell">
+        <h3>ship — the deploy story Rails never had</h3>
+        <p><code style="font-family:var(--mono);font-size:.88em">chord deploy</code>:
+        Native AOT compile, one static binary a few megabytes large, sub-100ms cold start,
+        Postgres the only thing standing next to it. Rails DX at write time; a Go-shaped
+        artifact at ship time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="decisions">
+  <div class="wrap">
+    <div class="kicker">The decision register</div>
+    <h2>Forty questions, answered before you arrive</h2>
+    <p class="lede">
+      “Convention over configuration” hides what a convention actually is: a decision, made
+      once, by someone else, so ten thousand teams don't each pay to make it again. Chord
+      keeps its decisions in a public register — numbered, argued, and amendable by RFC.
+      Each entry records what was chosen, what was rejected, and what evidence would reopen
+      it. Here are the first twelve.
+    </p>
+
+    <div class="ledger">
+      <div class="drow head"><div class="dn">№</div><div class="dq">The question you'd have re-decided</div><div class="da">Chord's answer</div></div>
+      <div class="drow"><div class="dn">01</div><div class="dq">Web server</div>
+        <div class="da"><strong>Kestrel.</strong> Never asked, never configured, never the bottleneck.</div></div>
+      <div class="drow"><div class="dn">02</div><div class="dq">Project layout</div>
+        <div class="da"><strong>The tree is the framework's.</strong> app/handlers, app/models, app/views, db/migrate, tests. Names are routes; structure is meaning.</div></div>
+      <div class="drow"><div class="dn">03</div><div class="dq">ORM</div>
+        <div class="da"><strong>EF Core beneath an ActiveRecord-flavored surface.</strong> Deal.where(...) reads like Rails, compiles like LINQ.</div></div>
+      <div class="drow"><div class="dn">04</div><div class="dq">Database</div>
+        <div class="da"><strong>Postgres — wearing four hats.</strong> Data, job queue, cache, and pub/sub. One dependency; outgrow a hat before you add a service.</div></div>
+      <div class="drow"><div class="dn">05</div><div class="dq">Front-end</div>
+        <div class="da"><strong>HTML over the wire.</strong> SignalR carries server-rendered partials; a fixed few-KB client morphs the DOM. No bundler, no hydration.</div></div>
+      <div class="drow"><div class="dn">06</div><div class="dq">Auth</div>
+        <div class="da"><strong>Sessions and passkeys, in the box, database-backed.</strong> chord g auth when you want the files in your tree to edit.</div></div>
+      <div class="drow"><div class="dn">07</div><div class="dq">Background jobs</div>
+        <div class="da"><strong>Hangfire, queued through Postgres,</strong> retries and schedules included, visible in the dev dashboard.</div></div>
+      <div class="drow"><div class="dn">08</div><div class="dq">Mail</div>
+        <div class="da"><strong>MailKit, pre-wired.</strong> Every outbound message previewable at /dev/mail before you've sent one.</div></div>
+      <div class="drow"><div class="dn">09</div><div class="dq">Cache</div>
+        <div class="da"><strong>Postgres unlogged tables.</strong> When you outgrow it you'll know, and what to swap in will be obvious.</div></div>
+      <div class="drow"><div class="dn">10</div><div class="dq">Testing</div>
+        <div class="da"><strong>Generated with every scaffold.</strong> One runner — chord test — and system tests that drive a real headless browser.</div></div>
+      <div class="drow"><div class="dn">11</div><div class="dq">Configuration</div>
+        <div class="da"><strong>Conventions first, environment second, no config trees.</strong> If a knob matters, it's a readable file; if it doesn't, it doesn't exist.</div></div>
+      <div class="drow"><div class="dn">12</div><div class="dq">Dependency injection</div>
+        <div class="da"><strong>The framework's business, not yours.</strong> Handlers take a params object; the container is invisible from G#.</div></div>
+      <div class="ledger-tail"><span class="n">13–40</span> are in the docs. You don't have to read them — that's the product.</div>
+    </div>
+
+    <div class="note">
+      <strong>A register, not a scripture.</strong> Rails earned its conventions by extracting
+      them from Basecamp; chord's are hypotheses until real applications grind them down. The
+      register is how omakase shows its work: every decision names the evidence that would
+      overturn it, so “decided for you” never hardens into “undiscussable.”
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="kicker">The stack</div>
+    <h2>Laravel is to Symfony as chord is to .NET</h2>
+
+    <div class="stack">
+      <div class="layer regel-layer">
+        <div class="name">Chord <span class="nl">the framework's own</span></div>
+        <div class="body">
+          <span class="analog">laravel : symfony :: chord : asp.net core</span>
+          <strong>The opinion layer.</strong> Conventions, generators, the CLI, and the
+          omakase defaults — the forty decisions, pre-made and coherent. Everything below
+          this line already existed and was already excellent; chord's contribution is that
+          you never have to choose it.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Surface <span class="nl">g#</span></div>
+        <div class="body">
+          <span class="analog">what a developer actually touches</span>
+          <code style="font-family:var(--mono);font-size:.88em">func</code> handlers, data
+          classes for params and models, <code style="font-family:var(--mono);font-size:.88em">if let</code>
+          over nullable input, <code style="font-family:var(--mono);font-size:.88em">scope</code>
+          blocks for request-scoped structured concurrency. Go's directness, Swift's nullable
+          discipline, the whole BCL a dot away.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Wire <span class="nl">hotwire-shaped</span></div>
+        <div class="body">
+          <span class="analog">html over signalr · morph, don't hydrate</span>
+          Server-rendered partials stream over SignalR channels; the client is a fixed few
+          kilobytes that patches the DOM. Real-time is the default posture, not an add-on —
+          a live table is a template plus a subscription.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Data <span class="nl">ef core beneath</span></div>
+        <div class="body">
+          <span class="analog">activerecord-flavored surface, ef core engine</span>
+          Conventions name the tables, columns, and foreign keys;
+          <code style="font-family:var(--mono);font-size:.88em">Deal.where(...)</code> reads
+          like ActiveRecord and compiles like LINQ. Migrations are first-class CLI citizens —
+          generated with the scaffold, run with the deploy.
+        </div>
+      </div>
+      <div class="layer">
+        <div class="name">Jobs &amp; Mail <span class="nl">pre-decided</span></div>
+        <div class="body">
+          <span class="analog">hangfire + mailkit, pre-wired</span>
+          Background jobs, schedules, and retries via Hangfire; transactional mail via
+          MailKit — configured, queued through Postgres, and visible in the dev dashboard
+          before you've written a line. The Sidekiq-and-ActionMailer question, answered in
+          the box.
+        </div>
+      </div>
+      <div class="layer substrate">
+        <div class="name">Substrate <span class="nl">the runtime</span></div>
+        <div class="body">
+          <span class="analog">the only dependencies you never chose</span>
+          ASP.NET Core and Kestrel underneath every request; Native AOT for the artifact;
+          one Postgres for data, jobs, and cache. The fastest mainstream web runtime in the
+          industry, doing what it always did — finally wearing one opinion.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="loop">
+  <div class="wrap">
+    <div class="kicker">The loop</div>
+    <h2>One command. A decided application.</h2>
+    <p>
+      The canonical exchange: you describe a resource once, on the command line, and the
+      framework answers with an application. Everything on the left is plain G# — the
+      shipped tour's G#: Go-style parameters, <code style="font-family:var(--mono);font-size:.88em">guard let</code>
+      from ADR-0071, a primary-constructor data class — nothing invented but the framework's
+      own types; everything on the right is the whole distance from name to production.
+    </p>
+
+    <div class="duo">
+      <div class="codeblock">
+        <div class="codelabel"><span>deals.gs · what you write</span><span class="lang">g#</span></div>
+        <pre><span class="k">package</span> App.Handlers
+
+<span class="k">import</span> Chord.Web
+
+<span class="k">data class</span> <span class="ty">DealForm</span>(title <span class="ty">string</span>?, amount <span class="ty">money</span>?)
+
+<span class="k">func</span> create(form <span class="ty">DealForm</span>) <span class="ty">Response</span> {
+    <span class="k">guard let</span> title = form.title <span class="k">else</span> {
+        <span class="k">return</span> web.invalid(<span class="s">"title is required"</span>)
+    }
+    <span class="k">let</span> deal = <span class="ty">Deal</span>.insert(title, form.amount ?? <span class="s">0</span>)
+    <span class="k">return</span> turbo.stream(deal)  <span class="c">// html over the wire</span>
+}</pre>
+      </div>
+      <div class="seamwrap"><div class="seam" aria-hidden="true"></div><div class="seamlabel">chord g</div></div>
+      <div class="codeblock">
+        <div class="codelabel"><span>chord g scaffold deal · then deploy</span><span class="lang">terminal</span></div>
+        <pre>$ chord g scaffold deal title:string amount:money
+
+  create  app/models/deal.gs           <span class="ok">✓</span>
+  create  db/migrate/0042_deals.gs     <span class="ok">✓</span>
+  create  app/handlers/deals.gs        <span class="ok">✓</span>
+  create  app/views/deals/index.gs     <span class="ok">✓</span>
+  create  app/views/deals/form.gs      <span class="ok">✓</span>
+  create  tests/deals_test.gs          <span class="ok">✓</span>
+
+$ chord deploy
+  gsc     <span class="ok">✓</span> <span class="dim">0 errors · 640 ms</span>
+  aot     <span class="ok">✓</span> <span class="dim">one static binary · 18 MB</span>
+  migrate <span class="ok">✓</span> <span class="dim">0042_deals · 12 ms</span>
+  boot    <span class="ok">✓</span> <span class="dim">40 ms cold start</span>
+<span class="ok">→ live</span> <span class="dim">one binary, one postgres, nothing else</span></pre>
+      </div>
+    </div>
+
+    <p>
+      The generators emit G# you own. Chord is not magic — it is defaults: eject any file,
+      rewrite any handler, replace any view, and the framework keeps working, because the
+      framework was only ever the thing that wrote the first draft. <strong>Convention is
+      where you start, never where you're trapped.</strong>
+    </p>
+  </div>
+</section>
+
+<section id="honest">
+  <div class="wrap">
+    <div class="kicker">What we won't pretend</div>
+    <h2>What omakase costs</h2>
+    <div class="edges">
+      <div class="edge">
+        <h3>No macros, no method_missing.</h3>
+        <p>Rails runs on Ruby metaprogramming; G# gives chord attributes, reflection, and
+        source generation. The answer is generated-code-you-can-read — which is also
+        generated code you can drift from. When conventions evolve, your ejected files
+        don't. Regeneration discipline is the tax, and chord pays it with a named tool,
+        not with hope: <code style="font-family:var(--mono);font-size:.88em">chord evolve</code>
+        re-scaffolds against your edits three-way-merge style, shows the diff, and never
+        overwrites a line you changed without asking.</p>
+      </div>
+      <div class="edge">
+        <h3>A framework bet on a v0.3 language with one maintainer.</h3>
+        <p>G# is real and shipping — a compiler (gsc), an MSBuild SDK, a VS Code extension,
+        a language server, a full written spec, dozens of releases. It is also one Microsoft
+        engineer's personal project at v0.3: not an official product, not a committee, not
+        a guarantee. Doubled risk, stated plainly. The mitigation: chord's guts are ordinary
+        C# assemblies on the ordinary CLR; only the surface a developer touches is G#. If
+        the language stalls, the framework limps; it doesn't die.</p>
+      </div>
+      <div class="edge">
+        <h3>Zero training corpus.</h3>
+        <p>Every model on earth writes C# and Rails fluently; none has ever seen G#.
+        cs2gs, tour-faithful syntax, and a thin, conventional surface shrink what a model
+        must learn — but day-one agent fluency is streng's argument, and chord loses it.
+        We are betting that a small, regular language is quickly learned. Betting, not
+        knowing.</p>
+      </div>
+      <div class="edge">
+        <h3>Blazor gravity.</h3>
+        <p>The .NET community will ask “why not Blazor” forever, and it deserves an answer
+        every time. HTML-over-the-wire is a philosophical stance — documents over runtimes,
+        server truth over client state — defended, not assumed. Some apps genuinely want
+        Blazor. Chord is not for them, and says so.</p>
+      </div>
+      <div class="edge">
+        <h3>Omakase must be earned.</h3>
+        <p>Rails' conventions weren't invented; they were extracted from Basecamp. Chord's
+        conventions, today, are extracted from nothing — they are hypotheses with good
+        posture. Until real applications grind them down, they're guesses wearing
+        confidence — which is exactly why the decision register exists, and why every
+        entry in it is amendable by RFC rather than carved in the framework.</p>
+      </div>
+      <div class="edge">
+        <h3>Decided-for-you means wrong-for-some.</h3>
+        <p>One Postgres, HTML over the wire, jobs in the box — every default excludes
+        someone. The team with Cosmos DB, a React fleet, and a Kafka spine should use
+        ASP.NET Core straight, and chord's docs say so on page one. An omakase that claims
+        to suit everyone is a menu.</p>
+      </div>
+    </div>
+
+    <p>
+      The pitch, in one sentence: <strong>chord is the forty decisions .NET never made,
+      made — Rails' covenant on Kestrel's engine, written in a language young enough to
+      say yes, shipping as one readable codebase, one static binary, and one Postgres.</strong>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="family">
+      <span class="this">chord</span><span>·</span>
+      <span>fugue</span><span>·</span>
+      <span>realbook</span>
+    </div>
+    <p>
+      Chord — a concept study in the G# ecosystem: the omakase full-stack that .NET's
+      culture never permitted, built now that a new language has made permission
+      unnecessary. Code samples are faithful to the shipped G# tour (v0.3).
+      Cousins to the samen · eigen · kern · streng · taal · regel family.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
