@@ -263,6 +263,7 @@
       <a href="#decisions">Decisions</a>
       <a href="#stack">The stack</a>
       <a href="#loop">The loop</a>
+      <a href="#agents">Agents</a>
       <a href="#honest">Honest</a>
     </div>
   </div>
@@ -584,6 +585,74 @@ $ chord deploy
   </div>
 </section>
 
+<section id="agents">
+  <div class="wrap">
+    <div class="kicker">The agent bet</div>
+    <h2>A framework agents sight-read, not rehearse</h2>
+    <p class="lede">
+      No model on earth has trained on G#, and chord's answer is not to wait for the
+      crawlers. It is to notice what omakase actually is: <strong>convention over
+      configuration is context compression.</strong> A framework with one blessed way to do
+      each thing is the most agent-legible framework possible — there is nothing to infer,
+      no forty-architecture guessing game about which shape this particular repo chose.
+      Rails' conventions were designed for human onboarding. Chord's are designed for a
+      context window.
+    </p>
+
+    <div class="grid2">
+      <div class="cell">
+        <span class="conf">one way to do it</span>
+        <h3>Nothing to infer.</h3>
+        <p>In an ASP.NET Core repo, an agent's first job is archaeology — which DI shape,
+        which mediator, whose Clean Architecture. In a chord app the answer is always the
+        register's answer, so the model spends its intelligence on your product instead of
+        your wiring.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">deterministic generators</span>
+        <h3>Scaffolds are few-shot examples.</h3>
+        <p><code style="font-family:var(--mono);font-size:.88em">chord g</code> emits the
+        same shape every time, so one worked scaffold teaches the pattern for every
+        resource that follows. An agent predicts the generator's output, diffs its
+        expectation against reality, and learns the framework from the delta.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">the register</span>
+        <h3>Forty decisions it never has to guess.</h3>
+        <p>The decision register doubles as the model's briefing: what was chosen, what was
+        rejected, and what evidence would reopen it — the exact document an agent needs to
+        stop proposing alternatives that were already ruled out on purpose.</p>
+      </div>
+      <div class="cell">
+        <span class="conf">chord ctx</span>
+        <h3>The whole framework in one paste.</h3>
+        <p>The tour, the conventions, the register, one worked scaffold — emitted as a
+        single model-ready bundle. Fluency arrives in-context, in seconds, for whatever
+        model shows up next quarter. No training run required, no waiting for a corpus to
+        accrete.</p>
+      </div>
+    </div>
+
+    <div class="codeblock">
+      <div class="codelabel"><span>chord ctx · the corpus, on demand</span><span class="lang">terminal</span></div>
+      <pre>$ chord ctx
+  tour         <span class="ok">✓</span> <span class="dim">g# v0.3 · the shipped language tour</span>
+  register     <span class="ok">✓</span> <span class="dim">forty decisions · choices and rejections</span>
+  scaffold     <span class="ok">✓</span> <span class="dim">one worked example · deal, end to end</span>
+  conventions  <span class="ok">✓</span> <span class="dim">names, routes, trees · the covenant</span>
+
+<span class="ok">→ chord.ctx.md</span> <span class="dim">· 41k tokens · paste into any model</span></pre>
+    </div>
+
+    <div class="note">
+      <strong>The inversion:</strong> zero training corpus is chord's weakest edge, and this
+      is the bet that it doesn't matter — that a small regular language plus one decided
+      framework is learned in-context faster than a sprawling ecosystem is remembered from
+      training. The first framework designed to be sight-read.
+    </div>
+  </div>
+</section>
+
 <section id="honest">
   <div class="wrap">
     <div class="kicker">What we won't pretend</div>
@@ -614,7 +683,7 @@ $ chord deploy
         cs2gs, tour-faithful syntax, and a thin, conventional surface shrink what a model
         must learn — but day-one agent fluency is streng's argument, and chord loses it.
         We are betting that a small, regular language is quickly learned. Betting, not
-        knowing.</p>
+        knowing — the sight-reading section above is that bet, made specific.</p>
       </div>
       <div class="edge">
         <h3>Blazor gravity.</h3>
