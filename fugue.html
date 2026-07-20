@@ -241,6 +241,7 @@
       <a href="#runs">How it runs</a>
       <a href="#stack">The stack</a>
       <a href="#killtest">The kill test</a>
+      <a href="#recorder">The recorder</a>
       <a href="#honest">Honest</a>
     </div>
   </div>
@@ -515,6 +516,62 @@ placement was nobody's job.</span></pre>
   </div>
 </section>
 
+<section id="recorder">
+  <div class="wrap">
+    <div class="kicker">The second demo</div>
+    <h2>Immortal in space. Now immortal in time.</h2>
+    <p>
+      The kill test proves a grain survives losing its machine. The flight recorder proves
+      it survives losing the moment: journal a grain's <em>turns</em> instead of only its
+      latest state, and any grain can be reactivated as it was at any instant. And because
+      views are grains too, that includes the screen — <strong>you can re-render what a
+      specific user actually saw when the bug happened.</strong>
+    </p>
+
+    <div class="duo">
+      <div class="codeblock">
+        <div class="codelabel"><span>room.gs · one attribute</span><span class="lang">g#</span></div>
+        <pre><span class="k">package</span> App.Rooms
+
+@<span class="ty">Journaled</span>(Retain: <span class="s">"90d"</span>)   <span class="c">// turns, not just state</span>
+<span class="k">class</span> <span class="ty">Room</span> : <span class="ty">Grain</span> {
+    <span class="c">// every message this grain handles is a
+    // journal entry before it is an effect.
+    // state is now a derivation — the fold
+    // of the journal — not the only truth.</span>
+}
+
+<span class="c">// debugging becomes a query:
+// "room 42, at 14:03, through
+//  user 71's eyes."</span></pre>
+      </div>
+      <div class="seamwrap"><div class="seam" aria-hidden="true"></div><div class="seamlabel">rewind</div></div>
+      <div class="codeblock">
+        <div class="codelabel"><span>the flight recorder · one transcript</span><span class="lang">production</span></div>
+        <pre>$ fugue replay room:42 --at 14:03:07
+
+journal          <span class="ok">✓</span> <span class="dim">18,204 turns · postgres</span>
+reactivate       <span class="ok">✓</span> <span class="dim">room:42 · turn 9,311 · sandboxed</span>
+view-grain       <span class="ok">✓</span> <span class="dim">user 71's screen, re-rendered</span>
+step             ⏵ <span class="dim">9,312 · 9,313 · 9,314 …</span>
+
+<span class="ok">the bug: on screen, as it happened</span>
+<span class="dim">no logs grepped. no repro steps written.
+history was already running.</span></pre>
+      </div>
+    </div>
+
+    <p>
+      Everything downstream is a byproduct. Audit history is free — the journal is the
+      audit. Incident review is a replay, not a reconstruction. And regression testing gets
+      its sharpest possible form: <strong>replay yesterday's production turns against
+      tomorrow's build</strong> and diff what the grains did. The kill test and the recorder
+      are the same claim on two axes — kill the node, the user never knows; rewind the
+      clock, the system never forgot.
+    </p>
+  </div>
+</section>
+
 <section id="honest">
   <div class="wrap">
     <div class="kicker">What we won't pretend</div>
@@ -551,6 +608,14 @@ placement was nobody's job.</span></pre>
         v0.3 with one primary maintainer, and no model has trained on it. The guts are C#
         assemblies and the G# surface is deliberately thin, but day-one agent fluency is
         lost. Stated plainly.</p>
+      </div>
+      <div class="edge">
+        <h3>Time travel has a disk bill.</h3>
+        <p>Journals grow without mercy, and “rewind anything” is a promise about retention,
+        compaction, and privacy law all at once. Erasure requests mean rewriting history —
+        so fugue ships <em>forget</em> as a first-class verb (per-user redaction across
+        journals), prices the recorder per grain type, and turns it on by default only
+        where it earns its storage.</p>
       </div>
       <div class="edge">
         <h3>“Just put it in a grain” is a seduction.</h3>

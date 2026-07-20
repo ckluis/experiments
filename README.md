@@ -29,6 +29,7 @@ and, where one exists, its source repository. Each spec links back to the index.
 | Tools | **aiCRO** — a full growth engagement from one URL | Node.js · Claude | Shipped | — | [live](https://ckluis.github.io/aiCRO/) · [code](https://github.com/ckluis/aiCRO) |
 | Tools | **senkani** — token compression for AI coding agents | Swift · macOS · MCP | Shipped | — | [live](https://ckluis.github.io/senkani) · [code](https://github.com/ckluis/senkani) |
 | Tools | **terminalHelper** — a searchable terminal command reference | Go · Bubble Tea · SQLite | Shipped | `terminalHelper.html` | [code](https://github.com/ckluis/terminalHelper) |
+| Tools | **luminaryTeam** — a 39-expert multi-agent technical review framework | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/luminaryTeam/) · [code](https://github.com/ckluis/luminaryTeam) |
 | Tools | **nonprofitEventPlanner** — run a whole youth trip from your phone | Rails 8 · Hotwire · Postgres | Local | `nonprofitEventPlanner.html` | private |
 | Tools | **customCMS** — BookEngine: one brain, many book storefronts | Go · SQLite · Claude | Local | `customCMS.html` | private |
 

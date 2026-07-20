@@ -241,6 +241,7 @@
       <a href="#runs">How it runs</a>
       <a href="#stack">The stack</a>
       <a href="#admission">Admission</a>
+      <a href="#audition">Audition</a>
       <a href="#honest">Honest</a>
     </div>
   </div>
@@ -506,6 +507,47 @@ no orphaned tables, no zombie hooks.</span></pre>
   </div>
 </section>
 
+<section id="audition">
+  <div class="wrap">
+    <div class="kicker">Admission, performed</div>
+    <h2>The manifest says <em>may</em>. The audition shows <em>does</em>.</h2>
+    <p>
+      Signature and manifest are paperwork — necessary, static, and silent about behavior.
+      So before a grant, realbook makes its own metaphor literal: <strong>the candidate
+      plugin performs.</strong> The gate forks a snapshot of the data, loads the plugin into
+      an isolated context with every outbound call captured, and replays yesterday's real
+      event stream against it. What comes back is not a claim. It is a transcript of what
+      the plugin actually did with your actual traffic — produced before its first
+      instruction ever runs live.
+    </p>
+
+    <div class="codeblock">
+      <div class="codelabel"><span>the audition · before the grant</span><span class="lang">realbook audition stripe-payments</span></div>
+      <pre>$ realbook audition stripe-payments
+
+stage        <span class="ok">✓</span> <span class="dim">forked snapshot · isolated ALC · outbound captured</span>
+replay       <span class="ok">✓</span> <span class="dim">yesterday's event stream · 41,882 events · 24h</span>
+behavior     charges.write      312   <span class="ok">✓ within manifest</span>
+             orders.read      1,102   <span class="ok">✓ within manifest</span>
+             contacts.*           0   <span class="dim">· never attempted</span>
+webhooks     <span class="dim">3 fired · captured, not delivered</span>
+verdict      <span class="ok">clean audition</span> <span class="dim">· transcript pinned to listing</span>
+
+<span class="dim">grant? the transcript is the argument.</span></pre>
+    </div>
+
+    <p>
+      Auditions re-run on every update, which turns the transcript history into a drift
+      detector: a v1.5 that suddenly reads tables v1.4 never touched is a headline at the
+      gate, not a diff buried in a changelog. And because the latest transcript is pinned
+      to the marketplace listing, “what does this plugin actually do” is answered with
+      evidence instead of a README — <strong>WordPress can't do this (arbitrary PHP, no
+      event stream) and npm can't do this (no runtime gate); realbook can because the
+      stream and the gate already exist.</strong>
+    </p>
+  </div>
+</section>
+
 <section id="honest">
   <div class="wrap">
     <div class="kicker">What we won't pretend</div>
@@ -525,6 +567,14 @@ no orphaned tables, no zombie hooks.</span></pre>
         ships as self-contained CoreCLR — roughly 80 MB, still one file — and a lean AOT build
         exists only for plugin-free deploys. Two artifacts, one honest tradeoff, chosen in
         favor of the economy.</p>
+      </div>
+      <div class="edge">
+        <h3>Auditions can be gamed.</h3>
+        <p>A plugin can play beautifully in replay and differently on stage — detect the
+        sandbox, wait thirty days, trigger on an event yesterday's stream didn't contain.
+        The audition raises the cost of malice and catches sloppiness nearly for free, but
+        it is a screen, not a proof: re-audition on update, runtime capability accounting,
+        and the out-of-process tier remain the deeper walls behind it.</p>
       </div>
       <div class="edge">
         <h3>Economies cold-start.</h3>
