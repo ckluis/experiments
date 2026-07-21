@@ -590,7 +590,7 @@
   <div class="vault reveal d1">
     <div class="vaultcard">
       <div class="vbar">
-        <div class="vmeta"><span class="dots"><i></i><i></i><i></i></span><span class="fn"><b>baton.md</b> · 470 lines · fill TARGET, MODE, DIAL</span></div>
+        <div class="vmeta"><span class="dots"><i></i><i></i><i></i></span><span class="fn"><b>baton.md</b> · 475 lines · fill TARGET, MODE, DIAL</span></div>
         <button class="copybtn" id="copybtn" type="button">Copy the prompt</button>
       </div>
       <pre id="psrc"># BATON — a Fable-led orchestrator of orchestrators
@@ -811,8 +811,13 @@ the operator), spawn a fable **synthesizer** to write `final/report.md`:
 outcome per phase, caveats accepted, bugs found + their regression tests,
 escalation history, and open questions. Dial FULL: run the luminary panel on
 the final state first; synthesis consumes the panel&#x27;s matrix. Your closing
-message to the operator: verdict, report path, and the ≤5 things that need a
-human — nothing else.
+message to the operator: verdict, report path, the ≤5 things that need a
+human, and one **disposal line** — `_orch/`&#x27;s approximate size plus
+copy-paste commands to archive it (`tar czf baton-run.tar.gz _orch &amp;&amp;
+rm -rf _orch`) or keep it to resume or re-verify. Cleanup is the operator&#x27;s
+act, never yours: the report, envelopes, and verdicts all cite artifact
+paths inside `_orch/`, so an agent that deletes it is destroying its own
+evidence.
 
 ## 7. Adversarial Layer (adapted from ckluis.github.io/luminaryTeam)
 
@@ -1009,7 +1014,7 @@ unchanged.
 - **BLOCKED batches.** Collect operator questions; surface them together at
   natural pauses.
 - **Your final message is small.** Verdict, `final/report.md` path, ≤5 items
-  needing a human. The report holds everything else.
+  needing a human, one disposal line. The report holds everything else.
 
 ## 11. Appendix — Mode Directives
 
