@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STOWORK — Your whole office. In a carry-on.</title>
+  <meta name="description" content="STOWORK is a carry-on-sized case that unfolds into a full three-monitor workstation with pro AV in under two minutes, then folds back to airline-legal dimensions." />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- three.js vendored locally as classic scripts: works from file:// with no
+       server, no build step, and no network. Order matters; defer preserves it
+       and waits for the DOM. -->
+  <script defer src="vendor/three.min.js"></script>
+  <script defer src="vendor/OrbitControls.js"></script>
+  <script defer src="src/caseModel.js"></script>
+  <script defer src="src/app.js"></script>
+</head>
+<body>
+
+<!-- ============================ NAV ============================ -->
+<header class="nav">
+  <a class="nav__brand" href="#top">STOWORK</a>
+  <nav class="nav__links">
+    <a href="#deploy">Deploy</a>
+    <a href="#layout">Layout</a>
+    <a href="#specs">Specs</a>
+    <a href="PLAN.md" class="nav__cta">Read the plan</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ============================ 1. HERO ============================ -->
+  <section class="hero" id="hero">
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow">Deployable office · not a laptop</p>
+        <h1 class="hero__title">STOWORK</h1>
+        <p class="hero__tagline">Your whole office. In a carry-on. In under two&nbsp;minutes.</p>
+        <p class="hero__pitch">
+          A carry-on-sized case that unfolds into a full <strong>three-monitor workstation</strong>
+          with broadcast-grade AV &mdash; then folds back down to airline-legal cabin dimensions.
+        </p>
+        <div class="btn-row">
+          <a href="#deploy" class="btn btn--primary">See it deploy ↓</a>
+          <a href="PLAN.md" class="btn btn--ghost">Read the plan</a>
+        </div>
+        <div class="hero__snap">
+          <span class="hero__snap-label">Snap model:</span>
+          <button id="heroStow" type="button" class="pill">Stowed</button>
+          <button id="heroReady" type="button" class="pill is-active">Ready to Work</button>
+        </div>
+      </div>
+
+      <div class="hero__viz">
+        <div class="viz viz--hero">
+          <canvas id="heroCanvas" class="viz__canvas" aria-label="Rotating 3D view of the deployed STOWORK workstation"></canvas>
+          <div class="viz__fallback" role="note">
+            <span class="viz__fallback-glyph">▦</span>
+            <p><strong>Interactive 3D preview needs WebGL.</strong></p>
+            <p>Your browser can't render the live model, but every spec below is fully readable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 2. THE PROBLEM ============================ -->
+  <section class="section problem" id="problem">
+    <div class="wrap">
+      <p class="eyebrow">The problem</p>
+      <h2 class="section__title">The road takes away everything that makes you fast.</h2>
+      <p class="lede">
+        A laptop gives you one cramped screen and a mushy keyboard. On the road you lose the six things
+        a professional actually works with &mdash; and above all, <strong>screen real estate</strong>.
+      </p>
+      <ul class="problem__grid">
+        <li><span class="problem__ico">▭▭▭</span><h3>Screen real estate</h3><p>One 14&Prime; panel instead of the three you left at your desk.</p></li>
+        <li><span class="problem__ico">⌨</span><h3>A real keyboard</h3><p>Mushy laptop travel keys, no dedicated trackpad reach.</p></li>
+        <li><span class="problem__ico">◉</span><h3>A proper camera</h3><p>You stare down at a laptop lens instead of into it.</p></li>
+        <li><span class="problem__ico">🎙</span><h3>A broadcast mic</h3><p>Tinny built-in capsule on every call that matters.</p></li>
+        <li><span class="problem__ico">🎧</span><h3>Studio headphones</h3><p>Left behind, or tangled in a bag with no home.</p></li>
+        <li><span class="problem__ico">◧</span><h3>A trackpad</h3><p>No room, no surface, no muscle memory.</p></li>
+      </ul>
+      <p class="problem__thesis">
+        STOWORK is not a laptop. It is a <strong>deployable office</strong> &mdash; drive it from your
+        laptop or phone over one cable (<em>Dock</em>), or dock your own Mac mini, Mac Studio, or mini-PC
+        in the swappable compute bay (<em>Core</em>).
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================ 3. SEE IT DEPLOY ============================ -->
+  <section class="section deploy" id="deploy">
+    <div class="wrap">
+      <p class="eyebrow">See it deploy</p>
+      <h2 class="section__title">Scrub the full set-up. Zero to office.</h2>
+      <p class="lede">
+        Drag the slider to open the case, raise the lift, fan the triptych, extend the AV boom, and
+        power on &mdash; the whole sequence fits a <strong>≤ 110-second</strong> budget.
+      </p>
+
+      <div class="deploy__stage-panel">
+        <div class="viz viz--deploy">
+          <canvas id="deployCanvas" class="viz__canvas" aria-label="Interactive 3D deployment of STOWORK"></canvas>
+          <div class="viz__fallback" role="note">
+            <span class="viz__fallback-glyph">▦</span>
+            <p><strong>Interactive 3D preview needs WebGL.</strong></p>
+            <p>The stage controls below still walk through the deployment sequence.</p>
+          </div>
+
+          <div class="deploy__readout">
+            <div class="readout__stage">
+              <span class="readout__k">Stage</span>
+              <span id="deployStageLabel" class="readout__stage-label">Stowed</span>
+            </div>
+            <div class="readout__clock">
+              <span class="readout__k">Setup clock</span>
+              <span id="deployClock" class="readout__clock-val">0:00</span>
+              <span class="readout__budget">/ 1:50 budget</span>
+            </div>
+            <div class="readout__pct">
+              <span class="readout__k">Deploy</span>
+              <span id="deployPct" class="readout__pct-val">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <p id="deployCaption" class="deploy__caption">55×35×23 cm. Airline carry-on legal.</p>
+
+        <div class="scrubber">
+          <input id="deploySlider" class="scrubber__range" type="range"
+                 min="0" max="1000" value="0" step="1"
+                 aria-label="Deployment progress, 0 to 100 percent" />
+          <div id="deployTicks" class="scrubber__ticks" aria-hidden="true"></div>
+        </div>
+
+        <div class="deploy__controls">
+          <button id="deployPlay" type="button" class="btn btn--primary btn--play">▶ Play deployment</button>
+          <div id="deployStages" class="stage-btns"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 4. THE LAYOUT ============================ -->
+  <section class="section layout" id="layout">
+    <div class="wrap">
+      <p class="eyebrow">The layout that makes it work</p>
+      <h2 class="section__title">Real dimensions. Honest geometry.</h2>
+
+      <div class="dim-cards">
+        <div class="dim-card">
+          <span class="dim-card__k">Stowed</span>
+          <span class="dim-card__v">55 × 35 × 23 <em>cm</em></span>
+          <p>Within the common 56×36×23 cm cabin limit. Wheeled spinner, telescoping handle, aluminum-frame clamshell.</p>
+        </div>
+        <div class="dim-card">
+          <span class="dim-card__k">Deployed footprint</span>
+          <span class="dim-card__v">60 × 95 <em>cm</em></span>
+          <p>Occupies ~60 cm deep × 95 cm wide of desk once the triptych fans. Needs only a chair and a table.</p>
+        </div>
+        <div class="dim-card">
+          <span class="dim-card__k">Runtime</span>
+          <span class="dim-card__v">4&ndash;6 <em>h</em></span>
+          <p>Off the internal swappable battery, or run indefinitely on AC passthrough.</p>
+        </div>
+      </div>
+
+      <div class="feature-rows">
+        <article class="frow">
+          <h3>The triptych fold</h3>
+          <p>
+            Three 14&Prime; 16:10 panels (~31 × 19.5 cm each) side-by-side span ~93 cm &mdash; far wider than the
+            55 cm case. The fix is a <strong>tri-fold triptych</strong>: the center panel is fixed; two wing panels
+            hinge on vertical axes and fold flat, face-to-face, over the center when stowed
+            (stack ≈ 31 × 19.5 × 2.4 cm). Deployed, each wing swings out ~35° into a curved, immersive
+            3-screen array. Panels are thin-film OLED (~1.2 mm laminate, matte AR). Combined target: 3× 2560×1600.
+          </p>
+        </article>
+        <article class="frow">
+          <h3>Input</h3>
+          <p>
+            A low-profile mechanical <strong>TKL keyboard (36 cm)</strong> sits in the front well; TKL + trackpad inline
+            = 36 + 16 = 52 cm, fitting the 53 cm interior width exactly. The <strong>16 × 11 cm glass haptic trackpad</strong>
+            sits to its right. The keyboard rides a slide-out tray that advances ~6 cm toward you for wrist comfort.
+          </p>
+        </article>
+        <article class="frow">
+          <h3>Pro AV</h3>
+          <p>
+            A cardioid condenser <strong>mic on a telescoping boom</strong> rises from the top-center bridge and angles
+            toward your mouth. A <strong>4K webcam</strong> sits co-located at eye level, so you look <em>into</em> the
+            lens, not down at a laptop. Over-ear studio headphones stow in a molded EVA cradle in the lid on pogo-pin
+            charging; stereo speakers live in the base front edge.
+          </p>
+        </article>
+        <article class="frow">
+          <h3>Lift &amp; ergonomics</h3>
+          <p>
+            The triptych rides a <strong>rear 4-bar lift linkage</strong> (gas-strut assisted) that raises it ~12 cm and
+            rotates it flat→vertical, putting the center of the screen near seated eye level on a standard 74 cm desk.
+          </p>
+        </article>
+      </div>
+
+      <div class="sku-split">
+        <div class="sku">
+          <h3>Dock <span class="sku__wt">7.9 kg</span></h3>
+          <p>Drive it from the machine you already carry. One <strong>USB4 / Thunderbolt</strong> cable to your laptop
+             or phone drives all three displays + AV + power.</p>
+        </div>
+        <div class="sku">
+          <h3>Core <span class="sku__wt">8.2 kg</span></h3>
+          <p>Dock your own <strong>Mac mini, Mac Studio, or mini-PC</strong> in the swappable compute bay &mdash; the case
+             becomes a complete desktop that travels with your real machine. Add <strong>0.67 kg</strong> (mini) or
+             <strong>2.7 kg</strong> (Studio) for the device you drop in.</p>
+        </div>
+      </div>
+
+      <!-- ----- Bring your own Mac: swappable compute bay ----- -->
+      <div class="bay">
+        <div class="bay__intro">
+          <p class="eyebrow bay__eyebrow">The compute bay</p>
+          <h3 class="bay__title">Bring your own Mac. Swap it forever.</h3>
+          <p class="bay__lede">
+            The base's left <strong>engine-bay third</strong> holds a standardized
+            <strong>200 × 200 × 100 mm</strong> compute bay with a fixed blind-mate connector block. Your machine
+            rides in a <strong>device-specific 3D-printed cradle</strong> that drops in on a quarter-turn latch and
+            routes its ports to that block. You swap computers by swapping a printed holder &mdash; the case side
+            never changes.
+          </p>
+          <ul class="bay__pills">
+            <li class="bay-pill">200 × 200 × 100 mm bay</li>
+            <li class="bay-pill">Blind-mate connector block</li>
+            <li class="bay-pill">Quarter-turn latch</li>
+            <li class="bay-pill">Open STL cradle family</li>
+          </ul>
+        </div>
+
+        <div class="bay__devices">
+          <div class="bay-dev">
+            <span class="bay-dev__k">Mac mini cradle</span>
+            <span class="bay-dev__v">197 × 197 × 36 <em>mm</em></span>
+            <p>Printed riser lifts the mini so its top sits flush with the bay lip; the airflow channel aligns to its
+               perimeter intake and rear exhaust.</p>
+          </div>
+          <div class="bay-dev">
+            <span class="bay-dev__k">Mac Studio cradle</span>
+            <span class="bay-dev__v">197 × 197 × 95 <em>mm</em></span>
+            <p>A minimal frame &mdash; the Studio nearly fills the bay. Sized so the bay swallows the tallest target
+               device and everything shorter.</p>
+          </div>
+          <div class="bay-dev">
+            <span class="bay-dev__k">Generic mini-PC cradle</span>
+            <span class="bay-dev__v">parametric <em>STL</em></span>
+            <p>Print to any device's L × W × H and port map &mdash; Intel NUC, Framework Desktop, Beelink, and more.
+               The print-layer look is part of the identity.</p>
+          </div>
+        </div>
+
+        <p class="bay__foot">
+          Future machines are a <strong>reprint, not a new case</strong>. Cradles ship pre-fit or download from an
+          open STL family, so the workstation you buy today never goes obsolete when your compute does.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 5. THREE STATES ============================ -->
+  <section class="section gallery" id="states">
+    <div class="wrap">
+      <p class="eyebrow">Three states</p>
+      <h2 class="section__title">Stowed. Triptych. Ready.</h2>
+      <p class="lede">The same rig at three moments of its life &mdash; each view is independently orbitable.</p>
+      <div class="gallery__grid">
+        <figure class="gallery__cell">
+          <div class="viz viz--mini">
+            <canvas id="galleryStowed" class="viz__canvas" aria-label="STOWORK stowed as a closed carry-on"></canvas>
+            <div class="viz__fallback viz__fallback--mini" role="note"><span class="viz__fallback-glyph">▦</span><p>3D needs WebGL</p></div>
+          </div>
+          <figcaption><strong>Stowed</strong><span>Closed clamshell, airline-legal.</span></figcaption>
+        </figure>
+        <figure class="gallery__cell">
+          <div class="viz viz--mini">
+            <canvas id="galleryTriptych" class="viz__canvas" aria-label="STOWORK with the triptych deployed"></canvas>
+            <div class="viz__fallback viz__fallback--mini" role="note"><span class="viz__fallback-glyph">▦</span><p>3D needs WebGL</p></div>
+          </div>
+          <figcaption><strong>Triptych</strong><span>Three screens fanned into an arc.</span></figcaption>
+        </figure>
+        <figure class="gallery__cell">
+          <div class="viz viz--mini">
+            <canvas id="galleryReady" class="viz__canvas" aria-label="STOWORK fully deployed and ready to work"></canvas>
+            <div class="viz__fallback viz__fallback--mini" role="note"><span class="viz__fallback-glyph">▦</span><p>3D needs WebGL</p></div>
+          </div>
+          <figcaption><strong>Ready to Work</strong><span>Boom up, keyboard forward, powered on.</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 6. BUILT TO BE BUILT ============================ -->
+  <section class="section build" id="build">
+    <div class="wrap">
+      <p class="eyebrow">Built to be built</p>
+      <h2 class="section__title">A concept engineered to ship.</h2>
+      <div class="build__cards">
+        <a class="build-card" href="PLAN.md#design--differentiation">
+          <span class="build-card__tag">Original by design</span>
+          <h3>Original by combination</h3>
+          <p>Carry-on envelope + tri-fold 3-monitor + integrated pro AV + sub-2-minute few-motion deploy +
+             lift-to-eye-level. A tightly integrated system that is genuinely hard to copy.</p>
+          <span class="build-card__link">See what makes it original →</span>
+        </a>
+        <a class="build-card" href="PLAN.md#manufacturing--dfm">
+          <span class="build-card__tag">Manufacture</span>
+          <h3>DFM-ready BOM</h3>
+          <p>Indicative bill of materials with cost bands, supplier categories, tooling/NRE estimate,
+             unit cost at volume, and a looks-like → works-like → DVT/PVT prototyping path.</p>
+          <span class="build-card__link">See the BOM →</span>
+        </a>
+        <a class="build-card" href="PLAN.md#financials--the-ask">
+          <span class="build-card__tag">Invest</span>
+          <h3>Market &amp; the ask</h3>
+          <p>Consultants, execs, creators, field engineers, and digital nomads. Dock vs Core pricing,
+             use-of-funds, milestones, and the raise.</p>
+          <span class="build-card__link">See the ask →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 7. SPECS TABLE ============================ -->
+  <section class="section specs" id="specs">
+    <div class="wrap">
+      <p class="eyebrow">Specs</p>
+      <h2 class="section__title">Condensed technical specification.</h2>
+      <div class="table-scroll">
+        <table class="spec-table">
+          <tbody>
+            <tr><th scope="row">Stowed dimensions</th><td>55 × 35 × 23 cm (W×D×H) — within 56×36×23 cm cabin limit</td></tr>
+            <tr><th scope="row">Deployed footprint</th><td>~60 cm deep × 95 cm wide of desk</td></tr>
+            <tr><th scope="row">Weight</th><td>Case only: Dock 7.9 kg · Core 8.2 kg. Add your machine: +0.67 kg (Mac mini) or +2.7 kg (Mac Studio). Battery low, over the wheels</td></tr>
+            <tr><th scope="row">Displays</th><td>3× 14&Prime; 16:10 thin-film OLED (~31 × 19.5 cm, ~1.2 mm laminate, matte AR)</td></tr>
+            <tr><th scope="row">Resolution</th><td>3× 2560×1600 target</td></tr>
+            <tr><th scope="row">Fold</th><td>Tri-fold triptych; wings fold face-to-face over center (stack ≈ 31 × 19.5 × 2.4 cm), fan ~35° each</td></tr>
+            <tr><th scope="row">Lift</th><td>Rear 4-bar linkage, gas-strut assisted; raises ~12 cm, flat→vertical to eye level on a 74 cm desk</td></tr>
+            <tr><th scope="row">Keyboard</th><td>Low-profile mechanical TKL (36 cm) on a slide-out tray (advances ~6 cm)</td></tr>
+            <tr><th scope="row">Trackpad</th><td>16 × 11 cm glass haptic pad (TKL + trackpad = 52 cm within 53 cm interior)</td></tr>
+            <tr><th scope="row">Microphone</th><td>Cardioid condenser capsule on a telescoping boom</td></tr>
+            <tr><th scope="row">Camera</th><td>4K webcam at eye level, center-top bridge</td></tr>
+            <tr><th scope="row">Audio</th><td>Over-ear studio headphones (EVA cradle, pogo-pin charging); stereo speakers in base front edge</td></tr>
+            <tr><th scope="row">Power</th><td>Swappable battery, 4–6 h runtime; AC passthrough</td></tr>
+            <tr><th scope="row">Dock SKU</th><td>One USB4 / Thunderbolt cable drives 3 displays + AV + power from your laptop or phone</td></tr>
+            <tr><th scope="row">Core SKU</th><td>Dock your own Mac mini / Mac Studio / mini-PC in the compute bay — a complete desktop</td></tr>
+            <tr><th scope="row">Compute bay</th><td>Standardized 200 × 200 × 100 mm well, fixed blind-mate connector block; fits Mac mini (197×197×36 mm), Mac Studio (197×197×95 mm), or a mini-PC via a device-specific 3D-printed cradle</td></tr>
+            <tr><th scope="row">Deploy time</th><td>≤ 110 s, mostly gas-strut / motor-assisted single motions</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-scroll">
+        <table class="spec-table spec-table--seq">
+          <caption>Deployment sequence — the ≤ 110-second budget</caption>
+          <thead>
+            <tr><th>#</th><th>Action</th><th>Time</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Lay case flat, unlatch, lid swings back</td><td>0–12 s</td></tr>
+            <tr><td>2</td><td>Raise monitor lift; bridge tilts flat→vertical</td><td>12–40 s</td></tr>
+            <tr><td>3</td><td>Fan the two wing monitors open</td><td>40–62 s</td></tr>
+            <tr><td>4</td><td>Extend mic / camera boom</td><td>62–78 s</td></tr>
+            <tr><td>5</td><td>Slide keyboard tray out, flip trackpad, power on</td><td>78–105 s</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 8. CTA / FOOTER ============================ -->
+  <section class="section cta" id="cta">
+    <div class="wrap cta__inner">
+      <h2 class="cta__title">Your whole office. In a carry-on.</h2>
+      <p class="cta__sub">Read the full concept plan — design differentiation, BOM, go-to-market, and the ask.</p>
+      <div class="btn-row btn-row--center">
+        <a href="PLAN.md" class="btn btn--primary btn--lg">Read the full plan (PLAN.md)</a>
+        <a href="../../index.html" class="btn btn--ghost">← Back to experiments</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <span class="foot__brand">STOWORK</span>
+    <span class="foot__note">Concept build · stow + work · a 3D experiment</span>
+    <a class="foot__hub" href="../../index.html">experiments hub</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STOWORK — caseModel self-test</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #0d0f12; color: #e9ecf1;
+      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    #app { position: fixed; inset: 0; }
+    canvas { display: block; }
+    #hud {
+      position: fixed; left: 16px; right: 16px; bottom: 16px; padding: 14px 16px;
+      background: rgba(18,21,26,0.82); border: 1px solid #2b2f36; border-radius: 12px;
+      backdrop-filter: blur(8px); max-width: 720px; margin: 0 auto;
+    }
+    #row { display: flex; align-items: center; gap: 12px; }
+    #slider { flex: 1; accent-color: #e6a15c; }
+    #readout { font-variant-numeric: tabular-nums; min-width: 150px; text-align: right; }
+    #readout b { color: #e6a15c; }
+    #stages { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    button {
+      background: #1b1f26; color: #e9ecf1; border: 1px solid #333a44; border-radius: 8px;
+      padding: 6px 10px; cursor: pointer; font-size: 12px;
+    }
+    button:hover { border-color: #e6a15c; color: #e6a15c; }
+    button.play { border-color: #e6a15c; color: #e6a15c; }
+    #err { position: fixed; top: 16px; left: 16px; right: 16px; color: #ff9a9a;
+      font-family: ui-monospace, monospace; white-space: pre-wrap; display: none; }
+  </style>
+  <!-- Vendored classic scripts (define globals): works from file:// with no server.
+       Non-deferred + inline scene script below runs in order; DOM it needs sits above it. -->
+  <script src="../vendor/three.min.js"></script>
+  <script src="../vendor/OrbitControls.js"></script>
+  <script src="./caseModel.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="err"></div>
+  <div id="hud">
+    <div id="row">
+      <input id="slider" type="range" min="0" max="1" step="0.001" value="0" />
+      <div id="readout">t = <b id="tval">0.000</b> · <span id="stage">Stowed</span></div>
+    </div>
+    <div id="stages"></div>
+  </div>
+
+  <script>
+    // THREE, THREE.OrbitControls, and createPortableOffice are globals from the
+    // classic scripts above. This inline block runs after them and after the DOM
+    // elements it references (which sit above it in the body).
+    const errEl = document.getElementById('err');
+    window.addEventListener('error', (e) => {
+      errEl.style.display = 'block';
+      errEl.textContent = 'ERROR: ' + (e.message || e.error);
+    });
+
+    // --- renderer / scene / camera ------------------------------------------
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    document.getElementById('app').appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0d0f12);
+
+    const office = createPortableOffice();
+    scene.add(office.root);
+
+    const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 1, 2000);
+    const R = office.fitRadius;
+    camera.position.set(R * 1.1, R * 0.85, R * 1.6);
+    camera.lookAt(0, R * 0.35, 0);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, R * 0.35, 0);
+    controls.minDistance = R * 0.6;
+    controls.maxDistance = R * 4;
+    controls.maxPolarAngle = Math.PI * 0.52; // don't dive under the table
+
+    // --- lights: one key, one fill, ambient, ground shadow plane ------------
+    scene.add(new THREE.HemisphereLight(0x9fb4d0, 0x141414, 0.55));
+    const key = new THREE.DirectionalLight(0xffffff, 2.4);
+    key.position.set(60, 90, 70);
+    key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    key.shadow.camera.left = -120; key.shadow.camera.right = 120;
+    key.shadow.camera.top = 120; key.shadow.camera.bottom = -120;
+    key.shadow.camera.near = 1; key.shadow.camera.far = 400;
+    scene.add(key);
+    const fill = new THREE.DirectionalLight(0xbcd0ff, 0.8);
+    fill.position.set(-70, 40, 30);
+    scene.add(fill);
+
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(600, 600),
+      new THREE.ShadowMaterial({ opacity: 0.32 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // --- HUD wiring ----------------------------------------------------------
+    const slider = document.getElementById('slider');
+    const tval = document.getElementById('tval');
+    const stageEl = document.getElementById('stage');
+
+    function currentStage(t) {
+      let s = office.stages[0];
+      for (const st of office.stages) if (t + 1e-6 >= st.t) s = st;
+      return s;
+    }
+    function apply(t) {
+      office.setDeploy(t);
+      tval.textContent = t.toFixed(3);
+      stageEl.textContent = currentStage(t).label;
+    }
+    slider.addEventListener('input', () => { stopPlay(); apply(parseFloat(slider.value)); });
+
+    const stagesEl = document.getElementById('stages');
+    for (const st of office.stages) {
+      const b = document.createElement('button');
+      b.textContent = st.label;
+      b.onclick = () => { stopPlay(); slider.value = st.t; apply(st.t); };
+      stagesEl.appendChild(b);
+    }
+    const play = document.createElement('button');
+    play.textContent = '▶ Play deployment';
+    play.className = 'play';
+    let playing = null;
+    function stopPlay() { if (playing) { cancelAnimationFrame(playing); playing = null; } }
+    play.onclick = () => {
+      stopPlay();
+      const start = performance.now(), DUR = 6000;
+      const step = (now) => {
+        const t = Math.min((now - start) / DUR, 1);
+        slider.value = t; apply(t);
+        if (t < 1) playing = requestAnimationFrame(step); else playing = null;
+      };
+      playing = requestAnimationFrame(step);
+    };
+    stagesEl.appendChild(play);
+
+    apply(0);
+
+    // --- render loop ---------------------------------------------------------
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+    renderer.setAnimationLoop(() => {
+      controls.update();
+      renderer.render(scene, camera);
+    });
+  </script>
+</body>
+</html>
