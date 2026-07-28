@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>omegaClass — grillModel self-test</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #0b0b0d; color: #f5f2ec;
+      font: 14px/1.4 "Helvetica Neue", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    #app { position: fixed; inset: 0; }
+    canvas { display: block; }
+    #hud {
+      position: fixed; left: 16px; right: 16px; bottom: 16px; padding: 14px 16px;
+      background: rgba(20,20,23,0.86); border: 1px solid #2b2f36; border-radius: 14px;
+      backdrop-filter: blur(8px); max-width: 760px; margin: 0 auto;
+    }
+    .row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
+    .row label { width: 74px; font-family: ui-monospace, monospace; font-size: 12px;
+      letter-spacing: 0.04em; color: #c7ccd1; }
+    input[type=range] { flex: 1; accent-color: #ff6a1e; }
+    .val { font-variant-numeric: tabular-nums; min-width: 46px; text-align: right; color: #ffab40; }
+    #postures { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    button {
+      background: #17181b; color: #f5f2ec; border: 1px solid #333a44; border-radius: 8px;
+      padding: 6px 11px; cursor: pointer; font-size: 12px; letter-spacing: 0.02em;
+    }
+    button:hover { border-color: #ff6a1e; color: #ffab40; }
+    #caption { margin-top: 8px; font-size: 12px; color: #9096a0; min-height: 16px; }
+    #err { position: fixed; top: 16px; left: 16px; right: 16px; color: #ff9a9a;
+      font-family: ui-monospace, monospace; white-space: pre-wrap; display: none; z-index: 9; }
+    .wm { position: fixed; top: 16px; left: 20px; font-family: ui-monospace, monospace;
+      font-size: 11px; color: #565b63; letter-spacing: 0.1em; }
+  </style>
+  <!-- Vendored classic scripts (define globals). Runs from file:// with no server. -->
+  <script src="../vendor/three.min.js"></script>
+  <script src="../vendor/OrbitControls.js"></script>
+  <script src="./grillModel.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <div class="wm">omegaClass · grillModel self-test</div>
+  <div id="err"></div>
+  <div id="hud">
+    <div class="row"><label>roof r</label><input id="r" type="range" min="0" max="1" step="0.001" value="0" /><span class="val" id="rv">0.00</span></div>
+    <div class="row"><label>doors d</label><input id="d" type="range" min="0" max="1" step="0.001" value="0" /><span class="val" id="dv">0.00</span></div>
+    <div class="row"><label>fire f</label><input id="f" type="range" min="0" max="1" step="0.001" value="0" /><span class="val" id="fv">0.00</span></div>
+    <div class="row"><label>grate g</label><input id="g" type="range" min="0" max="1" step="0.001" value="0.4" /><span class="val" id="gv">0.40</span></div>
+    <div id="postures"></div>
+    <div id="caption"></div>
+  </div>
+
+  <script>
+    // THREE, THREE.OrbitControls, and createOmegaGrill are globals from the classic
+    // scripts above. This inline block runs after them and after the DOM it uses.
+    const errEl = document.getElementById('err');
+    window.addEventListener('error', (e) => {
+      errEl.style.display = 'block';
+      errEl.textContent = 'ERROR: ' + (e.message || e.error) +
+        '\nthree r' + (THREE && THREE.REVISION) + ' · webgl ' +
+        (!!window.WebGLRenderingContext);
+    });
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    document.getElementById('app').appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0b0b0d);
+
+    const grill = createOmegaGrill();
+    scene.add(grill.root);
+
+    const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 1, 3000);
+    const R = grill.fitRadius;
+    camera.position.set(R * 1.0, R * 0.8, R * 1.5);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, R * 0.55, 0);
+    controls.minDistance = R * 0.5;
+    controls.maxDistance = R * 4;
+    controls.maxPolarAngle = Math.PI * 0.52;
+
+    // lights: cool key + warm ember fill + cool rim + hemi ambient
+    scene.add(new THREE.HemisphereLight(0x9fb4d0, 0x101014, 0.5));
+    const key = new THREE.DirectionalLight(0xffffff, 2.5);
+    key.position.set(120, 230, 140);
+    key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048);
+    key.shadow.camera.left = -200; key.shadow.camera.right = 200;
+    key.shadow.camera.top = 300; key.shadow.camera.bottom = -40;
+    key.shadow.camera.near = 1; key.shadow.camera.far = 800;
+    scene.add(key);
+    const fill = new THREE.DirectionalLight(0xff8a3c, 0.7);
+    fill.position.set(50, 60, 120);
+    scene.add(fill);
+    const rim = new THREE.DirectionalLight(0xbcd0ff, 0.8);
+    rim.position.set(-110, 120, -100);
+    scene.add(rim);
+
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(1400, 1400),
+      new THREE.ShadowMaterial({ opacity: 0.34 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // HUD wiring — roof / doors / fire / grate
+    const rEl = document.getElementById('r'), dEl = document.getElementById('d');
+    const fEl = document.getElementById('f'), gEl = document.getElementById('g');
+    const rvEl = document.getElementById('rv'), dvEl = document.getElementById('dv');
+    const fvEl = document.getElementById('fv'), gvEl = document.getElementById('gv');
+    const capEl = document.getElementById('caption');
+    function apply() {
+      const r = parseFloat(rEl.value), d = parseFloat(dEl.value);
+      const f = parseFloat(fEl.value), g = parseFloat(gEl.value);
+      grill.setRoof(r); grill.setDoors(d); grill.setFire(f); grill.setGrate(g);
+      rvEl.textContent = r.toFixed(2); dvEl.textContent = d.toFixed(2);
+      fvEl.textContent = f.toFixed(2); gvEl.textContent = g.toFixed(2);
+    }
+    rEl.oninput = dEl.oninput = fEl.oninput = gEl.oninput = () => { capEl.textContent = ''; apply(); };
+
+    const pEl = document.getElementById('postures');
+    for (const p of grill.postures) {
+      const b = document.createElement('button');
+      b.textContent = p.label;
+      b.onclick = () => {
+        rEl.value = p.roof; dEl.value = p.doors; fEl.value = p.fire; apply();
+        capEl.textContent = p.caption;
+      };
+      pEl.appendChild(b);
+    }
+    apply();
+
+    // subtle ember flicker so the fire reads alive in the harness
+    let t0 = performance.now();
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+    renderer.setAnimationLoop(() => {
+      const f = parseFloat(fEl.value);
+      if (f > 0.25) {
+        const flick = 1 + Math.sin((performance.now() - t0) * 0.012) * 0.06;
+        grill.parts.emberBed.scale.y = flick;
+      }
+      controls.update();
+      renderer.render(scene, camera);
+    });
+  </script>
+</body>
+</html>
