@@ -299,7 +299,7 @@
         fill three lines, walk away.</p>
       <div class="herostats reveal d3">
         <div><div class="n">1</div><div class="l">Prompt</div></div>
-        <div><div class="n">5</div><div class="l">Modes</div></div>
+        <div><div class="n">6</div><div class="l">Modes</div></div>
         <div><div class="n">4</div><div class="l">Model tiers</div></div>
         <div><div class="n"><i>3</i></div><div class="l">Lines to fill</div></div>
       </div>
@@ -385,7 +385,7 @@
     </div>
     <div class="step reveal d3">
       <div class="sn">3</div><h3>Verify</h3>
-      <p>Every DONE gets an adversarial second opinion: CONFIRMED, PARTIAL, or REFUTED — and a refuted claim counts as a failed attempt, feeding the escalation ladder.</p>
+      <p>Every DONE gets an adversarial second opinion: CONFIRMED, PARTIAL, or REFUTED — and a refuted claim counts as a failed attempt, feeding the escalation ladder. UI-facing tasks get a second attacker: a journey probe that drives the claimed feature as a simulated user, screenshots only.</p>
       <div class="who">runs on <b>tier +1</b></div>
     </div>
     <div class="step reveal d4">
@@ -454,7 +454,7 @@
 <!-- MOVEMENT IV — modes -->
 <section class="mov lift" id="modes"><div class="wrap">
   <div class="mhead">
-    <div class="mnum reveal">Movement IV — The five modes</div>
+    <div class="mnum reveal">Movement IV — The six modes</div>
     <h2 class="reveal d1">You point. <em>The mode is the directive.</em></h2>
     <p class="reveal d2">You never write the work order. Each mode ships a full-strength directive —
       the kind you'd spend twenty minutes wordsmithing — pre-aimed at whatever TARGET you name.
@@ -498,6 +498,25 @@
           silence is not a pass.</p>
       </div>
       <div class="conv"><b>CONVERGES</b> when fresh audit + blindspot rounds fall below the value cut line twice in a row.</div>
+    </div>
+    <div class="mode wide reveal">
+      <div class="mtop"><span class="badge">DOGFOOD</span><span class="aims">aims at a running product</span></div>
+      <h3>Users who <em>never saw the DOM.</em></h3>
+      <p>A persona matrix — every user tier, every role, their top journeys — drives the live product
+        the way real users would. Personas carry knowledge limits and patience budgets; an honest
+        abandonment is a first-class finding. Journeys end in flow documents with every screenshot
+        embedded and every friction flag graded — findings are facts a verifier can re-drive: steps,
+        dead ends, error text, timings, <b>never taste</b>. Cross-tier probes hunt what only simulated
+        users surface: tenant isolation, privilege boundaries, impersonation flows.</p>
+      <div class="blindspot">
+        <div class="bl">The screenshot contract — perception vs. actuation</div>
+        <p>Personas decide every action from <b>pixels alone</b> — if it isn't visible in the
+          screenshot, it doesn't exist, exactly like your user's Tuesday. The DOM may only execute a
+          click on an element already found in the pixels; discovering anything through the DOM, the
+          source, or docs the persona would never read is fabrication. A step without a screenshot is
+          a fabricated step.</p>
+      </div>
+      <div class="conv"><b>CONVERGES</b> when every persona × journey cell has a flow doc or an accepted block. Reports and flow docs out — a follow-up run does the fixing. Other modes borrow the probe for any UI-tagged task.</div>
     </div>
     <div class="mode reveal">
       <div class="mtop"><span class="badge">ROADMAP</span><span class="aims">aims at a goal</span></div>
@@ -565,9 +584,9 @@
     <div class="ustep reveal d1">
       <div class="un">2</div>
       <h3>Fill the run config</h3>
-      <p>Three lines at the top: <code>TARGET</code> (a folder, a spec file, or a goal),
-        <code>MODE</code> (TEST · BUILD · IMPROVE · ROADMAP · GENERIC), and <code>DIAL</code>
-        (leave it on STANDARD). That's the entire interface.</p>
+      <p>Three lines at the top: <code>TARGET</code> (a folder, a spec file, a running app, or a
+        goal), <code>MODE</code> (TEST · BUILD · IMPROVE · DOGFOOD · ROADMAP · GENERIC), and
+        <code>DIAL</code> (leave it on STANDARD). That's the entire interface.</p>
     </div>
     <div class="ustep reveal d2">
       <div class="un">3</div>
@@ -585,12 +604,12 @@
     <div class="mnum reveal">Movement VII — The score itself</div>
     <h2 class="reveal d1">The prompt, <em>entire.</em></h2>
     <p class="reveal d2">This page is the canonical home of baton — there is no repo to clone. What's
-      in this box is the whole thing: 470 lines, ~3,500 words, five modes, four tiers, one contract.</p>
+      in this box is the whole thing: 571 lines, ~4,600 words, six modes, four tiers, one contract.</p>
   </div>
   <div class="vault reveal d1">
     <div class="vaultcard">
       <div class="vbar">
-        <div class="vmeta"><span class="dots"><i></i><i></i><i></i></span><span class="fn"><b>baton.md</b> · 475 lines · fill TARGET, MODE, DIAL</span></div>
+        <div class="vmeta"><span class="dots"><i></i><i></i><i></i></span><span class="fn"><b>baton.md</b> · 571 lines · fill TARGET, MODE, DIAL</span></div>
         <button class="copybtn" id="copybtn" type="button">Copy the prompt</button>
       </div>
       <pre id="psrc"># BATON — a Fable-led orchestrator of orchestrators
@@ -598,18 +617,21 @@
 ## RUN CONFIG — fill these three lines, leave everything else untouched
 
 ```
-TARGET: [module/folder path, spec file, or one-line goal]
-MODE:   [TEST | BUILD | IMPROVE | ROADMAP | GENERIC]
+TARGET: [module/folder path, spec file, running app, or one-line goal]
+MODE:   [TEST | BUILD | IMPROVE | DOGFOOD | ROADMAP | GENERIC]
 DIAL:   STANDARD
 ```
 
 - **MODE** — TEST: adversarial test sweep + fix loop on a module/folder.
   BUILD: implement a spec file completely, plan-first, requirement-traced.
   IMPROVE: audit, blindspot-hunt, rank, and execute behavior-preserving
-  improvements to a module/folder. ROADMAP: produce a panel-hardened phased
-  roadmap for a goal; no execution. GENERIC: your own directive — write it
-  under OPERATOR NOTES. Each mode carries its full directive in §11; you
-  never write one (except GENERIC).
+  improvements to a module/folder. DOGFOOD: a persona matrix of simulated
+  users drives the running product through real journeys — screenshots-only
+  perception — and ships flow documents plus a UX findings report; no
+  fixes. ROADMAP: produce a panel-hardened phased roadmap for a goal; no
+  execution. GENERIC: your own directive — write it under OPERATOR NOTES.
+  Each mode carries its full directive in §11; you never write one (except
+  GENERIC).
 - **DIAL** — STANDARD: independent verifier tries to refute every claimed
   result. FULL: adds a luminary-style expert panel (independent audit → red
   flag → steelman clash → synthesis) at plan and final gates. OFF: trust
@@ -669,8 +691,10 @@ _orch/
       work/                # ALL work products; prime never enters this directory
   verify/
     T01-verdict.json       # verifier output per task
+  ux-debt.yaml             # friction logged by journey probes; report material, never a blocker
   final/
     report.md              # end-of-run synthesis (written by a fable synthesizer, not you)
+    flows/                 # per-journey flow docs, screenshots embedded (DOGFOOD / ui probes)
 ```
 
 Rules:
@@ -766,12 +790,17 @@ convert the directive into:
   tier: haiku
   blocked_by: []
   adversarial: standard        # off | standard | full
+  surface: code                # code | ui — ui: verification adds a journey probe (§6.3)
   handoff: _orch/tasks/T01/handoff.md   # planner writes every handoff.md too
 ```
 
 The planner also writes each task&#x27;s `handoff.md` (inputs, expected output
 paths under `work/`, and **objective done-criteria** — a criterion a verifier
 can check without judgment calls is worth three that need interpretation).
+The planner tags `surface: ui` on any task whose done-criteria a real user
+could witness through the product&#x27;s interface, and writes a minimal
+persona card per affected role under `plan/personas/` so journey probes
+(§8.4) have someone to be.
 
 **Plan gate:** when the planner&#x27;s envelope lands —
 - Dial STANDARD: spawn one independent **plan verifier** (template §8.3) to
@@ -800,6 +829,17 @@ Repeat until the backlog has no runnable tasks:
    `verify/&lt;id&gt;-verdict.json`: `CONFIRMED | REFUTED | PARTIAL` + evidence
    paths. REFUTED → the task re-enters as FAILED (§4). Workers never verify
    their own work.
+   **Journey probe (ui tasks):** if the task is tagged `surface: ui`, also
+   spawn a journey probe (§8.4) scoped to only the roles and journeys the
+   task affects — a simulated user drives the claimed feature in the running
+   product, screenshots-only perception. The probe checks the environment
+   first (reachable app, working credentials for the affected roles); if it
+   cannot run, it returns BLOCKED and the task keeps its code verdict with a
+   logged caveat — never stall the run on a missing environment. A probe
+   that shows the claimed behavior broken is a REFUTED like any other;
+   friction that does not violate the done-criteria appends to
+   `_orch/ux-debt.yaml` and never bounces the task — polish the spec did not
+   require is report material, not a failure.
 4. **Route** — apply §4 on every non-DONE envelope. Log every attempt to
    `attempts.log`.
 5. **Sweep** — when a phase completes, spawn one haiku janitor to confirm
@@ -832,7 +872,12 @@ Panel shape (fit to purpose — 3–5 experts, not 39):
    *adversarial-input* (what malformed/boundary/race case is still missing?),
    *suite-economics* (which tests are redundant, brittle, or overlapping?),
    *regression-integrity* (does every fixed bug have a pinned regression
-   test?). For plans: feasibility, dependency-ordering, tier-fit, scope-creep.
+   test?). For DOGFOOD the lenses are: *journey-honesty* (did probes actually
+   complete the flows, or narrate plausible fiction?), *persona-fidelity*
+   (did they behave as their persona card, or as an expert developer?),
+   *matrix-coverage* (which persona × journey cells went unprobed?),
+   *severity-inflation* (is every P1 really a P1?). For plans: feasibility,
+   dependency-ordering, tier-fit, scope-creep.
 2. **Red flag** — each expert declares **at most one** blocking concern.
 3. **Steelman clash** — where experts oppose, a fable mediator makes each
    argue the other&#x27;s position charitably before rebuttal, then rules.
@@ -895,7 +940,31 @@ the same contract footer.
 &gt; `{verdict_path}` as {&quot;task&quot;,&quot;verdict&quot;:&quot;CONFIRMED|REFUTED|PARTIAL&quot;,
 &gt; &quot;evidence&quot;:[paths],&quot;probe&quot;:&quot;...&quot;} and return it as your final text.
 
-### CONTRACT_FOOTER (append to 8.1 and 8.2)
+### 8.4 Journey Probe (opus default; requires screenshot-capable browser tooling)
+
+&gt; You are a JOURNEY PROBE simulating a real user. Read `{persona_path}` —
+&gt; your persona card: tier, role, goals, knowledge limits, patience budget.
+&gt; You are that person, not an engineer. Drive the running product at
+&gt; `{app_url}` with the browser tooling available in your session, completing
+&gt; the journeys listed in `{handoff_path}`. Environment check comes first: if
+&gt; the app is unreachable or your persona&#x27;s credentials fail, return BLOCKED
+&gt; immediately with the exact failure.
+&gt; **Perception contract:** decide every action from screenshots alone. If it
+&gt; is not visible in the current screenshot, you do not know it exists —
+&gt; scroll and explore as a person would. You may use the DOM only to execute
+&gt; a click or keystroke on an element you already identified in the pixels;
+&gt; discovering elements through the DOM, the source, or docs your persona
+&gt; would not read is fabrication. Respect the persona&#x27;s knowledge limits and
+&gt; patience budget: when the budget is spent, abandon the journey and record
+&gt; where and why — an honest abandonment is a first-class finding.
+&gt; For each journey write `{work_dir}/flow-{journey}.md`: one entry per step —
+&gt; screenshot path, intent, action taken, outcome, elapsed time, and any
+&gt; friction flag graded P0–P3. Findings must be observable facts — steps,
+&gt; backtracks, dead ends, error text, timings — never taste. A step without a
+&gt; screenshot is a fabricated step.
+&gt; {CONTRACT_FOOTER}
+
+### CONTRACT_FOOTER (append to 8.1, 8.2, and 8.4)
 
 &gt; CONTRACT: As your final act, write `{status_path}` matching the status
 &gt; envelope schema exactly (verdict ∈ DONE | DONE-WITH-CAVEATS | BLOCKED |
@@ -972,7 +1041,8 @@ Phase 0 must shape the roadmap as audit → blindspot → execute, roughly:
    b. **Outside perspectives** — read the module as its *callers* and its
       *operators* would, not as its author: trace real call sites in the
       wider codebase, imagine the 3 a.m. incident, the confusing error
-      message, the missing runbook.
+      message, the missing runbook. When a runnable UI exists, drive it
+      with a journey probe (§8.4) instead of imagining the user.
    c. **Shared assumptions** — attack anything the code, its tests, AND the
       audit lenses all take for granted (clock, locale, filesystem case,
       single-writer, &quot;input is already validated&quot;).
@@ -990,6 +1060,37 @@ Phase 0 must shape the roadmap as audit → blindspot → execute, roughly:
 6. **Converge**: re-audit after execution (fresh blindspot agent each
    round); stop when new candidates fall below the cut line (&quot;below
    threshold twice&quot;), not when the list is empty.
+
+### MODE: DOGFOOD
+Phase 0 must shape the roadmap as matrix → journeys → synthesis, roughly:
+1. **Persona matrix** (fable, part of planning): map the product&#x27;s user
+   tiers (e.g. operator → tenant admin → tenant end-user), the roles within
+   each tier, and each role&#x27;s top jobs-to-be-done. Write one persona card
+   per role: who they are, what they know, what they have never seen, and a
+   patience budget. **Matrix gate:** the matrix and cards go to the operator
+   as one BLOCKED batch before any journey runs — persona choices change
+   everything downstream.
+2. **Environment gate** (haiku): runnable app, seeded fixtures, and working
+   credentials for every matrix cell, proven by logging in as each role. A
+   cell that cannot authenticate blocks its own journeys, not the run.
+3. **Journey execution**: one task per persona × journey (template §8.4),
+   serialized — each produces a flow document with embedded screenshots and
+   fact-grounded friction flags.
+4. **Cross-tier probes** (first-class tasks, opus): tenant isolation (does
+   one tenant&#x27;s data ever render for another?), privilege boundaries (can a
+   lower role reach a higher role&#x27;s surface?), impersonation and support
+   flows. These are the findings only simulated users surface.
+5. **Verification**: the verifier re-drives claimed friction from the flow
+   doc and refutes fact-claims — steps, errors, timings — not taste. A
+   claimed step with no screenshot is fabricated: automatic REFUTED.
+6. **Synthesis** (fable): dedupe findings across personas — the same
+   friction hit by many roles gains severity; rank by frequency × severity;
+   write `final/ux-report.md` plus `final/flows/` — per-role flow documents,
+   human-browsable; a clean journey&#x27;s flow doc is one editing pass from
+   real user documentation. Shape the fix backlog so a follow-up IMPROVE or
+   BUILD run executes it directly. DOGFOOD observes and reports; it never
+   fixes.
+7. **Final gate** at dial FULL: the four DOGFOOD lenses from §7.
 
 ### MODE: ROADMAP
 Phase 0 + plan gate only, then synthesis. The deliverable is
@@ -1053,6 +1154,20 @@ before/after evidence — no drive-by refactors, no behavior change without an
 explicit operator-approved flag; and repeat until the remaining candidates
 fall below the value threshold and the module is measurably better with
 proof, not opinion.
+
+**DOGFOOD →** Simulate the real users of {TARGET}: derive the persona
+matrix — every user tier, every role within it, their top journeys — and
+get it operator-approved; prove a runnable environment and working
+credentials for every role before any journey runs; then drive each journey
+as that persona with screenshots-only perception, honest patience budgets,
+and no knowledge the real user would lack; probe the tier boundaries —
+tenant isolation, privilege escalation, impersonation flows; record every
+step as a flow document with embedded screenshots; ground every finding in
+observable fact — steps, dead ends, error text, timing — never taste;
+dedupe and rank findings across personas by frequency and severity; and
+deliver a UX report, browsable per-role flow documents, and a fix backlog a
+follow-up run of this same prompt can execute directly. Report everything;
+fix nothing.
 
 **ROADMAP →** Produce a decision-ready phased roadmap for {TARGET}: map the
 current state with citations, enumerate options honestly including
