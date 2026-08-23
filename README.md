@@ -15,10 +15,10 @@ and, where one exists, its source repository. Each spec links back to the index.
 
 | Section | Project | Stack | Status | Spec | Live · Code |
 |---|---|---|---|---|---|
-| Substrate | **regel** — a governed code-as-rows substrate | Go · TypeScript · Postgres | Shipped | `regel.html` | [live](https://ckluis.github.io/regel/) · [code](https://github.com/ckluis/regel) |
+| Substrate | **regel** — a governed code-as-rows substrate | Go · TypeScript · Postgres | Shipped | — | [live](https://ckluis.github.io/regel/) · [code](https://github.com/ckluis/regel) |
 | Substrate | **kern** — a homoiconic SaaS substrate | Lisp · Postgres | Spec | `kern.html` | — |
 | Substrate | **eigen** — a local-first hypermedia framework | Rust · Postgres | Spec | `eigen.html` | — |
-| Frameworks | **samen** — a governed B2B-SaaS foundry | Elixir · Ash · Oban · Postgres | Shipped | `samen.html` | [live](https://ckluis.github.io/samen/) · [code](https://github.com/ckluis/samen) |
+| Frameworks | **samen** — a governed B2B-SaaS foundry | Elixir · Ash · Oban · Postgres | Shipped | — | [live](https://ckluis.github.io/samen/) · [code](https://github.com/ckluis/samen) |
 | Frameworks | **chord** — the omakase full-stack for G# | G# | Spec | `chord.html` | — |
 | Frameworks | **fugue** — the Phoenix of G#, on Orleans | G# · Orleans | Spec | `fugue.html` | — |
 | Frameworks | **realbook** — the WordPress of G#, with a gate | G# | Spec | `realbook.html` | — |
