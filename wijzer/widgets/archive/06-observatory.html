@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wijzer — observatory</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{background:#e9e6df}
+  body{
+    position:relative;
+    width:364px;height:382px;
+    margin:0;overflow:hidden;
+    background:#e9e6df;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .card{
+    position:absolute;inset:0;
+    border-radius:26px;overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 50% 30%, #121a3a 0%, rgba(18,26,58,0) 62%),
+      linear-gradient(163deg,#0b1026 0%,#0e1430 52%,#101733 100%);
+    box-shadow:0 10px 24px rgba(16,20,38,.42), 0 2px 5px rgba(16,20,38,.30);
+    animation:rise .42s cubic-bezier(.3,0,.2,1) both;
+  }
+  .card::after{
+    content:'';position:absolute;inset:0;border-radius:26px;pointer-events:none;
+    border:1px solid rgba(163,187,255,.075);
+  }
+  @keyframes rise{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.card{animation:none}}
+
+  svg{display:block}
+  #stars{position:absolute;left:0;top:0;z-index:0}
+  #dial{position:absolute;left:0;top:26px;z-index:1}
+
+  /* ---- masthead ---- */
+  .mast{
+    position:absolute;left:15px;right:15px;top:11px;z-index:3;
+    display:flex;align-items:baseline;justify-content:space-between;
+  }
+  .mast .date{
+    font-size:10px;font-weight:600;letter-spacing:.17em;color:#c8cede;
+    text-shadow:0 0 9px rgba(150,185,255,.20);
+  }
+  .mast .doy{font-size:9px;font-weight:500;letter-spacing:.13em;color:#7b86a2}
+
+  /* ---- dial centre stack ---- */
+  .ctr{position:absolute;left:0;right:0;top:149px;z-index:3;text-align:center}
+  .ctr .t{
+    font-size:28px;font-weight:200;line-height:30px;letter-spacing:.005em;color:#f2f6ff;
+    text-shadow:0 0 16px rgba(152,190,255,.50),0 0 4px rgba(226,238,255,.35);
+  }
+  .ctr .t .ap{
+    font-size:11px;font-weight:500;letter-spacing:.11em;color:#aeb9d2;
+    margin-left:5px;vertical-align:2px;text-shadow:none;
+  }
+  .ctr .ph{
+    margin-top:2px;font-size:9px;line-height:11px;font-weight:600;
+    letter-spacing:.16em;color:#8b96b1;
+  }
+
+  /* ---- footer ---- */
+  .rule{position:absolute;left:15px;right:15px;height:1px;z-index:3;
+    background:linear-gradient(90deg,rgba(163,187,255,0),rgba(163,187,255,.16),rgba(163,187,255,0))}
+  .r1{top:277px}
+  .r2{top:347px}
+
+  .next{
+    position:absolute;left:15px;right:15px;top:283px;height:20px;z-index:3;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .next .l{display:flex;align-items:center;min-width:0}
+  .next .dot{
+    width:6px;height:6px;border-radius:50%;background:#4a7fd4;margin-right:8px;flex:0 0 auto;
+    box-shadow:0 0 8px rgba(74,127,212,.95),0 0 2px rgba(150,190,255,.8);
+  }
+  .next .nm{
+    font-size:10.5px;font-weight:600;letter-spacing:.11em;color:#dde4f2;
+    white-space:nowrap;text-shadow:0 0 8px rgba(150,185,255,.18);
+  }
+  .next .tm{font-size:9.5px;font-weight:500;letter-spacing:.05em;color:#818da8;margin-left:9px;white-space:nowrap}
+  .next .pill{
+    flex:0 0 auto;font-size:8.8px;font-weight:700;letter-spacing:.13em;color:#a5c6f7;
+    padding:3px 7px 3px 8px;border-radius:999px;
+    background:rgba(74,127,212,.15);border:1px solid rgba(116,163,233,.30);
+    text-shadow:0 0 8px rgba(120,170,240,.5);
+  }
+
+  .cells{position:absolute;left:15px;right:15px;top:309px;height:34px;z-index:3;display:flex}
+  .cells .c{flex:1 1 0;min-width:0;text-align:center}
+  .cells .c+.c{border-left:1px solid rgba(163,187,255,.11)}
+  .cells .v{
+    font-size:13.5px;font-weight:300;line-height:17px;letter-spacing:.01em;color:#e4eaf6;
+    white-space:nowrap;text-shadow:0 0 10px rgba(150,185,255,.22);
+  }
+  .cells .k{
+    margin-top:1px;font-size:9px;line-height:12px;font-weight:600;letter-spacing:.085em;
+    color:#7f8aa5;white-space:nowrap;
+  }
+
+  .alm{
+    position:absolute;left:12px;right:12px;top:355px;z-index:3;
+    text-align:center;font-size:9px;line-height:12px;font-weight:500;
+    letter-spacing:.085em;color:#7c87a1;white-space:nowrap;
+  }
+  .alm b{font-weight:600;color:#a7b1c8}
+  .alm i{font-style:normal;color:#4e587a;padding:0 2px}
+</style>
+</head>
+<body>
+<div class="card">
+
+  <svg id="stars" width="364" height="382" viewBox="0 0 364 382" aria-hidden="true"></svg>
+  <svg id="dial" width="364" height="248" viewBox="0 0 364 248" role="img"
+       aria-label="24-hour almanac dial: 8:55 AM, daylight 6:28 to 8:13, waning gibbous moon"></svg>
+
+  <div class="mast">
+    <div class="date">AUGUST 2 &middot; SUNDAY</div>
+    <div class="doy">DAY 214 / 365</div>
+  </div>
+
+  <div class="ctr">
+    <div class="t">8:55<span class="ap">AM</span></div>
+    <div class="ph">WANING 67%</div>
+  </div>
+
+  <div class="rule r1"></div>
+
+  <div class="next">
+    <div class="l">
+      <span class="dot"></span>
+      <span class="nm">TEAM STANDUP</span>
+      <span class="tm">9:00 AM</span>
+    </div>
+    <div class="pill">IN 5 MIN</div>
+  </div>
+
+  <div class="cells">
+    <div class="c"><div class="v">72&deg;</div><div class="k">PARTLY CLOUDY</div></div>
+    <div class="c"><div class="v">10:22 AM</div><div class="k">HIGH TIDE 3.1&#8202;FT</div></div>
+    <div class="c"><div class="v">6:28 &middot; 8:13</div><div class="k">SUNRISE &middot; SUNSET</div></div>
+  </div>
+
+  <div class="rule r2"></div>
+
+  <div class="alm">
+    UV <b>7</b> HIGH <i>&middot;</i> HUM <b>63%</b> <i>&middot;</i> WIND <b>SE 15</b> <i>&middot;</i> WATER <b>78&deg;</b>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var NS='http://www.w3.org/2000/svg';
+  var dial=document.getElementById('dial');
+  var sky=document.getElementById('stars');
+
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||dial).appendChild(e);return e;}
+
+  /* deterministic pseudo-random (frozen snapshot) */
+  var seed=20260802;
+  function rnd(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+
+  /* ---------- geometry ---------- */
+  var CX=182, CY=124;                 /* dial centre, local svg coords  */
+  var R_TIDE=114, T_AMP=5;            /* tide ribbon                    */
+  var R_RING=100;                     /* day / night ring               */
+  var R_TICK_O=94, R_TICK_I=88, R_TICK_C=84;
+  var R_MOONMK=78;                    /* moonrise / moonset markers     */
+  var R_NUM=74;                       /* hour numerals                  */
+  var R_EV=62;                        /* calendar event track           */
+
+  function P(r,deg){var t=deg*Math.PI/180;return [CX+r*Math.sin(t), CY-r*Math.cos(t)];}
+  function A(h){return h*15;}          /* hours -> degrees, midnight top, clockwise */
+  function f1(n){return Math.round(n*10)/10;}
+  function arcD(r,d0,d1){
+    var a=P(r,d0), b=P(r,d1), lg=((d1-d0+360)%360)>180?1:0;
+    return 'M'+f1(a[0])+','+f1(a[1])+' A'+r+','+r+' 0 '+lg+',1 '+f1(b[0])+','+f1(b[1]);
+  }
+
+  var SUNRISE=A(6+28/60);              /*  97.00 deg */
+  var SUNSET =A(20+13/60);             /* 303.25 deg */
+  var MOONSET=A(4+47/60);              /*  71.75 deg */
+  var MOONRISE=A(19+58/60);            /* 299.50 deg */
+  var NOW=A(8+55/60);                  /* 133.75 deg */
+
+  /* ---------- defs ---------- */
+  var defs=el('defs',{});
+  function grad(id,x1,y1,x2,y2,stops){
+    var g=el('linearGradient',{id:id,gradientUnits:'userSpaceOnUse',x1:f1(x1),y1:f1(y1),x2:f1(x2),y2:f1(y2)},defs);
+    stops.forEach(function(s){el('stop',{offset:s[0],'stop-color':s[1],'stop-opacity':(s[2]===undefined?1:s[2])},g);});
+  }
+  var sr=P(R_RING,SUNRISE), ss=P(R_RING,SUNSET);
+  grad('day',sr[0],sr[1],ss[0],ss[1],[
+    ['0%','#c9683a'],['14%','#e79a4a'],['44%','#f7d489'],['58%','#f6cd7c'],['86%','#e08b45'],['100%','#c05f36']
+  ]);
+
+  var rg=el('radialGradient',{id:'lit',cx:'32%',cy:'26%',r:'88%'},defs);
+  el('stop',{offset:'0%','stop-color':'#ffffff'},rg);
+  el('stop',{offset:'52%','stop-color':'#e9eefb'},rg);
+  el('stop',{offset:'100%','stop-color':'#a9b7d6'},rg);
+
+  var hg=el('radialGradient',{id:'halo',cx:'50%',cy:'50%',r:'50%'},defs);
+  el('stop',{offset:'40%','stop-color':'#9db6f2','stop-opacity':'.28'},hg);
+  el('stop',{offset:'66%','stop-color':'#7e99e2','stop-opacity':'.11'},hg);
+  el('stop',{offset:'100%','stop-color':'#7e99e2','stop-opacity':'0'},hg);
+
+  var vg=el('radialGradient',{id:'vign',cx:'50%',cy:'50%',r:'50%'},defs);
+  el('stop',{offset:'0%','stop-color':'#3f5aa8','stop-opacity':'.20'},vg);
+  el('stop',{offset:'70%','stop-color':'#2b3b78','stop-opacity':'.07'},vg);
+  el('stop',{offset:'100%','stop-color':'#222f60','stop-opacity':'0'},vg);
+
+  el('filter',{id:'b2',x:'-70%',y:'-70%',width:'240%',height:'240%'},defs)
+    .appendChild(document.createElementNS(NS,'feGaussianBlur')).setAttribute('stdDeviation','2');
+  el('filter',{id:'b4',x:'-70%',y:'-70%',width:'240%',height:'240%'},defs)
+    .appendChild(document.createElementNS(NS,'feGaussianBlur')).setAttribute('stdDeviation','4');
+  el('filter',{id:'b7',x:'-90%',y:'-90%',width:'280%',height:'280%'},defs)
+    .appendChild(document.createElementNS(NS,'feGaussianBlur')).setAttribute('stdDeviation','7');
+
+  /* ---------- background starfield (whole widget) ---------- */
+  (function(){
+    function star(x,y,r,o,p){el('circle',{cx:f1(x),cy:f1(y),r:r,fill:'#dce6ff',opacity:o},p||sky);}
+    var placed=0, guard=0;
+    while(placed<64 && guard<900){
+      guard++;
+      var x=rnd()*364, y=rnd()*382;
+      var dx=x-182, dy=y-150, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<58) continue;                       /* keep the moon's court clean */
+      if(y>272 && rnd()<0.72) continue;        /* thin out behind the readout */
+      var q=rnd();
+      if(q<0.60) star(x,y,0.6,0.17);
+      else if(q<0.90) star(x,y,0.8,0.34);
+      else {
+        star(x,y,1.05,0.62);
+        el('circle',{cx:f1(x),cy:f1(y),r:2.6,fill:'#b9ccff',opacity:'.16',filter:'url(#b2)'},sky);
+      }
+      placed++;
+    }
+  })();
+
+  /* ---------- dial glow bed ---------- */
+  el('circle',{cx:CX,cy:CY,r:132,fill:'url(#vign)'});
+
+  /* ---------- tide ribbon (outer track) ---------- */
+  (function(){
+    var EX=[{t:-1.6,v:3.2},{t:4+1/60,v:0.3},{t:10+22/60,v:3.1},{t:16+37/60,v:0.4},{t:22.4,v:3.2},{t:28+1/60,v:0.3}];
+    function height(t){
+      for(var i=0;i<EX.length-1;i++){
+        if(t>=EX[i].t && t<=EX[i+1].t){
+          var f=(1-Math.cos(Math.PI*(t-EX[i].t)/(EX[i+1].t-EX[i].t)))/2;
+          return EX[i].v+(EX[i+1].v-EX[i].v)*f;
+        }
+      }
+      return 1.75;
+    }
+    function rad(t){return R_TIDE+T_AMP*((height(t)-1.75)/1.45);}
+
+    /* mean-level guide */
+    el('circle',{cx:CX,cy:CY,r:R_TIDE,fill:'none',stroke:'#7d92cf',opacity:'.09',
+      'stroke-width':.7,'stroke-dasharray':'1 3.4'});
+
+    var d='';
+    for(var t=0;t<=24.0001;t+=0.1){
+      var p=P(rad(t),A(t));
+      d+=(d?' L':'M')+f1(p[0])+','+f1(p[1]);
+    }
+    d+=' Z';
+    el('path',{d:d,fill:'none',stroke:'#8fa9e8',opacity:'.16','stroke-width':2.6,filter:'url(#b2)'});
+    el('path',{d:d,fill:'none',stroke:'#8fa9e8',opacity:'.42','stroke-width':1});
+
+    [[4+1/60,0],[10+22/60,1],[16+37/60,0],[22.4,1]].forEach(function(m){
+      var p=P(rad(m[0]),A(m[0]));
+      el('circle',{cx:f1(p[0]),cy:f1(p[1]),r:m[1]?1.7:1.3,fill:'#bfd2f7',opacity:m[1]?'.85':'.5'});
+    });
+  })();
+
+  /* ---------- night span ---------- */
+  el('path',{d:arcD(R_RING,SUNSET,SUNRISE+360),fill:'none',stroke:'#1b2450','stroke-width':5.6,'stroke-linecap':'butt'});
+  el('path',{d:arcD(R_RING,SUNSET,SUNRISE+360),fill:'none',stroke:'#4a5c9c',opacity:'.30','stroke-width':5.6});
+
+  /* starlight inside the night arc */
+  (function(){
+    var span=(SUNRISE+360)-SUNSET;
+    for(var i=0;i<11;i++){
+      var a=SUNSET+6+ (i+rnd()*0.6)*(span-12)/11;
+      var p=P(R_RING+(rnd()-0.5)*2.4,a);
+      el('circle',{cx:f1(p[0]),cy:f1(p[1]),r:(rnd()<0.3?1.1:0.85),fill:'#e6edff',opacity:(0.5+rnd()*0.35).toFixed(2)});
+    }
+  })();
+
+  /* ---------- daylight span ---------- */
+  el('path',{d:arcD(R_RING,SUNRISE,SUNSET),fill:'none',stroke:'url(#day)',opacity:'.34',
+    'stroke-width':13,'stroke-linecap':'round',filter:'url(#b4)'});
+  el('path',{d:arcD(R_RING,SUNRISE,SUNSET),fill:'none',stroke:'url(#day)',
+    'stroke-width':5.2,'stroke-linecap':'round'});
+
+  /* ---------- hour ticks ---------- */
+  for(var h=0;h<24;h++){
+    var card=(h%6===0);
+    var q1=P(card?R_TICK_C:R_TICK_I,A(h)), q2=P(R_TICK_O,A(h));
+    el('line',{x1:f1(q1[0]),y1:f1(q1[1]),x2:f1(q2[0]),y2:f1(q2[1]),
+      stroke:card?'#93a2ca':'#465274',opacity:card?'.85':'.9',
+      'stroke-width':card?1.5:0.9,'stroke-linecap':'round'});
+  }
+
+  /* ---------- hour numerals ---------- */
+  [[0,'0'],[6,'6'],[12,'12'],[18,'18']].forEach(function(n){
+    var p=P(R_NUM,A(n[0]));
+    var t=el('text',{x:f1(p[0]),y:f1(p[1]),'text-anchor':'middle','dominant-baseline':'central',
+      'font-size':9.5,'font-weight':500,'letter-spacing':'.04em',fill:'#7885a8'});
+    t.textContent=n[1];
+  });
+
+  /* ---------- sun boundary markers ---------- */
+  function sunMark(a,col){
+    var i=P(R_RING+3.6,a), o=P(R_RING+8.4,a), c=P(R_RING,a);
+    el('line',{x1:f1(i[0]),y1:f1(i[1]),x2:f1(o[0]),y2:f1(o[1]),stroke:col,opacity:'.8','stroke-width':1.2,'stroke-linecap':'round'});
+    el('circle',{cx:f1(c[0]),cy:f1(c[1]),r:5,fill:col,opacity:'.35',filter:'url(#b2)'});
+    el('circle',{cx:f1(c[0]),cy:f1(c[1]),r:2.9,fill:'#fff5e2',stroke:col,'stroke-width':1});
+  }
+  sunMark(SUNRISE,'#f3c274');
+  sunMark(SUNSET,'#e28a4c');
+
+  /* ---------- moon phase geometry (67% lit, waning -> lit limb on the left) ---------- */
+  function litPath(r){
+    var rx=(0.34*r).toFixed(2);
+    return 'M0,'+(-r)+' A'+r+','+r+' 0 0,0 0,'+r+' A'+rx+','+r+' 0 0,0 0,'+(-r)+' Z';
+  }
+
+  /* moonrise / moonset markers, phase-correct miniatures */
+  function moonMark(a){
+    var p=P(R_MOONMK,a), g=el('g',{transform:'translate('+f1(p[0])+','+f1(p[1])+')'});
+    el('circle',{r:4.4,fill:'#9fb6ee',opacity:'.16',filter:'url(#b2)'},g);
+    el('circle',{r:3.5,fill:'#151d38',stroke:'#5f6f9e','stroke-width':.7},g);
+    el('path',{d:litPath(3.5),fill:'#cdd8ef',opacity:'.92'},g);
+  }
+  moonMark(MOONSET);
+  moonMark(MOONRISE);
+
+  /* ---------- calendar events, inner luminous track ---------- */
+  el('circle',{cx:CX,cy:CY,r:R_EV,fill:'none',stroke:'#8fa2d6',opacity:'.10','stroke-width':1});
+  var EVENTS=[
+    {s:9,    e:10,    c:'#4a7fd4'},
+    {s:11,   e:11.75, c:'#45a06b'},
+    {s:14,   e:15,    c:'#de7b3a'},
+    {s:16.5, e:null,  c:'#e0b23c'},
+    {s:18,   e:19,    c:'#9268c8'}
+  ];
+  EVENTS.forEach(function(ev){
+    if(ev.e===null){
+      var p=P(R_EV,A(ev.s));
+      el('circle',{cx:f1(p[0]),cy:f1(p[1]),r:5.2,fill:ev.c,opacity:'.38',filter:'url(#b2)'});
+      el('circle',{cx:f1(p[0]),cy:f1(p[1]),r:2.5,fill:ev.c});
+      return;
+    }
+    var d=arcD(R_EV,A(ev.s),A(ev.e));
+    el('path',{d:d,fill:'none',stroke:ev.c,opacity:'.40','stroke-width':9,'stroke-linecap':'round',filter:'url(#b2)'});
+    el('path',{d:d,fill:'none',stroke:ev.c,'stroke-width':4.2,'stroke-linecap':'round'});
+  });
+
+  /* ---------- the moon: emotional centre, offset above the dial's middle ---------- */
+  (function(){
+    var MR=25, mx=CX, my=CY-29;
+    el('circle',{cx:mx,cy:my,r:56,fill:'url(#halo)'});
+    el('circle',{cx:mx,cy:my,r:MR+3,fill:'#93aeee',opacity:'.30',filter:'url(#b7)'});
+
+    var g=el('g',{transform:'translate('+mx+','+my+')'});
+    el('circle',{r:MR,fill:'#141b34'},g);
+    var cp=el('clipPath',{id:'litclip'},defs);
+    el('path',{d:litPath(MR)},cp);
+    el('path',{d:litPath(MR),fill:'url(#lit)'},g);
+    var maria=el('g',{'clip-path':'url(#litclip)',fill:'#8f9ec2'},g);
+    el('circle',{cx:-9,cy:-8,r:6.2,opacity:'.15'},maria);
+    el('circle',{cx:1,cy:5,r:7.6,opacity:'.13'},maria);
+    el('circle',{cx:-13,cy:9,r:4.2,opacity:'.14'},maria);
+    el('circle',{cx:5,cy:-13,r:3.4,opacity:'.11'},maria);
+    el('circle',{cx:-17,cy:-1,r:2.6,opacity:'.12'},maria);
+    el('circle',{r:MR,fill:'none',stroke:'#a8b8dd','stroke-width':.7,opacity:'.34'},g);
+  })();
+
+  /* ---------- the hand: a slim luminous meridian at 8:55 ---------- */
+  (function(){
+    var a=NOW, i=P(66,a), o=P(107,a), tip=P(R_RING,a);
+    el('line',{x1:f1(i[0]),y1:f1(i[1]),x2:f1(o[0]),y2:f1(o[1]),stroke:'#cfe1ff',opacity:'.40',
+      'stroke-width':4.5,'stroke-linecap':'round',filter:'url(#b2)'});
+    el('line',{x1:f1(i[0]),y1:f1(i[1]),x2:f1(o[0]),y2:f1(o[1]),stroke:'#eef4ff',opacity:'.92',
+      'stroke-width':1.3,'stroke-linecap':'round'});
+    el('circle',{cx:f1(tip[0]),cy:f1(tip[1]),r:5.6,fill:'#dbe8ff',opacity:'.30',filter:'url(#b2)'});
+    el('circle',{cx:f1(tip[0]),cy:f1(tip[1]),r:2.4,fill:'#ffffff'});
+    el('circle',{cx:f1(i[0]),cy:f1(i[1]),r:1.3,fill:'#cfe1ff',opacity:'.7'});
+  })();
+})();
+</script>
+</body>
+</html>

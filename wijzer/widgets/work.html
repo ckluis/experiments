@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wijzer — work mode</title>
+<style>
+  /* ============================================================
+     WIJZER · widget study 05 — SWISS
+     International Typographic Style. 364 x 382.
+     Grid: margins 18px, content width 328px,
+           4 columns of 82px -> x = 18 / 100 / 182 / 264.
+           328 / 24h = 13.6667 px per hour, so hours 6, 12, 18
+           land EXACTLY on columns 2, 3, 4. The time axis and the
+           typographic grid are the same grid.
+     ============================================================ */
+
+  html,body{margin:0;padding:0;overflow:hidden}
+  body{
+    width:364px;height:382px;
+    background:#e9e6df;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  .w{
+    position:absolute;left:0;top:0;width:364px;height:382px;
+    background:#fafafa;
+    border-radius:26px;
+    overflow:hidden;
+    font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"SF Pro Display",Helvetica,Arial,sans-serif;
+    color:#1c1c1c;
+    box-shadow:0 1px 2px rgba(40,36,28,.16), 0 8px 20px rgba(40,36,28,.10);
+    animation:in .22s ease-out both;
+  }
+  @keyframes in{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.w{animation:none}}
+
+  /* ---- rules ---- */
+  .r{position:absolute;left:18px;width:328px;height:1px;background:#1c1c1c}
+  .hr{position:absolute;left:18px;width:328px;height:1px;background:#dcdcdc}
+  .rr{position:absolute;left:18px;top:150px;width:328px;height:2px;background:#eb0000}
+  .vr{position:absolute;top:312px;width:1px;height:34px;background:#dcdcdc}
+
+  /* ---- masthead ---- */
+  .brand{position:absolute;left:18px;top:12px;font-size:10px;line-height:11px;
+    font-weight:700;letter-spacing:.26em;color:#1c1c1c}
+  .kick{position:absolute;left:182px;top:12px;font-size:10px;line-height:11px;
+    font-weight:400;letter-spacing:.15em;color:#8a8a8a}
+
+  /* ---- headline ---- */
+  .big{position:absolute;left:18px;top:22px;display:flex;align-items:baseline;gap:9px}
+  .bt{font-size:62px;line-height:1;font-weight:500;letter-spacing:-.035em;color:#111}
+  .ba{font-size:15px;line-height:1;font-weight:500;letter-spacing:.08em;color:#4a4a4a}
+  .dow{position:absolute;left:182px;top:28px;font-size:11px;line-height:12px;
+    font-weight:700;letter-spacing:.11em;color:#1c1c1c;white-space:nowrap}
+  .doy{position:absolute;left:182px;top:44px;font-size:10px;line-height:12px;
+    font-weight:400;letter-spacing:.11em;color:#8a8a8a;white-space:nowrap}
+  .wx{position:absolute;left:182px;top:72px;display:flex;align-items:baseline;gap:7px}
+  .wv{font-size:21px;line-height:1;font-weight:500;letter-spacing:-.01em;color:#111}
+  .wl{font-size:10px;line-height:1;font-weight:600;letter-spacing:.08em;color:#8a8a8a;white-space:nowrap}
+
+  /* ---- 24-hour axis ---- */
+  .bar{position:absolute;top:96px;height:3px;background:#1c1c1c}
+  .ax{position:absolute;left:18px;top:105px;width:328px;height:1px;background:#1c1c1c}
+  .tk{position:absolute;top:106px;width:1px;height:4px;background:#b0b0b0}
+  .tk.mj{height:6px;background:#1c1c1c}
+  .hn{position:absolute;top:121px;font-size:10.5px;line-height:12px;
+    font-weight:400;letter-spacing:.06em;color:#8a8a8a}
+  .now{position:absolute;left:139px;top:93px;width:2px;height:26px;background:#eb0000}
+
+  /* ---- timetable ---- */
+  .row{position:absolute;left:18px;width:328px;height:17px;
+    padding-top:3px;box-sizing:border-box;display:flex;align-items:baseline;overflow:hidden}
+  .c1{flex:0 0 82px;font-size:11.5px;line-height:1;font-weight:500;
+    font-variant-numeric:tabular-nums;letter-spacing:0;white-space:nowrap}
+  .cbar{display:inline-block;width:3.5px;height:11.5px;border-radius:1.75px;
+    margin-right:7px;vertical-align:-1px}
+  .c2{flex:0 0 164px;font-size:11.5px;line-height:1;font-weight:500;
+    letter-spacing:.02em;white-space:nowrap}
+  .c4{flex:0 0 82px;font-size:10.5px;line-height:1;font-weight:400;
+    font-variant-numeric:tabular-nums;letter-spacing:.02em;color:#7d7d7d;white-space:nowrap}
+  .sec{font-size:10px;font-weight:400;letter-spacing:.02em;color:#8a8a8a;margin-left:6px}
+  .cal .c1,.cal .c2{color:#1c1c1c}
+  .alm .c1,.alm .c2{color:#7c7c7c;font-weight:400}
+  .alm .c2{letter-spacing:.06em}
+  .nxt .c1,.nxt .c2{font-weight:700;color:#111}
+  .past .c1,.past .c2,.past .c4{color:#bcbcbc;font-weight:400}
+  .past .c2{letter-spacing:.06em}
+
+  /* ---- footer metrics ---- */
+  .fv{position:absolute;top:316px;font-size:15px;line-height:17px;
+    font-weight:500;letter-spacing:-.005em;color:#1c1c1c;white-space:nowrap}
+  .fl{position:absolute;top:335px;font-size:10px;line-height:11px;
+    font-weight:600;letter-spacing:.09em;color:#7d7d7d;white-space:nowrap}
+  .moon{position:absolute;left:270px;top:350px;height:14px;
+    display:flex;align-items:center;gap:5px}
+  .moon span{font-size:12.5px;line-height:14px;font-weight:500;color:#1c1c1c}
+</style>
+</head>
+<body>
+<div class="w">
+
+  <div class="big"><span class="bt">8:55</span><span class="ba">AM</span></div>
+  <div class="dow">THURSDAY 30 JULY</div>
+  <div class="doy">DAY 211 OF 365</div>
+  <i class="r" style="top:92px"></i>
+
+  <div id="axis"></div>
+  <i class="r" style="top:136px"></i>
+
+  <i class="rr"></i>
+  <div id="table"></div>
+  <i class="r" style="top:282px"></i>
+
+  <!-- the payoff row: what the whole mode is for. Three cells on the same
+       82px grid as everything above (x = 18 / 127 / 237). -->
+  <i class="vr" style="left:118px"></i>
+  <i class="vr" style="left:227px"></i>
+  <div class="fv" style="left:18px">5 MIN</div>
+  <div class="fl" style="left:18px">TO NEXT</div>
+  <div class="fv" style="left:127px">3.75 HRS</div>
+  <div class="fl" style="left:127px">BOOKED TODAY</div>
+  <div class="fv" style="left:237px">19:00</div>
+  <div class="fl" style="left:237px">FREE AFTER</div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var L = 18, W = 328, PH = W / 24;          /* 13.666667 px per hour */
+  function X(h){ return Math.round(L + h * PH); }
+
+  /* ---------------- 24-hour axis ---------------- */
+  var axis = document.getElementById('axis'), out = [];
+
+  /* calendar events as flush bars above the axis, in their calendar colors */
+  [[9,9.5,'#4a7fd4'],[11,11.75,'#45a06b'],[14,15,'#de7b3a'],[16.5,17,'#e0b23c'],[18,19,'#9268c8']].forEach(function(e){
+    var x0 = X(e[0]), x1 = X(e[1]);
+    out.push('<i class="bar" style="left:'+x0+'px;width:'+Math.max(x1-x0,4)+'px;background:'+e[2]+'"></i>');
+  });
+
+  out.push('<i class="ax"></i>');
+
+  /* hour ticks; major at 0/6/12/18/24 */
+  for(var h=0; h<=24; h++){
+    var x = X(h); if(h===24) x -= 1;         /* keep the last tick inside the grid */
+    out.push('<i class="tk'+(h%6===0?' mj':'')+'" style="left:'+x+'px"></i>');
+  }
+
+  /* hour numerals — 00 flush left, 24 flush right, 06/12/18 centred on their ticks.
+     Two Helvetica figures at 10.5px measure ~11.7px of ink, so half is 6. */
+  out.push('<div class="hn" style="left:'+L+'px">00</div>');
+  [6,12,18].forEach(function(h){
+    out.push('<div class="hn" style="left:'+(X(h)-6)+'px">'+(h<10?'0':'')+h+'</div>');
+  });
+  out.push('<div class="hn" style="left:'+(L+W-12)+'px">24</div>');
+
+  /* the one loud thing: NOW at 8:55 */
+  out.push('<i class="now"></i>');
+  axis.innerHTML = out.join('');
+
+  /* ---------------- timetable: calendar slots only ---------------- */
+  /* work mode: no almanac rows, no history — the red rule IS now, and
+     everything below it is bookable time. Rows open to 24px so the five
+     slots own the column. */
+  var ROWS = [
+    { t:'09:00', n:'TEAM STANDUP',      c:'#4a7fd4', o:'5 MIN',    k:'cal nxt' },
+    { t:'11:00', n:'DENTIST',           c:'#45a06b', o:'~2 HRS',   k:'cal' },
+    { t:'14:00', n:'LUNCH',             c:'#de7b3a', o:'~5 HRS',   k:'cal' },
+    { t:'16:30', n:'CALL MOM',          c:'#e0b23c', o:'~7.5 HRS', k:'cal' },
+    { t:'18:00', n:'DINNER WITH SARAH', c:'#9268c8', o:'~9 HRS',   k:'cal' }
+  ];
+
+  function row(d, top, cls){
+    return '<div class="row '+cls+'" style="top:'+top+'px;height:24px;padding-top:7px">'
+         +   '<div class="c1"><i class="cbar" style="background:'+d.c+'"></i>'+d.t+'</div>'
+         +   '<div class="c2">'+d.n+'</div>'
+         +   '<div class="c4">'+d.o+'</div>'
+         + '</div>';
+  }
+
+  var t = [];
+  ROWS.forEach(function(d, i){
+    var top = 158 + i * 24;                  /* 158 -> 278 */
+    if(i > 0) t.push('<i class="hr" style="top:'+top+'px"></i>');
+    t.push(row(d, top, d.k));
+  });
+  document.getElementById('table').innerHTML = t.join('');
+})();
+</script>
+</body>
+</html>

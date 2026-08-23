@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wijzer — almanac paper</title>
+<style>
+  :root{
+    --ink:#26231d;
+    --paper:#f6f2e8;
+    --i90:rgba(38,35,29,.90);
+    --i70:rgba(38,35,29,.70);
+    --i55:rgba(38,35,29,.55);
+    --i42:rgba(38,35,29,.42);
+    --i22:rgba(38,35,29,.22);
+    --i13:rgba(38,35,29,.13);
+    --serif:Georgia,"Iowan Old Style",Charter,"Times New Roman",serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:364px;height:382px}
+  body{
+    margin:0;overflow:hidden;background:#e9e6df;
+    font-family:var(--serif);color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ---------- the card ---------- */
+  .card{
+    position:relative;
+    width:364px;height:382px;
+    border-radius:26px;
+    overflow:hidden;
+    background:
+      radial-gradient(128% 92% at 50% -6%, #fbf8f0 0%, #f6f2e8 54%, #efe9db 100%);
+    box-shadow:
+      0 1px 2px rgba(58,50,34,.14),
+      0 10px 24px -8px rgba(58,50,34,.26),
+      inset 0 0 0 1px rgba(255,255,255,.42);
+    animation:rise .26s ease-out both;
+  }
+  @keyframes rise{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.card{animation:none}}
+
+  /* faint laid-paper tone, no images */
+  .card::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      repeating-linear-gradient(90deg, rgba(38,35,29,.014) 0 1px, transparent 1px 6px),
+      radial-gradient(85% 60% at 18% 88%, rgba(120,102,64,.05), transparent 70%);
+    mix-blend-mode:multiply;opacity:.55;
+  }
+
+  /* ---------- double-rule plate ---------- */
+  .plate{
+    position:absolute;inset:8px;
+    border:1px solid var(--i70);
+    border-radius:18px;
+    padding:3px;
+  }
+  .plate2{
+    height:100%;
+    border:1px solid var(--i22);
+    border-radius:14px;
+    padding:9px 12px;
+  }
+  .content{position:relative;height:338px}
+
+  /* ---------- masthead ---------- */
+  .mast{height:27px;text-align:center}
+  .word{
+    font-size:11px;font-weight:700;letter-spacing:.40em;text-indent:.40em;
+    line-height:14px;white-space:nowrap;
+  }
+  .word svg{vertical-align:1.5px;margin:0 3px}
+  .sub{
+    font-size:9px;letter-spacing:.13em;text-indent:.13em;
+    line-height:13px;color:var(--i55);white-space:nowrap;
+  }
+  .dbl{
+    height:5px;
+    border-top:2px solid var(--i90);
+    border-bottom:1px solid var(--i90);
+  }
+  .dbl.top{margin:6px 0}
+  .dbl.bot{margin:5px 0;border-top-width:1px;border-bottom-width:2px}
+
+  /* ---------- main band ---------- */
+  .band{height:130px;display:flex;gap:12px}
+  #dial{width:130px;height:130px;flex:0 0 130px;display:block}
+  .col{flex:1 1 auto;min-width:0}
+
+  .now{height:36px;line-height:36px;white-space:nowrap}
+  .now .big{font-size:31px;letter-spacing:-.01em}
+  .now .ampm{font-size:11px;letter-spacing:.16em;margin-left:5px;color:var(--i70)}
+
+  .next{
+    font-size:9px;letter-spacing:.07em;line-height:13px;
+    color:var(--i70);white-space:nowrap;
+  }
+  .loz{
+    display:inline-block;width:3.6px;height:3.6px;background:var(--ink);
+    transform:rotate(45deg);margin-right:5px;vertical-align:1px;
+  }
+  .hr{height:1px;background:var(--i22);margin:5px 0}
+
+  .moonrow{height:34px;display:flex;align-items:center;gap:9px}
+  #moon{width:32px;height:32px;flex:0 0 32px;display:block}
+  .mtxt div{font-size:9px;letter-spacing:.1em;line-height:12px;white-space:nowrap}
+  .mtxt .f{color:var(--i55)}
+
+  .led{margin-top:6px}
+  .lrow{
+    display:grid;grid-template-columns:33px 1fr 1fr;
+    align-items:baseline;height:12.5px;
+  }
+  .lrow .lb{font-size:9px;letter-spacing:.11em;color:var(--i55)}
+  .lrow .t{font-size:9.5px;letter-spacing:.02em;color:var(--i90);white-space:nowrap}
+  .lrow .t b{font-weight:400;color:var(--i42);margin-right:1px}
+
+  /* ---------- section heads ---------- */
+  .head{display:flex;align-items:center;gap:7px;height:12px}
+  .head .lbl{font-size:9px;font-weight:700;letter-spacing:.18em;white-space:nowrap}
+  .head .fl{flex:1 1 auto;height:1px;background:var(--i22)}
+  .head .ann{font-size:9px;letter-spacing:.11em;color:var(--i42);white-space:nowrap}
+  .head.t2{margin-top:5px}
+
+  /* ---------- appointments ledger ---------- */
+  .rows{margin-top:0}
+  .row{
+    display:grid;grid-template-columns:10px 46px 1fr auto;
+    align-items:baseline;
+    height:14px;
+    border-bottom:1px solid var(--i13);
+  }
+  .row:last-child{border-bottom:none}
+  .row .mk{position:relative;top:-1px}
+  .row .mk i{
+    display:inline-block;width:3.6px;height:3.6px;background:var(--ink);
+    transform:rotate(45deg);
+  }
+  .row .tm{font-size:10px;text-align:right;padding-right:9px;white-space:nowrap;color:var(--i90)}
+  .row .tm s{text-decoration:none;font-size:9px;color:var(--i42);margin-left:1.5px}
+  .row .ti{font-size:9.5px;letter-spacing:.055em;color:var(--i90);overflow:hidden;white-space:nowrap}
+  .row .du{font-size:9px;letter-spacing:.06em;color:var(--i42);white-space:nowrap}
+  .row.nx .ti{font-weight:700;letter-spacing:.075em;color:var(--ink)}
+  .row.nx .tm{font-weight:700}
+
+  /* ---------- tides ---------- */
+  .tides{height:33px;display:grid;grid-template-columns:repeat(4,1fr)}
+  .tides .cell{position:relative}
+  .tides .cell+.cell{border-left:1px solid var(--i13);padding-left:8px}
+  .tides .k{font-size:9px;letter-spacing:.15em;line-height:10px;color:var(--i55)}
+  .tides .v{font-size:10.5px;line-height:12px;color:var(--i90);white-space:nowrap}
+  .tides .v s{text-decoration:none;font-size:9px;color:var(--i42);margin-left:1px}
+  .tides .h{font-size:9px;line-height:11px;letter-spacing:.05em;color:var(--i42)}
+
+  /* ---------- weather colophon ---------- */
+  .wx{
+    height:12px;line-height:12px;text-align:center;
+    font-size:9px;letter-spacing:.045em;color:var(--i70);white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+<div class="plate"><div class="plate2">
+<div class="content">
+
+  <div class="mast">
+    <div class="word"><svg class="orn" width="7" height="7" viewBox="-4 -4 8 8"></svg>WIJZER<svg class="orn" width="7" height="7" viewBox="-4 -4 8 8"></svg></div>
+    <div class="sub">SUNDAY &middot; AUGUST 2 &middot; DAY 214 OF 365</div>
+  </div>
+
+  <div class="dbl top"></div>
+
+  <div class="band">
+    <svg id="dial" viewBox="0 0 130 130" role="img" aria-label="24-hour almanac dial, 8:55 AM"></svg>
+    <div class="col">
+      <div class="now"><span class="big">8:55</span><span class="ampm">AM</span></div>
+      <div class="next"><i class="loz"></i>STANDUP BEGINS IN 5 MIN</div>
+      <div class="hr"></div>
+      <div class="moonrow">
+        <svg id="moon" viewBox="-18 -18 36 36" role="img" aria-label="Waning gibbous moon, 67 percent"></svg>
+        <div class="mtxt">
+          <div>WANING GIBBOUS</div>
+          <div class="f">67% ILLUMINED</div>
+        </div>
+      </div>
+      <div class="led">
+        <div class="lrow"><span class="lb">SUN</span><span class="t"><b>&uarr;</b>6:28 A</span><span class="t"><b>&darr;</b>8:13 P</span></div>
+        <div class="lrow"><span class="lb">MOON</span><span class="t"><b>&uarr;</b>7:58 P</span><span class="t"><b>&darr;</b>4:47 A</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="head" style="margin-top:4px">
+    <span class="lbl">APPOINTMENTS</span><span class="fl"></span><span class="ann">FIVE ENTRIES</span>
+  </div>
+
+  <div class="rows">
+    <div class="row nx"><span class="mk"><i></i></span><span class="tm">9:00<s>A</s></span><span class="ti">TEAM STANDUP</span><span class="du">1 HR</span></div>
+    <div class="row"><span class="mk"></span><span class="tm">11:00<s>A</s></span><span class="ti">DENTIST</span><span class="du">45 MIN</span></div>
+    <div class="row"><span class="mk"></span><span class="tm">2:00<s>P</s></span><span class="ti">LUNCH</span><span class="du">1 HR</span></div>
+    <div class="row"><span class="mk"></span><span class="tm">4:30<s>P</s></span><span class="ti">CALL MOM</span><span class="du">&mdash;</span></div>
+    <div class="row"><span class="mk"></span><span class="tm">6:00<s>P</s></span><span class="ti">DINNER WITH SARAH</span><span class="du">1 HR</span></div>
+  </div>
+
+  <div class="head t2">
+    <span class="lbl">TIDES</span><span class="fl"></span><span class="ann">HEIGHT IN FEET</span>
+  </div>
+
+  <div class="tides">
+    <div class="cell"><div class="k">LOW</div><div class="v">4:01<s>A</s></div><div class="h">0.3</div></div>
+    <div class="cell"><div class="k">HIGH</div><div class="v">10:22<s>A</s></div><div class="h">3.1</div></div>
+    <div class="cell"><div class="k">LOW</div><div class="v">4:37<s>P</s></div><div class="h">0.4</div></div>
+    <div class="cell"><div class="k">HIGH</div><div class="v">10:24<s>P</s></div><div class="h">3.2</div></div>
+  </div>
+
+  <div class="dbl bot"></div>
+
+  <div class="wx">72&deg; PARTLY CLOUDY &middot; UV 7 &middot; HUM 63% &middot; SE 15 &middot; WATER 78&deg;</div>
+
+</div>
+</div></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var NS='http://www.w3.org/2000/svg';
+  var INK='#26231d';
+
+  function el(parent,name,attrs){
+    var e=document.createElementNS(NS,name);
+    for(var k in attrs) e.setAttribute(k,attrs[k]);
+    parent.appendChild(e);
+    return e;
+  }
+
+  /* ============ masthead ornaments: engraved six-spoke asterisk ============ */
+  Array.prototype.forEach.call(document.querySelectorAll('svg.orn'),function(s){
+    for(var i=0;i<3;i++){
+      var a=(i*60)*Math.PI/180;
+      el(s,'line',{
+        x1:(-3.3*Math.sin(a)).toFixed(2), y1:( 3.3*Math.cos(a)).toFixed(2),
+        x2:( 3.3*Math.sin(a)).toFixed(2), y2:(-3.3*Math.cos(a)).toFixed(2),
+        stroke:INK,'stroke-width':.95,'stroke-linecap':'round'
+      });
+    }
+  });
+
+  /* ============================ the 24-hour dial ============================ */
+  var dial=document.getElementById('dial');
+  var CX=65, CY=65;
+  var R_ARCDN = 61.5;   /* day / night rim */
+  var R_TICK_O= 59.5;   /* tick outer */
+  var R_TICK_M= 56.0;   /* minor tick inner */
+  var R_TICK_C= 52.5;   /* cardinal tick inner */
+  var R_TIDE  = 51.0;   /* tide lozenges */
+  var R_NUM   = 45.0;   /* numerals */
+  var R_EVENT = 36.5;   /* event ring */
+  var HAND_TIP= 33.5;
+
+  /* degrees measured clockwise from 12 o'clock (= midnight, top) */
+  function P(r,deg){
+    var t=deg*Math.PI/180;
+    return [CX + r*Math.sin(t), CY - r*Math.cos(t)];
+  }
+  function hr(h){ return h*15; }
+  function arcPath(r,d0,d1){
+    var delta=((d1-d0)%360+360)%360;
+    var a=P(r,d0), b=P(r,d1);
+    return 'M'+a[0].toFixed(2)+','+a[1].toFixed(2)+
+           ' A'+r+','+r+' 0 '+(delta>180?1:0)+',1 '+
+           b[0].toFixed(2)+','+b[1].toFixed(2);
+  }
+  function lozenge(cx,cy,s){
+    return 'M'+cx.toFixed(2)+','+(cy-s).toFixed(2)+
+           ' L'+(cx+s).toFixed(2)+','+cy.toFixed(2)+
+           ' L'+cx.toFixed(2)+','+(cy+s).toFixed(2)+
+           ' L'+(cx-s).toFixed(2)+','+cy.toFixed(2)+'Z';
+  }
+
+  var SUNRISE=6+28/60, SUNSET=20+13/60;
+
+  /* --- rim: heavy ink for night, hairline for daylight --- */
+  el(dial,'path',{d:arcPath(R_ARCDN,hr(SUNSET),hr(SUNRISE)),fill:'none',
+    stroke:INK,'stroke-width':2.4,'stroke-linecap':'butt'});
+  el(dial,'path',{d:arcPath(R_ARCDN,hr(SUNRISE),hr(SUNSET)),fill:'none',
+    stroke:INK,'stroke-width':.7,opacity:.45});
+
+  /* --- hour ticks --- */
+  for(var i=0;i<24;i++){
+    var deg=i*15, card=(i%6===0);
+    var p1=P(card?R_TICK_C:R_TICK_M,deg), p2=P(R_TICK_O,deg);
+    el(dial,'line',{x1:p1[0].toFixed(2),y1:p1[1].toFixed(2),
+      x2:p2[0].toFixed(2),y2:p2[1].toFixed(2),
+      stroke:INK,'stroke-width':card?1.35:.7,opacity:card?.92:.42,
+      'stroke-linecap':'butt'});
+  }
+
+  /* --- tide lozenges: filled = high water, open = low water --- */
+  [[4+1/60,0],[10+22/60,1],[16+37/60,0],[22+24/60,1]].forEach(function(t){
+    var p=P(R_TIDE,hr(t[0]));
+    if(t[1]) el(dial,'path',{d:lozenge(p[0],p[1],2.3),fill:INK,opacity:.88});
+    else      el(dial,'path',{d:lozenge(p[0],p[1],2.3),fill:'none',stroke:INK,
+                 'stroke-width':.8,opacity:.7});
+  });
+
+  /* --- numerals 6 / 12 / 18 + a lozenge for midnight --- */
+  [6,12,18].forEach(function(h){
+    var p=P(R_NUM,hr(h));
+    var t=el(dial,'text',{x:p[0].toFixed(2),y:p[1].toFixed(2),
+      'text-anchor':'middle','dominant-baseline':'central',
+      'font-family':'Georgia,"Iowan Old Style",Charter,serif',
+      'font-size':9,fill:INK,opacity:.6});
+    t.textContent=String(h);
+  });
+  var mid=P(R_NUM,0);
+  el(dial,'path',{d:lozenge(mid[0],mid[1],2.6),fill:INK,opacity:.85});
+
+  /* --- event ring: colour becomes weight --- */
+  el(dial,'circle',{cx:CX,cy:CY,r:R_EVENT,fill:'none',stroke:INK,
+    'stroke-width':.5,opacity:.16});
+  var EVENTS=[
+    {s:9,    e:10,    next:true },
+    {s:11,   e:11.75, next:false},
+    {s:14,   e:15,    next:false},
+    {s:16.5, e:17,    next:false},
+    {s:18,   e:19,    next:false}
+  ];
+  EVENTS.forEach(function(ev){
+    el(dial,'path',{d:arcPath(R_EVENT,hr(ev.s),hr(ev.e)),fill:'none',stroke:INK,
+      'stroke-width':ev.next?3.2:1.5,opacity:ev.next?1:.72,'stroke-linecap':'butt'});
+  });
+
+  /* --- the pointer (wijzer) at 8:55 AM --- */
+  var ang=hr(8+55/60)*Math.PI/180;
+  var ux=Math.sin(ang), uy=-Math.cos(ang);      /* outward unit */
+  var px=Math.cos(ang), py=Math.sin(ang);       /* perpendicular */
+  function pt(r,w){ return [(CX+r*ux+w*px).toFixed(2),(CY+r*uy+w*py).toFixed(2)].join(','); }
+  el(dial,'polygon',{
+    points:[pt(HAND_TIP,0),pt(5,1.45),pt(-8,1.05),pt(-8,-1.05),pt(5,-1.45)].join(' '),
+    fill:INK
+  });
+  el(dial,'circle',{cx:CX,cy:CY,r:2.6,fill:INK});
+  el(dial,'circle',{cx:CX,cy:CY,r:.85,fill:'#f6f2e8'});
+
+  /* ========================= woodcut moon, waning gibbous ==================== */
+  var moon=document.getElementById('moon');
+  var R=15.4;
+  var frac=0.67;                    /* illuminated fraction */
+  var rx=Math.abs(1-2*frac)*R;      /* terminator semi-axis */
+
+  /* lit limb on the LEFT (waning, northern hemisphere) -> shadow hugs the right */
+  el(moon,'circle',{r:R,fill:'none',stroke:INK,'stroke-width':.9,opacity:.85});
+  el(moon,'path',{
+    d:'M0,'+(-R)+' A'+R+','+R+' 0 0,1 0,'+R+
+      ' A'+rx.toFixed(2)+','+R+' 0 0,0 0,'+(-R)+'Z',
+    fill:INK,opacity:.92
+  });
+  /* stippled maria in the lit half */
+  [[-8.0,-4.6,2.3],[-4.6,4.9,1.6],[-10.6,2.6,1.25],[-6.2,-8.6,1.0]].forEach(function(c){
+    el(moon,'circle',{cx:c[0],cy:c[1],r:c[2],fill:INK,opacity:.2});
+  });
+})();
+</script>
+</body>
+</html>

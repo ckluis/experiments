@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="wijzer — a 24-hour almanac dial: calendar, weather, tides, and sun/moon phases on one clean watch face. Concept preview for a watchOS study.">
+<title>wijzer — a 24-hour almanac dial</title>
+<style>
+  :root{
+    --bg:#f3f1ec;
+    --ink:#1c1b18;
+    --muted:#6c6a64;
+    --faint:#98958d;
+    --hair:#dcd8cf;
+    --card:#fdfcfa;
+    --navy:#3d4f76;
+    --elbow:#b6bcca;
+    --blue:#4a7fd4;
+    --green:#45a06b;
+    --orange:#de7b3a;
+    --yellow:#e0b23c;
+    --purple:#9268c8;
+    --wave:#4a90d9;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Inter,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding:34px 20px 60px;
+  }
+  .mast{text-align:center;margin-bottom:8px}
+  .mast .word{font-size:13px;font-weight:700;letter-spacing:.42em;text-indent:.42em}
+  .mast .sub{font-size:10.5px;letter-spacing:.24em;text-indent:.24em;color:var(--faint);margin-top:6px}
+  .stage{
+    position:relative;
+    max-width:1240px;
+    margin:0 auto;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:0;
+  }
+  .legend{
+    width:172px;
+    flex:0 0 172px;
+    padding-top:46px;
+  }
+  .legend h2{
+    font-size:11px;font-weight:600;letter-spacing:.18em;color:var(--ink);
+    border-bottom:1px solid var(--hair);padding-bottom:10px;margin-bottom:26px;
+    display:inline-block;padding-right:26px;
+  }
+  .legend .item{display:grid;grid-template-columns:22px 1fr;gap:0 8px;margin-bottom:26px}
+  .legend .key{padding-top:2px}
+  .legend .item h3{font-size:10.5px;font-weight:600;letter-spacing:.14em;margin-bottom:7px}
+  .legend .item p{font-size:12px;line-height:1.55;color:var(--muted)}
+  .k-ring{width:13px;height:13px;border:1.5px solid #7d7a72;border-radius:50%}
+  .k-dot{width:9px;height:9px;border-radius:50%;margin:2px 0 0 2px}
+  .dialwrap{flex:1 1 auto;min-width:0;display:flex;justify-content:center}
+  svg#dial{width:min(94vw,820px);height:auto;display:block}
+
+  /* svg type */
+  #dial text{font-family:var(--sans)}
+  .num{font-size:19px;fill:#56544e;font-weight:500}
+  .pin-name{font-size:13.5px;font-weight:600;letter-spacing:.1em;fill:#393833}
+  .pin-line{font-size:12.5px;fill:#716f68}
+  .ev-time{font-size:12px;fill:#8b8880}
+  .ev-title{font-size:14.5px;font-weight:500;fill:#33322f}
+  .c-day{font-size:15px;font-weight:600;letter-spacing:.28em;fill:#4c4a45}
+  .c-big{font-size:64px;font-weight:300;letter-spacing:-.01em;fill:#161512}
+  .c-ampm{font-size:22px;font-weight:400;letter-spacing:.04em;fill:#3a3833}
+  .c-doy{font-size:11.5px;font-weight:500;letter-spacing:.24em;fill:#8f8c84}
+
+  .ring-shadow{filter:drop-shadow(0 12px 34px rgba(60,55,40,.14))}
+  .dial-shadow{filter:drop-shadow(0 6px 20px rgba(60,55,40,.10))}
+  .hand-shadow{filter:drop-shadow(0 4px 7px rgba(20,18,12,.28))}
+
+  /* draw-in animation */
+  .arc{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1.1s cubic-bezier(.4,0,.2,1) forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .fade{opacity:0;animation:fadein .8s ease forwards}
+  @keyframes fadein{to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){
+    .arc{animation:none;stroke-dashoffset:0}
+    .fade{animation:none;opacity:1}
+  }
+
+  /* controls + weather */
+  .panel{max-width:900px;margin:6px auto 0}
+  .controls{
+    display:flex;align-items:center;gap:18px;
+    padding:0 10px;margin-bottom:22px;
+  }
+  .controls .lab{font-size:10px;font-weight:600;letter-spacing:.2em;color:var(--faint);flex:0 0 auto}
+  input[type=range]{
+    flex:1 1 auto;-webkit-appearance:none;appearance:none;height:22px;background:transparent;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--hair);border-radius:1px}
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:15px;height:15px;border-radius:50%;
+    background:var(--card);border:1.5px solid #8a877f;margin-top:-6.5px;
+    box-shadow:0 1px 4px rgba(0,0,0,.18);
+  }
+  input[type=range]::-moz-range-track{height:2px;background:var(--hair)}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--card);border:1.5px solid #8a877f}
+  #liveBtn{
+    flex:0 0 auto;display:flex;align-items:center;gap:8px;
+    font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;
+    padding:8px 16px;border-radius:999px;border:1px solid var(--hair);
+    background:var(--card);color:var(--ink);cursor:pointer;
+  }
+  #liveBtn .beacon{width:7px;height:7px;border-radius:50%;background:#3fa46a;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  body.scrubbing #liveBtn{border-color:#c9a44a;color:#8a6d1f}
+  body.scrubbing #liveBtn .beacon{background:#c9a44a;animation:none}
+  @media (prefers-reduced-motion:reduce){#liveBtn .beacon{animation:none}}
+
+  .wxbar{
+    background:var(--card);border-radius:18px;
+    box-shadow:0 8px 30px rgba(60,55,40,.10);
+    display:grid;grid-template-columns:repeat(5,1fr);
+    padding:26px 10px;
+  }
+  .wx{
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    border-left:1px solid #eceae4;
+  }
+  .wx:first-child{border-left:none}
+  .wx svg{flex:0 0 auto}
+  .wx .v{font-size:21px;font-weight:500;letter-spacing:-.01em}
+  .wx .v small{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0}
+  .wx .l{font-size:9.5px;font-weight:600;letter-spacing:.14em;color:var(--faint);margin-top:4px}
+  .foot{
+    text-align:center;font-size:10px;letter-spacing:.2em;color:#a5a29a;margin-top:26px;
+  }
+  @media (max-width:980px){
+    .stage{flex-direction:column;align-items:center}
+    .legend{width:100%;flex:none;display:flex;gap:28px;padding:10px 0 0;justify-content:center;flex-wrap:wrap}
+    .legend h2{display:none}
+    .legend .item{width:200px;margin-bottom:10px}
+    .wxbar{grid-template-columns:1fr 1fr;gap:18px 0;padding:20px 6px}
+    .wx{border-left:none}
+    .wx:nth-child(even){border-left:1px solid #eceae4}
+  }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="word">WIJZER</div>
+  <div class="sub">A 24-HOUR ALMANAC DIAL &middot; CONCEPT PREVIEW</div>
+</header>
+
+<div class="stage">
+  <aside class="legend">
+    <h2>HOW TO READ</h2>
+    <div class="item">
+      <div class="key"><div class="k-ring"></div></div>
+      <div><h3>24-HOUR DAY</h3><p>The dial represents a 24-hour day. Midnight at top, noon at the bottom.</p></div>
+    </div>
+    <div class="item">
+      <div class="key"><div class="k-dot" style="background:#4a7fd4"></div></div>
+      <div><h3>EVENTS</h3><p>Colored arcs show your calendar events at their true time of day.</p></div>
+    </div>
+    <div class="item">
+      <div class="key"><div class="k-dot" style="background:#3d4f76"></div></div>
+      <div><h3>SUN, MOON &amp; TIDE</h3><p>Pins outside the dial mark sunrise, sunset, moonrise, moonset, and the tides.</p></div>
+    </div>
+    <div class="item">
+      <div class="key"><div class="k-dot" style="background:#c9a44a"></div></div>
+      <div><h3>SCRUB</h3><p>Drag the slider below the dial to preview any moment of the day.</p></div>
+    </div>
+  </aside>
+  <div class="dialwrap">
+    <svg id="dial" viewBox="0 0 1100 1100" role="img" aria-label="24-hour almanac dial"></svg>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="controls">
+    <span class="lab">00:00</span>
+    <input type="range" id="scrub" min="0" max="1439" step="1" value="0" aria-label="Scrub time of day">
+    <span class="lab">24:00</span>
+    <button id="liveBtn"><span class="beacon"></span><span id="liveTxt">LIVE</span></button>
+  </div>
+
+  <div class="wxbar">
+    <div class="wx">
+      <svg width="38" height="38" viewBox="-19 -19 38 38" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g stroke="#e0b23c" stroke-width="1.8">
+          <circle cx="4" cy="-6" r="4"/>
+          <path d="M4,-13.5 v2 M9.3,-11.3 l-1.4,1.4 M11.5,-6 h-2 M-3.5,-6 h2 M-1.3,-11.3 l1.4,1.4"/>
+        </g>
+        <path d="M-8,7 h13.5 a4.5,4.5 0 0 0 .8,-8.9 a6.5,6.5 0 0 0 -12.6,-1.4 a5.2,5.2 0 0 0 -1.7,10.3 z" stroke="#8a8fa3" stroke-width="1.8" fill="#fdfcfa"/>
+      </svg>
+      <div><div class="v">72&deg;</div><div class="l">PARTLY CLOUDY</div></div>
+    </div>
+    <div class="wx">
+      <svg width="38" height="38" viewBox="-19 -19 38 38" fill="none">
+        <circle r="4.6" stroke="#8f6fd0" stroke-width="1.8"/>
+        <g fill="#8f6fd0">
+          <circle cx="0" cy="-9.5" r="1.3"/><circle cx="6.7" cy="-6.7" r="1.3"/>
+          <circle cx="9.5" cy="0" r="1.3"/><circle cx="6.7" cy="6.7" r="1.3"/>
+          <circle cx="0" cy="9.5" r="1.3"/><circle cx="-6.7" cy="6.7" r="1.3"/>
+          <circle cx="-9.5" cy="0" r="1.3"/><circle cx="-6.7" cy="-6.7" r="1.3"/>
+        </g>
+      </svg>
+      <div><div class="v">UV 7</div><div class="l">HIGH</div></div>
+    </div>
+    <div class="wx">
+      <svg width="38" height="38" viewBox="-19 -19 38 38" fill="none">
+        <path d="M0,-11 C5,-4 8,-.5 8,3.5 a8,8 0 1 1 -16,0 C-8,-.5 -5,-4 0,-11 z" stroke="#4a90d9" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <div><div class="v">63%</div><div class="l">HUMIDITY</div></div>
+    </div>
+    <div class="wx">
+      <svg width="38" height="38" viewBox="-19 -19 38 38" fill="none" stroke="#3fa46a" stroke-width="1.8" stroke-linecap="round">
+        <path d="M-12,-5 h13 a3.5,3.5 0 1 0 -3.5,-6"/>
+        <path d="M-14,0 h19 a3.5,3.5 0 1 1 -3.5,6"/>
+        <path d="M-10,5 h7"/>
+      </svg>
+      <div><div class="v">SE 15 <small>mph</small></div><div class="l">WIND</div></div>
+    </div>
+    <div class="wx">
+      <svg width="38" height="38" viewBox="-19 -19 38 38" fill="none" stroke="#4a90d9" stroke-width="1.8" stroke-linecap="round">
+        <path d="M-12,-3 q3,-6 6,0 t6,0 t6,0"/>
+        <path d="M-12,5 q3,-6 6,0 t6,0 t6,0"/>
+      </svg>
+      <div><div class="v">78&deg;</div><div class="l">WATER TEMP</div></div>
+    </div>
+  </div>
+
+  <div class="foot">SAMPLE DAY DATA &middot; A STUDY FOR AN APPLE&nbsp;WATCH FACE</div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var NS='http://www.w3.org/2000/svg';
+  var svg=document.getElementById('dial');
+  var CX=550, CY=550;
+  var R_RING=360, R_DIAL=294, R_NUM=327, R_ARC=254, R_EVLBL=204, R_PINDOT=368;
+
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;}
+  function P(r,deg){var t=(deg-90)*Math.PI/180;return [CX+r*Math.cos(t), CY+r*Math.sin(t)];}
+  function txt(s,x,y,cls,anchor,p){
+    var t=el('text',{x:x,y:y,'text-anchor':anchor||'middle','class':cls||''},p);
+    t.textContent=s;return t;
+  }
+  function hA(h){return h*15;} /* hours -> degrees, midnight at top, clockwise */
+
+  /* ---------- sample day data ---------- */
+  var EVENTS=[
+    {s:9,    e:10,    title:'Team Standup',    time:'9:00 – 10:00', color:'#4a7fd4'},
+    {s:11,   e:11.75, title:'Dentist',         time:'11:00',            color:'#45a06b'},
+    {s:14,   e:15,    title:'Lunch',           time:'14:00 – 15:00', color:'#de7b3a'},
+    {s:16.5, e:17,    title:'Call Mom',        time:'16:30',            color:'#e0b23c'},
+    {s:18,   e:19,    title:'Dinner with Sarah', time:'18:00 – 19:00', color:'#9268c8'}
+  ];
+  var PINS=[
+    {h:0,        icon:'moonphase', lines:['12:00 AM','MIDNIGHT']},
+    {h:4+1/60,   icon:'waves', lines:['LOW TIDE','4:01 AM','0.3 ft']},
+    {h:4+47/60,  icon:'moonset', lines:['MOONSET','4:47 AM']},
+    {h:6+28/60,  icon:'sunrise', lines:['SUNRISE','6:28 AM']},
+    {h:10+22/60, icon:'waves', lines:['HIGH TIDE','10:22 AM','3.1 ft']},
+    {h:16+37/60, icon:'waves', lines:['LOW TIDE','4:37 PM','0.4 ft']},
+    {h:19+58/60, icon:'moonrise', lines:['MOONRISE','7:58 PM']},
+    {h:20+13/60, icon:'sunset', lines:['SUNSET','8:13 PM']},
+    {h:22+24/60, icon:'waves', lines:['HIGH TIDE','10:24 PM','3.2 ft']}
+  ];
+
+  /* ---------- moon phase ---------- */
+  function moonPhase(d){
+    var syn=29.53058867, ref=Date.UTC(2000,0,6,18,14);
+    var p=((d.getTime()-ref)/86400000)%syn; if(p<0)p+=syn;
+    return p/syn;
+  }
+  function moonLitPath(r,phase){
+    var k=Math.cos(phase*2*Math.PI);           /* 1=new, -1=full */
+    var rx=Math.max(Math.abs(k)*r,0.01);
+    var waxing=phase<0.5;
+    var sweepOuter=waxing?1:0;
+    var sweepTerm=(k>0)?(waxing?0:1):(waxing?1:0);
+    return 'M0,'+(-r)+' A'+r+','+r+' 0 0,'+sweepOuter+' 0,'+r+
+           ' A'+rx.toFixed(2)+','+r+' 0 0,'+sweepTerm+' 0,'+(-r)+' Z';
+  }
+
+  /* ---------- small line icons (drawn centered at 0,0) ---------- */
+  var ICONS={
+    sunrise:function(g){sunIcon(g,'#d9a83a');},
+    sunset:function(g){sunIcon(g,'#d0762f');},
+    waves:function(g){
+      var p1=el('path',{d:'M-12,-3 q3,-6 6,0 t6,0 t6,0',fill:'none',stroke:'#4a7fd4','stroke-width':1.8,'stroke-linecap':'round'},g);
+      var p2=el('path',{d:'M-12,5 q3,-6 6,0 t6,0 t6,0',fill:'none',stroke:'#4a7fd4','stroke-width':1.8,'stroke-linecap':'round'},g);
+    },
+    moonrise:function(g){crescent(g);},
+    moonset:function(g){crescent(g);},
+    moonphase:function(g){
+      el('circle',{r:11,fill:'none',stroke:'#2f2e38','stroke-width':1.4,opacity:.45},g);
+      el('path',{d:moonLitPath(11,moonPhase(new Date())),fill:'#2f2e38'},g);
+    }
+  };
+  function sunIcon(g,color){
+    el('circle',{r:4.4,fill:'none',stroke:color,'stroke-width':1.8},g);
+    for(var i=0;i<8;i++){
+      var a=i*45*Math.PI/180;
+      el('line',{x1:7*Math.cos(a),y1:7*Math.sin(a),x2:10.5*Math.cos(a),y2:10.5*Math.sin(a),
+        stroke:color,'stroke-width':1.8,'stroke-linecap':'round'},g);
+    }
+  }
+  function crescent(g){
+    el('path',{d:'M3,-10 a10,10 0 1 0 7,7 a8.4,8.4 0 0 1 -7,-7 z',fill:'#2f2e38'},g);
+  }
+
+  /* ---------- ring + dial ---------- */
+  el('circle',{cx:CX,cy:CY,r:R_RING,fill:'#e9e6df','class':'ring-shadow'});
+  el('circle',{cx:CX,cy:CY,r:R_DIAL,fill:'#fcfbf8','class':'dial-shadow'});
+
+  /* numerals 1..23 */
+  for(var h=1;h<24;h++){
+    var p=P(R_NUM,hA(h));
+    var t=txt(String(h),p[0],p[1],'num');
+    t.setAttribute('dominant-baseline','central');
+  }
+
+  /* ticks: quarter-hour minor, hour medium, 0/6/12/18 bold */
+  for(var i=0;i<96;i++){
+    var a=i*3.75, hour=(i%4===0), card=(i%24===0);
+    var r1=card?264:(hour?272:280), sw=card?3:(hour?1.8:1.1);
+    var col=card?'#2b2a26':(hour?'#8a8781':'#c6c2b8');
+    var q1=P(r1,a), q2=P(290,a);
+    el('line',{x1:q1[0],y1:q1[1],x2:q2[0],y2:q2[1],stroke:col,'stroke-width':sw,'stroke-linecap':'round'});
+  }
+
+  /* ---------- event arcs + labels ---------- */
+  EVENTS.forEach(function(ev,idx){
+    var a0=hA(ev.s), a1=hA(ev.e);
+    var s=P(R_ARC,a0), e2=P(R_ARC,a1);
+    var large=(a1-a0)>180?1:0;
+    el('path',{
+      d:'M'+s[0].toFixed(1)+','+s[1].toFixed(1)+' A'+R_ARC+','+R_ARC+' 0 '+large+',1 '+e2[0].toFixed(1)+','+e2[1].toFixed(1),
+      fill:'none',stroke:ev.color,'stroke-width':5.5,'stroke-linecap':'round',
+      'class':'arc',style:'animation-delay:'+(0.15+idx*0.12)+'s'
+    });
+    var mid=(a0+a1)/2, lp=P(R_EVLBL,mid);
+    var g=el('g',{'class':'fade',style:'animation-delay:'+(0.4+idx*0.12)+'s'});
+    txt(ev.time, lp[0], lp[1]-8,'ev-time','middle',g);
+    txt(ev.title,lp[0], lp[1]+11,'ev-title','middle',g);
+  });
+
+  /* ---------- pins ---------- */
+  function drawPinDot(a){
+    var d=P(R_PINDOT,a);
+    el('circle',{cx:d[0],cy:d[1],r:5.5,fill:'#3d4f76'});
+    return d;
+  }
+  function pinBlock(g,bx,yc,pin){
+    var ig=el('g',{transform:'translate('+bx+','+(yc-30)+')'},g);
+    ICONS[pin.icon](ig);
+    txt(pin.lines[0],bx,yc+2,'pin-name','middle',g);
+    if(pin.lines[1])txt(pin.lines[1],bx,yc+21,'pin-line','middle',g);
+    if(pin.lines[2])txt(pin.lines[2],bx,yc+39,'pin-line','middle',g);
+  }
+
+  /* top pin (midnight) */
+  var sidePins=[];
+  PINS.forEach(function(pin){
+    var a=hA(pin.h);
+    if(a<7||a>353){ /* top, stacked */
+      var g=el('g',{'class':'fade'});
+      var d=P(R_PINDOT,a);
+      el('circle',{cx:d[0],cy:d[1],r:5.5,fill:'#3d4f76'},g);
+      el('line',{x1:CX,y1:d[1]-10,x2:CX,y2:130,stroke:'#b6bcca','stroke-width':1.5},g);
+      pinBlock(g,CX,86,{icon:pin.icon,lines:[]});
+      txt(pin.lines[0],CX,88,'pin-name','middle',g);
+      txt(pin.lines[1],CX,107,'pin-line','middle',g);
+      /* redo icon above text */
+      g.querySelector('g').setAttribute('transform','translate('+CX+','+52+')');
+    } else {
+      sidePins.push({pin:pin,a:a});
+    }
+  });
+
+  /* side pins with collision-relaxed label rows */
+  var left=[],right=[];
+  sidePins.forEach(function(sp){ (sp.a<180?right:left).push(sp); });
+  function layout(arr){
+    arr.forEach(function(sp){ sp.yc = P(400,sp.a)[1]; });
+    arr.sort(function(x,y){return x.yc-y.yc;});
+    var G=92;
+    for(var it=0;it<30;it++){
+      for(var j=1;j<arr.length;j++){
+        var gap=arr[j].yc-arr[j-1].yc;
+        if(gap<G){var push=(G-gap)/2; arr[j-1].yc-=push; arr[j].yc+=push;}
+      }
+    }
+  }
+  layout(left); layout(right);
+  function drawSide(arr,sign){
+    var bx=CX+sign*468;
+    arr.forEach(function(sp,idx){
+      var g=el('g',{'class':'fade',style:'animation-delay:'+(0.5+idx*0.1)+'s'});
+      var d=P(R_PINDOT,sp.a);
+      el('circle',{cx:d[0],cy:d[1],r:5.5,fill:'#3d4f76'},g);
+      var m=P(402,sp.a);
+      var cxE=bx-sign*66;
+      el('path',{d:'M'+d[0].toFixed(1)+','+d[1].toFixed(1)+' L'+m[0].toFixed(1)+','+m[1].toFixed(1)+' L'+cxE+','+sp.yc.toFixed(1),
+        fill:'none',stroke:'#b6bcca','stroke-width':1.5},g);
+      pinBlock(g,bx,sp.yc,sp.pin);
+    });
+  }
+  drawSide(right,1); drawSide(left,-1);
+
+  /* ---------- center text ---------- */
+  var cDay=txt('',CX,436,'c-day');
+  var cDate=txt('',CX,462,'c-day');
+  var big=el('text',{x:CX,y:518,'text-anchor':'middle','class':'c-big'});
+  var big1=el('tspan',{},big); var big2=el('tspan',{dy:-2,'class':'c-ampm'},big);
+  var cDoy=txt('',CX,600,'c-doy');
+
+  /* ---------- hand ---------- */
+  var hand=el('g',{'class':'hand-shadow'});
+  el('line',{x1:CX,y1:CY+36,x2:CX,y2:CY-234,stroke:'#17161a','stroke-width':7,'stroke-linecap':'round'},hand);
+  el('circle',{cx:CX,cy:CY,r:7.5,fill:'#17161a'});
+  el('circle',{cx:CX,cy:CY,r:2.4,fill:'#f6f5f1'});
+
+  /* ---------- clock / scrub ---------- */
+  var scrub=document.getElementById('scrub');
+  var liveBtn=document.getElementById('liveBtn');
+  var liveTxt=document.getElementById('liveTxt');
+  var override=null; /* minutes since midnight, or null = live */
+
+  var DOW=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+  var MON=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+
+  function render(){
+    var now=new Date();
+    var mins = override!==null ? override : now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+    var hFloat=mins/60;
+    hand.setAttribute('transform','rotate('+(hFloat*15).toFixed(3)+' '+CX+' '+CY+')');
+
+    var hh=Math.floor(hFloat)%24, mm=Math.floor(mins%60);
+    var am=hh<12, h12=hh%12; if(h12===0)h12=12;
+    big1.textContent=h12+':'+(mm<10?'0':'')+mm;
+    big2.textContent=' '+(am?'AM':'PM');
+
+    cDay.textContent=DOW[now.getDay()];
+    cDate.textContent=MON[now.getMonth()]+' '+now.getDate();
+    var start=new Date(now.getFullYear(),0,0);
+    var doy=Math.floor((now-start)/86400000);
+    var total=(new Date(now.getFullYear(),11,31)-start)/86400000;
+    cDoy.textContent='DAY '+doy+' OF '+Math.round(total);
+
+    if(override===null){ scrub.value=Math.floor(mins); }
+  }
+  scrub.addEventListener('input',function(){
+    override=+scrub.value;
+    document.body.classList.add('scrubbing');
+    liveTxt.textContent='RETURN TO LIVE';
+    render();
+  });
+  liveBtn.addEventListener('click',function(){
+    override=null;
+    document.body.classList.remove('scrubbing');
+    liveTxt.textContent='LIVE';
+    render();
+  });
+  render();
+  setInterval(render,1000);
+})();
+</script>
+</body>
+</html>

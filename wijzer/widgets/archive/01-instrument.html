@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wijzer — instrument</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:364px;height:382px}
+  body{
+    margin:0;
+    overflow:hidden;
+    background:#e9e6df;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #w{
+    width:364px;height:382px;
+    border-radius:26px;
+    background:#f3f1ec;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow:inset 0 0 0 1px rgba(120,108,84,.075);
+  }
+  svg#dial{display:block;width:364px;height:338px;flex:0 0 338px}
+  #dial text{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;text-rendering:geometricPrecision}
+  .num{font-size:10px;font-weight:500;fill:#a29e95;letter-spacing:.04em}
+  .cdate{font-size:9px;font-weight:600;fill:#96938b;letter-spacing:.2em}
+  .ctime{font-size:34px;font-weight:300;fill:#161512;letter-spacing:-.015em}
+  .campm{font-size:13px;font-weight:500;fill:#3c3a35;letter-spacing:.02em}
+  .nx{font-size:9.5px;font-weight:600;fill:#2f2e2a;letter-spacing:.035em}
+  .facesh{filter:drop-shadow(0 2px 5px rgba(72,64,44,.10))}
+
+  .strip{
+    height:44px;
+    flex:0 0 44px;
+    border-top:1px solid #e1ddd4;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    padding:0 12px;
+  }
+  .cell{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .cell+.cell::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:1px;background:#e6e2d9}
+  .v{font-size:12.5px;font-weight:500;color:#1f1e1b;letter-spacing:.005em;line-height:1}
+  .l{font-size:9px;font-weight:600;color:#98958d;letter-spacing:.11em;line-height:1;margin-top:5px}
+</style>
+</head>
+<body>
+<div id="w">
+  <svg id="dial" viewBox="0 0 364 338" role="img" aria-label="24-hour almanac dial. Sunday August 2, 8:55 AM. Next: Team Standup at 9:00."></svg>
+  <div class="strip">
+    <div class="cell"><div class="v">72&deg;</div><div class="l">PARTLY CLOUDY</div></div>
+    <div class="cell"><div class="v">UV 7</div><div class="l">HIGH</div></div>
+    <div class="cell"><div class="v">10:22</div><div class="l">HIGH TIDE</div></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var NS='http://www.w3.org/2000/svg';
+  var svg=document.getElementById('dial');
+  var CX=182, CY=170;
+
+  /* radial plan (px) */
+  var R_FACE=150,      /* dial face disc / rim hairline */
+      R_DAY=147,       /* daylight arc (sunrise -> sunset) */
+      R_PIN=138,       /* tide pins + moon glyph */
+      R_TOUT=130,      /* tick outer */
+      R_ARC=107,       /* calendar event arcs */
+      R_NUM=90,        /* 6 / 12 / 18 numerals */
+      R_HAND=130;      /* hand tip */
+
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;}
+  /* angle in degrees, clockwise from 12 o'clock */
+  function P(r,deg){var t=deg*Math.PI/180;return [CX+r*Math.sin(t), CY-r*Math.cos(t)];}
+  function A(h){return h*15;}
+  function f(n){return Math.round(n*100)/100;}
+  function arc(r,d0,d1,attrs){
+    var a=P(r,d0), b=P(r,d1), large=((d1-d0+360)%360)>180?1:0;
+    attrs.d='M'+f(a[0])+','+f(a[1])+' A'+r+','+r+' 0 '+large+',1 '+f(b[0])+','+f(b[1]);
+    attrs.fill='none';
+    return el('path',attrs);
+  }
+
+  /* ---------- frozen sample data ---------- */
+  var NOW=8+55/60;
+  var EVENTS=[
+    {s:9,    e:10,    c:'#4a7fd4'},   /* Team Standup   — next */
+    {s:11,   e:11.75, c:'#45a06b'},   /* Dentist */
+    {s:14,   e:15,    c:'#de7b3a'},   /* Lunch */
+    {s:16.5, e:17,    c:'#e0b23c'},   /* Call Mom */
+    {s:18,   e:19,    c:'#9268c8'}    /* Dinner with Sarah */
+  ];
+  var TIDES=[
+    {h:4+1/60,   high:false},  /* 0.3 ft */
+    {h:10+22/60, high:true},   /* 3.1 ft — next */
+    {h:16+37/60, high:false},  /* 0.4 ft */
+    {h:22+24/60, high:true}    /* 3.2 ft */
+  ];
+  var SUNRISE=6+28/60, SUNSET=20+13/60, MOONRISE=19+58/60, MOON_LIT=0.67;
+
+  /* ---------- face ---------- */
+  el('circle',{cx:CX,cy:CY,r:R_FACE,fill:'#fbfaf6','class':'facesh'});
+  el('circle',{cx:CX,cy:CY,r:R_FACE-0.5,fill:'none',stroke:'#e3dfd6','stroke-width':1});
+
+  /* ---------- daylight arc: sunrise -> sunset ---------- */
+  arc(R_DAY,A(SUNRISE),A(SUNSET),{stroke:'#cfa53f','stroke-width':1.7,'stroke-linecap':'round',opacity:.92});
+
+  /* ---------- tick graticule (half hours) ---------- */
+  for(var i=0;i<48;i++){
+    var a=i*7.5, hour=(i%2===0), card=(i%12===0);
+    var ri=card?114:(hour?121.5:126);
+    var p1=P(ri,a), p2=P(R_TOUT,a);
+    el('line',{x1:f(p1[0]),y1:f(p1[1]),x2:f(p2[0]),y2:f(p2[1]),
+      stroke:card?'#2b2a26':(hour?'#8f8c85':'#cbc7be'),
+      'stroke-width':card?2.2:(hour?1.05:0.8),
+      'stroke-linecap':card?'butt':'round'});
+  }
+
+  /* ---------- numerals: 6 / 12 / 18 only ---------- */
+  [6,12,18].forEach(function(h){
+    var p=P(R_NUM,A(h));
+    var t=el('text',{x:f(p[0]),y:f(p[1]),'text-anchor':'middle','dominant-baseline':'central','class':'num'});
+    t.textContent=String(h);
+  });
+
+  /* ---------- calendar event arcs ---------- */
+  EVENTS.forEach(function(ev){
+    arc(R_ARC,A(ev.s),A(ev.e),{stroke:ev.c,'stroke-width':5,'stroke-linecap':'round'});
+  });
+
+  /* ---------- tide pins: filled = high, small = low ---------- */
+  TIDES.forEach(function(td){
+    var p=P(R_PIN,A(td.h));
+    el('circle',{cx:f(p[0]),cy:f(p[1]),r:td.high?2.5:1.5,fill:'#3d4f76'});
+  });
+
+  /* ---------- moon: waning gibbous glyph, set at moonrise ---------- */
+  (function(){
+    var p=P(R_PIN,A(MOONRISE)), r=4.5, rx=Math.max((2*MOON_LIT-1)*r,0.02);
+    var g=el('g',{transform:'translate('+f(p[0])+','+f(p[1])+')'});
+    el('circle',{r:r,fill:'none',stroke:'#3d4f76','stroke-width':0.9,opacity:.5},g);
+    /* lit limb on the left = waning */
+    el('path',{d:'M0,'+(-r)+' A'+r+','+r+' 0 0,0 0,'+r+' A'+f(rx)+','+r+' 0 0,0 0,'+(-r)+' Z',fill:'#3d4f76'},g);
+  })();
+
+  /* ---------- centre: date · time · next ---------- */
+  var d=el('text',{x:CX,y:96,dx:-0.9,'text-anchor':'middle','class':'cdate'});
+  d.textContent='SUNDAY · AUGUST 2';
+
+  var tm=el('text',{x:CX,y:138,'text-anchor':'middle','class':'ctime'});
+  var t1=el('tspan',{},tm); t1.textContent='8:55';
+  var t2=el('tspan',{dx:5,'class':'campm'},tm); t2.textContent='AM';
+
+  /* next event, dot + label, optically centred via measured width */
+  var nxLabel='9:00  TEAM STANDUP', NXY=158;
+  var nx=el('text',{x:0,y:NXY,'text-anchor':'start','class':'nx'});
+  nx.textContent=nxLabel;
+  var w=0; try{w=nx.getComputedTextLength();}catch(e){}
+  if(!w) w=6.0*nxLabel.length;
+  var total=5+6+w, x0=CX-total/2;
+  nx.setAttribute('x',f(x0+11));
+  el('circle',{cx:f(x0+2.5),cy:NXY-3.2,r:2.5,fill:'#4a7fd4'});
+
+  /* ---------- hand: 8:55, slim, no tail ---------- */
+  var hp=P(R_HAND,A(NOW));
+  el('line',{x1:CX,y1:CY,x2:f(hp[0]),y2:f(hp[1]),stroke:'#17161a','stroke-width':3,'stroke-linecap':'round'});
+  el('circle',{cx:CX,cy:CY,r:3.2,fill:'#17161a'});
+})();
+</script>
+</body>
+</html>

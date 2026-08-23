@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>wijzer · coastal — large widget study</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:364px;height:382px}
+  body{
+    margin:0;
+    overflow:hidden;
+    background:#e9e6df;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #widget{
+    position:absolute;
+    inset:0;
+    width:364px;
+    height:382px;
+    border-radius:26px;
+    overflow:hidden;
+    box-shadow:
+      0 6px 18px rgba(46,58,62,.20),
+      0 1px 3px rgba(46,58,62,.14),
+      inset 0 1px 0 rgba(255,255,255,.55),
+      inset 0 -1px 0 rgba(40,62,70,.10),
+      inset 0 0 0 .5px rgba(40,62,70,.14);
+    animation:rise .45s ease-out both;
+  }
+  @keyframes rise{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){#widget{animation:none}}
+  svg{display:block;width:364px;height:382px}
+  text{font-family:inherit;font-variant-numeric:tabular-nums}
+
+  .t-time  {font-size:40px;  font-weight:300; letter-spacing:-.015em; fill:#1b414c}
+  .t-ampm  {font-size:13px;  font-weight:600; letter-spacing:.12em;   fill:#365a67}
+  .t-date  {font-size:11px;  font-weight:600; letter-spacing:.12em;   fill:#2f545f}
+  .t-doy   {font-size:10px;  font-weight:600; letter-spacing:.15em;   fill:#6b8188}
+  .t-temp  {font-size:24px;  font-weight:300; letter-spacing:-.01em;  fill:#1b414c}
+  .t-cond  {font-size:10.5px;font-weight:600; letter-spacing:.11em;   fill:#4a656e}
+  .t-astro {font-size:10.5px;font-weight:600; letter-spacing:.07em;   fill:#8a6120}
+  .t-moon  {font-size:10.5px;font-weight:600; letter-spacing:.07em;   fill:#4d6673}
+  .t-nowv  {font-size:12px;  font-weight:700; letter-spacing:.005em;  fill:#123138}
+  .t-nowl  {font-size:10.5px;font-weight:700; letter-spacing:.11em;   fill:#335d69}
+  .t-tt    {font-size:10.5px;font-weight:600; letter-spacing:.04em;   fill:#14343c; fill-opacity:.80}
+  .t-tf    {font-size:10.5px;font-weight:600; letter-spacing:.02em;   fill:#14343c; fill-opacity:.64}
+  .t-ttn   {font-size:11px;  font-weight:700; letter-spacing:.03em;   fill:#0d2b34}
+  .t-tfn   {font-size:10.5px;font-weight:700; letter-spacing:.02em;   fill:#14343c; fill-opacity:.86}
+  .t-evt   {font-size:10px;  font-weight:700; letter-spacing:.005em;  fill:#102e37}
+  .t-evn   {font-size:10px;  font-weight:600; letter-spacing:.02em;   fill:#102e37; fill-opacity:.88}
+  .t-evin  {font-size:10px;  font-weight:700; letter-spacing:.09em;   fill:#102e37; fill-opacity:.84}
+  .t-evth  {font-size:10px;  font-weight:600; letter-spacing:.04em;   fill:#102e37; fill-opacity:.68}
+  .t-mk    {font-size:10px;  font-weight:600; letter-spacing:.08em;   fill:#102e37; fill-opacity:.66}
+  .t-mv    {font-size:10px;  font-weight:700; letter-spacing:.05em;   fill:#102e37; fill-opacity:1}
+</style>
+</head>
+<body>
+<div id="widget">
+  <svg id="scene" viewBox="0 0 364 382" role="img"
+       aria-label="Coastal almanac, outdoor mode: 8:55 AM Thursday 30 July 2026, 72 degrees partly cloudy. Spring tide 3.7 feet and rising toward a 4.2 foot high at 10:22 AM. Sunrise was 5:38 AM, sunset 8:07 PM, and a moon one day past full rises at 8:50 PM.">
+    <defs>
+      <linearGradient id="air" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0"    stop-color="#c2d7e2"/>
+        <stop offset=".32"  stop-color="#d9e6e9"/>
+        <stop offset=".545" stop-color="#efe7db"/>
+        <stop offset=".72"  stop-color="#e8dfd1"/>
+        <stop offset="1"    stop-color="#ded3c3"/>
+      </linearGradient>
+      <linearGradient id="sea" x1="0" y1="226" x2="0" y2="382" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#60969f" stop-opacity=".30"/>
+        <stop offset="1" stop-color="#4a7e92" stop-opacity=".50"/>
+      </linearGradient>
+      <radialGradient id="sunglow">
+        <stop offset=".30" stop-color="#f7cd7d" stop-opacity=".52"/>
+        <stop offset=".68" stop-color="#f6d391" stop-opacity=".20"/>
+        <stop offset="1"   stop-color="#f6d391" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="grain">
+        <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+      </filter>
+      <clipPath id="waterclip"><path id="waterclippath" d=""/></clipPath>
+    </defs>
+
+    <!-- sky / air -->
+    <rect x="0" y="0" width="364" height="382" fill="url(#air)"/>
+
+    <!-- clouds (partly cloudy) -->
+    <g fill="#ffffff" opacity=".52">
+      <circle cx="176" cy="124" r="11"/><circle cx="192" cy="117" r="14.5"/>
+      <circle cx="209" cy="124" r="10"/><rect x="165" y="123" width="54" height="11" rx="5.5"/>
+    </g>
+    <g fill="#ffffff" opacity=".34">
+      <circle cx="63" cy="152" r="7.5"/><circle cx="76" cy="148" r="10"/>
+      <circle cx="88" cy="153" r="6.5"/><rect x="55.5" y="151" width="39" height="7.5" rx="3.75"/>
+    </g>
+
+    <!-- sun path: solid for elapsed, dotted for remaining -->
+    <polyline id="arcPast" fill="none" stroke="#c1912f" stroke-opacity=".60" stroke-width="1.1" stroke-linecap="round"/>
+    <polyline id="arcNext" fill="none" stroke="#9d8f74" stroke-opacity=".48" stroke-width="1.1" stroke-dasharray="1 3.2" stroke-linecap="round"/>
+
+    <!-- sun at 8:55 -->
+    <g id="sun"></g>
+
+    <!-- moon: one day past full, set at 6:28 AM, rises again 8:50 PM -->
+    <line x1="315.97" y1="183" x2="315.97" y2="206" stroke="#6d8794" stroke-opacity=".30" stroke-width="1" stroke-dasharray="1.5 2.5"/>
+    <g id="moon" transform="translate(315.97,174)">
+      <circle r="7.5" fill="#8ea3ad" fill-opacity=".14" stroke="#7d949f" stroke-opacity=".40" stroke-width="1"/>
+      <path id="moonlit" d="" fill="#8ba0ab" fill-opacity=".78"/>
+    </g>
+
+    <!-- horizon -->
+    <line x1="0" y1="208" x2="364" y2="208" stroke="#93a8ad" stroke-width="1.2" stroke-opacity=".9"/>
+    <!-- sunrise 5:38 / sunset 8:07 sit on the horizon where the arc lands -->
+    <path d="M81.24,208 A4.2,4.2 0 0 1 89.64,208 Z" fill="#edb455"/>
+    <path d="M300.91,208 A4.2,4.2 0 0 1 309.31,208 Z" fill="#e09b48"/>
+
+    <!-- water: fill, hour grid, woodblock echo lines -->
+    <path id="water" d="" fill="url(#sea)"/>
+    <g clip-path="url(#waterclip)">
+      <g id="grid" stroke="#164352" stroke-opacity=".10" stroke-width="1"></g>
+      <polyline id="echo1" fill="none" stroke="#143c48" stroke-opacity=".10" stroke-width="1"/>
+      <polyline id="echo2" fill="none" stroke="#143c48" stroke-opacity=".07" stroke-width="1"/>
+    </g>
+    <!-- surface: light beneath, ink line on top -->
+    <polyline id="foam" fill="none" stroke="#ffffff" stroke-opacity=".46" stroke-width="3"/>
+    <polyline id="surface" fill="none" stroke="#255260" stroke-width="2" stroke-linejoin="round"/>
+
+    <!-- tide extrema + next-tide ring -->
+    <g id="tidemarks"></g>
+
+    <!-- now thread at 8:55 -->
+    <line x1="135.24" y1="126" x2="135.24" y2="199" stroke="#3d6270" stroke-opacity=".55" stroke-width="1" stroke-dasharray="2 3"/>
+    <line x1="135.24" y1="217" x2="135.24" y2="232" stroke="#25525f" stroke-opacity=".45" stroke-width="1" stroke-dasharray="2 3"/>
+    <g id="nowdot"></g>
+
+    <!-- ================= type ================= -->
+    <text class="t-time" x="22" y="58">8:55</text>
+    <text class="t-ampm" x="106" y="58">AM</text>
+    <text class="t-date" x="22" y="76">THURSDAY &#183; 30 JULY</text>
+    <text class="t-doy"  x="22" y="90">DAY 211 OF 365</text>
+
+    <text class="t-temp" x="342" y="52" text-anchor="end">72&#176;</text>
+    <text class="t-cond" x="342" y="68" text-anchor="end">PARTLY CLOUDY</text>
+
+    <text class="t-astro" x="85"  y="201" text-anchor="middle">5:38 AM</text>
+    <text class="t-astro" x="300" y="201" text-anchor="end">8:07 PM</text>
+    <text class="t-moon"  x="304" y="178" text-anchor="end">8:50 PM</text>
+
+    <text class="t-nowv" x="127" y="222" text-anchor="end">3.7 ft</text>
+    <text class="t-nowl" x="127" y="233" text-anchor="end">RISING</text>
+
+    <!-- tide labels: nestled under each crest / trough -->
+    <text class="t-tt"  x="60.9" y="304" text-anchor="middle">4:01 AM</text>
+    <text class="t-tf"  x="60.9" y="315" text-anchor="middle">LOW &#8722;0.1 ft</text>
+
+    <text class="t-ttn" x="143"  y="252">10:22 AM</text>
+    <text class="t-tfn" x="143"  y="263">HIGH 4.2 ft</text>
+
+    <text class="t-tt"  x="252"  y="304" text-anchor="middle">4:37 PM</text>
+    <text class="t-tf"  x="252"  y="315" text-anchor="middle">LOW 0.0 ft</text>
+
+    <text class="t-tt"  x="356"  y="259" text-anchor="end">10:24 PM</text>
+    <text class="t-tf"  x="356"  y="270" text-anchor="end">HIGH 4.3 ft</text>
+
+    <!-- conditions ledger — the work row is gone; outdoor mode keeps only the elements -->
+    <line x1="20" y1="332" x2="344" y2="332" stroke="#14434f" stroke-opacity=".16" stroke-width="1"/>
+    <g stroke="#14434f" stroke-opacity=".15" stroke-width="1">
+      <line x1="101" y1="348" x2="101" y2="359"/>
+      <line x1="182" y1="348" x2="182" y2="359"/>
+      <line x1="263" y1="348" x2="263" y2="359"/>
+    </g>
+    <text x="60.5"  y="357" text-anchor="middle" class="t-mk">UV<tspan class="t-mv"> 4</tspan></text>
+    <text x="141.5" y="357" text-anchor="middle" class="t-mk">WIND<tspan class="t-mv"> SE 15</tspan></text>
+    <text x="222.5" y="357" text-anchor="middle" class="t-mk">HUM<tspan class="t-mv"> 63%</tspan></text>
+    <text x="303.5" y="357" text-anchor="middle" class="t-mk">SEA<tspan class="t-mv"> 72&#176;</tspan></text>
+
+    <!-- paper tooth -->
+    <rect x="0" y="0" width="364" height="382" filter="url(#grain)" opacity=".06"
+          style="mix-blend-mode:overlay" pointer-events="none"/>
+  </svg>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var NS='http://www.w3.org/2000/svg';
+  var svg=document.getElementById('scene');
+  var W=364, HZ=208;                 /* width, horizon y */
+
+  function X(h){ return h*W/24; }    /* hour -> x  (0h left, 24h right) */
+  function Hh(x){ return x*24/W; }   /* x -> hour */
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;}
+  function pts(a){var s='';for(var i=0;i<a.length;i++)s+=(i?' ':'')+a[i][0].toFixed(2)+','+a[i][1].toFixed(2);return s;}
+
+  /* ---------- TIDE (hero) ------------------------------------------
+     four real events plus the neighbouring extrema off both edges so
+     the curve is continuous from 00:00 to 24:00. Cosine interpolation
+     between successive high/low nodes = a true sine-like tide.        */
+  /* SPRING TIDE. The moon is one day past full, so sun and moon pull in
+     line and the range opens from the neap 0.3-3.1 to -0.1-4.3 ft. The
+     scale below re-maps that wider range onto the SAME 66px band, so the
+     curve keeps its composition while the numbers tell the truth.        */
+  var NODES=[
+    [-7.85,0.00],            /* prev low  (mirrored cycle)  */
+    [-1.60,4.30],            /* prev high = 10:24 PM yesterday */
+    [ 4.0167,-0.10],         /* LOW  4:01 AM  -0.1 ft */
+    [10.3667,4.20],          /* HIGH 10:22 AM  4.2 ft */
+    [16.6167,0.00],          /* LOW  4:37 PM   0.0 ft */
+    [22.4000,4.30],          /* HIGH 10:24 PM  4.3 ft */
+    [28.6500,-0.10]          /* next low */
+  ];
+  var FT0=-0.1, Y0=292, PPF=15.0;           /* -0.1 ft -> y292 ; 4.3 ft -> y226 */
+  function tideY(ft){ return Y0-(ft-FT0)*PPF; }
+  function tideFt(h){
+    for(var i=0;i<NODES.length-1;i++){
+      if(h>=NODES[i][0]&&h<=NODES[i+1][0]){
+        var t=(h-NODES[i][0])/(NODES[i+1][0]-NODES[i][0]);
+        return NODES[i][1]+(NODES[i+1][1]-NODES[i][1])*(1-Math.cos(Math.PI*t))/2;
+      }
+    }
+    return NODES[0][1];
+  }
+
+  var curve=[];
+  for(var x=-12;x<=376;x+=2) curve.push([x,tideY(tideFt(Hh(x)))]);
+
+  document.getElementById('surface').setAttribute('points',pts(curve));
+  document.getElementById('foam').setAttribute('points',pts(curve.map(function(p){return [p[0],p[1]+2.6];})));
+  document.getElementById('echo1').setAttribute('points',pts(curve.map(function(p){return [p[0],p[1]+12];})));
+  document.getElementById('echo2').setAttribute('points',pts(curve.map(function(p){return [p[0],p[1]+22];})));
+
+  var wd='M'+pts(curve).replace(/ /g,' L')+' L376,392 L-12,392 Z';
+  document.getElementById('water').setAttribute('d',wd);
+  document.getElementById('waterclippath').setAttribute('d',wd);
+
+  /* three-hour grid, clipped to the water */
+  var grid=document.getElementById('grid');
+  [3,6,12,15,18,21].forEach(function(h){       /* 9 omitted: the now-thread lives there */
+    var gx=X(h).toFixed(2);
+    el('line',{x1:gx,y1:HZ,x2:gx,y2:382},grid);
+  });
+
+  /* tide extrema markers + the next event (10:22 high) ringed */
+  var marks=document.getElementById('tidemarks');
+  [[4.0167,-0.10,0],[10.3667,4.20,1],[16.6167,0.00,0],[22.4,4.30,0]].forEach(function(t){
+    var cx=X(t[0]), cy=tideY(t[1]);
+    if(t[2]){
+      el('circle',{cx:cx.toFixed(2),cy:cy.toFixed(2),r:4.2,fill:'#f4f9f8',stroke:'#20505e','stroke-width':1.5},marks);
+    } else {
+      el('circle',{cx:cx.toFixed(2),cy:cy.toFixed(2),r:2.1,fill:'#2c5766','fill-opacity':'.72'},marks);
+    }
+  });
+
+  /* now: 8:55 AM on the rising limb */
+  var NOWH=8+55/60, NX=X(NOWH), NY=tideY(tideFt(NOWH));
+  var nd=document.getElementById('nowdot');
+  el('circle',{cx:NX.toFixed(2),cy:NY.toFixed(2),r:5.2,fill:'#ffffff','fill-opacity':'.9'},nd);
+  el('circle',{cx:NX.toFixed(2),cy:NY.toFixed(2),r:2.5,fill:'#12333c'},nd);
+
+  /* ---------- SUN ARC ---------------------------------------------- */
+  var RISE=X(5+38/60), SET=X(20+7/60), NOON=(RISE+SET)/2, SPAN=SET-NOON, APEX=156;
+  function sunY(px){var u=(px-NOON)/SPAN;return HZ-APEX*(1-u*u);}
+  var past=[],next=[];
+  for(var sx=RISE;sx<=SET;sx+=2){ (sx<=NX?past:next).push([sx,sunY(sx)]); }
+  past.push([NX,sunY(NX)]); next.unshift([NX,sunY(NX)]);
+  next.push([SET,HZ]); past.unshift([RISE,HZ]);
+  document.getElementById('arcPast').setAttribute('points',pts(past));
+  document.getElementById('arcNext').setAttribute('points',pts(next));
+
+  var sg=document.getElementById('sun'), SY=sunY(NX);
+  el('circle',{cx:NX.toFixed(2),cy:SY.toFixed(2),r:13,fill:'url(#sunglow)'},sg);
+  el('circle',{cx:NX.toFixed(2),cy:SY.toFixed(2),r:6.2,fill:'#f2b64e'},sg);
+  el('circle',{cx:(NX-1.6).toFixed(2),cy:(SY-1.8).toFixed(2),r:2.4,fill:'#fbdc9c','fill-opacity':'.55'},sg);
+
+  /* ---------- MOON: waning gibbous, 98% lit, one day past full ------
+     illum = (1 - cos(2*PI*phase))/2, so 0.98 lit waning -> phase 0.545.
+     The terminator hugs the limb: a disc with one shaved edge.          */
+  (function(){
+    var r=7.5, phase=0.545;                       /* .5 = full, >.5 waning */
+    var k=Math.cos(phase*2*Math.PI), rx=Math.max(Math.abs(k)*r,0.01);
+    var waxing=phase<0.5, so=waxing?1:0, st=(k>0)?(waxing?0:1):(waxing?1:0);
+    document.getElementById('moonlit').setAttribute('d',
+      'M0,'+(-r)+' A'+r+','+r+' 0 0,'+so+' 0,'+r+
+      ' A'+rx.toFixed(2)+','+r+' 0 0,'+st+' 0,'+(-r)+' Z');
+  })();
+
+})();
+</script>
+</body>
+</html>
