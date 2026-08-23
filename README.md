@@ -1,7 +1,7 @@
-# Experimental Architectures
+# Experiments
 
-A field index of the substrates, frameworks, languages, and tools I build to answer
-one question at a time — *what if the foundation were different?*
+A field index of the substrates, frameworks, languages, tools, and design studies I
+build to answer one question at a time — *what if the foundation were different?*
 
 By **Chris Kluis** — [ckluis.com](https://ckluis.com) · [kilofeet](https://kilofeet.com) ·
 [LinkedIn](https://www.linkedin.com/in/ckluis) · [X](https://x.com/ckluis)

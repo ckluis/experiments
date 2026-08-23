@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wijzer — modular dark</title>
+<style>
+  :root{
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",system-ui,sans-serif;
+    --gray:#8e8e93;
+    --dim:#636366;
+    --hair:#1f1f22;
+    --white:#f2f2f7;
+    --cyan:#64d2ff;
+    --amber:#ffd60a;
+    --orange:#ff9f0a;
+    --green:#30d158;
+    --purple:#bf5af2;
+    --blue:#4a7fd4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{background:#e9e6df}
+  html,body{width:364px;height:382px}
+  body{
+    margin:0;overflow:hidden;background:#e9e6df;
+    font-family:var(--sans);-webkit-font-smoothing:antialiased;
+    font-variant-numeric:tabular-nums;
+    font-feature-settings:"tnum" 1;
+  }
+  .widget{
+    width:364px;height:382px;background:#000;color:var(--white);
+    border-radius:26px;overflow:hidden;
+    padding:12px 13px;
+    display:flex;flex-direction:column;
+    box-shadow:0 3px 12px rgba(40,36,28,.34);
+    animation:in .22s ease-out both;
+  }
+  @keyframes in{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.widget{animation:none}}
+  svg{display:block;font-family:var(--sans);font-variant-numeric:tabular-nums}
+
+  /* ---------- row 1 : status ---------- */
+  .hdr{
+    height:23px;border-bottom:1px solid var(--hair);
+    display:flex;align-items:flex-start;justify-content:space-between;
+  }
+  .hdr .date{font-size:11px;font-weight:600;letter-spacing:.028em;color:#fff}
+  .hdr .wx{display:flex;align-items:center;gap:5px}
+  .hdr .wx .t{font-size:11px;font-weight:600;color:#fff}
+  .hdr .wx .c{font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--gray)}
+
+  /* ---------- row 2 : dial + agenda ---------- */
+  .mid{height:171px;border-bottom:1px solid var(--hair);display:flex}
+  .dialbox{width:152px;flex:0 0 152px;padding-top:9px}
+  .col{
+    width:173px;flex:0 0 173px;margin-left:13px;
+    border-left:1px solid var(--hair);padding-left:12px;
+    display:flex;flex-direction:column;
+  }
+  .next{height:58px;border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:8px}
+  .next .bar{width:3px;height:40px;border-radius:2px;background:var(--blue);flex:0 0 3px}
+  .next .l1{font-size:9px;font-weight:700;letter-spacing:.11em;color:var(--gray);line-height:11px}
+  .next .l1 b{color:#6ba3f0;font-weight:700}
+  .next .l2{font-size:14.5px;font-weight:600;letter-spacing:-.012em;color:#fff;line-height:18px;margin-top:2px;white-space:nowrap}
+  .next .l3{font-size:9.5px;font-weight:500;color:var(--gray);line-height:12px;letter-spacing:.005em}
+
+  .ev{height:28px;display:flex;align-items:center;border-bottom:1px solid var(--hair)}
+  .ev:last-child{border-bottom:none}
+  .ev i{width:5px;height:5px;border-radius:50%;flex:0 0 5px}
+  .ev .t{width:45px;flex:0 0 45px;margin-left:6px;font-size:9.5px;font-weight:500;color:var(--gray);letter-spacing:-.01em}
+  .ev .n{margin-left:6px;font-size:10.5px;font-weight:500;color:#e5e5ea;letter-spacing:-.005em;
+         white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* ---------- row 3 : tide ---------- */
+  .tide{height:75px;border-bottom:1px solid var(--hair);padding-top:4px}
+  .tide .cap{display:flex;align-items:baseline;justify-content:space-between;height:14px}
+  .tide .cap .k{font-size:9px;font-weight:700;letter-spacing:.13em;color:var(--gray)}
+  .tide .cap .v{font-size:9px;font-weight:600;letter-spacing:.06em;color:var(--cyan)}
+  .tide .cap .v em{font-style:normal;color:var(--gray)}
+  .t-lab{font-size:9px;font-weight:600;fill:#98989d;letter-spacing:.02em}
+  .t-key{fill:var(--cyan);font-weight:700}
+
+  /* ---------- rows 4+5 : complication grid ---------- */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr)}
+  .ga{height:45px;border-bottom:1px solid var(--hair)}
+  .gb{height:44px}
+  .cell{display:flex;flex-direction:column;justify-content:center;gap:2px;padding:0 7px}
+  .cell + .cell{border-left:1px solid var(--hair)}
+  .cell .lab{font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--gray);line-height:11px}
+  .cell .val{font-size:13px;font-weight:600;letter-spacing:-.01em;color:#fff;line-height:16px;
+             display:flex;align-items:center;gap:4px}
+  .cell .val small{font-size:9px;font-weight:700;letter-spacing:.06em}
+
+  /* dial type */
+  .d-time{font-size:21px;font-weight:600;fill:#fff;letter-spacing:-.02em}
+  .d-ampm{font-size:9.5px;font-weight:600;fill:var(--gray);letter-spacing:.02em}
+  .d-day{font-size:9px;font-weight:600;fill:var(--dim);letter-spacing:.1em}
+</style>
+</head>
+<body>
+
+<div class="widget">
+
+  <!-- 1 · status -->
+  <div class="hdr">
+    <div class="date">SUNDAY, AUGUST 2</div>
+    <div class="wx">
+      <svg width="15" height="15" viewBox="-19 -19 38 38" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <g stroke="#ffd60a" stroke-width="2.6">
+          <circle cx="4" cy="-6" r="4"/>
+          <path d="M4,-13.5 v2 M9.3,-11.3 l-1.4,1.4 M11.5,-6 h-2 M-3.5,-6 h2 M-1.3,-11.3 l1.4,1.4"/>
+        </g>
+        <path d="M-8,7 h13.5 a4.5,4.5 0 0 0 .8,-8.9 a6.5,6.5 0 0 0 -12.6,-1.4 a5.2,5.2 0 0 0 -1.7,10.3 z" stroke="#8e8e93" stroke-width="2.6" fill="#000"/>
+      </svg>
+      <span class="t">72&deg;</span>
+      <span class="c">PARTLY CLOUDY</span>
+    </div>
+  </div>
+
+  <!-- 2 · 24h dial + agenda -->
+  <div class="mid">
+    <div class="dialbox"><svg id="dial" width="152" height="152" viewBox="0 0 152 152" role="img" aria-label="24-hour dial, 8:55 AM"></svg></div>
+    <div class="col">
+      <div class="next">
+        <div class="bar"></div>
+        <div>
+          <div class="l1">NEXT &middot; <b>IN 5 MIN</b></div>
+          <div class="l2">Team Standup</div>
+          <div class="l3">9:00 &ndash; 10:00 AM</div>
+        </div>
+      </div>
+      <div class="ev"><i style="background:#45a06b"></i><span class="t">11:00 AM</span><span class="n">Dentist</span></div>
+      <div class="ev"><i style="background:#de7b3a"></i><span class="t">2:00 PM</span><span class="n">Lunch</span></div>
+      <div class="ev"><i style="background:#e0b23c"></i><span class="t">4:30 PM</span><span class="n">Call Mom</span></div>
+      <div class="ev"><i style="background:#9268c8"></i><span class="t">6:00 PM</span><span class="n">Dinner with Sarah</span></div>
+    </div>
+  </div>
+
+  <!-- 3 · tide -->
+  <div class="tide">
+    <div class="cap">
+      <span class="k">TIDE</span>
+      <span class="v">HIGH IN 1:27 <em>&middot; 3.1 FT</em></span>
+    </div>
+    <svg id="tide" width="338" height="54" viewBox="0 0 338 54" role="img" aria-label="Tide curve, rising to high at 10:22 AM"></svg>
+  </div>
+
+  <!-- 4 · sun / moon -->
+  <div class="grid ga">
+    <div class="cell"><div class="lab">SUNRISE</div><div class="val" style="color:#ffd60a">6:28 AM</div></div>
+    <div class="cell"><div class="lab">SUNSET</div><div class="val" style="color:#ff9f0a">8:13 PM</div></div>
+    <div class="cell"><div class="lab">DAYLIGHT</div><div class="val">13h 45m</div></div>
+    <div class="cell"><div class="lab">MOON</div><div class="val"><svg id="moon" width="15" height="15" viewBox="-8 -8 16 16" aria-hidden="true"></svg>67%</div></div>
+  </div>
+
+  <!-- 5 · micro-stats -->
+  <div class="grid gb">
+    <div class="cell"><div class="lab">UV INDEX</div><div class="val">7 <small style="color:#bf5af2">HIGH</small></div></div>
+    <div class="cell"><div class="lab">HUMIDITY</div><div class="val" style="color:#64d2ff">63%</div></div>
+    <div class="cell"><div class="lab">WIND MPH</div><div class="val" style="color:#30d158">SE 15</div></div>
+    <div class="cell"><div class="lab">WATER</div><div class="val" style="color:#64d2ff">78&deg;</div></div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var NS='http://www.w3.org/2000/svg';
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a){e.setAttribute(k,a[k]);}if(p){p.appendChild(e);}return e;}
+  function f(n){return Math.round(n*100)/100;}
+
+  var NOW=8+55/60;                 /* 8.9167 h */
+
+  /* ===================== 24-HOUR DIAL ===================== */
+  var dial=document.getElementById('dial'), C=76;
+  function P(r,deg){var t=deg*Math.PI/180;return [C+r*Math.sin(t), C-r*Math.cos(t)];}
+  function A(r,a0,a1){
+    var s=P(r,a0), e=P(r,a1), la=(a1-a0)>180?1:0;
+    return 'M'+f(s[0])+','+f(s[1])+' A'+r+','+r+' 0 '+la+',1 '+f(e[0])+','+f(e[1]);
+  }
+  function H(h){return h*15;}      /* hours -> degrees, midnight top, clockwise */
+
+  /* elapsed-day track */
+  el('circle',{cx:C,cy:C,r:73.5,fill:'none',stroke:'#131315','stroke-width':1.4},dial);
+  el('path',{d:A(73.5,0.6,H(NOW)),fill:'none',stroke:'rgba(255,255,255,.22)',
+             'stroke-width':1.4,'stroke-linecap':'round'},dial);
+
+  /* ticks : 48 half-hour minors, 24 hour majors, 4 cardinals */
+  for(var i=0;i<48;i++){
+    if(i%2===1){
+      var a=i*7.5, p1=P(70,a), p2=P(67.6,a);
+      el('line',{x1:f(p1[0]),y1:f(p1[1]),x2:f(p2[0]),y2:f(p2[1]),stroke:'#2b2b2e','stroke-width':1},dial);
+    }
+  }
+  for(var h=0;h<24;h++){
+    var ang=H(h), card=(h%6===0);
+    var q1=P(70,ang), q2=P(card?61:65.5,ang);
+    el('line',{x1:f(q1[0]),y1:f(q1[1]),x2:f(q2[0]),y2:f(q2[1]),
+      stroke:card?'#8e8e93':'#48484a','stroke-width':card?1.9:1.2,
+      'stroke-linecap':card?'butt':'round'},dial);
+  }
+
+  /* daylight arc : sunrise 6:28 -> sunset 8:13 PM */
+  var SR=6+28/60, SS=20+13/60;
+  el('path',{d:A(57.5,H(SR),H(SS)),fill:'none',stroke:'#ffd60a','stroke-width':2.3,
+             'stroke-linecap':'butt',opacity:'.9'},dial);
+  var sr=P(57.5,H(SR)), ss=P(57.5,H(SS));
+  el('circle',{cx:f(sr[0]),cy:f(sr[1]),r:2.3,fill:'#ffd60a'},dial);
+  el('circle',{cx:f(ss[0]),cy:f(ss[1]),r:2.3,fill:'#ff9f0a'},dial);
+
+  /* moonset 4:47 AM / moonrise 7:58 PM on the same ring */
+  [4+47/60, 19+58/60].forEach(function(mh){
+    var m=P(57.5,H(mh));
+    el('circle',{cx:f(m[0]),cy:f(m[1]),r:1.9,fill:'#aeaeb2'},dial);
+  });
+
+  /* calendar arcs */
+  var EV=[
+    {s:9,   e:10,    c:'#4a7fd4'},
+    {s:11,  e:11.75, c:'#45a06b'},
+    {s:14,  e:15,    c:'#de7b3a'},
+    {s:18,  e:19,    c:'#9268c8'}
+  ];
+  EV.forEach(function(v){
+    el('path',{d:A(48,H(v.s),H(v.e)),fill:'none',stroke:v.c,'stroke-width':5,'stroke-linecap':'round'},dial);
+  });
+  var cm=P(48,H(16.5));                       /* Call Mom — point event */
+  el('circle',{cx:f(cm[0]),cy:f(cm[1]),r:2.8,fill:'#e0b23c'},dial);
+
+  /* now marker : black casing + white hairline */
+  var m1=P(40,H(NOW)), m2=P(75,H(NOW));
+  el('line',{x1:f(m1[0]),y1:f(m1[1]),x2:f(m2[0]),y2:f(m2[1]),stroke:'#000','stroke-width':5,
+             'stroke-linecap':'round'},dial);
+  el('line',{x1:f(m1[0]),y1:f(m1[1]),x2:f(m2[0]),y2:f(m2[1]),stroke:'#fff','stroke-width':1.8,
+             'stroke-linecap':'round'},dial);
+  var md=P(73.5,H(NOW));
+  el('circle',{cx:f(md[0]),cy:f(md[1]),r:2.4,fill:'#fff'},dial);
+
+  /* center readout */
+  var tt=el('text',{x:C,y:77,'text-anchor':'middle','class':'d-time'},dial);
+  el('tspan',{},tt).textContent='8:55';
+  var ap=el('tspan',{dx:3,'class':'d-ampm'},tt); ap.textContent='AM';
+  var dy=el('text',{x:C,y:91,'text-anchor':'middle','class':'d-day'},dial);
+  dy.textContent='DAY 214';
+
+  /* ===================== TIDE CURVE ===================== */
+  var tide=document.getElementById('tide'), W=338, TOP=3, BOT=37, VMAX=3.5;
+  var EX=[
+    {t:-1.75,v:3.2},{t:4+1/60,v:0.3},{t:10+22/60,v:3.1},
+    {t:16+37/60,v:0.4},{t:22+24/60,v:3.2},{t:28.7,v:0.35}
+  ];
+  function lev(t){
+    for(var k=0;k<EX.length-1;k++){
+      if(t>=EX[k].t&&t<=EX[k+1].t){
+        var u=(t-EX[k].t)/(EX[k+1].t-EX[k].t);
+        var s=(1-Math.cos(Math.PI*u))/2;
+        return EX[k].v+(EX[k+1].v-EX[k].v)*s;
+      }
+    }
+    return EX[EX.length-1].v;
+  }
+  function tx(t){return W*t/24;}
+  function ty(v){return BOT-(v/VMAX)*(BOT-TOP);}
+
+  var defs=el('defs',{},tide);
+  var lg=el('linearGradient',{id:'tg',x1:'0',y1:'0',x2:'0',y2:'1'},defs);
+  el('stop',{offset:'0','stop-color':'#64d2ff','stop-opacity':'.42'},lg);
+  el('stop',{offset:'1','stop-color':'#64d2ff','stop-opacity':'.02'},lg);
+
+  /* sampled curve */
+  var pts=[], N=169;
+  for(var j=0;j<=N;j++){
+    var t=24*j/N;
+    pts.push([f(tx(t)), f(ty(lev(t)))]);
+  }
+  function pathOf(a){
+    var d='M'+a[0][0]+','+a[0][1];
+    for(var k=1;k<a.length;k++){d+=' L'+a[k][0]+','+a[k][1];}
+    return d;
+  }
+  var xNow=tx(NOW), yNow=ty(lev(NOW));
+  var past=pts.filter(function(p){return p[0]<=xNow;});
+  past.push([f(xNow),f(yNow)]);
+  var fut=pts.filter(function(p){return p[0]>=xNow;});
+  fut.unshift([f(xNow),f(yNow)]);
+
+  el('line',{x1:0,y1:BOT,x2:W,y2:BOT,stroke:'#1a1a1c','stroke-width':1},tide);
+  el('path',{d:pathOf(past)+' L'+f(xNow)+','+BOT+' L0,'+BOT+' Z',fill:'url(#tg)',stroke:'none'},tide);
+  el('path',{d:pathOf(fut),fill:'none',stroke:'#64d2ff','stroke-width':1.3,opacity:'.42',
+             'stroke-linejoin':'round'},tide);
+  el('path',{d:pathOf(past),fill:'none',stroke:'#64d2ff','stroke-width':1.6,
+             'stroke-linejoin':'round'},tide);
+
+  /* extremum dots + labels */
+  var MK=[
+    {t:4+1/60,   k:'L', s:'4:01'},
+    {t:10+22/60, k:'H', s:'10:22'},
+    {t:16+37/60, k:'L', s:'4:37'},
+    {t:22+24/60, k:'H', s:'10:24'}
+  ];
+  MK.forEach(function(mk){
+    var x=tx(mk.t), y=ty(lev(mk.t));
+    el('circle',{cx:f(x),cy:f(y),r:1.9,fill:'#64d2ff'},tide);
+    var anchor='middle', lx=x;
+    if(x<24){anchor='start';lx=0;}
+    if(x>W-24){anchor='end';lx=W;}
+    var lt=el('text',{x:f(lx),y:51,'text-anchor':anchor,'class':'t-lab'},tide);
+    var a1=el('tspan',{'class':'t-key'},lt); a1.textContent=mk.k+' ';
+    var a2=el('tspan',{},lt); a2.textContent=mk.s;
+  });
+
+  /* now marker on the tide */
+  el('line',{x1:f(xNow),y1:0,x2:f(xNow),y2:BOT+3,stroke:'rgba(255,255,255,.22)','stroke-width':1},tide);
+  el('circle',{cx:f(xNow),cy:f(yNow),r:3.4,fill:'#000'},tide);
+  el('circle',{cx:f(xNow),cy:f(yNow),r:2.3,fill:'#fff'},tide);
+
+  /* ===================== MOON DISC ===================== */
+  var moon=document.getElementById('moon'), R=7, frac=0.67;   /* waning gibbous, lit on the left */
+  var kx=Math.max(Math.abs(1-2*frac)*R,0.01);
+  el('circle',{r:R,fill:'#1c1c1e',stroke:'#3a3a3c','stroke-width':.6},moon);
+  el('path',{d:'M0,'+(-R)+' A'+R+','+R+' 0 0,0 0,'+R+' A'+f(kx)+','+R+' 0 0,0 0,'+(-R)+' Z',
+             fill:'#dcdce1'},moon);
+})();
+</script>
+</body>
+</html>

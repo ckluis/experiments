@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wijzer — instrument IV</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:364px;height:382px}
+  body{
+    margin:0;
+    overflow:hidden;
+    background:#e9e6df;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #w{
+    width:364px;height:382px;
+    border-radius:26px;
+    background:#f3f1ec;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow:inset 0 0 0 1px rgba(120,108,84,.075);
+  }
+  svg#dial{display:block;width:364px;height:296px;flex:0 0 296px}
+  #dial text{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;text-rendering:geometricPrecision}
+  .num{font-size:10px;font-weight:500;fill:#a29e95;letter-spacing:.04em}
+  /* current readout — sits beside the condition glyph, outside the rim */
+  .temp{font-size:12.5px;font-weight:400;fill:#37352f;letter-spacing:-.01em}
+  /* the every-4-hours temperature graduation: quiet, warm gray, one radius */
+  .grad{font-size:9.2px;font-weight:400;fill:#a9a49a;letter-spacing:.02em}
+
+  /* the disc sits ON TOP of the peek-out icons — its shadow falls on them */
+  .facesh{filter:drop-shadow(0 1.5px 3px rgba(72,64,44,.17)) drop-shadow(0 4px 10px rgba(72,64,44,.09))}
+  .handsh{filter:drop-shadow(0 1px 1.5px rgba(30,26,16,.16))}
+
+  /* ---- next meetings ---- */
+  .nxt{
+    flex:1 1 auto;
+    border-top:1px solid #e1ddd4;
+    padding:10px 18px 0 18px;
+  }
+  /* the date lives HERE now, not on the face — same quiet small-caps voice */
+  .hd{font-size:9px;font-weight:600;letter-spacing:.155em;color:#a19e95;line-height:9px;margin-bottom:7px;white-space:nowrap}
+  .row{
+    display:grid;
+    grid-template-columns:9px 38px 1fr auto;
+    column-gap:8px;
+    align-items:center;
+    height:17px;
+  }
+  .dot{width:5px;height:5px;border-radius:50%;justify-self:center;opacity:.85}
+  .tm{
+    font-size:11.5px;font-weight:400;color:#46443f;text-align:right;
+    font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
+    letter-spacing:.005em;line-height:1;
+  }
+  .ti{font-size:11.5px;font-weight:400;color:#5b5852;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mt{font-size:9px;font-weight:600;letter-spacing:.1em;color:#a19e95;line-height:1}
+  .lead .dot{width:6px;height:6px;opacity:1}
+  .lead .tm{color:#17161a;font-weight:500}
+  .lead .ti{color:#17161a;font-weight:500}
+</style>
+</head>
+<body>
+<div id="w">
+  <svg id="dial" viewBox="0 0 364 296" role="img"
+       aria-label="24-hour almanac dial, Sunday August 2. Hand at 8:55 AM. Now 72 degrees partly cloudy. Temperature graduation every four hours: 70, 68, 72, 79, 82, 77 degrees. Sunrise 6:28 AM, sunset 8:13 PM, moonrise 7:58 PM, moonset 4:47 AM, waning gibbous 67 percent. Tides: low 4:01 AM, high 10:22 AM, low 4:37 PM, high 10:24 PM."></svg>
+  <div class="nxt">
+    <div class="hd">NEXT ON SUNDAY · AUGUST 2</div>
+    <div class="row lead">
+      <span class="dot" style="background:#4a7fd4"></span>
+      <span class="tm">9:00</span>
+      <span class="ti">Team Standup</span>
+      <span class="mt">IN 5 MIN</span>
+    </div>
+    <div class="row">
+      <span class="dot" style="background:#45a06b"></span>
+      <span class="tm">11:00</span>
+      <span class="ti">Dentist</span>
+      <span class="mt"></span>
+    </div>
+    <div class="row">
+      <span class="dot" style="background:#de7b3a"></span>
+      <span class="tm">14:00</span>
+      <span class="ti">Lunch</span>
+      <span class="mt"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var NS='http://www.w3.org/2000/svg';
+  var svg=document.getElementById('dial');
+  var CX=182, CY=148;
+
+  /* ---------- radial plan (px) ------------------------------------------------
+     Same face as 01c. Two things changed out here on the rim:
+
+     (a) EVERY peek-out glyph is now drawn UPRIGHT in screen orientation. None of
+         them are stood up along their spoke any more — each little icon reads as
+         if it were printed on the table the watch is resting on. That means the
+         rim slices each glyph from a DIFFERENT side depending on where it sits
+         (top glyphs get their bottom eaten, right-hand glyphs their left, and so
+         on), so the identifying feature of every glyph is anchored toward its
+         own outward side. See the per-glyph notes below.
+
+     (b) They peek further. Glyph centre sits at R_PEEK, the rim cuts at R_FACE,
+         so the cut now falls 3.6px on the INNER side of each centre (01c: 2.4px).
+         For a 6.9px moon that is (6.9+3.6)/13.8 = 76% of the glyph beyond the rim
+         by height, ~80% by area; for the 7.6px suns 74%. Every glyph still loses
+         a visible bite to the rim AND catches the disc's drop shadow, so the
+         watch-resting-on-top illusion survives at the deeper peek.             */
+  var R_FACE =122,     /* dial disc / rim hairline              */
+      R_PEEK =125.6,   /* ALL peek-out glyph centres            */
+      R_DAY  =119.5,   /* daylight arc (sunrise -> sunset)      */
+      R_MK0  =115.2,   /* truth ticks (exact event angles)      */
+      R_MK1  =118.4,
+      R_MKL  =117.2,   /* short truth tick — low tide           */
+      R_GRAD =107.8,   /* temperature graduation ring           */
+      R_TOUT =100.5,   /* tick outer                            */
+      R_ARC  =82,      /* calendar event arcs                   */
+      R_NUM  =67,      /* 6 / 12 / 18 numerals                  */
+      R_HAND =75,      /* hand tip = 61.5% of face radius       */
+      R_NOWT =133,     /* current-temperature readout           */
+      A_NOWT =13;      /* ...just right of the condition glyph  */
+
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;}
+  /* angle in degrees, clockwise from 12 o'clock (midnight at top) */
+  function P(r,deg){var t=deg*Math.PI/180;return [CX+r*Math.sin(t), CY-r*Math.cos(t)];}
+  /* outward unit vector at an angle — the direction "away from the dial".
+     Everything about which part of a glyph survives the rim is decided by this. */
+  function U(deg){var t=deg*Math.PI/180;return [Math.sin(t), -Math.cos(t)];}
+  function A(h){return h*15;}
+  function f(n){return Math.round(n*100)/100;}
+  function arc(r,d0,d1,attrs,p){
+    var a=P(r,d0), b=P(r,d1), large=((d1-d0+360)%360)>180?1:0;
+    attrs.d='M'+f(a[0])+','+f(a[1])+' A'+r+','+r+' 0 '+large+',1 '+f(b[0])+','+f(b[1]);
+    attrs.fill='none';
+    return el('path',attrs,p);
+  }
+  function mark(deg,color,w,op,r1,p){
+    var a=P(R_MK0,deg), b=P(r1||R_MK1,deg);
+    el('line',{x1:f(a[0]),y1:f(a[1]),x2:f(b[0]),y2:f(b[1]),stroke:color,'stroke-width':w,opacity:op,'stroke-linecap':'butt'},p);
+  }
+  function rays(g,cx,cy,r0,r1,angles,color,sw){
+    angles.forEach(function(a){
+      var t=a*Math.PI/180;
+      el('line',{x1:f(cx+r0*Math.cos(t)),y1:f(cy+r0*Math.sin(t)),
+                 x2:f(cx+r1*Math.cos(t)),y2:f(cy+r1*Math.sin(t)),
+                 stroke:color,'stroke-width':sw,'stroke-linecap':'round'},g);
+    });
+  }
+  /* place a peek glyph. TRANSLATE ONLY — never rotate. */
+  function peekAt(deg,r){
+    var p=P(r||R_PEEK,deg);
+    return el('g',{transform:'translate('+f(p[0])+','+f(p[1])+')'},peek);
+  }
+  /* a sub-group nudged along the outward axis: +k = further out (more exposed),
+     -k = tucked deeper under the disc. This is the one lever that re-anchors a
+     glyph's internals once rotation is off the table. */
+  function along(g,deg,k){
+    var u=U(deg);
+    return el('g',{transform:'translate('+f(u[0]*k)+','+f(u[1]*k)+')'},g);
+  }
+
+  /* ---------- frozen sample data: 8:55 AM, Sunday August 2 ---------- */
+  var NOW=8+55/60;                       /* hand angle 133.75deg */
+  var EVENTS=[
+    {s:9,    e:10,    c:'#4a7fd4'},      /* Team Standup   — next */
+    {s:11,   e:11.75, c:'#45a06b'},      /* Dentist */
+    {s:14,   e:15,    c:'#de7b3a'},      /* Lunch */
+    {s:16.5, e:17,    c:'#e0b23c'},      /* Call Mom */
+    {s:18,   e:19,    c:'#9268c8'}       /* Dinner with Sarah */
+  ];
+  /* FOUR tide events — twice-daily. Each one gets a peeking wave glyph. */
+  var TIDES=[
+    {h:4+1/60,   high:false},            /* 0.3 ft   —  60.25deg */
+    {h:10+22/60, high:true},             /* 3.1 ft   — 155.50deg  (next) */
+    {h:16+37/60, high:false},            /* 0.4 ft   — 249.25deg */
+    {h:22+24/60, high:true}              /* 3.2 ft   — 336.00deg */
+  ];
+  var SUNRISE=6+28/60,   /* 6.467h  ->  97.00deg */
+      SUNSET =20+13/60,  /* 20.217h -> 303.25deg */
+      MOONSET=4+47/60,   /* 4.783h  ->  71.75deg */
+      MOONRISE=19+58/60, /* 19.967h -> 299.50deg */
+      MOON_LIT=0.67;     /* waning gibbous */
+
+  /* every-4-hours temperature curve */
+  var TEMPS=[[0,70],[4,68],[8,72],[12,79],[16,82],[20,77]];
+  var NOW_TEMP='72°';
+
+  /* ---- crowding resolutions -------------------------------------------------
+     1. sunset 303.25 / moonrise 299.50 are 3.75deg apart; with the glyphs larger
+        AND further out they would fuse, so they are pushed 2.5deg apart (10 min)
+        — the exact angles stay marked by the brass arc terminus and the slate
+        moon tick.
+     2. low tide 60.25 vs moonset 71.75 are 11.5deg = 25.2px apart at R_PEEK; the
+        tide's chevron reaches up-and-right toward the moon but stops 13px short
+        of it in y. No nudge needed.
+     3. the midnight cluster keeps 01c's spacing: tide 336 · humidity 346 ·
+        condition 0 · "72°" 13 · wind 27.
+     4. the graduation numerals live INSIDE the rim, so they cannot collide with
+        the peek glyphs at all — those are painted under the disc.             */
+  var NUDGE=2.5;
+
+  var C_SUNR='#d9a53c', C_SUNS='#bf6a29', C_MOON='#3d4f76',
+      C_CLOUD='#8b8881', C_BRASS='#c9992f', C_WET='#6d8098',
+      C_TIDE='#4a90d9';   /* water blue — was slate navy in 01c */
+
+  /* =========================================================================
+     LAYER 1 — peek-out glyphs. Drawn FIRST, centred at R_PEEK > R_FACE, so the
+     disc (layer 2) covers their inner quarter and drops its shadow on them.
+     ALL of them are upright: not one rotate() in this layer.
+     ========================================================================= */
+  var peek=el('g',{});
+
+  /* --- moon: waning gibbous, 67% lit, UPRIGHT ------------------------------
+     Lit limb on the LEFT, terminator bulging right of centre by (2·lit−1)·r.
+     Upright, the terminator is a near-vertical curve through the middle of the
+     disc, so it stays exposed at BOTH moon positions:
+       moonset 71.75deg  — rim eats the lower-left of the lit body; terminator,
+                           sitting right of centre, is entirely in the clear.
+       moonrise 297deg   — rim eats a 120deg arc of the dark limb's outline on the
+                           lower-right; the whole lit gibbous shows. The outline
+                           is carried at .5 so that bite reads.                */
+  function moon(deg,r){
+    var rx=Math.max((2*MOON_LIT-1)*r,0.02);
+    var g=peekAt(deg);
+    el('circle',{r:f(r),fill:'none',stroke:C_MOON,'stroke-width':0.95,opacity:.5},g);
+    el('path',{d:'M0,'+f(-r)+' A'+f(r)+','+f(r)+' 0 0,0 0,'+f(r)+
+                 ' A'+f(rx)+','+f(r)+' 0 0,0 0,'+f(-r)+' Z',fill:C_MOON},g);
+  }
+  moon(A(MOONSET),6.9);                 /*  71.75deg — exact          */
+  moon(A(MOONRISE)-NUDGE,6.9);          /* 297.00deg — paired w/ set  */
+
+  /* --- sun glyphs: rise (warm yellow) / set (deeper orange) ----------------
+     Radially symmetric, so upright costs them nothing: whichever quarter the rim
+     takes, the disc + six of eight rays stay out in the open.                 */
+  function sun(deg,color,filled,rd,r0,r1,sw){
+    var g=peekAt(deg);
+    el('circle',{r:rd,fill:filled?color:'none',stroke:color,'stroke-width':sw},g);
+    rays(g,0,0,r0,r1,[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5],color,sw);
+  }
+  sun(A(SUNRISE),C_SUNR,false,3.6,5.1,7.6,1.2);         /*  97.00deg — exact  */
+  sun(A(SUNSET)+NUDGE,C_SUNS,true,3.4,4.9,7.3,1.15);    /* 305.75deg — paired */
+
+  /* --- tides: four peeking wave glyphs, WATER BLUE, upright ----------------
+     Upright waves can't be "stood up" toward the water any more, so the glyph is
+     split into two parts that are anchored independently:
+
+       WAVES  — two horizontal crests, nudged 2.2px INWARD so the rim always
+                bites their inner tail (1.5–2.9px of water goes under the disc,
+                whichever hour the glyph lands on). That bite is what tucks them.
+       CHEVRON— nudged 6.3px OUTWARD, i.e. it always rides the exposed edge of
+                the glyph, whatever hour it lands on. Above the water at 22:24
+                and 04:01, below it at 10:22, beside it at 16:37 — but ALWAYS in
+                the clear, and always upright, so its direction is unambiguous.
+
+       HIGH — chevron points UP, taller/heavier stroke, crests at full amplitude
+              (±1.35) and set apart.
+       LOW  — chevron points DOWN, lighter stroke, crests almost flat (±0.7),
+              the second one carried at .55 so it half-dissolves under the rim.
+     Amplitude, chevron direction and stroke weight all carry the difference, so
+     it survives at 9px even where the rim eats a quarter of the glyph.        */
+  function tide(deg,high){
+    var g=peekAt(deg);
+    var sw=high?1.4:1.1, op=high?1:.9;
+    function path(d,parent,extra){
+      var a={fill:'none',stroke:C_TIDE,'stroke-width':sw,'stroke-linecap':'round',opacity:op,d:d};
+      if(extra)for(var j in extra)a[j]=extra[j];
+      el('path',a,parent);
+    }
+    var w=along(g,deg,-2.2);            /* water: tucked under        */
+    var c=along(g,deg, 6.3);            /* chevron: rides the edge    */
+    if(high){
+      path('M-3.8,-2 Q-1.9,-4.7 0,-2 Q1.9,0.7 3.8,-2',w);
+      path('M-3.8,1 Q-1.9,-1.7 0,1 Q1.9,3.7 3.8,1',w);
+      path('M-2.4,1.5 L0,-1.5 L2.4,1.5',c,{'stroke-linejoin':'round','stroke-width':1.5});
+    }else{
+      path('M-3.8,-0.6 Q-1.9,-2 0,-0.6 Q1.9,0.8 3.8,-0.6',w);
+      path('M-3.8,2 Q-1.9,0.6 0,2 Q1.9,3.4 3.8,2',w,{opacity:.55});
+      path('M-2.2,-1.5 L0,1.5 L2.2,-1.5',c,{'stroke-linejoin':'round','stroke-width':1.15});
+    }
+  }
+  TIDES.forEach(function(td){ tide(A(td.h),td.high); });
+
+  /* --- weather: partly cloudy (current condition) at midnight --------------
+     Sits at the very top, so the rim cuts a horizontal line across its BOTTOM.
+     The cluster is shifted down inside its own group by 4.0 (01c: 3.4) to keep
+     pace with the deeper peek: sun disc, its four rays and the whole upper
+     contour of the cloud stay above the cut; the cloud's underside goes under.
+     Cloud is an OPEN path filled with the paper ground, so the fill masks the
+     sun behind it and the stroke draws only the visible contour.              */
+  (function(){
+    var g=peekAt(0);
+    var b=el('g',{transform:'translate(1.6,4) scale(1.05)'},g);
+    el('circle',{cx:-4.8,cy:-6,r:2.4,fill:'none',stroke:C_BRASS,'stroke-width':1.1},b);
+    rays(b,-4.8,-6,3.4,4.9,[186,222,258,294],C_BRASS,1.05);
+    el('path',{d:'M-5.11,2.6 A3.2,3.2 0 0,1 -3.13,-3.48 A4.2,4.2 0 0,1 4.84,-3.17 A3,3 0 0,1 6.38,2.6',
+      fill:'#f3f1ec',stroke:C_CLOUD,'stroke-width':1.1,'stroke-linecap':'round','stroke-linejoin':'round'},b);
+  })();
+
+  /* --- weather: humidity droplet (63%) -------------------------------------
+     346deg: outward is up-and-slightly-left, so the pointed tip — the whole
+     identity of the glyph — is the part that clears the rim, and the bottom of
+     the bulb is what tucks under. Shifted down 0.6 to keep that bite.         */
+  (function(){
+    var g=peekAt(346);
+    var b=el('g',{transform:'translate(0,0.6) scale(1.08)'},g);
+    el('path',{d:'M0,-6.2 C3.3,-2 4.3,-0.2 4.3,1.5 A4.3,4.3 0 0,1 -4.3,1.5 C-4.3,-0.2 -3.3,-2 0,-6.2 Z',
+      fill:'none',stroke:C_WET,'stroke-width':1.1,'stroke-linejoin':'round'},b);
+  })();
+
+  /* --- weather: wind SE 15 -------------------------------------------------
+     27deg: outward is up-and-right. Top two gusts run clear; the lowest gust's
+     left end slides under the rim, which is exactly the reading we want.      */
+  (function(){
+    var g=peekAt(27);
+    var b=el('g',{transform:'translate(0,2.2) scale(1.15)'},g);
+    [['M-6.2,-4.9 Q-1,-6.6 4.4,-5.5'],
+     ['M-5.4,-1.6 Q-0.4,-3.3 5.2,-2.1'],
+     ['M-4.6,1.7 Q0,0.1 4.6,1.1']].forEach(function(d){
+      el('path',{d:d[0],fill:'none',stroke:C_CLOUD,'stroke-width':1.05,'stroke-linecap':'round'},b);
+    });
+  })();
+
+  /* =========================================================================
+     LAYER 2 — the disc. Opaque fill + soft shadow, painted OVER the glyphs.
+     ========================================================================= */
+  el('circle',{cx:CX,cy:CY,r:R_FACE,fill:'#fbfaf6','class':'facesh'});
+  el('circle',{cx:CX,cy:CY,r:R_FACE-0.5,fill:'none',stroke:'#e3dfd6','stroke-width':1});
+
+  /* =========================================================================
+     LAYER 3 — face furniture. No lettering here except the graduation and the
+     three numerals: the date has moved off the face and into the agenda header,
+     leaving a pure instrument.
+     ========================================================================= */
+
+  /* daylight arc: sunrise -> sunset (exact angles) */
+  arc(R_DAY,A(SUNRISE),A(SUNSET),{stroke:'#cfa53f','stroke-width':1.7,'stroke-linecap':'round',opacity:.92});
+
+  /* truth ticks: exact lunar moments + all four exact tide moments.
+     The tide ticks take the same water blue as their glyphs, so each wave out on
+     the rim is visibly wired to the minute it belongs to. */
+  mark(A(MOONSET),C_MOON,0.9,.55);
+  mark(A(MOONRISE),C_MOON,0.9,.55);
+  TIDES.forEach(function(td){
+    mark(A(td.h),C_TIDE,td.high?1.5:1,td.high?.7:.52,td.high?R_MK1:R_MKL);
+  });
+
+  /* tick graticule (half hours) */
+  for(var i=0;i<48;i++){
+    var a=i*7.5, hour=(i%2===0), card=(i%12===0);
+    var ri=card?87:(hour?93:97);
+    var p1=P(ri,a), p2=P(R_TOUT,a);
+    el('line',{x1:f(p1[0]),y1:f(p1[1]),x2:f(p2[0]),y2:f(p2[1]),
+      stroke:card?'#2b2a26':(hour?'#8f8c85':'#cbc7be'),
+      'stroke-width':card?2.1:(hour?1.05:0.8),
+      'stroke-linecap':card?'butt':'round'});
+  }
+
+  /* temperature graduation: every 4 hours, one consistent radius, just inside
+     the rim in the empty band between the tick tips and the truth ticks. Read
+     as instrument graduation, not labels — hence 9.2px in muted warm gray. */
+  TEMPS.forEach(function(t){
+    var p=P(R_GRAD,A(t[0]));
+    var e=el('text',{x:f(p[0]),y:f(p[1]),'text-anchor':'middle','dominant-baseline':'central','class':'grad'});
+    e.textContent=t[1]+'°';
+  });
+
+  /* numerals: 6 / 12 / 18 only */
+  [6,12,18].forEach(function(h){
+    var p=P(R_NUM,A(h));
+    var t=el('text',{x:f(p[0]),y:f(p[1]),'text-anchor':'middle','dominant-baseline':'central','class':'num'});
+    t.textContent=String(h);
+  });
+
+  /* calendar event arcs, in their own colours */
+  EVENTS.forEach(function(ev){
+    arc(R_ARC,A(ev.s),A(ev.e),{stroke:ev.c,'stroke-width':5,'stroke-linecap':'round'});
+  });
+
+  /* ---------- hand: 8:55 AM, short tapered blade, no tail ---------- */
+  (function(){
+    var t=A(NOW)*Math.PI/180;
+    var ux=Math.sin(t), uy=-Math.cos(t);      /* outward unit  */
+    var px=-uy, py=ux;                        /* perpendicular */
+    var b=3.2, wb=1.9, wt=0.55;
+    var bx=CX+ux*b, by=CY+uy*b, tx=CX+ux*R_HAND, ty=CY+uy*R_HAND;
+    var g=el('g',{'class':'handsh'});
+    el('path',{d:'M'+f(bx+px*wb)+','+f(by+py*wb)+
+                 ' L'+f(tx+px*wt)+','+f(ty+py*wt)+
+                 ' L'+f(tx-px*wt)+','+f(ty-py*wt)+
+                 ' L'+f(bx-px*wb)+','+f(by-py*wb)+' Z',
+      fill:'#17161a',stroke:'#17161a','stroke-width':0.6,'stroke-linejoin':'round'},g);
+    el('circle',{cx:CX,cy:CY,r:5.6,fill:'none',stroke:'#17161a','stroke-width':0.8,opacity:.13},g);
+    el('circle',{cx:CX,cy:CY,r:3.8,fill:'#17161a'},g);
+  })();
+
+  /* =========================================================================
+     LAYER 4 — the current readout, last so it never gets covered. It sits
+     OUTSIDE the rim, in the gap between the condition glyph and the wind
+     glyph, so it reads as that cluster's value rather than as face furniture.
+     ========================================================================= */
+  (function(){
+    var p=P(R_NOWT,A_NOWT);
+    var t=el('text',{x:f(p[0]),y:f(p[1]),'text-anchor':'middle','dominant-baseline':'central','class':'temp'});
+    t.textContent=NOW_TEMP;
+  })();
+})();
+</script>
+</body>
+</html>

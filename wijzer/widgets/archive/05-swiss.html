@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wijzer — 05 swiss</title>
+<style>
+  /* ============================================================
+     WIJZER · widget study 05 — SWISS
+     International Typographic Style. 364 x 382.
+     Grid: margins 18px, content width 328px,
+           4 columns of 82px -> x = 18 / 100 / 182 / 264.
+           328 / 24h = 13.6667 px per hour, so hours 6, 12, 18
+           land EXACTLY on columns 2, 3, 4. The time axis and the
+           typographic grid are the same grid.
+     ============================================================ */
+
+  html,body{margin:0;padding:0;overflow:hidden}
+  body{
+    width:364px;height:382px;
+    background:#e9e6df;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  .w{
+    position:absolute;left:0;top:0;width:364px;height:382px;
+    background:#fafafa;
+    border-radius:26px;
+    overflow:hidden;
+    font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"SF Pro Display",Helvetica,Arial,sans-serif;
+    color:#1c1c1c;
+    box-shadow:0 1px 2px rgba(40,36,28,.16), 0 8px 20px rgba(40,36,28,.10);
+    animation:in .22s ease-out both;
+  }
+  @keyframes in{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.w{animation:none}}
+
+  /* ---- rules ---- */
+  .r{position:absolute;left:18px;width:328px;height:1px;background:#1c1c1c}
+  .hr{position:absolute;left:18px;width:328px;height:1px;background:#e6e6e6}
+  .rr{position:absolute;left:18px;top:168px;width:328px;height:2px;background:#eb0000}
+  .vr{position:absolute;top:342px;width:1px;height:40px;background:#dedede}
+
+  /* ---- masthead ---- */
+  .brand{position:absolute;left:18px;top:12px;font-size:9px;line-height:10px;
+    font-weight:700;letter-spacing:.30em;color:#1c1c1c}
+  .kick{position:absolute;left:182px;top:12px;font-size:9px;line-height:10px;
+    font-weight:400;letter-spacing:.18em;color:#a2a2a2}
+
+  /* ---- headline ---- */
+  .big{position:absolute;left:18px;top:36px;display:flex;align-items:baseline;gap:9px}
+  .bt{font-size:62px;line-height:1;font-weight:500;letter-spacing:-.035em;color:#111}
+  .ba{font-size:15px;line-height:1;font-weight:500;letter-spacing:.08em;color:#4a4a4a}
+  .dow{position:absolute;left:182px;top:43px;font-size:9.5px;line-height:11px;
+    font-weight:700;letter-spacing:.13em;color:#1c1c1c;white-space:nowrap}
+  .doy{position:absolute;left:182px;top:58px;font-size:9px;line-height:11px;
+    font-weight:400;letter-spacing:.13em;color:#9a9a9a;white-space:nowrap}
+  .wx{position:absolute;left:182px;top:72px;display:flex;align-items:baseline;gap:7px}
+  .wv{font-size:21px;line-height:1;font-weight:500;letter-spacing:-.01em;color:#111}
+  .wl{font-size:9px;line-height:1;font-weight:600;letter-spacing:.09em;color:#9a9a9a;white-space:nowrap}
+
+  /* ---- 24-hour axis ---- */
+  .bar{position:absolute;top:109px;height:3px;background:#1c1c1c}
+  .ax{position:absolute;left:18px;top:118px;width:328px;height:1px;background:#1c1c1c}
+  .tk{position:absolute;top:119px;width:1px;height:3px;background:#c9c9c9}
+  .tk.mj{height:6px;background:#1c1c1c}
+  .cap{position:absolute;top:128px;width:1px;height:5px;background:#1c1c1c}
+  .day{position:absolute;top:130px;height:1px;background:#1c1c1c}
+  .hn{position:absolute;top:135px;font-size:9px;line-height:10px;
+    font-weight:400;letter-spacing:.08em;color:#9a9a9a}
+  .now{position:absolute;left:139px;top:106px;width:2px;height:26px;background:#eb0000}
+
+  /* ---- timetable ---- */
+  .row{position:absolute;left:18px;width:328px;height:17px;
+    padding-top:3px;box-sizing:border-box;display:flex;align-items:baseline;overflow:hidden}
+  .c1{flex:0 0 82px;font-size:10.5px;line-height:1;font-weight:500;
+    font-variant-numeric:tabular-nums;letter-spacing:0;white-space:nowrap}
+  .c2{flex:0 0 164px;font-size:10.5px;line-height:1;font-weight:500;
+    letter-spacing:.02em;white-space:nowrap}
+  .c4{flex:0 0 82px;font-size:9.5px;line-height:1;font-weight:400;
+    font-variant-numeric:tabular-nums;letter-spacing:.02em;color:#8e8e8e;white-space:nowrap}
+  .sec{font-size:9px;font-weight:400;letter-spacing:.02em;color:#a2a2a2;margin-left:6px}
+  .cal .c1,.cal .c2{color:#1c1c1c}
+  .alm .c1,.alm .c2{color:#7c7c7c;font-weight:400}
+  .alm .c2{letter-spacing:.06em}
+  .nxt .c1,.nxt .c2{font-weight:700;color:#111}
+  .past .c1,.past .c2,.past .c4{color:#bcbcbc;font-weight:400}
+  .past .c2{letter-spacing:.06em}
+
+  /* ---- footer metrics ---- */
+  .fv{position:absolute;top:350px;font-size:12.5px;line-height:14px;
+    font-weight:500;letter-spacing:-.005em;color:#1c1c1c;white-space:nowrap}
+  .fl{position:absolute;top:366px;font-size:9px;line-height:10px;
+    font-weight:600;letter-spacing:.10em;color:#8e8e8e;white-space:nowrap}
+  .moon{position:absolute;left:270px;top:350px;height:14px;
+    display:flex;align-items:center;gap:5px}
+  .moon span{font-size:12.5px;line-height:14px;font-weight:500;color:#1c1c1c}
+</style>
+</head>
+<body>
+<div class="w">
+
+  <div class="brand">WIJZER</div>
+  <div class="kick">24-HOUR ALMANAC</div>
+  <i class="r" style="top:28px"></i>
+
+  <div class="big"><span class="bt">8:55</span><span class="ba">AM</span></div>
+  <div class="dow">SUNDAY 2 AUGUST</div>
+  <div class="doy">DAY 214 OF 365</div>
+  <div class="wx"><span class="wv">72&deg;</span><span class="wl">PARTLY CLOUDY</span></div>
+  <i class="r" style="top:105px"></i>
+
+  <div id="axis"></div>
+  <i class="r" style="top:149px"></i>
+
+  <i class="rr"></i>
+  <div id="table"></div>
+  <i class="r" style="top:341px"></i>
+
+  <i class="vr" style="left:100px"></i>
+  <i class="vr" style="left:182px"></i>
+  <i class="vr" style="left:264px"></i>
+  <div class="fv" style="left:18px">UV 7</div>   <div class="fl" style="left:18px">HIGH</div>
+  <div class="fv" style="left:106px">63%</div>   <div class="fl" style="left:106px">HUMIDITY</div>
+  <div class="fv" style="left:188px">SE 15</div> <div class="fl" style="left:188px">WIND MPH</div>
+  <div class="moon">
+    <svg width="13" height="13" viewBox="-7 -7 14 14" aria-label="waning gibbous moon, 67% illuminated">
+      <circle r="6" fill="none" stroke="#c4c4c4" stroke-width="1"></circle>
+      <path d="M0,-6 A6,6 0 0,0 0,6 A2.04,6 0 0,0 0,-6 Z" fill="#1c1c1c"></path>
+    </svg>
+    <span>67%</span>
+  </div>
+  <div class="fl" style="left:270px">WANING</div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var L = 18, W = 328, PH = W / 24;          /* 13.666667 px per hour */
+  function X(h){ return Math.round(L + h * PH); }
+
+  /* ---------------- 24-hour axis ---------------- */
+  var axis = document.getElementById('axis'), out = [];
+
+  /* calendar events as flush bars above the axis */
+  [[9,10],[11,11.75],[14,15],[16.5,17],[18,19]].forEach(function(e){
+    var x0 = X(e[0]), x1 = X(e[1]);
+    out.push('<i class="bar" style="left:'+x0+'px;width:'+Math.max(x1-x0,4)+'px"></i>');
+  });
+
+  out.push('<i class="ax"></i>');
+
+  /* hour ticks; major at 0/6/12/18/24 */
+  for(var h=0; h<=24; h++){
+    var x = X(h); if(h===24) x -= 1;         /* keep the last tick inside the grid */
+    out.push('<i class="tk'+(h%6===0?' mj':'')+'" style="left:'+x+'px"></i>');
+  }
+
+  /* daylight span: sunrise 6:28 -> sunset 8:13 PM, drawn as a dimension line */
+  var sr = X(6 + 28/60), ss = X(20 + 13/60);
+  out.push('<i class="cap" style="left:'+sr+'px"></i>');
+  out.push('<i class="day" style="left:'+sr+'px;width:'+(ss-sr+1)+'px"></i>');
+  out.push('<i class="cap" style="left:'+ss+'px"></i>');
+
+  /* hour numerals — 00 flush left, 24 flush right, 06/12/18 centred on their ticks.
+     Two Helvetica figures at 9px measure exactly 10px of ink, so half is 5. */
+  out.push('<div class="hn" style="left:'+L+'px">00</div>');
+  [6,12,18].forEach(function(h){
+    out.push('<div class="hn" style="left:'+(X(h)-5)+'px">'+(h<10?'0':'')+h+'</div>');
+  });
+  out.push('<div class="hn" style="left:'+(L+W-10)+'px">24</div>');
+
+  /* the one loud thing: NOW at 8:55 */
+  out.push('<i class="now"></i>');
+  axis.innerHTML = out.join('');
+
+  /* ---------------- timetable ---------------- */
+  /* one row of history above the red now-rule, then the rest of the day */
+  var PAST = { t:'06:28', n:'SUNRISE',           s:'',        o:'−2:27' };
+  var ROWS = [
+    { t:'09:00', n:'TEAM STANDUP',      s:'–10:00', o:'+0:05',  k:'cal nxt' },
+    { t:'10:22', n:'HIGH TIDE',         s:'3.1 FT',      o:'+1:27',  k:'alm' },
+    { t:'11:00', n:'DENTIST',           s:'–11:45', o:'+2:05',  k:'cal' },
+    { t:'14:00', n:'LUNCH',             s:'–15:00', o:'+5:05',  k:'cal' },
+    { t:'16:30', n:'CALL MOM',          s:'',            o:'+7:35',  k:'cal' },
+    { t:'16:37', n:'LOW TIDE',          s:'0.4 FT',      o:'+7:42',  k:'alm' },
+    { t:'18:00', n:'DINNER WITH SARAH', s:'–19:00', o:'+9:05',  k:'cal' },
+    { t:'19:58', n:'MOONRISE',          s:'',            o:'+11:03', k:'alm' },
+    { t:'20:13', n:'SUNSET',            s:'',            o:'+11:18', k:'alm' },
+    { t:'22:24', n:'HIGH TIDE',         s:'3.2 FT',      o:'+13:29', k:'alm' }
+  ];
+
+  function row(d, top, cls){
+    return '<div class="row '+cls+'" style="top:'+top+'px">'
+         +   '<div class="c1">'+d.t+'</div>'
+         +   '<div class="c2">'+d.n+(d.s?'<span class="sec">'+d.s+'</span>':'')+'</div>'
+         +   '<div class="c4">'+d.o+'</div>'
+         + '</div>';
+  }
+
+  var t = [ row(PAST, 151, 'past') ];        /* 151 -> 168, red rule at 168 */
+  ROWS.forEach(function(d, i){
+    var top = 170 + i * 17;                  /* 170 -> 340 */
+    if(i > 0) t.push('<i class="hr" style="top:'+top+'px"></i>');
+    t.push(row(d, top, d.k));
+  });
+  document.getElementById('table').innerHTML = t.join('');
+})();
+</script>
+</body>
+</html>
