@@ -14,7 +14,7 @@
 <meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-experiments.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Experiments used to be expensive. Now they cost a weekend. 21 experiments, 7 shipped, 6 themes.">
+<meta property="og:image:alt" content="Experiments used to be expensive. Now they cost a weekend. 21 experiments, 8 shipped, 6 themes.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@ckluis">
 <meta name="twitter:creator" content="@ckluis">
@@ -132,6 +132,10 @@
   .sechero p{margin-top:22px;max-width:60ch;font-size:clamp(18px,1.6vw,21px);color:#3a342a;line-height:1.5}
 
   /* tech pills */
+  .tver{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.04em;color:var(--accent-ink);margin-left:9px;vertical-align:2px}
+  .tstats{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .tstats b{font-weight:600;font-size:15px;color:var(--ink);margin-right:2px}
+  .tstats i{width:3px;height:3px;border-radius:50%;background:var(--faint);flex:none}
   .spills{display:flex;gap:7px;flex-wrap:wrap}
   .spill{font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:var(--paper-deep);white-space:nowrap}
 
@@ -216,7 +220,7 @@
       barrier to trying something didn't move. <b>It disappeared.</b></p>
     <div class="herostats reveal d3">
       <div><div class="n">21</div><div class="l">Experiments</div></div>
-      <div><div class="n">7</div><div class="l">Shipped</div></div>
+      <div><div class="n">8</div><div class="l">Shipped</div></div>
       <div><div class="n">6</div><div class="l">Themes</div></div>
     </div>
     <a href="#substrate" class="cta reveal d4">See the experiments <span class="a">↓</span></a>
@@ -229,7 +233,7 @@
       <div class="r ember" style="width:71%"></div><div class="r" style="width:58%"></div>
       <div class="r" style="width:38%"></div>
     </div>
-    <div class="stat"><div class="big">21</div><div class="cap">experiments · 7 shipped</div></div>
+    <div class="stat"><div class="big">21</div><div class="cap">experiments · 8 shipped</div></div>
     <div class="whisper">The code is rows. A few of them run.</div>
   </div>
 </div></header>
@@ -443,13 +447,14 @@
         <div class="spills"><span class="spill">Prompts</span><span class="spill">Multi-agent</span><span class="spill">Claude</span></div>
         <div class="tlinks"><a href="https://ckluis.github.io/luminaryTeam/" target="_blank" rel="noopener">Live ↗</a><a href="https://github.com/ckluis/luminaryTeam" target="_blank" rel="noopener">Code ↗</a></div></div>
     </article>
-    <article class="tile reveal d1">
-      <a href="baton.html" class="tprimary" aria-label="baton"></a>
-      <div class="tshot"><div class="panel"><img src="previews/baton.png" alt="baton"></div></div>
-      <div class="tbody"><div class="ttop"><div class="tname">baton</div><span class="pill spec">Spec</span></div>
-        <p class="ttag">An orchestrator of orchestrators — one starter prompt that turns a fresh Fable session into a file-passing, tier-escalating, adversarially verified multi-agent run. Fill three lines, walk away.</p>
-        <div class="spills"><span class="spill">Prompt</span><span class="spill">Multi-agent</span><span class="spill">Fable</span></div>
-        <div class="tlinks"><a href="baton.html">Get the prompt →</a></div></div>
+    <article class="tile ship reveal d1">
+      <a href="https://ckluis.github.io/baton/" target="_blank" rel="noopener" class="tprimary" aria-label="baton — live"></a>
+      <div class="tshot"><div class="panel"><img src="previews/live-baton.png" alt="baton"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">baton<span class="tver">v2</span></div><span class="pill shipped">Shipped</span></div>
+        <p class="ttag">An orchestrator of orchestrators, rebuilt around what it costs. Say what you want in seven lines and it picks the mode, plans a graph, and routes every task to the cheapest model that can finish it — escalating one rung at a time, and asking before it spends the expensive one.</p>
+        <div class="tstats"><span><b>6</b> rungs</span><i></i><span><b>8</b> modes</span><i></i><span><b>28</b> personas</span></div>
+        <div class="spills"><span class="spill">Prompts</span><span class="spill">Multi-agent</span><span class="spill">Claude</span></div>
+        <div class="tlinks"><a href="https://ckluis.github.io/baton/" target="_blank" rel="noopener">Live ↗</a><a href="https://github.com/ckluis/baton" target="_blank" rel="noopener">Code ↗</a><a href="https://ckluis.github.io/baton/baton-v1.html" target="_blank" rel="noopener">v1 ↗</a></div></div>
     </article>
     <article class="tile reveal">
       <a href="nonprofitEventPlanner.html" class="tprimary" aria-label="nonprofitEventPlanner"></a>
