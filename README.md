@@ -30,6 +30,7 @@ and, where one exists, its source repository. Each spec links back to the index.
 | Tools | **senkani** — token compression for AI coding agents | Swift · macOS · MCP | Shipped | — | [live](https://ckluis.github.io/senkani) · [code](https://github.com/ckluis/senkani) |
 | Tools | **terminalHelper** — a searchable terminal command reference | Go · Bubble Tea · SQLite | Shipped | `terminalHelper.html` | [code](https://github.com/ckluis/terminalHelper) |
 | Tools | **luminaryTeam** — a 39-expert multi-agent technical review framework | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/luminaryTeam/) · [code](https://github.com/ckluis/luminaryTeam) |
+| Tools | **baton** — an orchestrator of orchestrators, routed by cost | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/baton/) · [code](https://github.com/ckluis/baton) |
 | Tools | **nonprofitEventPlanner** — run a whole youth trip from your phone | Rails 8 · Hotwire · Postgres | Local | `nonprofitEventPlanner.html` | private |
 | Tools | **customCMS** — BookEngine: one brain, many book storefronts | Go · SQLite · Claude | Local | `customCMS.html` | private |
 
@@ -43,4 +44,15 @@ for f in chord eigen fugue kern lui realbook regel samen streng taal customCMS n
 done
 ```
 
-External projects (no local spec) use hand-built inline SVG previews in `index.html`.
+External projects (no local spec) are shot from their live site into
+`previews/live-<name>.png`, or use hand-built inline SVG previews in `index.html`.
+
+The index's own social card is generated from `previews/_social-experiments-src.html`:
+
+```sh
+npx playwright screenshot --viewport-size=1200,630 --wait-for-timeout=3000 \
+  previews/_social-experiments-src.html previews/social-experiments.png
+```
+
+`baton.html` is a redirect stub — baton moved to its own repository, and the old
+URL is kept so existing links still land somewhere useful.
