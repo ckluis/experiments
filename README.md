@@ -19,6 +19,8 @@ and, where one exists, its source repository. Each spec links back to the index.
 | Substrate | **kern** — a homoiconic SaaS substrate | Lisp · Postgres | Spec | `kern.html` | — |
 | Substrate | **eigen** — a local-first hypermedia framework | Rust · Postgres | Spec | `eigen.html` | — |
 | Frameworks | **samen** — a governed B2B-SaaS foundry | Elixir · Ash · Oban · Postgres | Shipped | — | [live](https://ckluis.github.io/samen/) · [code](https://github.com/ckluis/samen) |
+| Frameworks | **cauldron** — a zero-dependency Common Lisp web framework, one binary | Common Lisp · SBCL | Archived | — | [code](https://github.com/ckluis/cauldron) |
+| Frameworks | **crucible-works** — a multi-tenant business platform on cauldron | Common Lisp · Postgres | Archived | — | [code](https://github.com/ckluis/crucible-works) |
 | Frameworks | **chord** — the omakase full-stack for G# | G# | Spec | `chord.html` | — |
 | Frameworks | **fugue** — the Phoenix of G#, on Orleans | G# · Orleans | Spec | `fugue.html` | — |
 | Frameworks | **realbook** — the WordPress of G#, with a gate | G# | Spec | `realbook.html` | — |
@@ -47,7 +49,7 @@ done
 
 External projects (no local spec) are shot from their live site into
 `previews/live-<name>.png`, or get a hand-built SVG in `previews/` (`stowork.svg`,
-`baton.svg`, `workflowForge.svg`) that draws the mechanism rather than the landing page.
+`baton.svg`, `workflowForge.svg`, `cauldron.svg`, `crucible-works.svg`) that draws the mechanism rather than the landing page.
 
 The index's own social card is generated from `previews/_social-experiments-src.html`:
 

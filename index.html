@@ -4,22 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Experiments — Chris Kluis</title>
-<meta name="description" content="A field index of 22 experiments by Chris Kluis — substrates, frameworks, languages, interfaces, tools, and design studies. Most built solo in spare hours, all in the open.">
+<meta name="description" content="A field index of 24 experiments by Chris Kluis — substrates, frameworks, languages, interfaces, tools, and design studies. Most built solo in spare hours, all in the open.">
 <link rel="canonical" href="https://ckluis.github.io/experiments/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ckluis / experiments">
 <meta property="og:url" content="https://ckluis.github.io/experiments/">
 <meta property="og:title" content="Experiments — Chris Kluis">
-<meta property="og:description" content="A field index of 22 experiments by Chris Kluis — substrates, frameworks, languages, interfaces, tools, and design studies. Most built solo in spare hours, all in the open.">
+<meta property="og:description" content="A field index of 24 experiments by Chris Kluis — substrates, frameworks, languages, interfaces, tools, and design studies. Most built solo in spare hours, all in the open.">
 <meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-experiments.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Experiments used to be expensive. Now they cost a weekend. 22 experiments, 9 shipped, 6 themes.">
+<meta property="og:image:alt" content="Experiments used to be expensive. Now they cost a weekend. 24 experiments, 9 shipped, 6 themes.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@ckluis">
 <meta name="twitter:creator" content="@ckluis">
 <meta name="twitter:title" content="Experiments — Chris Kluis">
-<meta name="twitter:description" content="A field index of 22 experiments by Chris Kluis — substrates, frameworks, languages, interfaces, tools, and design studies. Most built solo in spare hours, all in the open.">
+<meta name="twitter:description" content="A field index of 24 experiments by Chris Kluis — substrates, frameworks, languages, interfaces, tools, and design studies. Most built solo in spare hours, all in the open.">
 <meta name="twitter:image" content="https://ckluis.github.io/experiments/previews/social-experiments.png">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
     --ink:#1a160f; --muted:#6e6455; --faint:#a89c86;
     --line:#ddd3c1; --line-soft:#e7dfce;
     --accent:#6b4ec2; --accent-ink:#5540a3; --ember:#c56a3a;
-    --shipped:#3f7d55; --spec:#8a6d2f; --local:#9a5a3c;
+    --shipped:#3f7d55; --spec:#8a6d2f; --local:#9a5a3c; --archived:#6b6579;
     --display:"Fraunces","Charter",Georgia,serif;
     --body:"Inter","Helvetica Neue",system-ui,sans-serif;
     --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;
@@ -174,7 +174,10 @@
   .ttop{display:flex;align-items:center;justify-content:space-between;gap:12px}
   .tname{font-family:var(--display);font-weight:600;font-size:27px;letter-spacing:-.01em}
   .pill{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;border:1px solid currentColor;font-weight:500;white-space:nowrap}
-  .pill.shipped{color:var(--shipped)}.pill.spec{color:var(--spec)}.pill.local{color:var(--local)}
+  .pill.shipped{color:var(--shipped)}.pill.spec{color:var(--spec)}.pill.local{color:var(--local)}.pill.archived{color:var(--archived)}
+  .tline{display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .tline b{font-weight:600;color:var(--ink)}
+  .tline .arr{color:var(--faint)}
   .ttag{color:var(--muted);font-size:14.5px;line-height:1.5;flex:1}
   .tlinks{display:flex;gap:16px;margin-top:4px;padding-top:14px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:12.5px;font-weight:500}
   .tlinks a{color:var(--accent-ink);position:relative;z-index:3}.tlinks a:hover{text-decoration:underline}
@@ -219,21 +222,21 @@
       substrates, frameworks, languages, tools, and design studies, most built solo in spare hours. The
       barrier to trying something didn't move. <b>It disappeared.</b></p>
     <div class="herostats reveal d3">
-      <div><div class="n">22</div><div class="l">Experiments</div></div>
+      <div><div class="n">24</div><div class="l">Experiments</div></div>
       <div><div class="n">9</div><div class="l">Shipped</div></div>
       <div><div class="n">6</div><div class="l">Themes</div></div>
     </div>
     <a href="#substrate" class="cta reveal d4">See the experiments <span class="a">↓</span></a>
   </div>
   <div class="specimen reveal d2" aria-hidden="true">
-    <div class="lab"><span>FIELD INDEX · CK</span><span>SPECIMEN 00 / 22</span></div>
+    <div class="lab"><span>FIELD INDEX · CK</span><span>SPECIMEN 00 / 24</span></div>
     <div class="rows">
       <div class="r" style="width:82%"></div><div class="r" style="width:64%"></div>
       <div class="r hot" style="width:93%"></div><div class="r" style="width:47%"></div>
       <div class="r ember" style="width:71%"></div><div class="r" style="width:58%"></div>
       <div class="r" style="width:38%"></div>
     </div>
-    <div class="stat"><div class="big">22</div><div class="cap">experiments · 9 shipped</div></div>
+    <div class="stat"><div class="big">24</div><div class="cap">experiments · 9 shipped</div></div>
     <div class="whisper">The code is rows. A few of them run.</div>
   </div>
 </div></header>
@@ -305,7 +308,7 @@
   <div class="sechero">
     <div class="snum reveal">02 — Frameworks</div>
     <h2 class="reveal d1">Platforms to <em>build on.</em></h2>
-    <p class="reveal d2">Opinionated ways to ship products faster — a hypothetical G# ecosystem of full-stack frameworks, and one shipped foundry for launching many SaaS products on a single substrate.</p>
+    <p class="reveal d2">Opinionated ways to ship products faster — one shipped foundry for launching many SaaS products on a single substrate, a hypothetical G# ecosystem of full-stack frameworks, and a Lisp pair that went from first commit to archive in four days.</p>
   </div>
 
   <div class="feature reveal">
@@ -321,6 +324,24 @@
   </div>
 
   <div class="tiles">
+    <article class="tile reveal">
+      <a href="https://github.com/ckluis/cauldron" target="_blank" rel="noopener" class="tprimary" aria-label="cauldron — archived code"></a>
+      <div class="tshot"><div class="panel"><img src="previews/cauldron.svg" alt="cauldron — one sealed binary holding a whole web stack, nothing crossing in from outside"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">cauldron</div><span class="pill archived">Archived</span></div>
+        <p class="ttag">A whole web framework from zero dependencies in Common Lisp — HTTP server, Postgres wire protocol, crypto, a LiveView-style UI engine, an admin panel, and an agent system — shipped as one SBCL binary. No Quicklisp, no FFI, no C.</p>
+        <div class="tline"><span><b>Built</b> 17 Mar 2026</span><span><span class="arr">→</span> <b>Tested</b> 1,554 green</span><span><span class="arr">→</span> <b>Archived</b> 21 Mar 2026</span></div>
+        <div class="spills"><span class="spill">Common Lisp</span><span class="spill">SBCL</span><span class="spill">Zero deps</span><span class="spill">One binary</span></div>
+        <div class="tlinks"><a href="https://github.com/ckluis/cauldron" target="_blank" rel="noopener">Code ↗</a><a href="kern.html">kern took it further →</a></div></div>
+    </article>
+    <article class="tile reveal d1">
+      <a href="https://github.com/ckluis/crucible-works" target="_blank" rel="noopener" class="tprimary" aria-label="crucible-works — archived code"></a>
+      <div class="tshot"><div class="panel"><img src="previews/crucible-works.svg" alt="crucible-works — tenants standing on their own schema slices of one Postgres, on a cauldron foundation"></div></div>
+      <div class="tbody"><div class="ttop"><div class="tname">crucible-works</div><span class="pill archived">Archived</span></div>
+        <p class="ttag">A multi-tenant business platform built on cauldron to prove it could carry a real product — CRM, CMS, knowledge base, billing, and two agent runtimes on schema-per-tenant Postgres — archived with it once the point was made.</p>
+        <div class="tline"><span><b>Built</b> 17 Mar 2026</span><span><span class="arr">→</span> <b>Tested</b> 540 green</span><span><span class="arr">→</span> <b>Archived</b> 21 Mar 2026</span></div>
+        <div class="spills"><span class="spill">Common Lisp</span><span class="spill">On cauldron</span><span class="spill">Multi-tenant Postgres</span></div>
+        <div class="tlinks"><a href="https://github.com/ckluis/crucible-works" target="_blank" rel="noopener">Code ↗</a><a href="https://ckluis.github.io/samen/" target="_blank" rel="noopener">samen took it further ↗</a></div></div>
+    </article>
     <article class="tile reveal">
       <a href="chord.html" class="tprimary" aria-label="chord"></a>
       <div class="tshot"><div class="panel"><img src="previews/chord.png" alt="chord"></div></div>
