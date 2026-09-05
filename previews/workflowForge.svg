@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" role="img" aria-label="workflowForge — a pasted JSON workflow rendered as a DRAKON-style diagram on a sendable page: the happy path runs straight down the left edge, exceptions fan out to the right on lines that never cross, severity glyphs mark each branch, review dots sit beside each step, and a Continue-at chip closes a loop">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a140c"/><stop offset="1" stop-color="#0e0a05"/>
+    </linearGradient>
+    <radialGradient id="glowP" cx="14%" cy="8%" r="60%">
+      <stop offset="0" stop-color="#6b4ec2" stop-opacity=".34"/><stop offset="1" stop-color="#6b4ec2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowA" cx="94%" cy="100%" r="65%">
+      <stop offset="0" stop-color="#e6a15c" stop-opacity=".26"/><stop offset="1" stop-color="#e6a15c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fdfaf3"/><stop offset="1" stop-color="#f4ecdd"/>
+    </linearGradient>
+    <linearGradient id="paperBack" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e2d7c2"/><stop offset="1" stop-color="#cbbc9f"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e6dcff" stop-opacity=".24"/><stop offset=".45" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#e6a15c" stop-opacity=".18"/>
+    </linearGradient>
+    <filter id="softer" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="26"/></filter>
+  </defs>
+
+  <!-- ground -->
+  <rect width="1200" height="760" fill="url(#bg)"/>
+  <rect width="1200" height="760" fill="url(#glowP)"/>
+  <rect width="1200" height="760" fill="url(#glowA)"/>
+
+  <!-- ghosted JSON input, top-left, feeding the page -->
+  <g fill="#f2e9da">
+    <text x="40" y="150" font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="54" opacity=".3">{</text>
+    <g opacity=".17">
+      <rect x="64" y="172" width="70" height="7" rx="3.5"/>
+      <rect x="64" y="194" width="98" height="7" rx="3.5"/>
+      <rect x="82" y="216" width="60" height="7" rx="3.5"/>
+      <rect x="82" y="238" width="82" height="7" rx="3.5"/>
+      <rect x="82" y="260" width="44" height="7" rx="3.5"/>
+      <rect x="64" y="282" width="90" height="7" rx="3.5"/>
+      <rect x="82" y="304" width="72" height="7" rx="3.5"/>
+      <rect x="82" y="326" width="52" height="7" rx="3.5"/>
+      <rect x="64" y="348" width="40" height="7" rx="3.5"/>
+    </g>
+    <rect x="110" y="344" width="3" height="16" fill="#e6dcff" opacity=".85"/>
+    <text x="40" y="412" font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="54" opacity=".3">}</text>
+  </g>
+
+  <!-- shadow, then the second page peeking out behind -->
+  <rect x="196" y="72" width="820" height="720" rx="12" fill="#000" opacity=".6" filter="url(#softer)"/>
+  <rect x="204" y="60" width="812" height="720" rx="10" fill="url(#paperBack)"/>
+  <rect x="204" y="60" width="812" height="720" rx="10" fill="#0e0a05" opacity=".14"/>
+
+  <!-- the page -->
+  <rect x="180" y="36" width="812" height="724" rx="10" fill="url(#paper)"/>
+  <rect x="180" y="36" width="812" height="724" rx="10" fill="url(#sheen)"/>
+
+  <!-- sheet header: title, subtitle bar, legend, rule -->
+  <text x="226" y="92" font-family="'Fraunces', Georgia, serif" font-size="30" font-weight="600" fill="#1a160f">Ship a hotfix</text>
+  <rect x="228" y="102" width="150" height="4" rx="2" fill="#a59b8c"/>
+  <g font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="19" font-weight="700" text-anchor="middle">
+    <text x="846" y="92" fill="#7b5adc">&#9432;</text>
+    <text x="882" y="92" fill="#c9903a">&#9650;</text>
+    <text x="918" y="92" fill="#c56a3a">&#10007;</text>
+    <text x="954" y="92" fill="#3f8f62">&#10003;</text>
+  </g>
+  <line x1="226" y1="116" x2="954" y2="116" stroke="#1a160f" stroke-opacity=".14" stroke-width="1.5"/>
+  <!-- common-fate row guides: every shape sits on a shared row -->
+  <g stroke="#1a160f" stroke-opacity=".07" stroke-width="1.2" stroke-dasharray="3 7">
+    <line x1="226" y1="221" x2="954" y2="221"/>
+    <line x1="226" y1="299" x2="954" y2="299"/>
+    <line x1="226" y1="377" x2="954" y2="377"/>
+    <line x1="226" y1="455" x2="954" y2="455"/>
+    <line x1="226" y1="533" x2="954" y2="533"/>
+    <line x1="226" y1="611" x2="954" y2="611"/>
+    <line x1="226" y1="688" x2="954" y2="688"/>
+  </g>
+
+  <!-- ===== connectors (under the shapes) ===== -->
+  <!-- the skewer: happy path, straight down the left -->
+  <g stroke="#1a160f" stroke-width="3.4">
+    <line x1="330" y1="170" x2="330" y2="194"/>
+    <line x1="330" y1="248" x2="330" y2="272"/>
+    <line x1="330" y1="326" x2="330" y2="350"/>
+    <line x1="330" y1="404" x2="330" y2="428"/>
+    <line x1="330" y1="482" x2="330" y2="506"/>
+    <line x1="330" y1="560" x2="330" y2="584"/>
+    <line x1="330" y1="638" x2="330" y2="666"/>
+  </g>
+  <!-- failure branch from step 3 : far-right column -->
+  <polyline points="444,377 830,377 830,428" fill="none" stroke="#c56a3a" stroke-width="2.6" stroke-linejoin="round"/>
+  <line x1="830" y1="482" x2="830" y2="506" stroke="#c56a3a" stroke-width="2.6"/>
+  <line x1="830" y1="560" x2="830" y2="666" stroke="#c56a3a" stroke-width="2.6"/>
+  <!-- warning branch from step 5 : near column -->
+  <polyline points="444,533 580,533 580,584" fill="none" stroke="#c9903a" stroke-width="2.6" stroke-linejoin="round"/>
+  <line x1="580" y1="638" x2="580" y2="666" stroke="#c9903a" stroke-width="2.6"/>
+  <!-- info comment attached to step 4 -->
+  <line x1="430" y1="455" x2="470" y2="455" stroke="#7b5adc" stroke-width="2.2"/>
+
+  <!-- branch severity labels -->
+  <g font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="22" font-weight="700">
+    <text x="460" y="369" fill="#c56a3a">&#10007;</text>
+    <text x="460" y="525" fill="#c9903a">&#9650;</text>
+  </g>
+
+  <!-- ===== the spine shapes ===== -->
+  <rect x="250" y="126" width="160" height="44" rx="22" fill="#e3f2e8" stroke="#3f8f62" stroke-width="2"/>
+  <rect x="300" y="145" width="60" height="6" rx="3" fill="#1f5c3a"/>
+
+  <!-- 1 action -->
+  <rect x="230" y="194" width="200" height="54" rx="2" fill="#fffdf8" stroke="#1a160f" stroke-width="1.8"/>
+  <rect x="280" y="209" width="100" height="6" rx="3" fill="#1a160f"/>
+  <rect x="296" y="225" width="68" height="4" rx="2" fill="#a59b8c"/>
+
+  <!-- 2 input (parallelogram) -->
+  <polygon points="244,272 444,272 416,326 216,326" fill="#fffdf8" stroke="#1a160f" stroke-width="1.8" stroke-linejoin="round"/>
+  <rect x="272" y="287" width="116" height="6" rx="3" fill="#1a160f"/>
+  <rect x="290" y="303" width="80" height="4" rx="2" fill="#a59b8c"/>
+
+  <!-- 3 question (hexagon) -->
+  <polygon points="216,377 236,350 424,350 444,377 424,404 236,404" fill="#fbf1dc" stroke="#c9a35a" stroke-width="1.8" stroke-linejoin="round"/>
+  <rect x="284" y="365" width="92" height="6" rx="3" fill="#1a160f"/>
+  <rect x="300" y="381" width="60" height="4" rx="2" fill="#a59b8c"/>
+
+  <!-- 4 action -->
+  <rect x="230" y="428" width="200" height="54" rx="2" fill="#fffdf8" stroke="#1a160f" stroke-width="1.8"/>
+  <rect x="270" y="443" width="120" height="6" rx="3" fill="#1a160f"/>
+  <rect x="294" y="459" width="72" height="4" rx="2" fill="#a59b8c"/>
+
+  <!-- 5 question (hexagon) -->
+  <polygon points="216,533 236,506 424,506 444,533 424,560 236,560" fill="#fbf1dc" stroke="#c9a35a" stroke-width="1.8" stroke-linejoin="round"/>
+  <rect x="290" y="521" width="80" height="6" rx="3" fill="#1a160f"/>
+  <rect x="302" y="537" width="56" height="4" rx="2" fill="#a59b8c"/>
+
+  <!-- 6 output (parallelogram) -->
+  <polygon points="244,584 444,584 416,638 216,638" fill="#fffdf8" stroke="#1a160f" stroke-width="1.8" stroke-linejoin="round"/>
+  <rect x="276" y="599" width="108" height="6" rx="3" fill="#1a160f"/>
+  <rect x="292" y="615" width="76" height="4" rx="2" fill="#a59b8c"/>
+
+  <!-- spine end pill -->
+  <rect x="250" y="666" width="160" height="44" rx="22" fill="#e3f2e8" stroke="#3f8f62" stroke-width="2"/>
+  <rect x="290" y="685" width="80" height="6" rx="3" fill="#1f5c3a"/>
+
+  <!-- ===== branch shapes ===== -->
+  <!-- info comment (squircle) on step 4 -->
+  <rect x="470" y="437" width="132" height="36" rx="12" fill="#ece6fb" stroke="#7b5adc" stroke-width="1.8"/>
+  <text x="490" y="463" font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="19" font-weight="700" fill="#7b5adc">&#9432;</text>
+  <rect x="512" y="452" width="74" height="5" rx="2.5" fill="#5a4a8c"/>
+
+  <!-- 3a failure box -->
+  <rect x="730" y="428" width="200" height="54" rx="2" fill="#f8e4d8" stroke="#c56a3a" stroke-width="1.8"/>
+  <rect x="774" y="443" width="112" height="6" rx="3" fill="#1a160f"/>
+  <rect x="792" y="459" width="76" height="4" rx="2" fill="#a59b8c"/>
+  <!-- 3a.2 failure output -->
+  <polygon points="744,506 944,506 916,560 716,560" fill="#f8e4d8" stroke="#c56a3a" stroke-width="1.8" stroke-linejoin="round"/>
+  <rect x="780" y="521" width="100" height="6" rx="3" fill="#1a160f"/>
+  <rect x="796" y="537" width="68" height="4" rx="2" fill="#a59b8c"/>
+  <!-- 3a end pill: failed -->
+  <rect x="750" y="666" width="160" height="44" rx="22" fill="#fffdf8" stroke="#c56a3a" stroke-width="2"/>
+  <text x="830" y="697" font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="26" font-weight="700" fill="#c56a3a" text-anchor="middle">&#10007;</text>
+
+  <!-- 5a warning output -->
+  <polygon points="494,584 694,584 666,638 466,638" fill="#fbf1dc" stroke="#c9a35a" stroke-width="1.8" stroke-linejoin="round"/>
+  <rect x="524" y="599" width="112" height="6" rx="3" fill="#1a160f"/>
+  <rect x="542" y="615" width="76" height="4" rx="2" fill="#a59b8c"/>
+  <!-- Continue-at chip -->
+  <rect x="482" y="666" width="196" height="44" rx="22" fill="#fbf1dc" stroke="#c9a35a" stroke-width="2"/>
+  <text x="506" y="696" font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="22" fill="#8a6420">&#8617;</text>
+  <text x="596" y="695" font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="19" font-weight="700" fill="#1a160f" text-anchor="middle">Continue at 3</text>
+
+  <!-- ===== step ids ===== -->
+  <g font-family="'JetBrains Mono', ui-monospace, Menlo, monospace" font-size="16" font-weight="700" fill="#3f8f62">
+    <text x="232" y="188">1</text>
+    <text x="232" y="266">2</text>
+    <text x="232" y="344">3</text>
+    <text x="232" y="422">4</text>
+    <text x="232" y="500">5</text>
+    <text x="232" y="578">6</text>
+    <text x="732" y="422">3a</text>
+    <text x="732" y="500">3a.2</text>
+    <text x="470" y="578">5a</text>
+  </g>
+
+  <!-- ===== review-state dots: verified / disputed / unverified ===== -->
+  <g stroke-width="1.8">
+    <circle cx="208" cy="221" r="7" fill="#6ee0a0" stroke="#3f8f62"/>
+    <circle cx="208" cy="299" r="7" fill="#6ee0a0" stroke="#3f8f62"/>
+    <circle cx="208" cy="377" r="7" fill="none" stroke="#7b7266"/>
+    <circle cx="208" cy="455" r="7" fill="#6ee0a0" stroke="#3f8f62"/>
+    <circle cx="208" cy="533" r="7" fill="#c56a3a" stroke="#9c4f27"/>
+    <circle cx="208" cy="611" r="7" fill="none" stroke="#7b7266"/>
+  </g>
+</svg>

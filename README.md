@@ -26,11 +26,12 @@ and, where one exists, its source repository. Each spec links back to the index.
 | Languages | **streng** — a closed-world TypeScript | TypeScript · native compiler | Spec | `streng.html` | — |
 | Interfaces | **lui** — a layout-first UI framework | UI framework · AI sidecar | Spec | `lui.html` | — |
 | Interfaces | **uiExplorer** — the UI Lab, provenance-first UI experiments | HTML/CSS · zero-dep · AI | Shipped | — | [live](https://ckluis.github.io/uiExplorer/) · [code](https://github.com/ckluis/uiExplorer) |
+| Tools | **workflowForge** — paste a workflow, get a page you can send | Single-file HTML · SVG · bring your own model | Shipped | — | [live](https://ckluis.github.io/workflowForge/) · [code](https://github.com/ckluis/workflowForge) |
 | Tools | **aiCRO** — a full growth engagement from one URL | Node.js · Claude | Shipped | — | [live](https://ckluis.github.io/aiCRO/) · [code](https://github.com/ckluis/aiCRO) |
 | Tools | **senkani** — token compression for AI coding agents | Swift · macOS · MCP | Shipped | — | [live](https://ckluis.github.io/senkani) · [code](https://github.com/ckluis/senkani) |
 | Tools | **terminalHelper** — a searchable terminal command reference | Go · Bubble Tea · SQLite | Shipped | `terminalHelper.html` | [code](https://github.com/ckluis/terminalHelper) |
-| Tools | **luminaryTeam** — a 39-expert multi-agent technical review framework | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/luminaryTeam/) · [code](https://github.com/ckluis/luminaryTeam) |
-| Tools | **baton** — an orchestrator of orchestrators, routed by cost | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/baton/) · [code](https://github.com/ckluis/baton) |
+| Tools | **luminaryTeam** — a 40-expert multi-agent technical review framework | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/luminaryTeam/) · [code](https://github.com/ckluis/luminaryTeam) |
+| Tools | **baton** v3.1 — an orchestrator of orchestrators, routed by cost | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/baton/) · [code](https://github.com/ckluis/baton) · [v2](https://ckluis.github.io/baton/baton-v2.html) · [v1](https://ckluis.github.io/baton/baton-v1.html) |
 | Tools | **nonprofitEventPlanner** — run a whole youth trip from your phone | Rails 8 · Hotwire · Postgres | Local | `nonprofitEventPlanner.html` | private |
 | Tools | **customCMS** — BookEngine: one brain, many book storefronts | Go · SQLite · Claude | Local | `customCMS.html` | private |
 
@@ -45,7 +46,8 @@ done
 ```
 
 External projects (no local spec) are shot from their live site into
-`previews/live-<name>.png`, or use hand-built inline SVG previews in `index.html`.
+`previews/live-<name>.png`, or get a hand-built SVG in `previews/` (`stowork.svg`,
+`baton.svg`, `workflowForge.svg`) that draws the mechanism rather than the landing page.
 
 The index's own social card is generated from `previews/_social-experiments-src.html`:
 
