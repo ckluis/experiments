@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bocht — a backend in one Bend binary, and the curve its tests missed</title>
+<meta name="description" content="A case study: a full backend framework written as one Bend program, an MCP-only CMS built on it, and the quadratic slowdown that 43 passing tests never saw. One function fixed — 1,200× faster at 48 KB, with zero behavior change.">
+<link rel="canonical" href="https://ckluis.github.io/experiments/bocht/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ckluis / experiments">
+<meta property="og:url" content="https://ckluis.github.io/experiments/bocht/">
+<meta property="og:title" content="bocht — a backend in one Bend binary, and the curve its tests missed">
+<meta property="og:description" content="43 of 43 tests passed. The server still froze for two minutes. A case study in building a framework with one AI and checking it with another.">
+<meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-bocht.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="bocht — request time bending upward with post size before the fix, flat after it: 126 seconds to 0.105 seconds at 48 KB.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ckluis">
+<meta name="twitter:creator" content="@ckluis">
+<meta name="twitter:title" content="bocht — a backend in one Bend binary, and the curve its tests missed">
+<meta name="twitter:description" content="43 of 43 tests passed. The server still froze for two minutes. A case study in building a framework with one AI and checking it with another.">
+<meta name="twitter:image" content="https://ckluis.github.io/experiments/previews/social-bocht.png">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f9f4ea; --paper-deep:#f1eadd; --card:#fdfaf3;
+    --ink:#1a160f; --ink-2:#3a342a; --muted:#6e6455; --faint:#a89c86;
+    --line:#ddd3c1; --line-soft:#e7dfce;
+    --accent:#6b4ec2; --accent-ink:#5540a3; --ember:#c56a3a;
+    --dark:#120d07; --dark-2:#1b140c; --cream:#f2e9da;
+    --before:#e8894d; --before-ink:#a4501f; --v2:#c9a6a0; --after:#62d99c; --after-ink:#2f7a52;
+    --display:"Fraunces","Charter",Georgia,serif;
+    --body:"Inter","Helvetica Neue",system-ui,sans-serif;
+    --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+  a{color:inherit}
+  img,svg{display:block;max-width:100%}
+  ::selection{background:rgba(107,78,194,.18)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,5vw,64px)}
+  .narrow{max-width:760px}
+  .mono{font-family:var(--mono)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+  b,strong{font-weight:600}
+
+  .reveal{transition:opacity .9s cubic-bezier(.2,.7,.3,1),transform .9s cubic-bezier(.2,.7,.3,1)}
+  html.js .reveal{opacity:0;transform:translateY(22px)}
+  html.js .reveal.in{opacity:1;transform:none}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+
+  /* ===== back chip ===== */
+  .xa-back{position:fixed;left:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:7px;
+    font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.02em;color:#1c1811;background:#fbf7ee;
+    border:1px solid #d9cfbd;border-radius:100px;padding:8px 15px;text-decoration:none;
+    box-shadow:0 6px 20px -8px rgba(28,24,17,.4);transition:transform .18s ease,box-shadow .18s ease}
+  .xa-back:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(28,24,17,.55)}
+  .xa-back .xa-arrow{transition:transform .18s ease}
+  .xa-back:hover .xa-arrow{transform:translateX(-2px)}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;overflow:hidden;color:var(--cream);padding:clamp(64px,9vw,112px) 0 clamp(56px,7vw,88px);
+    background:radial-gradient(70% 60% at 12% 8%,rgba(107,78,194,.34),transparent 60%),radial-gradient(60% 70% at 95% 100%,rgba(232,137,77,.26),transparent 60%),linear-gradient(160deg,#1a130b,#0e0a05);
+    background-size:140% 140%;animation:drift 26s ease-in-out infinite}
+  .hero .wrap{display:grid;grid-template-columns:1fr 1.08fr;gap:clamp(28px,4.5vw,64px);align-items:center}
+  @media(max-width:920px){.hero .wrap{grid-template-columns:1fr}}
+  .hero .eyebrow{color:rgba(242,233,218,.62);margin-bottom:22px}
+  .hero .eyebrow::before{content:"";display:inline-block;width:26px;height:1.5px;background:var(--before);vertical-align:middle;margin-right:12px;margin-bottom:4px}
+  .hero h1{font-family:var(--display);font-weight:600;font-size:clamp(64px,10vw,132px);line-height:.86;letter-spacing:-.035em}
+  .hero h1 .def{display:block;font-family:var(--mono);font-weight:400;font-size:13px;letter-spacing:.06em;color:rgba(242,233,218,.5);margin-top:18px;line-height:1.5}
+  .hero .tag{font-family:var(--display);font-size:clamp(24px,2.7vw,34px);line-height:1.18;letter-spacing:-.01em;margin-top:26px;max-width:18ch}
+  .hero .tag em{color:var(--before);font-style:italic}
+  .hero .lede{margin-top:20px;max-width:48ch;color:rgba(242,233,218,.78);font-size:clamp(16px,1.35vw,18.5px)}
+  .hstats{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:14px 30px;margin-top:30px}
+  @media(max-width:520px){.hstats{grid-template-columns:repeat(2,auto)}}
+  .hstats div{min-width:0}
+  .hstats .n{font-weight:800;font-size:28px;letter-spacing:-.02em;line-height:1;color:#fff}
+  .hstats .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,233,218,.5);margin-top:6px}
+
+  .scope{position:relative;border-radius:22px;padding:22px 22px 16px;background:linear-gradient(165deg,rgba(255,255,255,.055),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.1);box-shadow:0 50px 100px -50px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.07)}
+  .scope .lab{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,233,218,.45);margin-bottom:6px}
+  .scope svg{width:100%;height:auto}
+  .scope .big{position:absolute;left:15%;top:17%}
+  @media(max-width:620px){.scope .big{position:static;margin:6px 0 2px}.scope .lab{flex-wrap:wrap}}
+  .scope .big .x{font-weight:800;font-size:clamp(46px,6vw,76px);line-height:.9;letter-spacing:-.04em;color:#fff}
+  .scope .big .c{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,233,218,.55);margin-top:8px;max-width:22ch;line-height:1.5}
+  .axis text,.scope text{font-family:var(--mono);font-size:11px;fill:rgba(242,233,218,.5)}
+  .gridl{stroke:rgba(255,255,255,.07);stroke-width:1}
+  .c-before{fill:none;stroke:var(--before);stroke-width:3.2;stroke-linecap:round;filter:drop-shadow(0 0 10px rgba(232,137,77,.55))}
+  .c-after{fill:none;stroke:var(--after);stroke-width:3.2;stroke-linecap:round;filter:drop-shadow(0 0 8px rgba(98,217,156,.6))}
+  html.js .draw{stroke-dasharray:1400;stroke-dashoffset:1400;animation:ink 2.4s cubic-bezier(.3,.6,.2,1) .35s forwards}
+  html.js .draw.late{animation-delay:1.3s}
+  @keyframes ink{to{stroke-dashoffset:0}}
+  @keyframes drift{0%,100%{background-position:0% 0%}50%{background-position:100% 100%}}
+
+  .jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px}
+  .jump a{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-decoration:none;color:rgba(242,233,218,.78);border:1px solid rgba(242,233,218,.2);border-radius:100px;padding:6px 13px;background:rgba(255,255,255,.03);transition:border-color .18s,color .18s}
+  .jump a:hover{border-color:rgba(242,233,218,.55);color:#fff}
+
+  /* ===== summary strip ===== */
+  .strip{border-bottom:1px solid var(--line);background:var(--paper-deep)}
+  .strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  @media(max-width:820px){.strip .wrap{grid-template-columns:1fr 1fr}}
+  .strip .cell{padding:26px 22px 24px 0;border-right:1px solid var(--line)}
+  .strip .cell:last-child{border-right:0}
+  @media(max-width:820px){.strip .cell:nth-child(2n){border-right:0}.strip .cell{padding:20px 14px 18px 0}}
+  .strip .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .strip .v{font-family:var(--display);font-size:clamp(19px,1.9vw,24px);line-height:1.2;margin-top:8px;letter-spacing:-.01em}
+
+  /* ===== sections ===== */
+  section.sec{padding:clamp(72px,9vw,124px) 0;position:relative}
+  section.sec.alt{background:linear-gradient(180deg,var(--paper),#f4ecdd)}
+  section.sec.dark{background:linear-gradient(170deg,#17110a,#0f0b06);color:var(--cream)}
+  .sh{margin-bottom:clamp(34px,4.5vw,56px)}
+  .sh .num{font-family:var(--mono);font-size:13px;letter-spacing:.2em;color:var(--ember)}
+  .dark .sh .num{color:var(--before)}
+  .sh h2{font-family:var(--display);font-weight:600;font-size:clamp(36px,5.4vw,72px);line-height:1;letter-spacing:-.02em;margin-top:16px;max-width:18ch}
+  .sh h2 em{font-style:italic;color:var(--muted);font-weight:400}
+  .dark .sh h2 em{color:rgba(242,233,218,.5)}
+  .sh p{margin-top:20px;max-width:62ch;font-size:clamp(17px,1.5vw,20px);color:var(--ink-2);line-height:1.55}
+  .dark .sh p{color:rgba(242,233,218,.78)}
+  .prose p{max-width:66ch;color:var(--ink-2);margin-top:16px}
+  .prose p:first-child{margin-top:0}
+  .dark .prose p{color:rgba(242,233,218,.78)}
+  code{font-family:var(--mono);font-size:.86em;background:var(--paper-deep);border:1px solid var(--line-soft);border-radius:5px;padding:1px 6px;white-space:nowrap}
+  .dark code,.binary code,.panel code{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:#fff}
+  .note{font-size:14px;color:var(--muted);margin-top:14px;max-width:70ch}
+  .dark .note{color:rgba(242,233,218,.5)}
+
+  /* architecture */
+  .arch{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(22px,3.5vw,48px);align-items:start}
+  @media(max-width:900px){.arch{grid-template-columns:1fr}}
+  .binary{position:relative;border-radius:22px;padding:22px;background:linear-gradient(160deg,#1c150c,#100b06);border:1px solid rgba(255,255,255,.08);box-shadow:0 40px 80px -46px rgba(20,16,9,.85);color:var(--cream)}
+  .binary .bh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .binary .bh .t{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,233,218,.6)}
+  .binary .bh .s{font-family:var(--mono);font-size:11.5px;color:var(--after)}
+  .layer{display:grid;grid-template-columns:118px 1fr;gap:14px;align-items:start;padding:13px 14px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);margin-top:8px}
+  @media(max-width:520px){.layer{grid-template-columns:1fr;gap:4px}}
+  .layer .ln{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#d7c8ff;padding-top:2px}
+  .layer .ld{font-size:14.5px;line-height:1.5;color:rgba(242,233,218,.82)}
+  .layer .ld b{color:#fff}
+  .layer.store{background:rgba(98,217,156,.06);border-color:rgba(98,217,156,.22)}
+  .layer.store .ln{color:var(--after)}
+  .flow{height:14px;margin:0 0 0 64px;border-left:1.5px dashed rgba(242,233,218,.22)}
+  .disk{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  .disk span{font-family:var(--mono);font-size:11px;color:rgba(242,233,218,.7);border:1px dashed rgba(242,233,218,.25);border-radius:7px;padding:4px 9px}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fact{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:18px 18px 16px}
+  .fact .n{font-weight:800;font-size:30px;letter-spacing:-.02em;line-height:1}
+  .fact .l{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.45}
+  .honest{margin-top:14px;border:1px solid #e6cfa6;background:#fbf1de;border-radius:16px;padding:18px 20px}
+  .honest h4{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a5a1c;margin-bottom:8px}
+  .honest ul{margin-left:18px;font-size:14.5px;color:var(--ink-2)}
+  .honest li{margin-top:5px}
+
+  /* process */
+  .method{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:8px}
+  @media(max-width:900px){.method{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.method{grid-template-columns:1fr}}
+  .mstep{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:16px 16px 18px;position:relative}
+  .mstep .i{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ember)}
+  .mstep h4{font-family:var(--display);font-size:21px;font-weight:600;margin-top:6px;letter-spacing:-.01em}
+  .mstep p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .verdict{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:760px){.verdict{grid-template-columns:1fr}}
+  .vbox{border-radius:16px;padding:18px 20px;border:1px solid var(--line)}
+  .vbox.good{background:#eef5ee;border-color:#cfe3d4}
+  .vbox.gap{background:#fbf0e6;border-color:#efd3bb}
+  .vbox h4{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .vbox.good h4{color:var(--after-ink)}.vbox.gap h4{color:var(--before-ink)}
+  .vbox ul{margin:10px 0 0 18px;font-size:14.5px;color:var(--ink-2)}
+  .vbox li{margin-top:5px}
+
+  .timeline{position:relative;margin-top:clamp(40px,5vw,64px)}
+  .timeline::before{content:"";position:absolute;left:15px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent),var(--before),var(--after-ink))}
+  .tl{position:relative;padding:0 0 30px 52px}
+  .tl:last-child{padding-bottom:0}
+  .tl .dot{position:absolute;left:6px;top:4px;width:20px;height:20px;border-radius:50%;background:var(--paper);border:2px solid var(--accent)}
+  .tl.r1 .dot{border-color:var(--ink)} .tl.r2 .dot{border-color:var(--before)} .tl.r3 .dot{border-color:var(--after-ink);background:#e3f3e8}
+  .tl .when{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .tl h4{font-family:var(--display);font-size:clamp(21px,2.1vw,26px);font-weight:600;letter-spacing:-.01em;margin-top:4px}
+  .tl p{max-width:64ch;color:var(--ink-2);margin-top:6px;font-size:16px}
+  .tl .who{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid currentColor;border-radius:100px;padding:2px 9px;margin-left:8px;vertical-align:3px}
+  .who.b{color:var(--accent-ink)} .who.c{color:var(--after-ink)} .who.h{color:var(--ember)}
+
+  /* cms */
+  .cms{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(22px,3.5vw,48px);align-items:start}
+  @media(max-width:920px){.cms{grid-template-columns:1fr}}
+  .tools{border:1px solid var(--line);border-radius:18px;background:var(--card);overflow:hidden}
+  .tools .row{display:grid;grid-template-columns:minmax(0,190px) 1fr;gap:14px;padding:12px 18px;border-top:1px solid var(--line-soft);font-size:14.5px}
+  .tools .row:first-child{border-top:0;background:var(--paper-deep);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .tools .row code{white-space:normal;word-break:break-all}
+  @media(max-width:520px){.tools .row{grid-template-columns:1fr;gap:4px}}
+  .term{border-radius:18px;background:#0f0b06;border:1px solid rgba(255,255,255,.08);box-shadow:0 40px 80px -46px rgba(20,16,9,.85);overflow:hidden}
+  .term .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.07)}
+  .term .bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.14)}
+  .term .bar span{margin-left:8px;font-family:var(--mono);font-size:11px;color:rgba(242,233,218,.45);letter-spacing:.06em}
+  .term pre{margin:0;padding:16px 18px 18px;font-family:var(--mono);font-size:12.5px;line-height:1.62;color:rgba(242,233,218,.86);white-space:pre-wrap;word-break:break-word}
+  .term .q{color:#d7c8ff}.term .a{color:var(--after)}.term .e{color:var(--before)}.term .m{color:rgba(242,233,218,.4)}
+  .uses{margin-top:18px;display:grid;gap:10px}
+  .use{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:15px;color:var(--ink-2)}
+  .use .ck{width:20px;height:20px;border-radius:6px;background:#e3f3e8;color:var(--after-ink);font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:2px}
+
+  /* curve section (dark) */
+  .chart{border-radius:22px;padding:clamp(16px,2.5vw,26px);background:linear-gradient(165deg,rgba(255,255,255,.05),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.09)}
+  .chart svg{width:100%;height:auto}
+  .chart text{font-family:var(--mono);font-size:12px;fill:rgba(242,233,218,.55)}
+  .legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:12px;font-family:var(--mono);font-size:12px;color:rgba(242,233,218,.75)}
+  .legend span::before{content:"";display:inline-block;width:18px;height:3px;border-radius:2px;margin-right:8px;vertical-align:middle}
+  .legend .lb::before{background:var(--before)} .legend .l2::before{background:repeating-linear-gradient(90deg,var(--v2) 0 5px,transparent 5px 9px)} .legend .la::before{background:var(--after)}
+  .legend .lg::before{background:rgba(242,233,218,.3)}
+  .dtable{width:100%;border-collapse:collapse;margin-top:26px;font-family:var(--mono);font-size:13px}
+  .dtable th,.dtable td{padding:9px 10px;text-align:right;border-bottom:1px solid rgba(255,255,255,.08);white-space:nowrap}
+  .dtable th:first-child,.dtable td:first-child{text-align:left}
+  .dtable th{font-weight:500;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,233,218,.45)}
+  .dtable td{color:rgba(242,233,218,.82)}
+  .dtable .b{color:var(--before)} .dtable .v{color:var(--v2)} .dtable .f{color:var(--after)}
+  .scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,3vw,36px);margin-top:clamp(40px,5vw,64px)}
+  @media(max-width:900px){.two{grid-template-columns:1fr}}
+  .two>*,.arch>*,.cms>*,.hero .wrap>*{min-width:0}
+  .panel{border-radius:18px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);padding:20px 20px 18px}
+  .panel h3{font-family:var(--display);font-size:24px;font-weight:600;letter-spacing:-.01em;color:#fff}
+  .panel p{font-size:15px;color:rgba(242,233,218,.74);margin-top:8px}
+  .code{margin-top:14px;border-radius:12px;background:#0a0704;border:1px solid rgba(255,255,255,.07);padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.65;color:rgba(242,233,218,.8);overflow-x:auto;white-space:pre}
+  .code .k{color:#d7c8ff}.code .c{color:rgba(242,233,218,.38)}.code .bad{color:var(--before)}.code .good{color:var(--after)}
+  .code .del{display:block;background:rgba(232,137,77,.09);margin:0 -16px;padding:0 16px}
+  .code .add{display:block;background:rgba(98,217,156,.08);margin:0 -16px;padding:0 16px}
+  .prof .row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-top:9px;font-family:var(--mono);font-size:12px;color:rgba(242,233,218,.8)}
+  .prof .barw{grid-column:1 / -1;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+  .prof .barw i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--before),#f3b184)}
+  .prof .row.cold .barw i{background:rgba(242,233,218,.25)}
+
+  /* regressions table (paper) */
+  .rtable{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .rtable th,.rtable td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  .rtable th{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--paper-deep)}
+  .rtable tr:last-child td{border-bottom:0}
+  .rtable .ok{color:var(--after-ink)} .rtable .bad{color:var(--before-ink);font-weight:600}
+  .rtable td:first-child{color:var(--ink-2);min-width:250px}
+  .rtable td{min-width:130px}
+  @media(max-width:700px){
+    .rtable,.rtable tbody,.rtable tr,.rtable td{display:block;width:100%}
+    .rtable tr:first-child{display:none}
+    .rtable tr{border-bottom:1px solid var(--line)}
+    .rtable tr:last-child{border-bottom:0}
+    .rtable td{min-width:0;border-bottom:0;padding:4px 16px}
+    .rtable td:first-child{padding-top:14px;min-width:0;color:var(--ink)}
+    .rtable td:last-child{padding-bottom:14px}
+    .rtable td[data-l]::before{content:attr(data-l);display:inline-block;width:112px;font-weight:500;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  }
+
+  /* proof tiles */
+  .proofs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:980px){.proofs{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.proofs{grid-template-columns:1fr}}
+  .proof{border-radius:20px;border:1px solid var(--line);background:var(--card);padding:22px 20px 20px;display:flex;flex-direction:column}
+  .proof .n{font-weight:800;font-size:clamp(34px,3.6vw,46px);letter-spacing:-.03em;line-height:1}
+  .proof .n small{font-size:.5em;font-weight:600;color:var(--muted);letter-spacing:0}
+  .proof h4{font-family:var(--display);font-size:20px;font-weight:600;margin-top:12px;letter-spacing:-.01em}
+  .proof p{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.5;flex:1}
+  .proof .src{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:12px}
+  .proof.hl{border-color:rgba(47,122,82,.45);background:linear-gradient(170deg,#f1f8f2,var(--card))}
+  .notproved{margin-top:16px;border:1px dashed var(--line);border-radius:16px;padding:16px 20px;font-size:14.5px;color:var(--ink-2)}
+  .notproved b{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;font-weight:500}
+
+  /* lessons */
+  .lessons{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:980px){.lessons{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){.lessons{grid-template-columns:1fr}}
+  .lesson{border-radius:20px;padding:24px 22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09)}
+  .lesson .i{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--before)}
+  .lesson h3{font-family:var(--display);font-size:clamp(22px,2.2vw,27px);line-height:1.12;font-weight:600;margin-top:10px;color:#fff;letter-spacing:-.01em}
+  .lesson p{font-size:15px;color:rgba(242,233,218,.72);margin-top:10px}
+
+  /* footer */
+  .foot{padding:clamp(64px,8vw,104px) 0 90px;background:var(--paper-deep);border-top:1px solid var(--line)}
+  .foot h2{font-family:var(--display);font-size:clamp(30px,4vw,48px);font-weight:600;letter-spacing:-.02em;line-height:1.05;max-width:22ch}
+  .foot h2 em{color:var(--muted);font-weight:400}
+  .credits{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+  @media(max-width:820px){.credits{grid-template-columns:1fr}}
+  .credit{border-top:2px solid var(--ink);padding-top:12px}
+  .credit .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .credit p{font-size:15px;color:var(--ink-2);margin-top:6px}
+  .foot .links{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+  .foot .links a{font-family:var(--mono);font-size:13px;text-decoration:none;border:1px solid var(--ink);border-radius:100px;padding:10px 18px;transition:background .18s,color .18s}
+  .foot .links a:hover{background:var(--ink);color:var(--paper)}
+  .foot .fine{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:34px;max-width:90ch;line-height:1.6}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    html.js .reveal{opacity:1!important;transform:none!important}
+    html.js .draw{stroke-dasharray:none!important;stroke-dashoffset:0!important}
+  }
+</style>
+</head>
+<body>
+
+<a href="../index.html" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow reveal">Case study · Frameworks · Sept 2026</div>
+      <h1 class="reveal d1">bocht<span class="def">/bɔxt/ · Dutch, noun — a bend, a curve</span></h1>
+      <p class="tag reveal d2">A whole backend in one Bend binary — and the <em>curve</em> its own tests never saw.</p>
+      <p class="lede reveal d2">An AI app builder wrote a backend framework as a single Bend program, then built
+        an MCP-only CMS on top of it and verified it 43 for 43. I handed the bundle to Claude Code to check.
+        It reproduced every claim, and found a quadratic slowdown that let one blog post freeze the server
+        for two minutes. The builder's fix made it worse. The real fix was one function.</p>
+      <div class="hstats reveal d3">
+        <div><div class="n">9,598</div><div class="l">lines of Bend</div></div>
+        <div><div class="n">1</div><div class="l">native binary</div></div>
+        <div><div class="n">43/43</div><div class="l">tests, every version</div></div>
+        <div><div class="n">1</div><div class="l">function fixed</div></div>
+      </div>
+      <nav class="jump reveal d3" aria-label="Sections">
+        <a href="#framework">01 Framework</a><a href="#process">02 Process</a><a href="#cms">03 The CMS</a><a href="#curve">04 The curve</a><a href="#proof">05 Proof</a><a href="#lessons">06 Lessons</a>
+      </nav>
+    </div>
+
+    <figure class="scope reveal d2" aria-label="Chart: time to save one post versus post size. Before the fix the time bends sharply upward to 126 seconds at 48 KB; after the fix it stays flat near zero, 0.105 seconds.">
+      <div class="lab"><span>Time to save one post</span><span>measured · M-series Mac</span></div>
+      <svg viewBox="0 0 600 380" role="img" aria-hidden="true">
+        <g class="axis">
+          <line class="gridl" x1="40" y1="330" x2="570" y2="330"/>
+          <line class="gridl" x1="40" y1="238" x2="570" y2="238"/>
+          <line class="gridl" x1="40" y1="146" x2="570" y2="146"/>
+          <line class="gridl" x1="40" y1="53.1" x2="570" y2="53.1"/>
+          <text x="8" y="334">0 s</text><text x="4" y="242">40 s</text><text x="4" y="150">80 s</text><text x="0" y="57">120 s</text>
+          <text x="36" y="356">0</text><text x="136" y="356">8 KB</text><text x="243" y="356">16 KB</text><text x="349" y="356">24 KB</text><text x="455" y="356">32 KB</text><text x="528" y="356">48 KB</text>
+        </g>
+        <path class="c-before draw" d="M40.0,330.0 C41.8,330.0 47.1,330.0 50.6,330.0 C54.1,329.9 55.9,329.9 61.2,329.9 C66.5,329.8 71.8,329.8 82.4,329.5 C93.0,329.3 103.6,329.4 124.8,328.2 C146.0,327.0 181.3,325.0 209.6,322.4 C237.9,319.9 266.1,317.2 294.4,312.8 C322.7,308.4 350.9,307.5 379.2,295.9 C407.5,284.3 435.7,286.0 464.0,243.1 C492.3,200.3 534.7,72.8 548.8,38.8"/>
+        <path class="c-after draw late" d="M40,326 L548.8,325.2"/>
+        <circle cx="548.8" cy="38.8" r="5" fill="#e8894d"/>
+        <circle cx="548.8" cy="325.2" r="5" fill="#62d99c"/>
+        <text x="444" y="30" style="fill:#e8894d">before · 126.2 s</text>
+        <text x="420" y="314" style="fill:#62d99c">after · 0.105 s</text>
+      </svg>
+      <div class="big"><div class="x">1,200×</div><div class="c">faster at 48 KB · same answers, byte for byte</div></div>
+    </figure>
+  </div>
+</header>
+
+<!-- ============================ STRIP ============================ -->
+<div class="strip"><div class="wrap">
+  <div class="cell"><div class="k">The framework</div><div class="v">Storage, auth, rate limits, HTTP and MCP in one process</div></div>
+  <div class="cell"><div class="k">The example</div><div class="v">A blog CMS whose only interface is seven MCP tools</div></div>
+  <div class="cell"><div class="k">The miss</div><div class="v">Save time grew with the square of post size</div></div>
+  <div class="cell"><div class="k">The fix</div><div class="v">One strict branch made lazy. Zero behavior change.</div></div>
+</div></div>
+
+<!-- ============================ 01 FRAMEWORK ============================ -->
+<section class="sec" id="framework"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">01 — The framework</div>
+    <h2 class="reveal d1">One process. <em>No sidecars.</em></h2>
+    <p class="reveal d2">Bocht is a backend framework written as one <a href="https://bend-lang.com" target="_blank" rel="noopener">Bend</a> program. Bend compiles it to C, clang compiles that to a single native binary, and that binary is the whole service: no database process, no reverse proxy, no queue. Everything a request touches lives in the same address space.</p>
+  </div>
+
+  <div class="arch">
+    <div class="binary reveal" role="img" aria-label="Request path inside the single binary, from socket to disk">
+      <div class="bh"><span class="t">Inside the binary · request path</span><span class="s">1.97 MB · arm64 · builds in ~25 s</span></div>
+      <div class="layer"><div class="ln">Socket</div><div class="ld"><b>HTTP/1.1 with keep-alive</b> — 100 requests per connection, 64 KB body cap, clean 400/411/413/431 on malformed input.</div></div>
+      <div class="flow"></div>
+      <div class="layer"><div class="ln">Auth</div><div class="ld"><b>Bearer keys</b> scoped to a tenant and a role (admin or member), with rotate and revoke endpoints. No token, no parsing: a 401 comes back before the body is read as JSON.</div></div>
+      <div class="flow"></div>
+      <div class="layer"><div class="ln">Limits</div><div class="ld"><b>Per-credential rate limits</b>, plus separate budgets for key management and admin restarts. Bursts get a 429, not a crash.</div></div>
+      <div class="flow"></div>
+      <div class="layer"><div class="ln">Router</div><div class="ld"><b>20 routes</b>: keys, users, articles, claps, publications, members and an event feed over REST — and <code>POST /mcp</code> for the CMS.</div></div>
+      <div class="flow"></div>
+      <div class="layer store"><div class="ln">Store</div><div class="ld"><b>Segmented write-ahead log</b> (64 MiB segments, fsync'd) plus <b>snapshots</b> whose trailer binds the record count and an HMAC. A forged or truncated snapshot is refused at boot.</div></div>
+      <div class="disk"><span>wal/active/seg-000001.wal</span><span>wal/archive/2026/09/…</span><span>bocht.snapshot</span></div>
+    </div>
+
+    <div>
+      <div class="facts">
+        <div class="fact reveal"><div class="n">1,505</div><div class="l">definitions and 22 types in one source file</div></div>
+        <div class="fact reveal d1"><div class="n">12</div><div class="l">custom C effects for fsync, directory ops, socket timeouts and HMAC</div></div>
+        <div class="fact reveal"><div class="n">SHA-256</div><div class="l">implemented in pure Bend, not linked in</div></div>
+        <div class="fact reveal d1"><div class="n">0</div><div class="l">proofs — Bend can check them; Bocht doesn't write any</div></div>
+      </div>
+      <div class="honest reveal">
+        <h4>Honest limits</h4>
+        <ul>
+          <li>Single node. No replication, sharding or consensus.</li>
+          <li>The log survives the process dying, not the power going out.</li>
+          <li>One request at a time. A slow request blocks every client — which is why the curve in section 04 mattered.</li>
+          <li>Bend moves fast: the builder reports breaking changes in every release from 2.0.18 to 2.0.34, and the pinned r61 release doesn't build on 2.0.34 (confirmed).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================ 02 PROCESS ============================ -->
+<section class="sec alt" id="process"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">02 — The process</div>
+    <h2 class="reveal d1">Built by one AI. <em>Checked by another.</em></h2>
+    <p class="reveal d2">I didn't write Bocht. I directed an AI app builder that wrote it, and it worked under a verification discipline worth stealing: no claim ships unless it can be re-derived from files on disk.</p>
+  </div>
+
+  <div class="method">
+    <div class="mstep reveal"><div class="i">1 · Probe</div><h4>Every capability has a script</h4><p>Each one ends with one canonical line: <code>RESULT: PASS=n FAIL=0</code>. No line, no claim.</p></div>
+    <div class="mstep reveal d1"><div class="i">2 · Manifest</div><h4>Results bound to a binary</h4><p>A stamp script writes the exact binary's SHA-256 next to every result file it produced.</p></div>
+    <div class="mstep reveal d2"><div class="i">3 · Verify</div><h4>A second script audits the ledger</h4><p>Source hash, binary hash, build exit code and manifest must all agree before "done" is written.</p></div>
+    <div class="mstep reveal d3"><div class="i">4 · Canary</div><h4>The pinned build is watched</h4><p>A read-only backup and a hash sidecar are checked hourly against the live binary.</p></div>
+    <div class="mstep reveal d3"><div class="i">5 · Ledger rule</div><h4>Never say "flawless"</h4><p>Verified claims only. Never production-ready, clustered, replicated or bug-free.</p></div>
+  </div>
+
+  <div class="verdict">
+    <div class="vbox good reveal"><h4>What the discipline got right</h4><ul>
+      <li>Every hash in the bundle matched its README.</li>
+      <li>The 43-test suite reproduced on a different OS and CPU.</li>
+      <li>By the builder's account, its own first run caught a real protocol bug: the tool name read from the wrong object.</li>
+      <li>Writes survived <code>kill -9</code>: 303 of 303 acknowledged writes, and 20 of 20 single-write cycles.</li>
+    </ul></div>
+    <div class="vbox gap reveal d1"><h4>What it can't see</h4><ul>
+      <li>A manifest proves which binary produced a log. It doesn't prove the log tested the right things.</li>
+      <li>All 43 checks used tiny payloads. Nothing timed a realistic post.</li>
+      <li>The suite passed on every version — including the one where a read deleted a post.</li>
+      <li>The shipped verifier needed a ledger file that wasn't in the bundle, so it couldn't be run.</li>
+    </ul></div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl reveal"><div class="dot"></div><div class="when">28 Sep · r61 pinned</div>
+      <h4>The framework hardens <span class="who b">builder</span></h4>
+      <p>The builder reports a 200-item hardening campaign landing on release r61: WAL purge tombstones, snapshot HMAC, per-bucket rate limits, keep-alive half-close handling. One of the 200 items ships in the bundle (27 checks, all pass).</p></div>
+    <div class="tl reveal"><div class="dot"></div><div class="when">29 Sep · morning</div>
+      <h4>The CMS goes on top, additively <span class="who b">builder</span></h4>
+      <p>Per the builder, the MCP blog is appended as one marked section without touching existing lines. It is verified 43/43, then upgraded to Bend 2.0.34 and re-verified.</p></div>
+    <div class="tl r1 reveal"><div class="dot"></div><div class="when">Round 1 · evaluate</div>
+      <h4>Every claim reproduces. Then the curve. <span class="who c">Claude Code</span></h4>
+      <p>Hashes match, it builds on macOS in 26 seconds, 43/43 passes. Forty extra checks mostly hold — then one timing sweep shows a 16 KB post taking 3 seconds, and a 32 KB post blocking every other client for 33.</p></div>
+    <div class="tl r2 reveal"><div class="dot"></div><div class="when">Round 2 · the builder's fix</div>
+      <h4>"O(n²) fixed." It wasn't. <span class="who b">builder</span></h4>
+      <p>The "deep fix" removed a depth check from the JSON key finder and skipped several validations. Same speed on the same machine. Seven behaviors changed; one turned a read into a delete. Still 43/43.</p></div>
+    <div class="tl r3 reveal"><div class="dot"></div><div class="when">Round 3 · the real fix</div>
+      <h4>Profile, fix one function, prove nothing else moved <span class="who c">Claude Code</span></h4>
+      <p>Start again from the version that behaved correctly. Sample the process mid-request, find the hot function, apply the pattern the codebase already uses elsewhere, then replay 90 requests against old and new and diff every byte.</p></div>
+  </div>
+</div></section>
+
+<!-- ============================ 03 CMS ============================ -->
+<section class="sec" id="cms"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">03 — The example app</div>
+    <h2 class="reveal d1">The interface <em>is</em> the app.</h2>
+    <p class="reveal d2">The proof that Bocht is a framework and not just one service: a second application built on it. A blog CMS with no web UI at all. Its entire surface is seven MCP tools on <code>POST /mcp</code>, JSON-RPC 2.0, designed to be driven by an LLM client.</p>
+  </div>
+
+  <div class="cms">
+    <div>
+      <div class="tools reveal">
+        <div class="row"><div>Tool</div><div>What it does</div></div>
+        <div class="row"><div><code>blog_create_post</code></div><div>Create a draft: title, body, tags</div></div>
+        <div class="row"><div><code>blog_list_posts</code></div><div>List posts by status: draft, published or all</div></div>
+        <div class="row"><div><code>blog_get_post</code></div><div>Fetch one post by id</div></div>
+        <div class="row"><div><code>blog_update_post</code></div><div>Change title, body or tags</div></div>
+        <div class="row"><div><code>blog_publish_post</code></div><div>Draft → published</div></div>
+        <div class="row"><div><code>blog_unpublish_post</code></div><div>Published → draft</div></div>
+        <div class="row"><div><code>blog_delete_post</code></div><div>Remove a post</div></div>
+      </div>
+      <div class="uses">
+        <div class="use reveal"><span class="ck">✓</span><div><b>Same storage.</b> Posts are records in the framework's WAL and snapshots, so they survive restarts with no extra code.</div></div>
+        <div class="use reveal"><span class="ck">✓</span><div><b>Same keys.</b> The Bearer keys and roles that guard the REST API guard every tool call.</div></div>
+        <div class="use reveal"><span class="ck">✓</span><div><b>Same server.</b> One more route in the router; keep-alive, limits and error shapes come free.</div></div>
+        <div class="use reveal"><span class="ck">✓</span><div><b>Strict protocol.</b> The full JSON-RPC error range from <code>-32700</code> to <code>-32602</code>; unknown tools and missing posts are tool errors, not transport failures.</div></div>
+      </div>
+    </div>
+
+    <figure class="term reveal d1" aria-label="A real exchange with the fixed server">
+      <div class="bar"><i></i><i></i><i></i><span>POST /mcp · captured from the fixed build</span></div>
+<pre><span class="m"># initialize</span>
+<span class="q">→ {"jsonrpc":"2.0","id":1,"method":"initialize",
+   "params":{"protocolVersion":"2025-06-18"}}</span>
+<span class="a">← {"result":{"protocolVersion":"2025-06-18",
+   "capabilities":{"tools":{}},
+   "serverInfo":{"name":"bocht-fresh-blog","version":"0.1.0"}}}</span>
+
+<span class="m"># create a draft</span>
+<span class="q">→ {"method":"tools/call","params":{"name":"blog_create_post",
+   "arguments":{"title":"Hello, MCP",
+     "body":"The interface is the app.","tags":["mcp","meta"]}}}</span>
+<span class="a">← {"id":"p1","author":"k_0","title":"Hello, MCP",
+   "tags":["mcp","meta"],"status":"draft", …}</span>
+
+<span class="m"># publish it</span>
+<span class="q">→ {"method":"tools/call","params":{"name":"blog_publish_post",
+   "arguments":{"id":"p1"}}}</span>
+<span class="a">← {"id":"p1", …, "status":"published"}</span>
+
+<span class="m"># a post that isn't there: a tool error, not a crash</span>
+<span class="q">→ {"name":"blog_get_post","arguments":{"id":"p9"}}</span>
+<span class="e">← {"content":[{"text":"{\"error\":\"not_found\",\"id\":\"p9\"}"}],
+   "isError":true}</span>
+
+<span class="m"># no token</span>
+<span class="e">← 401 {"error":"unauthorized","_hint":"See GET /help for the API."}</span></pre>
+    </figure>
+  </div>
+  <p class="note reveal">Responses trimmed for width; the full bodies are in the evaluation scripts. The builder also wrote a 101-post blog through these tools as a dogfooding exercise. That run wasn't repeated here.</p>
+</div></section>
+
+<!-- ============================ 04 CURVE ============================ -->
+<section class="sec dark" id="curve"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">04 — The curve</div>
+    <h2 class="reveal d1">Double the post, <em>quadruple the wait.</em></h2>
+    <p class="reveal d2">On a log–log chart, a straight line's slope tells you the algorithm. Slope one means time grows with size. Slope two means it grows with the square. The original and the builder's "fix" climb at slope two, steepening further past 32 KB. The fixed build runs at slope one — the same line REST was always on.</p>
+  </div>
+
+  <figure class="chart reveal" aria-label="Log-log chart of time to save one post against post size for three builds. The original and the builder's fix rise steeply at about slope two, reaching 126 and 152 seconds at 48 KB. The fixed build rises at slope one, reaching 0.13 seconds at 60 KB.">
+    <svg viewBox="0 0 760 420" role="img" aria-hidden="true">
+      <g>
+        <line class="gridl" x1="70" y1="324.1" x2="730" y2="324.1"/><line class="gridl" x1="70" y1="258.4" x2="730" y2="258.4"/>
+        <line class="gridl" x1="70" y1="192.7" x2="730" y2="192.7"/><line class="gridl" x1="70" y1="127" x2="730" y2="127"/><line class="gridl" x1="70" y1="61.3" x2="730" y2="61.3"/>
+        <line class="gridl" x1="70" y1="30" x2="70" y2="370"/><line class="gridl" x1="180" y1="30" x2="180" y2="370"/><line class="gridl" x1="290" y1="30" x2="290" y2="370"/><line class="gridl" x1="400" y1="30" x2="400" y2="370"/><line class="gridl" x1="510" y1="30" x2="510" y2="370"/><line class="gridl" x1="620" y1="30" x2="620" y2="370"/><line class="gridl" x1="730" y1="30" x2="730" y2="370"/>
+        <text x="16" y="328">10 ms</text><text x="12" y="262">100 ms</text><text x="40" y="197">1 s</text><text x="32" y="131">10 s</text><text x="24" y="65">100 s</text>
+        <text x="56" y="394">1 KB</text><text x="166" y="394">2 KB</text><text x="276" y="394">4 KB</text><text x="386" y="394">8 KB</text><text x="492" y="394">16 KB</text><text x="602" y="394">32 KB</text><text x="712" y="394">64 KB</text>
+        <text x="330" y="414" style="fill:rgba(242,233,218,.38)">post body size (log scale)</text>
+      </g>
+      <line x1="70" y1="360.4" x2="730" y2="241.8" stroke="rgba(242,233,218,.22)" stroke-width="1.2" stroke-dasharray="3 5"/>
+      <line x1="70" y1="314.5" x2="730" y2="77.2" stroke="rgba(242,233,218,.22)" stroke-width="1.2" stroke-dasharray="3 5"/>
+      <text x="628" y="246" style="fill:rgba(242,233,218,.4)">slope 1</text>
+      <text x="560" y="116" style="fill:rgba(242,233,218,.4)" transform="rotate(-19 560 116)">slope 2</text>
+      <path d="M70.0,302.3 L180.0,275.5 L290.0,238.2 L400.0,200.3 L510.0,161.9 L574.3,139.7 L620.0,118.3 L655.4,84.0 L684.3,49.3" fill="none" stroke="#c9a6a0" stroke-width="2.4" stroke-dasharray="7 6"/>
+      <path class="c-before draw" d="M70.0,303.3 L180.0,275.6 L290.0,238.7 L400.0,199.6 L510.0,158.8 L574.3,135.4 L620.0,115.9 L655.4,89.2 L684.3,54.7"/>
+      <path class="c-after draw late" d="M70.0,356.6 L180.0,341.1 L290.0,324.7 L400.0,306.7 L510.0,287.7 L574.3,276.5 L620.0,268.7 L655.4,262.2 L684.3,256.9 L719.8,250.4"/>
+      <g fill="#e8894d"><circle cx="70" cy="303.3" r="3.5"/><circle cx="180" cy="275.6" r="3.5"/><circle cx="290" cy="238.7" r="3.5"/><circle cx="400" cy="199.6" r="3.5"/><circle cx="510" cy="158.8" r="3.5"/><circle cx="574.3" cy="135.4" r="3.5"/><circle cx="620" cy="115.9" r="3.5"/><circle cx="655.4" cy="89.2" r="3.5"/><circle cx="684.3" cy="54.7" r="3.5"/></g>
+      <g fill="#62d99c"><circle cx="70" cy="356.6" r="3.5"/><circle cx="180" cy="341.1" r="3.5"/><circle cx="290" cy="324.7" r="3.5"/><circle cx="400" cy="306.7" r="3.5"/><circle cx="510" cy="287.7" r="3.5"/><circle cx="574.3" cy="276.5" r="3.5"/><circle cx="620" cy="268.7" r="3.5"/><circle cx="655.4" cy="262.2" r="3.5"/><circle cx="684.3" cy="256.9" r="3.5"/><circle cx="719.8" cy="250.4" r="3.5"/></g>
+      <text x="580" y="44" style="fill:#e8894d">126 s</text><text x="694" y="46" style="fill:#c9a6a0">152 s</text><text x="664" y="286" style="fill:#62d99c">0.13 s</text>
+    </svg>
+    <div class="legend"><span class="lb">original (v1)</span><span class="l2">builder's "deep fix" (v2)</span><span class="la">fixed</span><span class="lg">reference slopes</span></div>
+  </figure>
+
+  <div class="scrollx reveal">
+    <table class="dtable">
+      <tr><th>Body size</th><th>1 KB</th><th>4 KB</th><th>8 KB</th><th>16 KB</th><th>24 KB</th><th>32 KB</th><th>40 KB</th><th>48 KB</th><th>60 KB</th></tr>
+      <tr><td class="b">original</td><td>0.021 s</td><td>0.199 s</td><td>0.787 s</td><td>3.28 s</td><td>7.45 s</td><td>14.8 s</td><td>37.6 s</td><td>126.2 s</td><td>—</td></tr>
+      <tr><td class="v">builder's fix</td><td>0.022 s</td><td>0.203 s</td><td>0.766 s</td><td>2.94 s</td><td>6.41 s</td><td>13.6 s</td><td>45.1 s</td><td>152.3 s</td><td>—</td></tr>
+      <tr><td class="f">fixed</td><td>0.003 s</td><td>0.010 s</td><td>0.018 s</td><td>0.036 s</td><td>0.053 s</td><td>0.070 s</td><td>0.088 s</td><td>0.105 s</td><td>0.133 s</td></tr>
+    </table>
+  </div>
+  <p class="note reveal">Each cell is one <code>blog_create_post</code> call on the same Mac, measured with <code>eval/sweep.py</code>; fixed-build cells are the best of three. The server caps request bodies at 64 KB, so 60 KB is the largest post the service accepts.</p>
+
+  <div class="two">
+    <div class="panel reveal">
+      <h3>Where the time went</h3>
+      <p>Four seconds of macOS <code>sample</code> on the original server while it handled one <code>tools/list</code> request padded to 24 KB. Almost every sample sat in one JSON helper and the string-building it triggered.</p>
+      <div class="prof">
+        <div class="row"><span>jf_raw_go <span style="color:rgba(242,233,218,.45)">+ the frees it triggers</span></span><span>52%</span><div class="barw"><i style="width:52%"></i></div></div>
+        <div class="row"><span>String.from_list</span><span>33%</span><div class="barw"><i style="width:33%"></i></div></div>
+        <div class="row"><span>jf_raw_go (continuation frames)</span><span>11%</span><div class="barw"><i style="width:11%"></i></div></div>
+        <div class="row cold"><span>everything else</span><span>4%</span><div class="barw"><i style="width:4%"></i></div></div>
+      </div>
+      <p style="margin-top:14px"><code>jf_raw_go</code> reads unquoted JSON values like numbers. Every MCP request uses it once, to read the JSON-RPC <code>"id": 1</code>. REST never calls it on a post body, which is why REST stayed fast.</p>
+    </div>
+    <div class="panel reveal d1">
+      <h3>Why a one-character id cost two minutes</h3>
+      <p>In Bend, <code>Bool.pick(cond, a, b)</code> is an ordinary function: both <code>a</code> and <code>b</code> are evaluated before it picks one. So at every character, the helper rebuilt the whole string read so far <em>and</em> kept going — past the end of the number, through the rest of the body.</p>
+<div class="code"><span class="c"># before: both branches run at every character</span>
+<span class="del"><span class="bad">Bool.pick</span>(String, jf_raw_end(h),
+  <span class="bad">String.from_list(List.reverse(acc))</span>,  <span class="c"># O(k) each time</span>
+  jf_raw_go(t, h &lt;&gt; acc))                 <span class="c"># never stops</span></span>
+<span class="c"># after: carry the stop flag in, match on it (lazy)</span>
+<span class="add"><span class="k">match</span> hit:
+  <span class="k">case</span> True{}:  <span class="good">jf_raw_fin(acc)</span>          <span class="c"># built once</span>
+  <span class="k">case</span> False{}: jf_raw_go(t, h &lt;&gt; acc, jf_raw_end(h))</span></div>
+      <p style="margin-top:12px">The file already documented this trap and used the fix in its string scanner. This one helper had been missed. 22 lines added, 6 removed.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================ REGRESSIONS ============================ -->
+<section class="sec alt" id="regressions"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">04b — The builder's fix</div>
+    <h2 class="reveal d1">Faster on paper. <em>Wrong in practice.</em></h2>
+    <p class="reveal d2">The builder went after the balanced-bracket extractor, not the function that was actually slow. It deleted a depth guard from the JSON key finder, and skipped validations "for performance." Every key lookup started matching the first key with that name at any depth — including in the REST API it had promised not to touch. None of these changed a single test result.</p>
+  </div>
+  <div class="scrollx reveal">
+    <table class="rtable">
+      <tr><th>Request</th><th>Original</th><th>Builder's fix</th><th>Fixed</th></tr>
+      <tr><td><code>blog_get_post</code> whose arguments, listed before the tool name, include <code>"name":"blog_delete_post"</code></td><td class="ok" data-l="Original">returns the post</td><td class="bad" data-l="Builder's fix">deletes the post</td><td class="ok" data-l="Fixed">returns the post</td></tr>
+      <tr><td>A title inside <code>params._meta</code> plus the real title in the arguments</td><td class="ok" data-l="Original">stores the real title</td><td class="bad" data-l="Builder's fix">stores the _meta title</td><td class="ok" data-l="Fixed">stores the real title</td></tr>
+      <tr><td>REST: <code>{"meta":{"title":"NESTED"},"title":"real"}</code></td><td class="ok" data-l="Original">stores "real"</td><td class="bad" data-l="Builder's fix">stores "NESTED"</td><td class="ok" data-l="Fixed">stores "real"</td></tr>
+      <tr><td><code>"tags": "notarray"</code></td><td class="ok" data-l="Original">-32602 error</td><td class="bad" data-l="Builder's fix">accepted, tags silently dropped</td><td class="ok" data-l="Fixed">-32602 error</td></tr>
+      <tr><td><code>initialize</code> with <code>"params": "notobj"</code></td><td class="ok" data-l="Original">-32600 error</td><td class="bad" data-l="Builder's fix">accepted</td><td class="ok" data-l="Fixed">-32600 error</td></tr>
+      <tr><td>No tool name; <code>arguments.name</code> set</td><td class="ok" data-l="Original">"missing tool name"</td><td class="bad" data-l="Builder's fix">runs that tool</td><td class="ok" data-l="Fixed">"missing tool name"</td></tr>
+      <tr><td><code>arguments</code> is a string or an array</td><td class="ok" data-l="Original">"arguments must be an object"</td><td class="bad" data-l="Builder's fix">"missing required argument: title"</td><td class="ok" data-l="Fixed">"arguments must be an object"</td></tr>
+    </table>
+  </div>
+</div></section>
+
+<!-- ============================ 05 PROOF ============================ -->
+<section class="sec" id="proof"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">05 — The proof</div>
+    <h2 class="reveal d1">Same answers. <em>1,200× sooner.</em></h2>
+    <p class="reveal d2">A speedup is easy to show. Showing that nothing else changed is the part that matters, and a passing suite can't do it — it passed on the broken version too. So the fix was checked against the original, request by request.</p>
+  </div>
+  <div class="proofs">
+    <div class="proof hl reveal"><div class="n">0<small> / 90</small></div><h4>Differences from the original</h4><p>90 requests replayed against the original and the fixed build: 16 id shapes in 4 positions, junk ids, 10 clap bodies, all seven round-2 regression cases, no-auth. Every response identical, byte for byte.</p><div class="src">eval/diff_v1.py</div></div>
+    <div class="proof reveal d1"><div class="n">10<small> / 90</small></div><h4>The harness has teeth</h4><p>Pointed at the builder's fix, the same replay flags 10 differences — the delete, the wrong titles, the dropped tags, the lost validation. A comparison that can't fail proves nothing.</p><div class="src">eval/diff_v1.py · v1 vs v2</div></div>
+    <div class="proof reveal d2"><div class="n">43<small> / 43</small></div><h4>The original suite</h4><p>Still passes. Necessary, not sufficient: it passed on all three builds.</p><div class="src">tests/probe_mcp_final.py</div></div>
+    <div class="proof reveal d3"><div class="n">20<small> / 20</small></div><h4>Writes survive kill -9</h4><p>Save a post, kill the process with no warning, restart, read it back — twenty times. Durability wasn't touched, and now it's measured.</p><div class="src">eval/kill9.py</div></div>
+  </div>
+  <div class="notproved reveal"><b>Not proven here</b>Correctness beyond these requests; power-loss durability; anything about more than one node; the older r61 release, which has the same bug in its clap endpoint and was left alone because it doesn't build on current Bend.</div>
+</div></section>
+
+<!-- ============================ 06 LESSONS ============================ -->
+<section class="sec dark" id="lessons"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">06 — Lessons</div>
+    <h2 class="reveal d1">What 43/43 <em>actually means.</em></h2>
+  </div>
+  <div class="lessons">
+    <div class="lesson reveal"><div class="i">01</div><h3>A passing suite is a floor, not a verdict.</h3><p>The suite passed on the original, the regression, and the fix. It measured "still works on small inputs," and was reported as "verified."</p></div>
+    <div class="lesson reveal d1"><div class="i">02</div><h3>Evidence binds the file, not the claim.</h3><p>Hash manifests are excellent at catching drift. They say nothing about whether the right thing was tested, or who ran it.</p></div>
+    <div class="lesson reveal d2"><div class="i">03</div><h3>Profile before you fix.</h3><p>The builder rewrote code that wasn't on the hot path and reported a win. Four seconds of <code>sample</code> named the right function.</p></div>
+    <div class="lesson reveal"><div class="i">04</div><h3>Diff against a known-good build.</h3><p>When you have a version that behaves correctly, the strongest test of a change is "same bytes out." Then check the harness can fail.</p></div>
+    <div class="lesson reveal d1"><div class="i">05</div><h3>Time one realistic input.</h3><p>Every functional test used a few bytes. A single 16 KB request — a normal blog post — would have exposed this on day one.</p></div>
+    <div class="lesson reveal d2"><div class="i">06</div><h3>Strictness hides in helpers.</h3><p>In an eager language, a harmless-looking <code>pick(cond, a, b)</code> runs both sides. The codebase knew this, wrote it down, and still missed one.</p></div>
+  </div>
+</div></section>
+
+<!-- ============================ FOOT ============================ -->
+<footer class="foot"><div class="wrap">
+  <h2>One AI wrote it. Another checked it. <em>A person decided which one to believe.</em></h2>
+  <div class="credits">
+    <div class="credit"><div class="k">Framework &amp; CMS</div><p>Generated by an AI app builder under its evidence-first methodology, in Bend 2.0.32–2.0.34.</p></div>
+    <div class="credit"><div class="k">Audit &amp; fix</div><p>Claude Code (Opus 5.5): reproduction, adversarial tests, profiling, the one-function fix, and the differential proof.</p></div>
+    <div class="credit"><div class="k">Direction</div><p>Chris Kluis — asked for the evaluation, rejected the builder's fix, and chose to ship the case study.</p></div>
+  </div>
+  <div class="links">
+    <a href="../index.html">← All experiments</a>
+    <a href="https://bend-lang.com" target="_blank" rel="noopener">Bend ↗</a>
+    <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">Model Context Protocol ↗</a>
+  </div>
+  <p class="fine">Status: local. The source and evaluation scripts live in a private repository for now. All timings measured on one Apple-silicon Mac, Bend 2.0.34, 29 Sep 2026. Absolute numbers will differ on other hardware; the slopes won't.</p>
+</div></footer>
+
+<script>
+  (function(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+    var io=new IntersectionObserver(function(entries){entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    els.forEach(function(e){io.observe(e)});
+  })();
+</script>
+</body>
+</html>
