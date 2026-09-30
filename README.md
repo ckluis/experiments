@@ -24,7 +24,9 @@ and, where one exists, its source repository. Each spec links back to the index.
 | Frameworks | **chord** — the omakase full-stack for G# | G# | Spec | `chord.html` | — |
 | Frameworks | **fugue** — the Phoenix of G#, on Orleans | G# · Orleans | Spec | `fugue.html` | — |
 | Frameworks | **realbook** — the WordPress of G#, with a gate | G# | Spec | `realbook.html` | — |
-| Frameworks | **bocht** — a backend in one Bend binary, and the curve its 43 passing tests missed | Bend · C · MCP | Case study | `bocht/index.html` | private |
+| Frameworks | **bocht** (Bend series 1): a whole backend in one Bend binary, built by an AI under an evidence discipline | Bend · C · MCP | Case study | `bend/bocht/index.html` | private |
+| Frameworks | **bochtCMS** (Bend series 2): an MCP-only CMS, and the curve its 43 passing tests missed | Bend · MCP | Case study | `bend/bochtCMS/index.html` | private |
+| Frameworks | **shellOS** (Bend series 3): a desktop shell drawn in pure Bend, ported to macOS and redesigned | Bend · PTY | Case study | `bend/shellOS/index.html` | private |
 | Languages | **taal** — building the BEAM on Go | Go · actor model | Spec | `taal.html` | — |
 | Languages | **streng** — a closed-world TypeScript | TypeScript · native compiler | Spec | `streng.html` | — |
 | Interfaces | **lui** — a layout-first UI framework | UI framework · AI sidecar | Spec | `lui.html` | — |

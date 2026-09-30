@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>shellOS: a desktop where every pixel is computed in Bend</title>
+<meta name="description" content="The Bend series, part 3: a single-window shell (terminal, reader, command palette) rendered pixel by pixel in pure Bend, ported from a Linux VM to macOS, three screen-only bugs fixed, and redesigned.">
+<link rel="canonical" href="https://ckluis.github.io/experiments/bend/shellOS/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ckluis / experiments">
+<meta property="og:url" content="https://ckluis.github.io/experiments/bend/shellOS/">
+<meta property="og:title" content="shellOS: a desktop where every pixel is computed in Bend">
+<meta property="og:description" content="Terminal, reader and palette, drawn by a pure Bend program. Ported to a Mac, three bugs its suites missed, then redesigned. Part 3 of the Bend series.">
+<meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-bend-shellos.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="shellOS after the redesign: panes for themes, saved articles, items, the reader and a live terminal.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ckluis">
+<meta name="twitter:creator" content="@ckluis">
+<meta name="twitter:title" content="shellOS: a desktop where every pixel is computed in Bend">
+<meta name="twitter:description" content="Terminal, reader and palette, drawn by a pure Bend program. Ported to a Mac, three bugs its suites missed, then redesigned. Part 3 of the Bend series.">
+<meta name="twitter:image" content="https://ckluis.github.io/experiments/previews/social-bend-shellos.png">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/series.css">
+</head>
+<body>
+<a href="https://ckluis.github.io/experiments/" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+<header class="hero">
+  <div class="wrap">
+    <nav class="rail reveal" aria-label="The Bend series"><span class="rl">The Bend series</span><a href="../index.html"><span class="i">00</span>Series</a><a href="../bocht/index.html"><span class="i">01</span>bocht</a><a href="../bochtCMS/index.html"><span class="i">02</span>bochtCMS</a><a href="../shellOS/index.html" aria-current="page"><span class="i">03</span>shellOS</a></nav>
+    <div>
+      <div class="eyebrow reveal">03 · The desktop · Sept 2026</div>
+      <h1 class="reveal d1">shellOS<span class="def">a single-window meta-OS shell · pure Bend</span></h1>
+      <p class="tag reveal d2">A desktop where <em>every pixel</em> is computed in Bend.</p>
+      <p class="lede reveal d2">The same AI app builder wrote a whole shell: terminal tabs over a real PTY, an HTML reader,
+        a command palette, search, Gmail and AI panes. The font rasterizer, the layout and the terminal emulator are pure Bend;
+        only files, sockets, TLS, the PTY and the window sit behind a small C seam. It arrived as a zip for a Linux VM that
+        couldn't build it. Claude Code ported it to a Mac, found three bugs its suites never caught, and redesigned it.</p>
+      <div class="hstats reveal d3">
+        <div><div class="n">9,641</div><div class="l">lines of Bend</div></div>
+        <div><div class="n">17</div><div class="l">C effect files</div></div>
+        <div><div class="n">3</div><div class="l">bugs its tests missed</div></div>
+        <div><div class="n">2×</div><div class="l">faster frames</div></div>
+      </div>
+      <nav class="jump reveal d3" aria-label="Sections">
+        <a href="#pure">01 Pure</a><a href="#port">02 The port</a><a href="#bugs">03 Bugs</a><a href="#redesign">04 Redesign</a><a href="#limits">05 Limits</a><a href="#series">The series</a>
+      </nav>
+    </div>
+    <figure class="reveal d2">
+      <div class="win"><div class="bar"><i></i><i></i><i></i><span>Shell-OS</span></div><img src="site/after.png" width="1440" height="960" alt="shellOS after the redesign: themes and saved panes, an items list, the reader, and a terminal showing ls -la, with a TERMINAL mode badge in the status bar"></div>
+      <figcaption class="cap">After · native macOS window · 1440×960</figcaption>
+    </figure>
+  </div>
+</header>
+
+<div class="strip"><div class="wrap">
+  <div class="cell"><div class="k">What it is</div><div class="v">A whole desktop shell, rendered by a pure Bend program</div></div>
+  <div class="cell"><div class="k">The port</div><div class="v">Linux VM to macOS: two build fixes, no app changes</div></div>
+  <div class="cell"><div class="k">The misses</div><div class="v">State changed, screen didn't: three times</div></div>
+  <div class="cell"><div class="k">The redesign</div><div class="v">TUI panes, a real font, twice the frame rate</div></div>
+</div></div>
+
+<!-- ============================ 01 PURE ============================ -->
+<section class="sec" id="pure"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">01 — What it is</div>
+    <h2 class="reveal d1">Pure, <em>except the seam.</em></h2>
+    <p class="reveal d2">Every frame is a quadtree image built by pure functions. The program asks the outside world for exactly five kinds of thing, each through a named effect with a C file behind it. Everything else is data in, pixels out.</p>
+  </div>
+  <div class="arch">
+    <div class="binary reveal" role="img" aria-label="Pure Bend layers of shellOS and the effect seam beneath them">
+      <div class="bh"><div class="t">Inside the program · pure layers</div><div class="s">1,483 defs · 39 types</div></div>
+      <div class="layer"><div class="ln">Font</div><div class="ld"><b>Spleen 8×16</b> as four packed words per glyph, looked up by a match: O(1), no allocation.</div></div>
+      <div class="layer"><div class="ln">Images</div><div class="ld">Each frame is a <b>quadtree</b>. Only the screen regions a change touches are rebuilt; the rest is shared with the last frame.</div></div>
+      <div class="layer"><div class="ln">Terminal</div><div class="ld">A <b>VT100 subset</b> emulator: 80×24 grid, 16 colors, scrollback, driven by bytes from a real shell.</div></div>
+      <div class="layer"><div class="ln">Reader</div><div class="ld">HTML tokenizer, text extraction and word wrap, all pure; articles can be saved with notes.</div></div>
+      <div class="layer"><div class="ln">UI</div><div class="ld">Themes, items, paging, search across items, articles and terminal output, a command palette, a key map.</div></div>
+      <div class="layer store"><div class="ln">Effect seam</div><div class="ld"><b>17 C files</b>: files (atomic, fsync'd), PTY spawn/read/write/close, sockets, TLS through OpenSSL. The window comes from Bend's runtime.</div></div>
+    </div>
+    <div>
+      <div class="facts one">
+        <div class="fact reveal"><div class="k">What's real</div><p>A live <code>/bin/sh</code> in each terminal tab and items saved with tmp + fsync + rename, both exercised here. HTTPS with mandatory certificate checks and owner-only Gmail and AI configs are built in but were not re-run here.</p></div>
+        <div class="fact reveal d1"><div class="k">What's pure</div><p>Rendering, layout, font rasterization, the terminal state machine, HTML parsing, search. None of it can touch the outside world.</p></div>
+      </div>
+      <div class="honest reveal"><b>Honest limit.</b> "Pure" describes the program, not the platform: the window, the Metal presentation and the GPU path are Bend's runtime, and the effect seam is ordinary C.</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============================ 02 PORT ============================ -->
+<section class="sec alt" id="port"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">02 — The port</div>
+    <h2 class="reveal d1">Written for a VM <em>that couldn't build it.</em></h2>
+    <p class="reveal d2">The package arrived with a nine-step plan for a Linux VM. Step four, the native build, needed 5 GB of free memory the VM never had: for five days its hourly status runs deferred the rebuild, so the shipped binary predated its own bug fixes.</p>
+  </div>
+  <div class="proofs">
+    <div class="proof hl reveal"><div class="n">0</div><h4>Lines of app code changed</h4><p>Bend's window already has a native macOS backend and maps keys the same way on both platforms. The shell's Bend code ran as written.</p></div>
+    <div class="proof reveal d1"><div class="n">2</div><h4>Build fixes</h4><p>Point the clang wrapper at Homebrew's OpenSSL, and replace Linux-only <code>flock</code> with a mkdir lock.</p></div>
+    <div class="proof reveal d2"><div class="n">52<small> s</small></div><h4>First native build</h4><p>3.2 GB peak memory on the Mac; zero warnings after fixing four pointer-size warnings in the C seam. A 6.3 MB arm64 binary.</p></div>
+    <div class="proof reveal d3"><div class="n">22</div><h4>Gates per launch</h4><p>A new harness drives the real window: keys posted to one process, screenshots of one window, fresh working dirs, exact PIDs.</p></div>
+  </div>
+  <p class="note reveal">The Linux harness drove a virtual X display. On macOS it's <code>macwin</code>, a small Objective-C tool: find the window by PID, post keys and clicks with CoreGraphics, capture with <code>screencapture -l</code>.</p>
+</div></section>
+
+<!-- ============================ 03 BUGS ============================ -->
+<section class="sec" id="bugs"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">03 — What the suites missed</div>
+    <h2 class="reveal d1">The state changed. <em>The screen didn't.</em></h2>
+    <p class="reveal d2">The shell redraws only when something marks the frame as touched. Its test suites checked state: palette open, query typed, selection moved. They all passed. None of them looked at the pixels, and that is where all three bugs lived.</p>
+  </div>
+  <div class="bugs">
+    <div class="bug reveal"><div class="i">Bug 1 · first screenshot</div><h3>The palette froze after it opened.</h3><p>Typing a filter or pressing an arrow changed the palette's state, but only open and close marked the frame, so the old frame kept being shown. The builder's fix had covered open and close and stopped there.</p><div class="fix"><b>Fix:</b> move, type and backspace mark the frame. New probe t35 fails on the old code, passes on the fix.</div></div>
+    <div class="bug reveal d1"><div class="i">Bug 2 · redesign screenshots</div><h3>Help never appeared.</h3><p>Pressing <code>?</code> opened the help overlay in state and never repainted, so in the native app it was invisible. Its suite passed 14 of 14.</p><div class="fix"><b>Fix:</b> opening and closing help marks the frame. Two probes, red then green.</div></div>
+    <div class="bug reveal d2"><div class="i">Bug 3 · the harness quit</div><h3>Esc to close help also quit.</h3><p>Help wasn't counted as an open panel, so keys went through it: the Esc that closed help reached the main keymap and quit the app, and <code>d</code> would have deleted an item underneath.</p><div class="fix"><b>Fix:</b> help counts as open for key stripping. Two probes, red then green.</div></div>
+  </div>
+  <p class="note reveal">All three were found by looking at real screenshots of the real window. A frame diff proves that something changed; only looking shows that the right thing changed.</p>
+</div></section>
+
+<!-- ============================ 04 REDESIGN ============================ -->
+<section class="sec alt" id="redesign"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">04 — The redesign</div>
+    <h2 class="reveal d1">Still a TUI. <em>Now a legible one.</em></h2>
+    <p class="reveal d2">"Not very pretty or clean." Two directions were mocked up at pixel fidelity on the app's own canvas with its own bitmap-font drawing; the owner picked rounded panes with titles in the border. Then: "the fonts are REALLY small." The window maps one canvas pixel to one point, so on a scaled 6K display the fix was a bigger font on a bigger canvas.</p>
+  </div>
+  <div class="ba">
+    <figure class="reveal"><span class="tagb b">Before</span><div class="win"><div class="bar"><i></i><i></i><i></i><span>Shell-OS</span></div><img src="site/before.png" width="1024" height="1024" alt="The original shellOS: an 8 by 8 pixel font, grey boxes, large mostly empty item cards, a terminal cropped to 30 columns"></div><figcaption class="cap">font8x8 · 1024×1024 · terminal cropped to 30×30</figcaption></figure>
+    <figure class="reveal d1"><span class="tagb a">After</span><div class="win"><div class="bar"><i></i><i></i><i></i><span>Shell-OS</span></div><img src="site/after_palette.png" width="1440" height="960" alt="The redesigned shellOS with the command palette open, filtered to four tab actions with keycaps"></div><figcaption class="cap">Spleen 8×16 · 1440×960 · full 80×24 terminal</figcaption></figure>
+  </div>
+  <div class="facts" style="margin-top:clamp(28px,4vw,48px)">
+    <div class="fact reveal"><div class="k">Panes, not boxes</div><p>Rounded borders with titles set into them, one accent color, a color per theme, three text weights, and "…" instead of clipped text.</p></div>
+    <div class="fact reveal d1"><div class="k">A status bar with a mode</div><p>NORMAL, PALETTE, TERMINAL, READER: a badge and the keys that work right now. It becomes the input line when you add, edit or write a note.</p></div>
+    <div class="fact reveal d2"><div class="k">Faster, not slower</div><p>Full-frame render went from 21 ms to about 11 ms. The old font walked a 1,024-entry list for every glyph row; the new one is a match.</p></div>
+    <div class="fact reveal d3"><div class="k">The whole terminal</div><p>The old tile showed a 30×30 corner of an 80×24 grid. Now the full grid shows, and the shell is told its window size.</p></div>
+  </div>
+  <div class="shots">
+    <figure class="reveal"><div class="win"><div class="bar"><i></i><i></i><i></i><span>Shell-OS</span></div><img src="site/search.png" width="1440" height="960" alt="Universal search over items, reader articles and terminal lines"></div><figcaption class="cap">Search: items, articles, notes, terminal</figcaption></figure>
+    <figure class="reveal d1"><div class="win"><div class="bar"><i></i><i></i><i></i><span>Shell-OS</span></div><img src="site/help.png" width="1440" height="960" alt="The help overlay listing keys as keycaps, now visible"></div><figcaption class="cap">Help: invisible before bug 2 was fixed</figcaption></figure>
+    <figure class="reveal"><div class="win"><div class="bar"><i></i><i></i><i></i><span>Shell-OS</span></div><img src="site/note.png" width="1440" height="960" alt="Saving an article with a note typed into the status bar"></div><figcaption class="cap">Save article: the note is typed in the status bar</figcaption></figure>
+    <figure class="reveal d1"><div class="win"><div class="bar"><i></i><i></i><i></i><span>Shell-OS</span></div><img src="site/terminal.png" width="1440" height="960" alt="The terminal pane focused, showing ls -la output from a real shell"></div><figcaption class="cap">Terminal: a real /bin/sh behind a PTY</figcaption></figure>
+  </div>
+</div></section>
+
+<!-- ============================ 05 LIMITS ============================ -->
+<section class="sec" id="limits"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">05 — Honest limits</div>
+    <h2 class="reveal d1">What this <em>doesn't</em> show.</h2>
+  </div>
+  <div class="facts">
+    <div class="fact reveal"><div class="k">Untested panes</div><p>Gmail and AI were restyled but never run live: there were no configs on this machine.</p></div>
+    <div class="fact reveal d1"><div class="k">Stale suites</div><p>Three of the eight shipped suites don't compile against the shipped source; their fixtures predate later type changes. They were left as found.</p></div>
+    <div class="fact reveal d2"><div class="k">One machine</div><p>Every number here is from one Apple-silicon Mac on Bend 2.0.34. The Linux build path was not re-run.</p></div>
+    <div class="fact reveal d3"><div class="k">The builder's history</div><p>The shipped report logs ten days of work on the VM, starting 20 Sep. Only what was re-run here is claimed here.</p></div>
+  </div>
+</div></section>
+
+<!-- ============================ THE BEND SERIES ============================ -->
+<section class="series" id="series"><div class="wrap">
+  <div class="eyebrow reveal">The Bend series</div>
+  <h2 class="reveal d1">One language. Three builds. <em>One auditor.</em></h2>
+  <p class="intro reveal d2">Three programs, one young language, one method. Each was written by an AI app builder in <a href="https://bend-lang.com" target="_blank" rel="noopener">Bend 2</a> under an evidence-first discipline, then handed to Claude Code to check: reproduce every claim, attack it, profile it, fix only what is proven, and show the fix changed nothing else. Every time, the builder's own tests passed, and something real was still wrong.</p>
+  <div class="scards"><a class="scard reveal" href="../bocht/index.html"><div class="n">01 · bocht</div><div class="t">bocht</div><p>The framework. A whole backend (HTTP, auth, rate limits, WAL storage, MCP) compiled from one Bend program into one binary.</p><div class="m"><span>8,777 lines</span><span>1 binary</span><span>release r61</span></div><div class="go">Read the case study →</div></a><a class="scard reveal" href="../bochtCMS/index.html"><div class="n">02 · bochtCMS</div><div class="t">bochtCMS</div><p>The app on top. A blog CMS whose only interface is seven MCP tools, and the quadratic curve its 43 passing tests never saw.</p><div class="m"><span>7 MCP tools</span><span>1,200× fix</span><span>0 / 90 diffs</span></div><div class="go">Read the case study →</div></a><div class="scard reveal here"><div class="n">03 · shellOS</div><div class="t">shellOS</div><p>The desktop. A single-window shell drawn pixel by pixel in pure Bend: terminal, reader, palette. Ported to a Mac and redesigned.</p><div class="m"><span>9,641 lines</span><span>17 C effects</span><span>3 bugs fixed</span></div><div class="go">You are here</div></div></div>
+  <a class="all reveal" href="../index.html">About the series: the language, the method, what it found →</a>
+</div></section>
+
+<!-- ============================ FOOT ============================ -->
+<footer class="foot"><div class="wrap">
+  <h2>A pure program drew it. <em>Screenshots found what the tests couldn't.</em></h2>
+  <div class="credits"><div class="credit"><div class="k">Shell</div><p>Generated by an AI app builder in ten days of waves on a Linux VM, from Bend 2.0.18 to 2.0.34.</p></div><div class="credit"><div class="k">Port, fixes, redesign</div><p>Claude Code (Opus 5.5): macOS build and harness, three bug fixes with regression probes, the Panes redesign and readability pass.</p></div><div class="credit"><div class="k">Direction</div><p>Chris Kluis: asked for the port, called the first UI "not very pretty," picked the design, and asked for bigger type.</p></div></div>
+  <div class="links"><a href="https://bend-lang.com" target="_blank" rel="noopener">Bend ↗</a><a href="https://github.com/fcambus/spleen" target="_blank" rel="noopener">Spleen font ↗</a><a href="https://ckluis.github.io/experiments/">All experiments ↗</a></div>
+  <p class="fine">Status: local. Source, harness and screenshots live in a private repository for now. Measured on one Apple-silicon Mac, Bend 2.0.34, 30 Sep 2026.</p>
+</div></footer>
+<script src="../assets/series.js"></script>
+</body>
+</html>

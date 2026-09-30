@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bend series: three real programs in Bend, each built by an AI and checked by another</title>
+<meta name="description" content="A backend framework, an MCP CMS and a desktop shell, each written in Bend by an AI app builder with passing tests, and each audited by Claude Code: reproduce, attack, fix, prove.">
+<link rel="canonical" href="https://ckluis.github.io/experiments/bend/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ckluis / experiments">
+<meta property="og:url" content="https://ckluis.github.io/experiments/bend/">
+<meta property="og:title" content="The Bend series: three real programs in Bend, each built by an AI and checked by another">
+<meta property="og:description" content="A backend, an MCP CMS and a desktop shell, all in Bend. Every suite passed. Every audit still found something real.">
+<meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-bend.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Bend series: bocht, bochtCMS and shellOS.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ckluis">
+<meta name="twitter:creator" content="@ckluis">
+<meta name="twitter:title" content="The Bend series: three real programs in Bend, each built by an AI and checked by another">
+<meta name="twitter:description" content="A backend, an MCP CMS and a desktop shell, all in Bend. Every suite passed. Every audit still found something real.">
+<meta name="twitter:image" content="https://ckluis.github.io/experiments/previews/social-bend.png">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/series.css">
+</head>
+<body>
+<a href="https://ckluis.github.io/experiments/" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+<header class="hero">
+  <div class="wrap">
+    <nav class="rail reveal" aria-label="The Bend series"><span class="rl">The Bend series</span><a href="index.html" aria-current="page"><span class="i">00</span>Series</a><a href="bocht/index.html"><span class="i">01</span>bocht</a><a href="bochtCMS/index.html"><span class="i">02</span>bochtCMS</a><a href="shellOS/index.html"><span class="i">03</span>shellOS</a></nav>
+    <div>
+      <div class="eyebrow reveal">A series of experiments · Sept 2026</div>
+      <h1 class="reveal d1">Bend<span class="def">three real programs in a young language</span></h1>
+      <p class="tag reveal d2">Each one built by an AI. <em>Each one checked</em> by another.</p>
+      <p class="lede reveal d2">Bend is a functional language that compiles to C and runs on CPU or GPU. An AI app builder used it
+        to write a backend framework, a CMS on top of it, and a whole desktop shell, each shipped with passing tests and
+        a ledger of evidence. Claude Code was then asked the same question every time: is any of this actually true?</p>
+      <div class="hstats reveal d3">
+        <div><div class="n">3</div><div class="l">programs</div></div>
+        <div><div class="n">19k+</div><div class="l">distinct lines of Bend</div></div>
+        <div><div class="n">4</div><div class="l">bugs past green suites</div></div>
+        <div><div class="n">3</div><div class="l">audits</div></div>
+      </div>
+      <nav class="jump reveal d3" aria-label="Sections"><a href="#projects">The three</a><a href="#bend">The language</a><a href="#method">The method</a><a href="#found">What it found</a></nav>
+    </div>
+    <figure class="spec reveal d2" aria-label="The series at a glance">
+      <div class="lab"><span>The series</span><span>Bend 2.0.32–2.0.34</span></div>
+      <div class="x">1 → 3</div>
+      <div class="c">one language · one method · three builds</div>
+      <div class="chips">
+        <span>01 bocht · framework</span><span>02 bochtCMS · MCP app</span><span>03 shellOS · desktop</span>
+        <span class="k">43/43 · 35/35 · 14/14 green</span><span class="k">4 real bugs anyway</span>
+      </div>
+      <div class="no"><div><b>1,200×</b>the CMS fix</div><div><b>2×</b>shellOS frames</div><div><b>0/90</b>differential diffs</div></div>
+    </figure>
+  </div>
+</header>
+
+<!-- ============================ PROJECTS ============================ -->
+<section class="sec" id="projects"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">01 — The three</div>
+    <h2 class="reveal d1">A framework, an app, <em>and a desktop.</em></h2>
+    <p class="reveal d2">Each builds on the last: the CMS runs on the framework, and the shell is written the same way by the same builder. Each page stands alone and links to the others.</p>
+  </div>
+  <div class="ptiles">
+  <article class="ptile reveal" style="--glow:rgba(107,78,194,.30)">
+    <div class="ptext">
+      <div class="n">01 · bocht</div>
+      <h3>bocht</h3>
+      <p class="tl2">A whole backend, <em>one</em> binary.</p>
+      <p>HTTP with keep-alive, bearer-key auth with roles, per-credential rate limits, a segmented write-ahead log with HMAC-bound snapshots, 20 REST routes and an MCP endpoint, all one Bend program with no sidecars.</p>
+      <div class="pills"><span>Bend 2</span><span>C via clang</span><span>WAL + fsync</span><span>REST</span><span>MCP</span></div>
+      <div class="kv"><div><b>8,777</b><span>lines</span></div><div><b>1.97 MB</b><span>binary</span></div><div><b>12</b><span>C effects</span></div></div>
+      <a class="open" href="bocht/index.html">Open bocht →</a>
+    </div>
+    <a class="pshot" href="bocht/index.html" aria-label="bocht"><img src="assets/cards/bocht.png" width="1200" height="760" alt="bocht: the whole backend as one 1.97 MB arm64 binary"></a>
+  </article>
+
+  <article class="ptile flip reveal" style="--glow:rgba(232,137,77,.30)">
+    <div class="ptext">
+      <div class="n">02 · bochtCMS</div>
+      <h3>bochtCMS</h3>
+      <p class="tl2">No screens, and a <em>curve</em> no test saw.</p>
+      <p>A blog CMS whose only interface is seven MCP tools. It passed 43 of 43 tests while one 48 KB post froze the server for two minutes. The builder's fix regressed seven behaviors; the real fix was one function, proven by a 90-request differential.</p>
+      <div class="pills"><span>MCP</span><span>JSON-RPC 2.0</span><span>Profiling</span><span>Differential testing</span></div>
+      <div class="kv"><div><b>126 s → 0.1 s</b><span>at 48 KB</span></div><div><b>0 / 90</b><span>differences</span></div><div><b>7</b><span>regressions caught</span></div></div>
+      <a class="open" href="bochtCMS/index.html">Open bochtCMS →</a>
+    </div>
+    <a class="pshot" href="bochtCMS/index.html" aria-label="bochtCMS"><img src="assets/cards/bochtCMS.png" width="1200" height="760" alt="bochtCMS: time to save one post before and after the fix"></a>
+  </article>
+
+  <article class="ptile reveal" style="--glow:rgba(98,217,156,.22)">
+    <div class="ptext">
+      <div class="n">03 · shellOS</div>
+      <h3>shellOS</h3>
+      <p class="tl2">Every pixel, <em>computed</em> in Bend.</p>
+      <p>A single-window shell: terminal tabs over a real PTY, an HTML reader, a palette, search, Gmail and AI panes. Ported from a Linux VM to macOS with no app changes, three screen-only bugs fixed, and redesigned twice at the owner's request.</p>
+      <div class="pills"><span>Bend 2</span><span>Quadtree images</span><span>VT100</span><span>PTY</span><span>AppKit/Metal</span></div>
+      <div class="kv"><div><b>9,641</b><span>lines</span></div><div><b>3</b><span>bugs fixed</span></div><div><b>21 → 11 ms</b><span>per frame</span></div></div>
+      <a class="open" href="shellOS/index.html">Open shellOS →</a>
+    </div>
+    <a class="pshot" href="shellOS/index.html" aria-label="shellOS"><img src="assets/cards/shellOS.png" width="1200" height="760" alt="shellOS after the redesign"></a>
+  </article>
+
+  </div>
+</div></section>
+
+<!-- ============================ THE LANGUAGE ============================ -->
+<section class="sec alt" id="bend"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">02 — The language</div>
+    <h2 class="reveal d1">Why Bend <em>is a hard place to build.</em></h2>
+    <p class="reveal d2"><a href="https://bend-lang.com" target="_blank" rel="noopener">Bend</a> is young, strict about purity, and changes fast. Those are the conditions that make an AI builder's claims worth checking.</p>
+  </div>
+  <div class="langfacts">
+    <div class="lf reveal"><div class="k">Compiles to C</div><p>One C file serves as both the CPU program and the GPU kernel. clang builds a native binary; the same source can emit JS.</p></div>
+    <div class="lf reveal d1"><div class="k">Affine by default</div><p>A value is used once unless marked reusable. Matches only work on parameters, there are no forward references, and no mutual recursion.</p></div>
+    <div class="lf reveal d2"><div class="k">Strict, so helpers bite</div><p>A <code>pick(cond, a, b)</code> helper evaluates both sides. That one line made the bochtCMS parser quadratic.</p></div>
+    <div class="lf reveal d3"><div class="k">Moving fast</div><p>The builder logged breaking changes in 2.0.27, 2.0.29, 2.0.32 and 2.0.34, four in 12 days. bocht's pinned release no longer builds on the current one.</p></div>
+  </div>
+</div></section>
+
+<!-- ============================ THE METHOD ============================ -->
+<section class="sec" id="method"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">03 — The method</div>
+    <h2 class="reveal d1">Nothing counts <em>until it's re-derived.</em></h2>
+    <p class="reveal d2">Same loop, three times. The builder writes and tests under its own discipline; Claude Code starts from the bundle, not the builder's word.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal"><div class="who">Builder</div><h4>Write and ledger</h4><p>Probes that print one PASS line, results bound to a binary's hash, a verifier that audits the ledger.</p></div>
+    <div class="step reveal d1"><div class="who">Claude Code</div><h4>Reproduce</h4><p>Rebuild from source on a different OS and CPU. Re-run every claim. Check every hash.</p></div>
+    <div class="step reveal d2"><div class="who">Claude Code</div><h4>Attack and look</h4><p>Adversarial requests, realistic sizes, timing sweeps, and screenshots of the real window.</p></div>
+    <div class="step reveal d3"><div class="who">Claude Code</div><h4>Fix and prove</h4><p>Smallest fix, a probe that fails before and passes after, and a differential against the original.</p></div>
+  </div>
+  <p class="note reveal">A person sits at the end of each loop: Chris Kluis asked for every evaluation, rejected a builder's fix, picked the designs, and decided what ships.</p>
+</div></section>
+
+<!-- ============================ WHAT IT FOUND ============================ -->
+<section class="sec dark" id="found"><div class="wrap">
+  <div class="sh">
+    <div class="num reveal">04 — What it found</div>
+    <h2 class="reveal d1">Green suites, <em>real bugs.</em></h2>
+    <p class="reveal d2">Across all three, the builder's tests passed every time. They were checking the wrong thing: tiny payloads, internal state, the builder's own expectations.</p>
+  </div>
+  <div class="lessons">
+    <div class="lesson reveal"><div class="i">01</div><h3>Size is a test input.</h3><p>All 43 CMS checks used tiny payloads. The bug only showed at realistic post sizes, and grew with the square of them.</p></div>
+    <div class="lesson reveal d1"><div class="i">02</div><h3>State isn't the screen.</h3><p>shellOS's suites proved the palette and help opened. The window never showed them. Only screenshots caught it.</p></div>
+    <div class="lesson reveal d2"><div class="i">03</div><h3>A fix needs a differential.</h3><p>The builder's "O(n²) fixed" was no faster and changed seven behaviors, one of which turned a read into a delete. Its suite still passed.</p></div>
+    <div class="lesson reveal"><div class="i">04</div><h3>Manifests prove provenance.</h3><p>Binding results to a binary's hash proves which build produced a log, not that the log tested the right things.</p></div>
+    <div class="lesson reveal d1"><div class="i">05</div><h3>Evidence travels.</h3><p>Every hash in every bundle matched. The discipline made each audit fast; it just couldn't audit itself.</p></div>
+    <div class="lesson reveal d2"><div class="i">06</div><h3>Someone has to decide.</h3><p>One AI wrote it, another checked it, and the person in the loop decided which one to believe.</p></div>
+  </div>
+</div></section>
+
+<!-- ============================ FOOT ============================ -->
+<footer class="foot"><div class="wrap">
+  <h2>Three builds. Three audits. <em>Every claim re-derived from disk.</em></h2>
+  <div class="credits"><div class="credit"><div class="k">Builds</div><p>An AI app builder, under its evidence-first methodology, in Bend 2.0.18–2.0.34.</p></div><div class="credit"><div class="k">Audits &amp; fixes</div><p>Claude Code (Opus 5.5): reproduction, adversarial testing, profiling, minimal fixes, differentials, the shellOS port and redesign.</p></div><div class="credit"><div class="k">Direction</div><p>Chris Kluis: commissioned each evaluation, made the calls, and published the series.</p></div></div>
+  <div class="links"><a href="https://bend-lang.com" target="_blank" rel="noopener">Bend ↗</a><a href="bocht/index.html">bocht</a><a href="bochtCMS/index.html">bochtCMS</a><a href="shellOS/index.html">shellOS</a><a href="https://ckluis.github.io/experiments/">All experiments ↗</a></div>
+  <p class="fine">Status: local. The programs, harnesses and evaluation scripts live in a private repository for now. Measured on one Apple-silicon Mac, Bend 2.0.34, late September 2026.</p>
+</div></footer>
+<script src="assets/series.js"></script>
+</body>
+</html>
