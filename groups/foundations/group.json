@@ -1,0 +1,11 @@
+{
+  "order": 1,
+  "title": "Foundations",
+  "accent": "#6b4ec2",
+  "aliases": [
+    "substrate",
+    "languages"
+  ],
+  "line": "What if the layer under everything were different?",
+  "blurb": "Substrates, kernels and languages — the floor a product stands on, rebuilt from first principles to see what changes above it."
+}

@@ -1,0 +1,44 @@
+{
+  "name": "bocht",
+  "order": 10,
+  "status": "case-study",
+  "line": "a whole backend in one Bend binary",
+  "question": "Can an AI build a whole backend in Bend — and prove every claim it makes?",
+  "body": "Bend series, part 1. A whole backend (HTTP, auth, rate limits, WAL storage, REST and MCP) written as one Bend program by an AI app builder, shipped with an evidence discipline worth stealing: no claim without a re-derivable result.",
+  "stack": [
+    "Bend",
+    "C",
+    "WAL",
+    "MCP"
+  ],
+  "facts": [
+    [
+      "r61",
+      "pinned"
+    ],
+    [
+      "8,793",
+      "lines of Bend"
+    ],
+    [
+      "1",
+      "binary"
+    ]
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/bocht/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/bocht"
+    },
+    {
+      "label": "The Bend series",
+      "href": "bend/index.html"
+    }
+  ],
+  "alt": "bocht: the whole backend as one 1.70 MB arm64 binary",
+  "preview": "/bend/assets/cards/bocht.png"
+}

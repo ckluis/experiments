@@ -1,0 +1,19 @@
+{
+  "name": "kern",
+  "order": 20,
+  "status": "spec",
+  "line": "a homoiconic SaaS substrate",
+  "question": "What if every view, workflow and policy — even an agent's patch — were a versioned row?",
+  "body": "A homoiconic SaaS substrate in Lisp — every view, workflow, policy, and even agent-written patch is a versioned row, evaluated by a tiny kernel.",
+  "stack": [
+    "Lisp",
+    "Postgres"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "kern.html"
+    }
+  ],
+  "alt": "kern — a homoiconic SaaS substrate"
+}

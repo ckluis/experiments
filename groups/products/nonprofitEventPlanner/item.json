@@ -1,0 +1,20 @@
+{
+  "name": "nonprofitEventPlanner",
+  "order": 30,
+  "status": "local",
+  "line": "run a whole youth trip from your phone",
+  "question": "What if one volunteer could run an entire youth trip from their phone?",
+  "body": "One place for a volunteer to run a whole youth trip — rooming, chaperones, money tracked (not chased), and parents onboarded by magic link.",
+  "stack": [
+    "Rails 8",
+    "Hotwire",
+    "Postgres"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "nonprofitEventPlanner.html"
+    }
+  ],
+  "alt": "nonprofitEventPlanner — run a whole youth trip from your phone"
+}

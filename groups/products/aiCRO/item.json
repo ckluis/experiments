@@ -1,0 +1,24 @@
+{
+  "name": "aiCRO",
+  "order": 10,
+  "status": "shipped",
+  "line": "a full growth engagement from one URL",
+  "question": "What if one URL were enough for a whole growth engagement — analysis, positioning, a rebuilt site and a GTM kit?",
+  "body": "A full growth engagement from one URL — analysis, positioning, a rebuilt site inside a guided preview, and a GTM kit per customer group. Evidence-graded and self-contained: it opens from a file, no server, no AI slop.",
+  "stack": [
+    "Node.js",
+    "Claude",
+    "Self-contained HTML"
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/aiCRO/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/aiCRO"
+    }
+  ],
+  "alt": "aiCRO — a full growth engagement from one URL"
+}

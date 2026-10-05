@@ -1,0 +1,19 @@
+{
+  "name": "taal",
+  "order": 50,
+  "status": "spec",
+  "line": "the BEAM, built on Go",
+  "question": "What if you could have Erlang's actors and supervision trees without the Erlang VM?",
+  "body": "A small language for building the BEAM on Go — Erlang-style actors and supervision trees, without the VM.",
+  "stack": [
+    "Go",
+    "Actor model"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "taal.html"
+    }
+  ],
+  "alt": "taal — the BEAM, built on Go"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "workflowForge",
+  "order": 40,
+  "status": "shipped",
+  "line": "paste a workflow, get a page you can send",
+  "question": "What if any workflow could become a diagram you can send — one where no two lines ever cross?",
+  "body": "Paste a workflow, get a page you can send. Whatever model you already use writes the JSON; one self-contained HTML file draws it as a DRAKON-style diagram — happy path down the left, exceptions fanning right, severity by shape, and no two lines ever cross. Every step carries a verified, disputed, or unverified state only a human can advance, and the page never reads your process.",
+  "stack": [
+    "Single-file HTML",
+    "SVG renderer",
+    "Bring your own model",
+    "No server"
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/workflowForge/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/workflowForge"
+    }
+  ],
+  "alt": "workflowForge — a DRAKON-style workflow diagram rendered as one sendable page"
+}

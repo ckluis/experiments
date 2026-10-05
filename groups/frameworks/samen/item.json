@@ -1,0 +1,25 @@
+{
+  "name": "samen",
+  "order": 10,
+  "status": "shipped",
+  "line": "a governed B2B-SaaS foundry",
+  "question": "What if the boring 80% of a SaaS product came preset — and you could support tenants without ever seeing their customers?",
+  "body": "A governed B2B-SaaS foundry that presets the boring 80% — identity, CRM, billing, support, and the product UI — as six governed idioms on one Postgres per product. Support your tenants without ever seeing their customers.",
+  "stack": [
+    "Elixir",
+    "Ash",
+    "Oban",
+    "Postgres"
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/samen/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/samen"
+    }
+  ],
+  "alt": "samen — a governed B2B-SaaS foundry"
+}

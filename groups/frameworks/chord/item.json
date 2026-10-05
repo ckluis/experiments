@@ -1,0 +1,19 @@
+{
+  "name": "chord",
+  "order": 20,
+  "status": "spec",
+  "line": "the omakase full-stack for G#",
+  "question": "What would a G# stack look like if every decision were already made for you?",
+  "body": "The omakase full-stack for G# — every decision made for you, batteries included, one blessed way to do each thing.",
+  "stack": [
+    "G#",
+    "Full-stack"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "chord.html"
+    }
+  ],
+  "alt": "chord — the omakase full-stack for G#"
+}

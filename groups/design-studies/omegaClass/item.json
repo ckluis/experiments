@@ -1,0 +1,25 @@
+{
+  "name": "omegaClass",
+  "order": 40,
+  "status": "concept",
+  "line": "an outdoor fire station in one cabinet",
+  "question": "Can one stainless cabinet hold a parrilla, a smoker and a prep station — and let two pitmasters work at once?",
+  "body": "One wide sealed stainless cabinet that opens into a full outdoor fire station in three zones: a prep + sink counter, a brasero-fed Argentine parrilla, and a vertical rack smoker — sheltered by two lift-up roofs. Designed so a master asador and a master pitmaster can both work it at once. Configure it live, then read the full plan.",
+  "stack": [
+    "Three.js",
+    "Two-axis rig",
+    "PBR + reflections",
+    "No-build"
+  ],
+  "links": [
+    {
+      "label": "Open the 3D",
+      "href": "3d/omegaClassGrills/index.html"
+    },
+    {
+      "label": "Read the plan",
+      "href": "3d/omegaClassGrills/PLAN.md"
+    }
+  ],
+  "alt": "omegaClass — a stainless grill that deploys a sheltered fire station"
+}

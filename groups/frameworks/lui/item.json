@@ -1,0 +1,19 @@
+{
+  "name": "lui",
+  "order": 50,
+  "status": "spec",
+  "line": "layout-first UI with an AI sidecar",
+  "question": "What if you described a screen's intent and the framework composed the layout?",
+  "body": "Layout User Interface — a layout-first UI framework with an AI sidecar that composes screens from intent.",
+  "stack": [
+    "UI framework",
+    "AI sidecar"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "lui.html"
+    }
+  ],
+  "alt": "lui — layout-first UI with an AI sidecar"
+}

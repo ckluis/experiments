@@ -1,0 +1,10 @@
+{
+  "order": 3,
+  "title": "Agent tools",
+  "accent": "#2f7d6d",
+  "aliases": [
+    "tools"
+  ],
+  "line": "Making agents cheaper, better reviewed, and easier to steer.",
+  "blurb": "Orchestrators, review frameworks and native tools for working with AI agents every day — measured, routed and reviewed."
+}

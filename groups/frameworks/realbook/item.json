@@ -1,0 +1,19 @@
+{
+  "name": "realbook",
+  "order": 40,
+  "status": "spec",
+  "line": "the WordPress of G#, with a gate",
+  "question": "What if content and commerce were governed by admission instead of a plugin free-for-all?",
+  "body": "The WordPress of G#, with a gate — content and commerce, governed by admission instead of a plugin free-for-all.",
+  "stack": [
+    "G#",
+    "CMS"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "realbook.html"
+    }
+  ],
+  "alt": "realbook — the WordPress of G#, with a gate"
+}

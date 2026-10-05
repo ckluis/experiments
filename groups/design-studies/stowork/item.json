@@ -1,0 +1,24 @@
+{
+  "name": "STOWORK",
+  "order": 50,
+  "status": "concept",
+  "line": "a carry-on that becomes a workstation",
+  "question": "Can a carry-on unfold into a three-monitor studio in under two minutes?",
+  "body": "A carry-on that unfolds into a full three-monitor workstation — broadcast-grade AV and a swappable compute bay for your own Mac mini or Studio — in under two minutes.",
+  "stack": [
+    "Three.js",
+    "Parametric rig",
+    "No-build"
+  ],
+  "links": [
+    {
+      "label": "Open the 3D",
+      "href": "3d/portable-office/index.html"
+    },
+    {
+      "label": "Read the plan",
+      "href": "3d/portable-office/PLAN.md"
+    }
+  ],
+  "alt": "STOWORK — a carry-on that becomes a workstation"
+}

@@ -1,0 +1,51 @@
+{
+  "name": "baton",
+  "version": "v3.1",
+  "order": 10,
+  "status": "shipped",
+  "line": "an orchestrator of orchestrators",
+  "question": "What if every task went to the cheapest model that could actually finish it?",
+  "body": "An orchestrator of orchestrators, routed by what it costs. Say what you want and it picks a mode, plans a graph, and sends every task to the cheapest rung that can finish it — escalating one rung at a time, asking before it spends the expensive one, and handing you a one-slide brief at each decision instead of a report to dig through.",
+  "stack": [
+    "Prompts",
+    "Multi-agent",
+    "Claude"
+  ],
+  "facts": [
+    [
+      "6",
+      "rungs"
+    ],
+    [
+      "10",
+      "modes"
+    ],
+    [
+      "44",
+      "personas"
+    ],
+    [
+      "40",
+      "experts"
+    ]
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/baton/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/baton"
+    },
+    {
+      "label": "v2",
+      "href": "https://ckluis.github.io/baton/baton-v2.html"
+    },
+    {
+      "label": "v1",
+      "href": "https://ckluis.github.io/baton/baton-v1.html"
+    }
+  ],
+  "alt": "baton — six rungs of model × effort, a task graph routed to the cheapest rung that can finish it"
+}
