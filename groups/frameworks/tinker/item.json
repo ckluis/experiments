@@ -1,0 +1,35 @@
+{
+  "name": "tinker",
+  "order": 15,
+  "status": "shipped",
+  "repo": "ckluis/tinker",
+  "line": "internal tools on data you can't see",
+  "question": "What if you could build internal tools on personal data nobody can read without a second person's approval?",
+  "body": "An ontology-driven builder in Rust on PostgreSQL 18. Define an object once and get a row-level-secured table, a governed API and an MCP front door for agents. Email and phone are sealed by type in a separate vault: queries see a mask, automations get a key, and a person sees the value only after a second person approves. Erasure is a crypto-shred.",
+  "stack": [
+    "Rust",
+    "PostgreSQL 18",
+    "MCP"
+  ],
+  "facts": [
+    [
+      "662",
+      "tests passing"
+    ],
+    [
+      "M0–M8",
+      "gated milestones"
+    ]
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/tinker/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/tinker"
+    }
+  ],
+  "alt": "tinker — internal tools on data you can't see"
+}

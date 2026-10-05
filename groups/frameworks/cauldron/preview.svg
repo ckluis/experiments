@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="cauldron — one sealed binary holding a whole web stack, HTTP, Postgres, crypto, UI engine, admin and agents, while quicklisp, FFI, C and npm stay outside struck through">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%"><stop offset="0" stop-color="#e08a5a" stop-opacity=".22"/><stop offset="1" stop-color="#e08a5a" stop-opacity="0"/></radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/></pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">One binary. Nothing else.</text>
+<rect x="40" y="100" width="360" height="260" rx="14" fill="#e08a5a" fill-opacity=".12" stroke="#e08a5a" stroke-width="1.5"/>
+<text x="60" y="128" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#e08a5a" fill-opacity="1" text-anchor="start">ONE SBCL BINARY</text>
+<rect x="60" y="148" width="160" height="50" rx="8" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="140" y="178" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="middle">HTTP</text>
+<rect x="232" y="148" width="160" height="50" rx="8" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="312" y="178" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="middle">POSTGRES WIRE</text>
+<rect x="60" y="212" width="160" height="50" rx="8" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="140" y="242" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="middle">CRYPTO</text>
+<rect x="232" y="212" width="160" height="50" rx="8" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="312" y="242" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="middle">LIVEVIEW-STYLE UI</text>
+<rect x="60" y="276" width="160" height="50" rx="8" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="140" y="306" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="middle">ADMIN PANEL</text>
+<rect x="232" y="276" width="160" height="50" rx="8" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="312" y="306" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="middle">AGENTS</text>
+<line x1="60" y1="344" x2="380" y2="344" stroke="#e08a5a" stroke-opacity=".0"/>
+<text x="220" y="340" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".08em" fill="#e08a5a" fill-opacity="0.9" text-anchor="middle">ZERO DEPENDENCIES · NO FFI · NO C</text>
+<rect x="460" y="130" width="140" height="44" rx="8" fill="none" stroke="#efe6d6" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="4 4"/>
+<text x="530" y="157" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.45" text-anchor="middle">QUICKLISP</text>
+<line x1="478" y1="152" x2="582" y2="152" stroke="#e07a5f" stroke-width="1.5" stroke-linecap="round" stroke-opacity=".9"/>
+<path d="M452 152 H410" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2" stroke-linecap="round"/><path d="M420 144 l-8 8 l8 8" fill="none" stroke="#efe6d6" stroke-opacity=".0"/>
+<rect x="460" y="200" width="140" height="44" rx="8" fill="none" stroke="#efe6d6" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="4 4"/>
+<text x="530" y="227" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.45" text-anchor="middle">FFI / C</text>
+<line x1="478" y1="222" x2="582" y2="222" stroke="#e07a5f" stroke-width="1.5" stroke-linecap="round" stroke-opacity=".9"/>
+<path d="M452 222 H410" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2" stroke-linecap="round"/><path d="M420 214 l-8 8 l8 8" fill="none" stroke="#efe6d6" stroke-opacity=".0"/>
+<rect x="460" y="270" width="140" height="44" rx="8" fill="none" stroke="#efe6d6" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="4 4"/>
+<text x="530" y="297" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.45" text-anchor="middle">NPM</text>
+<line x1="478" y1="292" x2="582" y2="292" stroke="#e07a5f" stroke-width="1.5" stroke-linecap="round" stroke-opacity=".9"/>
+<path d="M452 292 H410" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2" stroke-linecap="round"/><path d="M420 284 l-8 8 l8 8" fill="none" stroke="#efe6d6" stroke-opacity=".0"/>
+<text x="530" y="344" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.45" text-anchor="middle">STAYS OUTSIDE</text>
+</svg>

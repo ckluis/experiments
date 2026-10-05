@@ -11,49 +11,68 @@ By **Chris Kluis** — [ckluis.com](https://ckluis.com) · [kilofeet](https://ki
 Locally: open `index.html` in a browser. It links out to each experiment's spec page
 and, where one exists, its source repository. Each spec links back to the index.
 
-## The experiments
+## How the index is built
 
-| Section | Project | Stack | Status | Spec | Live · Code |
-|---|---|---|---|---|---|
-| Substrate | **regel** — a governed code-as-rows substrate | Go · TypeScript · Postgres | Shipped | — | [live](https://ckluis.github.io/regel/) · [code](https://github.com/ckluis/regel) |
-| Substrate | **kern** — a homoiconic SaaS substrate | Lisp · Postgres | Spec | `kern.html` | — |
-| Substrate | **eigen** — a local-first hypermedia framework | Rust · Postgres | Spec | `eigen.html` | — |
-| Frameworks | **samen** — a governed B2B-SaaS foundry | Elixir · Ash · Oban · Postgres | Shipped | — | [live](https://ckluis.github.io/samen/) · [code](https://github.com/ckluis/samen) |
-| Frameworks | **cauldron** — a zero-dependency Common Lisp web framework, one binary | Common Lisp · SBCL | Archived | — | [code](https://github.com/ckluis/cauldron) |
-| Frameworks | **crucible-works** — a multi-tenant business platform on cauldron | Common Lisp · Postgres | Archived | — | [code](https://github.com/ckluis/crucible-works) |
-| Frameworks | **chord** — the omakase full-stack for G# | G# | Spec | `chord.html` | — |
-| Frameworks | **fugue** — the Phoenix of G#, on Orleans | G# · Orleans | Spec | `fugue.html` | — |
-| Frameworks | **realbook** — the WordPress of G#, with a gate | G# | Spec | `realbook.html` | — |
-| Frameworks | **bocht** (Bend series 1): a whole backend in one Bend binary, built by an AI under an evidence discipline | Bend · C · MCP | Case study | — | [live](https://ckluis.github.io/bocht/) · [code](https://github.com/ckluis/bocht) |
-| Frameworks | **bochtCMS** (Bend series 2): an MCP-only CMS, and the curve its 43 passing tests missed | Bend · MCP | Case study | — | [live](https://ckluis.github.io/bochtCMS/) · [code](https://github.com/ckluis/bochtCMS) |
-| Frameworks | **shellOS** (Bend series 3): a desktop shell drawn in pure Bend, ported to macOS and redesigned | Bend · PTY | Case study | — | [live](https://ckluis.github.io/shellOS/) · [code](https://github.com/ckluis/shellOS) |
-| Languages | **taal** — building the BEAM on Go | Go · actor model | Spec | `taal.html` | — |
-| Languages | **streng** — a closed-world TypeScript | TypeScript · native compiler | Spec | `streng.html` | — |
-| Interfaces | **lui** — a layout-first UI framework | UI framework · AI sidecar | Spec | `lui.html` | — |
-| Interfaces | **uiExplorer** — the UI Lab, provenance-first UI experiments | HTML/CSS · zero-dep · AI | Shipped | — | [live](https://ckluis.github.io/uiExplorer/) · [code](https://github.com/ckluis/uiExplorer) |
-| Tools | **workflowForge** — paste a workflow, get a page you can send | Single-file HTML · SVG · bring your own model | Shipped | — | [live](https://ckluis.github.io/workflowForge/) · [code](https://github.com/ckluis/workflowForge) |
-| Tools | **aiCRO** — a full growth engagement from one URL | Node.js · Claude | Shipped | — | [live](https://ckluis.github.io/aiCRO/) · [code](https://github.com/ckluis/aiCRO) |
-| Tools | **senkani** — token compression for AI coding agents | Swift · macOS · MCP | Shipped | — | [live](https://ckluis.github.io/senkani) · [code](https://github.com/ckluis/senkani) |
-| Tools | **terminalHelper** — a searchable terminal command reference | Go · Bubble Tea · SQLite | Shipped | `terminalHelper.html` | [code](https://github.com/ckluis/terminalHelper) |
-| Tools | **luminaryTeam** — a 40-expert multi-agent technical review framework | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/luminaryTeam/) · [code](https://github.com/ckluis/luminaryTeam) |
-| Tools | **baton** v3.1 — an orchestrator of orchestrators, routed by cost | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/baton/) · [code](https://github.com/ckluis/baton) · [v2](https://ckluis.github.io/baton/baton-v2.html) · [v1](https://ckluis.github.io/baton/baton-v1.html) |
-| Tools | **nonprofitEventPlanner** — run a whole youth trip from your phone | Rails 8 · Hotwire · Postgres | Local | `nonprofitEventPlanner.html` | private |
-| Tools | **customCMS** — BookEngine: one brain, many book storefronts | Go · SQLite · Claude | Local | `customCMS.html` | private |
-| Design tests | **Overlook** — an open letter to Slack: the chat interface for supervising agents, with a basis graph that can recall, fork and blame | Vanilla JS · no-build | Concept | `overlook/index.html` | — |
+`index.html` is generated. Every experiment is a folder:
 
-## Regenerating spec previews
-
-Card thumbnails in `previews/` are baked screenshots of each spec's masthead:
-
-```sh
-for f in chord eigen fugue kern lui realbook regel samen streng taal customCMS nonprofitEventPlanner; do
-  npx playwright screenshot --viewport-size=1200,760 --wait-for-timeout=1600 "$f.html" "previews/$f.png"
-done
+```
+groups/<group>/group.json          title, question line, accent colour, order, old anchors
+groups/<group>/<item>/item.json    name, status, line, question, description, stack, facts, links
+groups/<group>/<item>/preview.*    the card image (or "preview": "/path/in/repo.png" in item.json)
 ```
 
-External projects (no local spec) are shot from their live site into
-`previews/live-<name>.png`, or get a hand-built SVG in `previews/` (`stowork.svg`,
-`baton.svg`, `workflowForge.svg`, `cauldron.svg`, `crucible-works.svg`) that draws the mechanism rather than the landing page.
+```sh
+node build/build.mjs          # writes index.html, registry.json, this table and the social-card counts
+node build/build.mjs --check  # exits 1 if anything is stale
+```
+
+To add an experiment, add a folder with an `item.json` and a `preview.png`, then run the build.
+The design lives in `build/index.template.html`. Statuses: `shipped`, `spec`, `concept`,
+`case-study`, `local`, `archived`. `registry.json` is the machine-readable list of every
+folder and its metadata — don't edit it by hand.
+
+## The experiments
+
+<!-- registry:start -->
+| Type | Project | Stack | Status | Links |
+|---|---|---|---|---|
+| Foundations | **regel** — code as governed Postgres rows | Go · TypeScript · Postgres | Shipped | [live](https://ckluis.github.io/regel/) · [code](https://github.com/ckluis/regel) |
+| Foundations | **kern** — a homoiconic SaaS substrate | Lisp · Postgres | Spec | [read the spec](kern.html) |
+| Foundations | **eigen** — local-first hypermedia in one Rust binary | Rust · Postgres | Spec | [read the spec](eigen.html) |
+| Foundations | **taal** — the BEAM, built on Go | Go · Actor model | Spec | [read the spec](taal.html) |
+| Foundations | **streng** — a closed-world TypeScript | TypeScript · Native compiler | Spec | [read the spec](streng.html) |
+| Platforms & frameworks | **samen** — a governed B2B-SaaS foundry | Elixir · Ash · Oban · Postgres | Shipped | [live](https://ckluis.github.io/samen/) · [code](https://github.com/ckluis/samen) |
+| Platforms & frameworks | **tinker** — internal tools on data you can't see | Rust · PostgreSQL 18 · MCP | Shipped | [live](https://ckluis.github.io/tinker/) · [code](https://github.com/ckluis/tinker) |
+| Platforms & frameworks | **chord** — the omakase full-stack for G# | G# · Full-stack | Spec | [read the spec](chord.html) |
+| Platforms & frameworks | **fugue** — the Phoenix of G#, on Orleans | G# · Orleans | Spec | [read the spec](fugue.html) |
+| Platforms & frameworks | **realbook** — the WordPress of G#, with a gate | G# · CMS | Spec | [read the spec](realbook.html) |
+| Platforms & frameworks | **lui** — layout-first UI with an AI sidecar | UI framework · AI sidecar | Spec | [read the spec](lui.html) |
+| Platforms & frameworks | **cauldron** — a web framework from zero dependencies | Common Lisp · SBCL · Zero deps · One binary | Archived | [code](https://github.com/ckluis/cauldron) · [kern took it further](kern.html) |
+| Platforms & frameworks | **crucible-works** — a business platform built to prove cauldron | Common Lisp · On cauldron · Multi-tenant Postgres | Archived | [code](https://github.com/ckluis/crucible-works) · [samen took it further](https://ckluis.github.io/samen/) |
+| Agent tools | **baton** v5 — the accountability layer for agent runs | Prompts · Multi-agent · Claude | Shipped | [live](https://ckluis.github.io/baton/) · [code](https://github.com/ckluis/baton) · [v2](https://ckluis.github.io/baton/baton-v2.html) · [v1](https://ckluis.github.io/baton/baton-v1.html) |
+| Agent tools | **luminaryTeam** — a 40-expert adversarial review | Prompts · Multi-agent · Claude | Shipped | [live](https://ckluis.github.io/luminaryTeam/) · [code](https://github.com/ckluis/luminaryTeam) |
+| Agent tools | **senkani** — token compression for coding agents | Swift · macOS · MCP | Shipped | [live](https://ckluis.github.io/senkani) · [code](https://github.com/ckluis/senkani) |
+| Agent tools | **workflowForge** — paste a workflow, get a page you can send | Single-file HTML · SVG renderer · Bring your own model · No server | Shipped | [live](https://ckluis.github.io/workflowForge/) · [code](https://github.com/ckluis/workflowForge) |
+| Products | **aiCRO** — a full growth engagement from one URL | Node.js · Claude · Self-contained HTML | Shipped | [live](https://ckluis.github.io/aiCRO/) · [code](https://github.com/ckluis/aiCRO) |
+| Products | **terminalHelper** — a searchable terminal command reference | Go · Bubble Tea · SQLite | Shipped | [read the spec](terminalHelper.html) · [code](https://github.com/ckluis/terminalHelper) |
+| Products | **nonprofitEventPlanner** — run a whole youth trip from your phone | Rails 8 · Hotwire · Postgres | Local | [read the spec](nonprofitEventPlanner.html) |
+| Products | **customCMS** — one brain, many book storefronts | Go · SQLite · Claude Code | Local | [read the spec](customCMS.html) |
+| Field reports | **bocht** — a whole backend in one Bend binary | Bend · C · WAL · MCP | Case study | [live](https://ckluis.github.io/bocht/) · [code](https://github.com/ckluis/bocht) · [the bend series](bend/index.html) |
+| Field reports | **bochtCMS** — an MCP-only CMS, and the curve its tests missed | Bend · MCP · JSON-RPC · Claude Code | Case study | [live](https://ckluis.github.io/bochtCMS/) · [code](https://github.com/ckluis/bochtCMS) · [the bend series](bend/index.html) |
+| Field reports | **shellOS** — a desktop shell drawn in pure Bend | Bend · PTY · VT100 · Claude Code | Case study | [live](https://ckluis.github.io/shellOS/) · [code](https://github.com/ckluis/shellOS) · [the bend series](bend/index.html) |
+| Design studies | **Overlook** — an open letter to Slack | Vanilla JS · 12 live demos · Agent sim · No-build | Concept | [read the letter](overlook/index.html) · [see the graph](overlook/index.html#graph) |
+| Design studies | **wijzer** — an open letter to Apple | SVG · Computed ephemeris · True scale · No-build | Concept | [read the letter](wijzer/index.html) · [try the faces](wijzer/index.html#swipe) |
+| Design studies | **uiExplorer** — the UI Lab | HTML/CSS · Zero-dep · AI-native | Shipped | [live](https://ckluis.github.io/uiExplorer/) · [code](https://github.com/ckluis/uiExplorer) |
+| Design studies | **omegaClass** — an outdoor fire station in one cabinet | Three.js · Two-axis rig · PBR + reflections · No-build | Concept | [open the 3d](3d/omegaClassGrills/index.html) · [read the plan](3d/omegaClassGrills/PLAN.md) |
+| Design studies | **STOWORK** — a carry-on that becomes a workstation | Three.js · Parametric rig · No-build | Concept | [open the 3d](3d/portable-office/index.html) · [read the plan](3d/portable-office/PLAN.md) |
+<!-- registry:end -->
+
+## Card drawings
+
+Each card shows `preview.svg` from the item's folder: a drawing of the project's mechanism or signature
+UI on a dark ground, in one shared style. The spec is in [`build/card-style.md`](build/card-style.md).
+Stars and forks come from GitHub and are cached in `build/github-stats.json`; refresh them with
+`node build/build.mjs --stats`.
 
 The index's own social card is generated from `previews/_social-experiments-src.html`:
 

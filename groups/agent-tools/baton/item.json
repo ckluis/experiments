@@ -1,0 +1,52 @@
+{
+  "name": "baton",
+  "version": "v5",
+  "order": 10,
+  "status": "shipped",
+  "repo": "ckluis/baton",
+  "line": "the accountability layer for agent runs",
+  "question": "What if every agent run kept a record — evidence that cites, verdicts per criterion, and gates a person holds?",
+  "body": "A router prompt that turns a fresh session into a multi-agent run with a record: evidence that cites or retracts, verdicts computed per criterion, gates a person holds, and state that outlives the laptop. Three tiers replace six rungs — cheap for what a command can settle, frontier for everything with judgment, a person when frontier has failed twice. One more line, TEAM: github, hands the same run to a team.",
+  "stack": [
+    "Prompts",
+    "Multi-agent",
+    "Claude"
+  ],
+  "facts": [
+    [
+      "3",
+      "tiers"
+    ],
+    [
+      "48",
+      "rules"
+    ],
+    [
+      "40",
+      "named experts"
+    ],
+    [
+      "10",
+      "modes"
+    ]
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/baton/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/baton"
+    },
+    {
+      "label": "v2",
+      "href": "https://ckluis.github.io/baton/baton-v2.html"
+    },
+    {
+      "label": "v1",
+      "href": "https://ckluis.github.io/baton/baton-v1.html"
+    }
+  ],
+  "alt": "baton v5 — work routed to three tiers (cheap, frontier, a person) while every step lands in a record of evidence, verdicts and gates"
+}

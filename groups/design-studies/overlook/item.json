@@ -1,0 +1,25 @@
+{
+  "name": "Overlook",
+  "order": 10,
+  "status": "concept",
+  "line": "an open letter to Slack",
+  "question": "What if supervising ten agents felt as calm as reading one channel?",
+  "body": "An open letter to Slack, with the product built first. Columns instead of tabs, a room per project, humans and agents on one roster, and two signals — new, and needs you. Underneath, a graph that can recall what a wrong fact touched, fork a decision into its futures, and blame any line.",
+  "stack": [
+    "Vanilla JS",
+    "12 live demos",
+    "Agent sim",
+    "No-build"
+  ],
+  "links": [
+    {
+      "label": "Read the letter",
+      "href": "overlook/index.html"
+    },
+    {
+      "label": "See the graph",
+      "href": "overlook/index.html#graph"
+    }
+  ],
+  "alt": "Overlook — supervising ten agents should feel as calm as reading one channel"
+}

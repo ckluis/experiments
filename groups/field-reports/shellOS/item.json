@@ -1,0 +1,44 @@
+{
+  "name": "shellOS",
+  "order": 30,
+  "status": "case-study",
+  "repo": "ckluis/shellOS",
+  "line": "a desktop shell drawn in pure Bend",
+  "question": "Can a desktop shell drawn pixel by pixel in Bend move from Linux to macOS without changing the app?",
+  "body": "Bend series, part 3. A single-window desktop shell drawn pixel by pixel in pure Bend (terminal over a real PTY, reader, palette), ported from a Linux VM to macOS with no app changes, three screen-only bugs fixed, then redesigned.",
+  "stack": [
+    "Bend",
+    "PTY",
+    "VT100",
+    "Claude Code"
+  ],
+  "facts": [
+    [
+      "VM → Mac",
+      "ported"
+    ],
+    [
+      "3",
+      "bugs fixed"
+    ],
+    [
+      "2×",
+      "frames"
+    ]
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/shellOS/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/shellOS"
+    },
+    {
+      "label": "The Bend series",
+      "href": "bend/index.html"
+    }
+  ],
+  "alt": "shellOS after the redesign: panes for themes, saved articles, items, the reader and a live terminal"
+}

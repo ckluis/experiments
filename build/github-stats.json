@@ -1,0 +1,80 @@
+{
+  "fetched": "2026-10-05",
+  "repos": {
+    "ckluis/aiCRO": {
+      "stars": 1,
+      "forks": 1,
+      "pushed": "2026-07-20T11:48:18Z"
+    },
+    "ckluis/baton": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-10-03T01:09:08Z"
+    },
+    "ckluis/bocht": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-10-05T11:50:11Z"
+    },
+    "ckluis/bochtCMS": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-10-05T11:51:00Z"
+    },
+    "ckluis/cauldron": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-03-17T15:56:46Z"
+    },
+    "ckluis/crucible-works": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-03-17T15:57:23Z"
+    },
+    "ckluis/luminaryTeam": {
+      "stars": 0,
+      "forks": 1,
+      "pushed": "2026-07-02T17:51:06Z"
+    },
+    "ckluis/regel": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-07-20T11:47:08Z"
+    },
+    "ckluis/samen": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-10-05T12:11:59Z"
+    },
+    "ckluis/senkani": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-09-13T19:16:50Z"
+    },
+    "ckluis/shellOS": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-10-05T11:58:02Z"
+    },
+    "ckluis/terminalHelper": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-04-03T12:17:44Z"
+    },
+    "ckluis/tinker": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-10-05T11:47:10Z"
+    },
+    "ckluis/uiExplorer": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-07-20T11:49:34Z"
+    },
+    "ckluis/workflowForge": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-09-05T19:58:07Z"
+    }
+  }
+}

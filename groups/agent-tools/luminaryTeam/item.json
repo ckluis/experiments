@@ -1,0 +1,25 @@
+{
+  "name": "luminaryTeam",
+  "order": 20,
+  "status": "shipped",
+  "repo": "ckluis/luminaryTeam",
+  "line": "a 40-expert adversarial review",
+  "question": "What would 40 domain experts find if they reviewed your plan before launch?",
+  "body": "A multi-agent technical review framework — drop in a codebase, spec, or launch plan and get an adversarial audit from 40 domain experts across 7 phases, synthesized into ranked fixes.",
+  "stack": [
+    "Prompts",
+    "Multi-agent",
+    "Claude"
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/luminaryTeam/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/luminaryTeam"
+    }
+  ],
+  "alt": "luminaryTeam — a 40-expert adversarial review"
+}

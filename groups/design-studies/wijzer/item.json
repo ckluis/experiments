@@ -1,0 +1,25 @@
+{
+  "name": "wijzer",
+  "order": 20,
+  "status": "concept",
+  "line": "an open letter to Apple",
+  "question": "What if your watch showed how much of the day is still yours?",
+  "body": "A watch face that draws your calendar and your sky on one 24-hour dial — meetings as arcs, the sun, moon and tide resting at their true hours. Three faces, prototyped in HTML at true widget scale, with the ephemeris computed rather than invented. Written up as an open letter to Apple, because watchOS does not open the face.",
+  "stack": [
+    "SVG",
+    "Computed ephemeris",
+    "True scale",
+    "No-build"
+  ],
+  "links": [
+    {
+      "label": "Read the letter",
+      "href": "wijzer/index.html"
+    },
+    {
+      "label": "Try the faces",
+      "href": "wijzer/index.html#swipe"
+    }
+  ],
+  "alt": "wijzer — a 24-hour almanac watch face"
+}

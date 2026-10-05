@@ -1,0 +1,25 @@
+{
+  "name": "terminalHelper",
+  "order": 20,
+  "status": "shipped",
+  "repo": "ckluis/terminalHelper",
+  "line": "a searchable terminal command reference",
+  "question": "What if your terminal had a browsable library of every command you've ever needed?",
+  "body": "A searchable, browsable command reference for your terminal — a Miller-column TUI, full-text search, and an ask-Claude escape hatch that saves answers to your library.",
+  "stack": [
+    "Go",
+    "Bubble Tea",
+    "SQLite"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "terminalHelper.html"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/terminalHelper"
+    }
+  ],
+  "alt": "terminalHelper — a searchable terminal command reference"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "streng",
+  "order": 60,
+  "status": "spec",
+  "line": "a closed-world TypeScript",
+  "question": "What if TypeScript came with no supply chain at all — the whole corpus vendored and checked in milliseconds?",
+  "body": "A closed-world TypeScript — all of the corpus, none of the supply chain, checked by a vendored native compiler in milliseconds.",
+  "stack": [
+    "TypeScript",
+    "Native compiler"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "streng.html"
+    }
+  ],
+  "alt": "streng — a closed-world TypeScript"
+}

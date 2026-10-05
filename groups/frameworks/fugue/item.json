@@ -1,0 +1,19 @@
+{
+  "name": "fugue",
+  "order": 30,
+  "status": "spec",
+  "line": "the Phoenix of G#, on Orleans",
+  "question": "What if an app framework were distributed by default, built on virtual actors?",
+  "body": "The Phoenix of G#, on Orleans — a distributed-by-default app framework built on virtual actors.",
+  "stack": [
+    "G#",
+    "Orleans"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "fugue.html"
+    }
+  ],
+  "alt": "fugue — the Phoenix of G#, on Orleans"
+}

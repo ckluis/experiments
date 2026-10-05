@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="aiCRO: one website URL goes in and five self-contained deliverables come out: a cover, a book, a plan, a rebuilt website in a guided preview, and a go-to-market kit per customer group">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%">
+      <stop offset="0" stop-color="#d9a94a" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#d9a94a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">One URL, five deliverables.</text>
+<rect x="40" y="170" width="176" height="44" rx="22" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<circle cx="62" cy="192" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".5" stroke-width="1.2"/>
+<text x="78" y="196" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="0" fill="#efe6d6" fill-opacity="1" text-anchor="start">marigoldhome.co</text>
+<text x="40" y="240" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">OPENS FROM FILE://</text>
+<text x="40" y="256" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">NO SERVER · NO CDN</text>
+<circle cx="216" cy="192" r="4" fill="#d9a94a"/>
+<g fill="none" stroke-width="1.5" stroke-linecap="round">
+<path d="M216 192 C 270 192, 270 108, 330 108" stroke="#efe6d6" stroke-opacity=".35"/>
+<path d="M216 192 C 270 192, 270 158, 330 158" stroke="#efe6d6" stroke-opacity=".35"/>
+<path d="M216 192 C 270 192, 270 208, 330 208" stroke="#efe6d6" stroke-opacity=".35"/>
+<path d="M216 192 C 270 192, 270 258, 330 258" stroke="#d9a94a" stroke-opacity="1"/>
+<path d="M216 192 C 270 192, 270 308, 330 308" stroke="#efe6d6" stroke-opacity=".35"/>
+</g>
+<rect x="330" y="88" width="270" height="40" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="346" y="113" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">00</text>
+<text x="376" y="113" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.85" text-anchor="start">COVER</text>
+<rect x="330" y="138" width="270" height="40" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="346" y="163" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">01</text>
+<text x="376" y="163" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.85" text-anchor="start">BOOK</text>
+<rect x="330" y="188" width="270" height="40" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="346" y="213" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">02</text>
+<text x="376" y="213" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.85" text-anchor="start">PLAN</text>
+<rect x="330" y="238" width="270" height="40" rx="10" fill="#d9a94a" fill-opacity=".1" stroke="#d9a94a" stroke-width="1.5"/>
+<text x="346" y="263" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#d9a94a" fill-opacity="1" text-anchor="start">03</text>
+<text x="376" y="263" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#d9a94a" fill-opacity="1" text-anchor="start">WEBSITE · GUIDED PREVIEW</text>
+<rect x="330" y="288" width="270" height="40" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="346" y="313" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">04</text>
+<text x="376" y="313" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity="0.85" text-anchor="start">GTM KIT · PER GROUP</text>
+</svg>

@@ -1,0 +1,25 @@
+{
+  "name": "regel",
+  "order": 10,
+  "status": "shipped",
+  "repo": "ckluis/regel",
+  "line": "code as governed Postgres rows",
+  "question": "What if deploying were a commit, and rolling back were a WHERE clause?",
+  "body": "A Go kernel runs strict-TypeScript apps admitted as content-addressed Postgres rows. Deploy is a commit; rollback is an as-of WHERE clause — and nothing lands unverified.",
+  "stack": [
+    "Go",
+    "TypeScript",
+    "Postgres"
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/regel/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/regel"
+    }
+  ],
+  "alt": "regel — code as governed Postgres rows"
+}

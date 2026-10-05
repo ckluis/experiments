@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="baton v5 — a run's tasks are routed to three tiers: cheap for what a command can settle, frontier for judgment, a person when frontier has failed twice; every step writes evidence, a verdict per criterion and a gate into one record">
+  <defs>
+    <radialGradient id="glow" cx="88%" cy="8%" r="70%">
+      <stop offset="0" stop-color="#5fb3a1" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#5fb3a1" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">Agents work. baton keeps the record.</text>
+
+  <!-- three tiers -->
+  <g font-family="JetBrains Mono, ui-monospace, monospace">
+    <rect x="40" y="96" width="350" height="56" rx="12" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+    <text x="58" y="120" font-size="11" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".85">CHEAP</text>
+    <text x="58" y="138" font-size="10" fill="#efe6d6" fill-opacity=".45">what a command can settle</text>
+
+    <rect x="40" y="166" width="350" height="56" rx="12" fill="#5fb3a1" fill-opacity=".1" stroke="#5fb3a1" stroke-width="1.5"/>
+    <text x="58" y="190" font-size="11" letter-spacing=".1em" fill="#5fb3a1">FRONTIER</text>
+    <text x="58" y="208" font-size="10" fill="#efe6d6" fill-opacity=".55">everything with judgment</text>
+
+    <rect x="40" y="236" width="350" height="56" rx="12" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text x="58" y="260" font-size="11" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".85">A PERSON</text>
+    <text x="58" y="278" font-size="10" fill="#efe6d6" fill-opacity=".45">when frontier has failed twice</text>
+  </g>
+
+  <!-- tasks on the tiers -->
+  <g stroke-width="1.5">
+    <circle cx="266" cy="124" r="7" fill="#14110c" stroke="#7fc49a"/><path d="M262.5 124l2.5 2.5 4.5-5" fill="none" stroke="#7fc49a" stroke-linecap="round"/>
+    <circle cx="300" cy="124" r="7" fill="#14110c" stroke="#7fc49a"/><path d="M296.5 124l2.5 2.5 4.5-5" fill="none" stroke="#7fc49a" stroke-linecap="round"/>
+    <circle cx="232" cy="194" r="7" fill="#14110c" stroke="#7fc49a"/><path d="M228.5 194l2.5 2.5 4.5-5" fill="none" stroke="#7fc49a" stroke-linecap="round"/>
+    <circle cx="266" cy="194" r="7" fill="#5fb3a1" fill-opacity=".25" stroke="#5fb3a1"/>
+    <circle cx="300" cy="194" r="7" fill="#14110c" stroke="#e07a5f"/><path d="M297 191l6 6M303 191l-6 6" stroke="#e07a5f" stroke-linecap="round"/>
+    <circle cx="334" cy="194" r="7" fill="#14110c" stroke="#e07a5f"/><path d="M331 191l6 6M337 191l-6 6" stroke="#e07a5f" stroke-linecap="round"/>
+    <path d="M334 202 C 334 236, 334 236, 334 252" fill="none" stroke="#e07a5f" stroke-opacity=".7" stroke-dasharray="3 4" stroke-linecap="round"/>
+    <!-- person -->
+    <circle cx="334" cy="258" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".85"/>
+    <path d="M325 276c0-6 4-9 9-9s9 3 9 9" fill="none" stroke="#efe6d6" stroke-opacity=".85" stroke-linecap="round"/>
+  </g>
+  <text x="326" y="233" text-anchor="end" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9.5" letter-spacing=".08em" fill="#e07a5f" fill-opacity=".85">FAILED ×2</text>
+
+  <!-- the record -->
+  <g fill="none" stroke-width="1.5" stroke-linecap="round" stroke="#5fb3a1" stroke-opacity=".55">
+    <path d="M390 124 C 420 124, 420 160, 436 160"/>
+    <path d="M390 194 L 436 194"/>
+    <path d="M390 264 C 420 264, 420 228, 436 228"/>
+  </g>
+  <g font-family="JetBrains Mono, ui-monospace, monospace">
+    <rect x="436" y="96" width="164" height="196" rx="12" fill="#1c1812" stroke="#5fb3a1" stroke-width="1.5"/>
+    <text x="452" y="120" font-size="10.5" letter-spacing=".1em" fill="#5fb3a1">THE RECORD</text>
+    <line x1="452" y1="132" x2="584" y2="132" stroke="#efe6d6" stroke-opacity=".12"/>
+    <text x="452" y="156" font-size="9.8" fill="#efe6d6" fill-opacity=".8">evidence · cites</text>
+    <text x="452" y="180" font-size="9.8" fill="#efe6d6" fill-opacity=".8">verdict · per criterion</text>
+    <text x="452" y="204" font-size="9.8" fill="#efe6d6" fill-opacity=".8">gate · a person holds</text>
+    <text x="452" y="228" font-size="9.8" fill="#efe6d6" fill-opacity=".8">state · outlives laptop</text>
+    <line x1="452" y1="246" x2="584" y2="246" stroke="#efe6d6" stroke-opacity=".12"/>
+    <text x="452" y="272" font-size="10" fill="#efe6d6" fill-opacity=".45">TEAM: github → PR</text>
+  </g>
+
+  <text x="40" y="340" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".45">3 TIERS · 48 RULES · 40 EXPERTS · 10 MODES</text>
+</svg>

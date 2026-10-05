@@ -1,0 +1,11 @@
+{
+  "order": 6,
+  "title": "Design studies",
+  "accent": "#b4456a",
+  "aliases": [
+    "design",
+    "interfaces"
+  ],
+  "line": "Designs taken far enough to argue with.",
+  "blurb": "Open letters with working prototypes, 3D objects you can rotate, and interfaces at true scale — built to answer what a sketch can't."
+}

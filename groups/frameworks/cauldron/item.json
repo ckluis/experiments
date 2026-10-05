@@ -1,0 +1,36 @@
+{
+  "name": "cauldron",
+  "order": 60,
+  "status": "archived",
+  "repo": "ckluis/cauldron",
+  "line": "a web framework from zero dependencies",
+  "question": "How much of a modern web stack can one Lisp binary carry with no dependencies at all?",
+  "body": "A whole web framework from zero dependencies in Common Lisp — HTTP server, Postgres wire protocol, crypto, a LiveView-style UI engine, an admin panel, and an agent system — shipped as one SBCL binary. No Quicklisp, no FFI, no C.",
+  "stack": [
+    "Common Lisp",
+    "SBCL",
+    "Zero deps",
+    "One binary"
+  ],
+  "facts": [
+    [
+      "1,554",
+      "tests green"
+    ],
+    [
+      "17–21 Mar",
+      "built → archived"
+    ]
+  ],
+  "links": [
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/cauldron"
+    },
+    {
+      "label": "kern took it further",
+      "href": "kern.html"
+    }
+  ],
+  "alt": "cauldron — one sealed binary holding a whole web stack, nothing crossing in from outside"
+}

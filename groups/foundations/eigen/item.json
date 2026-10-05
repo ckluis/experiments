@@ -1,0 +1,19 @@
+{
+  "name": "eigen",
+  "order": 30,
+  "status": "spec",
+  "line": "local-first hypermedia in one Rust binary",
+  "question": "What if one static binary were the app, the desktop and the API — and PII stayed hidden offline?",
+  "body": "A local-first hypermedia framework for Rust — one static binary is the app, desktop, and API; Postgres holds everything; PII stays hidden offline.",
+  "stack": [
+    "Rust",
+    "Postgres"
+  ],
+  "links": [
+    {
+      "label": "Read the spec",
+      "href": "eigen.html"
+    }
+  ],
+  "alt": "eigen — local-first hypermedia in one Rust binary"
+}

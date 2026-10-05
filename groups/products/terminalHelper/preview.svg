@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="terminalHelper: a three-column Miller TUI of tools, commands and a preview, plus an ask-Claude line that turns a plain-English question into a runnable command saved to your library">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%">
+      <stop offset="0" stop-color="#d9a94a" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#d9a94a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">One keystroke away.</text>
+<rect x="40" y="88" width="560" height="150" rx="12" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<line x1="190" y1="88" x2="190" y2="238" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1"/>
+<line x1="340" y1="88" x2="340" y2="238" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1"/>
+<text x="58" y="112" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">TOOLS</text>
+<text x="208" y="112" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">COMMANDS</text>
+<text x="358" y="112" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">PREVIEW</text>
+<rect x="50" y="124" width="130" height="26" rx="6" fill="#d9a94a" fill-opacity=".12" stroke="#d9a94a" stroke-width="1.5"/>
+<text x="62" y="142" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing=".02em" fill="#d9a94a" fill-opacity="1" text-anchor="start">git</text>
+<text x="62" y="172" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing=".02em" fill="#efe6d6" fill-opacity="0.6" text-anchor="start">curl</text>
+<g stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5" stroke-linecap="round"><line x1="62" y1="196" x2="104" y2="196"/><line x1="62" y1="216" x2="90" y2="216"/></g>
+<rect x="200" y="124" width="130" height="26" rx="6" fill="#d9a94a" fill-opacity=".12" stroke="#d9a94a" stroke-width="1.5"/>
+<text x="210" y="142" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#d9a94a" fill-opacity="1" text-anchor="start">reset --soft</text>
+<text x="210" y="172" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#efe6d6" fill-opacity="0.6" text-anchor="start">revert HEAD</text>
+<text x="358" y="142" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#efe6d6" fill-opacity="1" text-anchor="start">git reset --soft</text>
+<text x="358" y="160" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#efe6d6" fill-opacity="1" text-anchor="start">HEAD~1</text>
+<text x="358" y="186" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">undo staged commit,</text>
+<text x="358" y="202" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">keep changes</text>
+<path d="M180 137 h20 M330 137 h20" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="40" y="274" width="300" height="56" rx="12" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="58" y="298" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" fill="#d9a94a">$</text><text x="72" y="298" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#efe6d6" fill-opacity="1" text-anchor="start">th ask "find files &gt;100MB"</text>
+<text x="58" y="318" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#efe6d6" fill-opacity="0.85" text-anchor="start">› find . -type f -size +100M</text>
+<path d="M348 302 H 452" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round"/><path d="M444 296 l8 6 l-8 6" fill="none" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="460" y="274" width="140" height="56" rx="12" fill="#d9a94a" fill-opacity=".1" stroke="#d9a94a" stroke-width="1.5"/>
+<text x="530" y="298" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#d9a94a" fill-opacity="1" text-anchor="middle">SAVED TO</text>
+<text x="530" y="316" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#d9a94a" fill-opacity="1" text-anchor="middle">YOUR LIBRARY</text>
+</svg>

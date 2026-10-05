@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="luminaryTeam — forty independent expert lenses pass through seven phases and come out as ranked fixes from P0 blocker to P3 improvement">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%">
+      <stop offset="0" stop-color="#5fb3a1" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#5fb3a1" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">Forty lenses, one verdict.</text>
+<rect x="40" y="100" width="200" height="220" rx="14" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="58" y="126" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">40 EXPERTS · INDEPENDENT</text>
+<circle cx="62" cy="152" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="84" cy="152" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="106" cy="152" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="128" cy="152" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="150" cy="152" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="172" cy="152" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="194" cy="152" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="216" cy="152" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="62" cy="178" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="84" cy="178" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="106" cy="178" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="128" cy="178" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="150" cy="178" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="172" cy="178" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="194" cy="178" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="216" cy="178" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="62" cy="204" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="84" cy="204" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="106" cy="204" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="128" cy="204" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="150" cy="204" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="172" cy="204" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="194" cy="204" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="216" cy="204" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="62" cy="230" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="84" cy="230" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="106" cy="230" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="128" cy="230" r="6" fill="#5fb3a1"/>
+<circle cx="150" cy="230" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="172" cy="230" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="194" cy="230" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="216" cy="230" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="62" cy="256" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="84" cy="256" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="106" cy="256" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="128" cy="256" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="150" cy="256" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="172" cy="256" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="194" cy="256" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<circle cx="216" cy="256" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".45" stroke-width="1.2"/>
+<text x="58" y="296" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start">ONE RED FLAG EACH, AT MOST</text>
+<path d="M252 210 H 290" stroke="#efe6d6" stroke-opacity=".35" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="290" y="150" width="60" height="120" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<circle cx="306" cy="166" r="3" fill="#efe6d6" fill-opacity=".45"/><text x="318" y="170" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">00</text>
+<circle cx="306" cy="182" r="3" fill="#efe6d6" fill-opacity=".45"/><text x="318" y="186" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">01</text>
+<circle cx="306" cy="198" r="3" fill="#efe6d6" fill-opacity=".45"/><text x="318" y="202" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">02</text>
+<circle cx="306" cy="214" r="3" fill="#efe6d6" fill-opacity=".45"/><text x="318" y="218" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">03</text>
+<circle cx="306" cy="230" r="3" fill="#efe6d6" fill-opacity=".45"/><text x="318" y="234" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">04</text>
+<circle cx="306" cy="246" r="3" fill="#efe6d6" fill-opacity=".45"/><text x="318" y="250" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">05</text>
+<circle cx="306" cy="262" r="3" fill="#efe6d6" fill-opacity=".45"/><text x="318" y="266" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start">06</text>
+<text x="320" y="140" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity="0.5" text-anchor="middle">7 PHASES</text>
+<path d="M356 210 H 394" stroke="#efe6d6" stroke-opacity=".35" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="394" y="120" width="206" height="42" rx="10" fill="#5fb3a1" fill-opacity=".1" stroke="#5fb3a1" stroke-width="1.5"/>
+<text x="412" y="146" font-family="JetBrains Mono, ui-monospace, monospace" font-size="13" letter-spacing=".06em" fill="#5fb3a1" fill-opacity="1" text-anchor="start">P0</text>
+<text x="450" y="146" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".1em" fill="#5fb3a1" fill-opacity="1" text-anchor="start">BLOCKER</text>
+<rect x="394" y="174" width="206" height="42" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="412" y="200" font-family="JetBrains Mono, ui-monospace, monospace" font-size="13" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="start">P1</text>
+<text x="450" y="200" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.7" text-anchor="start">CRITICAL</text>
+<rect x="394" y="228" width="206" height="42" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="412" y="254" font-family="JetBrains Mono, ui-monospace, monospace" font-size="13" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="start">P2</text>
+<text x="450" y="254" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.7" text-anchor="start">IMPORTANT</text>
+<rect x="394" y="282" width="206" height="42" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+<text x="412" y="308" font-family="JetBrains Mono, ui-monospace, monospace" font-size="13" letter-spacing=".06em" fill="#efe6d6" fill-opacity="1" text-anchor="start">P3</text>
+<text x="450" y="308" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.7" text-anchor="start">IMPROVEMENT</text>
+<text x="497" y="340" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.45" text-anchor="middle">RANKED FIXES</text>
+</svg>

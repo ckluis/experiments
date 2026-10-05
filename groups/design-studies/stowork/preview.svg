@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="STOWORK — a carry-on case on the left unfolds, by an arrow, into a three-monitor workstation with an AV boom and a compute bay in the base">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%">
+      <stop offset="0" stop-color="#e07a9c" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#e07a9c" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">Case to studio.</text>
+  <path d="M82 214V170M110 214V170" fill="none" stroke="#efe6d6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"  stroke-opacity=".5"/>
+  <path d="M82 170h28" fill="none" stroke="#efe6d6" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".5" stroke-width="3"/>
+  <rect x="56" y="214" width="82" height="108" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".6" stroke-width="1.5"/>
+  <line x1="56" y1="232" x2="138" y2="232" stroke="#efe6d6" stroke-opacity=".25" stroke-width="1.2"/>
+  <line x1="56" y1="304" x2="138" y2="304" stroke="#efe6d6" stroke-opacity=".25" stroke-width="1.2"/>
+  <rect x="84" y="248" width="26" height="30" rx="4" fill="none" stroke="#efe6d6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".35"/>
+  <circle cx="72" cy="330" r="5" fill="none" stroke="#efe6d6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".5"/><circle cx="122" cy="330" r="5" fill="none" stroke="#efe6d6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".5"/>
+  <text x="97" y="364" text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.45">STOWED · CARRY-ON</text>
+  <path d="M162 262H222" fill="none" stroke="#e07a9c" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M213 254l9 8l-9 8" fill="none" stroke="#e07a9c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="192" y="246" text-anchor="middle" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing=".1em" fill="#e07a9c" fill-opacity="1">&lt; 2 MIN</text>
+  <rect x="310" y="318" width="270" height="22" rx="6" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".5" stroke-width="1.5"/>
+  <rect x="340" y="323" width="44" height="12" rx="3" fill="#e07a9c" fill-opacity=".15" stroke="#e07a9c" stroke-width="1.2"/>
+  <text x="396" y="333" text-anchor="start" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#e07a9c" fill-opacity="1">COMPUTE BAY</text>
+  <path d="M445 318V250M475 318V250" fill="none" stroke="#efe6d6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".4"/>
+  <rect x="400" y="140" width="120" height="76" rx="6" fill="#e07a9c" fill-opacity=".12" stroke="#e07a9c" stroke-width="1.5"/>
+  <path d="M418 190l22-22l16 14l16-18l22 26" fill="none" stroke="#e07a9c" stroke-opacity=".6" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M460 216v34" fill="none" stroke="#efe6d6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".6"/>
+  <path d="M392 146L318 160V222L392 212Z" fill="#e07a9c" fill-opacity=".1" stroke="#e07a9c" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M528 146L602 160V222L528 212Z" fill="#e07a9c" fill-opacity=".1" stroke="#e07a9c" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M400 182H392M520 182H528" fill="none" stroke="#efe6d6" stroke-width="3" stroke-linecap="round" stroke-opacity=".7"/>
+  <path d="M420 292L400 306H520L500 292Z" fill="none" stroke="#efe6d6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".6"/>
+  <line x1="430" y1="299" x2="490" y2="299" stroke="#efe6d6" stroke-opacity=".3" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M530 318V240Q530 100 470 102H430" fill="none" stroke="#efe6d6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".7"/>
+  <rect x="414" y="94" width="20" height="16" rx="4" fill="#1c1812" stroke="#efe6d6" stroke-width="1.5"/>
+  <circle cx="424" cy="102" r="3" fill="#efe6d6"/>
+  <text x="440" y="84" text-anchor="start" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.45">AV BOOM</text>
+  <text x="530" y="364" text-anchor="end" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity="0.45">3 MONITORS · AV · COMPUTE</text>
+</svg>

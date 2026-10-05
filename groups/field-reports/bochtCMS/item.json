@@ -1,0 +1,44 @@
+{
+  "name": "bochtCMS",
+  "order": 20,
+  "status": "case-study",
+  "repo": "ckluis/bochtCMS",
+  "line": "an MCP-only CMS, and the curve its tests missed",
+  "question": "What does a passing test suite miss when a CMS freezes on a long post?",
+  "body": "Bend series, part 2. A blog CMS on bocht whose only interface is seven MCP tools. Its 43 tests passed on every version, including the one that froze for two minutes on a long post. One function fixed: 1,200× faster, same bytes out.",
+  "stack": [
+    "Bend",
+    "MCP",
+    "JSON-RPC",
+    "Claude Code"
+  ],
+  "facts": [
+    [
+      "43/43",
+      "tests passed"
+    ],
+    [
+      "2 min",
+      "freeze on a long post"
+    ],
+    [
+      "1,200×",
+      "faster after one fix"
+    ]
+  ],
+  "links": [
+    {
+      "label": "Live",
+      "href": "https://ckluis.github.io/bochtCMS/"
+    },
+    {
+      "label": "Code",
+      "href": "https://github.com/ckluis/bochtCMS"
+    },
+    {
+      "label": "The Bend series",
+      "href": "bend/index.html"
+    }
+  ],
+  "alt": "bochtCMS: time to save one post bending upward with size before the fix, flat after it"
+}
