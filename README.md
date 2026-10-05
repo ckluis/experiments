@@ -39,6 +39,7 @@ and, where one exists, its source repository. Each spec links back to the index.
 | Tools | **baton** v3.1 — an orchestrator of orchestrators, routed by cost | Prompts · Multi-agent · Claude | Shipped | — | [live](https://ckluis.github.io/baton/) · [code](https://github.com/ckluis/baton) · [v2](https://ckluis.github.io/baton/baton-v2.html) · [v1](https://ckluis.github.io/baton/baton-v1.html) |
 | Tools | **nonprofitEventPlanner** — run a whole youth trip from your phone | Rails 8 · Hotwire · Postgres | Local | `nonprofitEventPlanner.html` | private |
 | Tools | **customCMS** — BookEngine: one brain, many book storefronts | Go · SQLite · Claude | Local | `customCMS.html` | private |
+| Design tests | **Overlook** — an open letter to Slack: the chat interface for supervising agents, with a basis graph that can recall, fork and blame | Vanilla JS · no-build | Concept | `overlook/index.html` | — |
 
 ## Regenerating spec previews
 
