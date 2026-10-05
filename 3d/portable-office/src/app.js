@@ -1,558 +1,375 @@
-// STOWORK — landing page 3D app (Page Builder).
-// Consumes ./caseModel.js (Model Builder owns it) strictly via the SPEC §4 API.
+// STOWORK — the deploy stage.
 //
-// Robustness contract: if WebGL is unavailable or three fails, every canvas slot
-// shows a graceful fallback panel and the marketing/spec content stays readable.
-// Nothing here is allowed to throw uncaught and blank the page.
-
-// Classic script: THREE (vendor/three.min.js), THREE.OrbitControls
-// (vendor/OrbitControls.js), and createPortableOffice (src/caseModel.js) are all
-// globals loaded by <script> tags before this file. No ES module import, so the
-// page works from file:// with no server and no build step.
+// One deploy value t ∈ [0,1] drives everything: the 3D model (caseModel.js),
+// the slider, the step readout, the setup clock and the storyboard cards.
 //
-// Wrapped in an IIFE so this file's top-level declarations (STAGES, lerp,
-// StowScene, boot, …) do NOT leak into the shared global scope that classic
-// scripts share. caseModel.js also declares `const STAGES` and `const lerp`;
-// two globals with the same name is a SyntaxError ("Identifier 'STAGES' has
-// already been declared") that stops this entire file from running — which is
-// exactly what blanked the 3D. Keep everything scoped here.
+// Layers, from most to least capable, each one a complete experience:
+//   1. WebGL: the live parametric model, drag to turn, scrub/play the deploy.
+//   2. JS, no WebGL: the same controls cross-fade between the six rendered
+//      stills in renders/ (produced from this same model + studio.js).
+//   3. No JS: the stage shows the "Ready to work" still, and the storyboard
+//      below it shows all six stages with their timings and captions.
+//
+// Only one WebGL context is ever created (phones cap the number of live
+// contexts, which is what blanked the old multi-canvas page on mobile).
+// Classic script, wrapped in an IIFE so nothing collides with caseModel.js.
 (function () {
+  'use strict';
 
-// ---------------------------------------------------------------------------
-// Shared contract data (verbatim from SPEC §2). Kept local so the deploy UI
-// (caption, clock, stage buttons, ticks) works even if the 3D scene fails.
-// ---------------------------------------------------------------------------
-const STAGES = [
-  { t: 0.00, id: 'stowed',   label: 'Stowed',            caption: '55×35×23 cm. Airline carry-on legal.' },
-  { t: 0.15, id: 'opened',   label: 'Opened',            caption: 'Lay flat, unlatch, lid swings clear.' },
-  { t: 0.45, id: 'monitors', label: 'Monitors Up',       caption: 'Gas-strut lift raises the display to eye level.' },
-  { t: 0.70, id: 'triptych', label: 'Triptych Deployed', caption: 'Two wings fan into a curved 3-screen array.' },
-  { t: 0.85, id: 'av',       label: 'AV Boom',           caption: 'Broadcast mic + 4K camera rise to your face.' },
-  { t: 1.00, id: 'ready',    label: 'Ready to Work',     caption: 'Keyboard forward. Power on. Under two minutes.' }
-];
+  const STAGES = [
+    { t: 0.00, sec: 0,   label: 'Stowed',        caption: '55 × 35 × 23 cm. Airline carry-on legal.' },
+    { t: 0.15, sec: 12,  label: 'Open',          caption: 'Lay it flat, unlatch, and the lid swings back and clear.' },
+    { t: 0.45, sec: 40,  label: 'Monitors up',   caption: 'The gas-strut lift raises the screens ~12 cm and tilts them upright.' },
+    { t: 0.70, sec: 62,  label: 'Triptych',      caption: 'Two wings fan out ~35° into a curved three-screen array.' },
+    { t: 0.85, sec: 78,  label: 'AV boom',       caption: 'Mic tips toward you; the 4K camera lands at eye level.' },
+    { t: 1.00, sec: 105, label: 'Ready to work', caption: 'Keyboard forward, trackpad flat, power on. Under two minutes.' }
+  ];
+  const PLAY_MS_PER_SEC = 72;   // 105 s of real deploy → ~7.5 s on screen
+  const HOLD_MS = 380;          // a beat at every stage stop
 
-const DEPLOY_BUDGET_S = 110; // SPEC §2 sub-2-minute deploy budget.
-const PLAY_DURATION_MS = 6000;
+  const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+  const easeInOut = (k) => (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+  const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+  const $ = (id) => document.getElementById(id);
 
-const prefersReduced =
-  typeof matchMedia === 'function' &&
-  matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-// ---------------------------------------------------------------------------
-// Small math helpers
-// ---------------------------------------------------------------------------
-const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
-const lerp = (a, b, k) => a + (b - a) * k;
-function smoothstep(k) {
-  k = clamp01(k);
-  return k * k * (3 - 2 * k);
-}
-
-// One-time WebGL capability probe.
-function webglAvailable() {
-  try {
-    const c = document.createElement('canvas');
-    return !!(
-      window.WebGLRenderingContext &&
-      (c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl'))
-    );
-  } catch (e) {
-    return false;
+  function stageIndex(t) {
+    let idx = 0;
+    for (let i = 0; i < STAGES.length; i++) if (t >= STAGES[i].t - 0.002) idx = i;
+    return idx;
   }
-}
-
-// ---------------------------------------------------------------------------
-// StowScene — one renderer/scene/model per canvas. Independently sensible.
-// ---------------------------------------------------------------------------
-class StowScene {
-  /**
-   * @param {HTMLCanvasElement} canvas
-   * @param {object} opts { initialT, autoRotate, minPolar, targetLift }
-   */
-  constructor(canvas, opts = {}) {
-    this.canvas = canvas;
-    this.opts = opts;
-    this.onScreen = false;
-    this.disposed = false;
-    this._tween = null;
-    this._t = clamp01(opts.initialT ?? 1);
-
-    // Renderer -----------------------------------------------------------
-    // NOTE: no 'high-performance' powerPreference — some embedded / low-power
-    // WebView contexts (and headless GPUs) refuse a high-perf context and then
-    // fail to create ANY renderer. Defaulting + accepting a perf caveat lets a
-    // software/integrated context through, which is what we want for a preview.
-    this.renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: true,
-      alpha: false,
-      failIfMajorPerformanceCaveat: false
-    });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
-    this.renderer.outputEncoding = THREE.sRGBEncoding;
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-    // Scene --------------------------------------------------------------
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x14181d);
-
-    // Camera (framed after we know fitRadius) -----------------------------
-    this.camera = new THREE.PerspectiveCamera(35, 1, 1, 4000);
-
-    // Lights: key + fill + soft ground shadow -----------------------------
-    const key = new THREE.DirectionalLight(0xfff2e2, 2.4);
-    key.position.set(60, 90, 70);
-    key.castShadow = true;
-    key.shadow.mapSize.set(1024, 1024);
-    key.shadow.camera.near = 10;
-    key.shadow.camera.far = 400;
-    key.shadow.camera.left = -90;
-    key.shadow.camera.right = 90;
-    key.shadow.camera.top = 90;
-    key.shadow.camera.bottom = -90;
-    key.shadow.bias = -0.0005;
-    key.shadow.radius = 4;
-    this.scene.add(key);
-
-    const fill = new THREE.DirectionalLight(0x8fb4d6, 0.7);
-    fill.position.set(-70, 40, -30);
-    this.scene.add(fill);
-
-    this.scene.add(new THREE.HemisphereLight(0x24303c, 0x0a0d10, 0.5));
-
-    // Soft ground shadow catcher -----------------------------------------
-    const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(1200, 1200),
-      new THREE.ShadowMaterial({ opacity: 0.34 })
-    );
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = 0;
-    ground.receiveShadow = true;
-    this.scene.add(ground);
-
-    // Model (SPEC §4 API) -------------------------------------------------
-    this.model = createPortableOffice();
-    this.scene.add(this.model.root);
-    this.model.setDeploy(this._t);
-    this.model.root.traverse((o) => {
-      if (o.isMesh) {
-        o.castShadow = true;
-        o.receiveShadow = true;
-      }
-    });
-
-    const fitRadius = this.model.fitRadius || 60;
-    this.fitRadius = fitRadius;
-
-    // Frame camera --------------------------------------------------------
-    const target = new THREE.Vector3(0, opts.targetLift ?? fitRadius * 0.42, 0);
-    this.target = target;
-    const dist = fitRadius * 2.6;
-    this.camera.position.set(
-      dist * 0.55,
-      target.y + fitRadius * 0.55,
-      dist * 0.9
-    );
-
-    // Controls ------------------------------------------------------------
-    this.controls = new THREE.OrbitControls(this.camera, canvas);
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.08;
-    this.controls.enablePan = false;
-    this.controls.target.copy(target);
-    this.controls.minDistance = fitRadius * 1.15;
-    this.controls.maxDistance = fitRadius * 4.2;
-    this.controls.maxPolarAngle = opts.minPolar ?? Math.PI * 0.495; // stay above ground
-    this.controls.autoRotate = !!opts.autoRotate && !prefersReduced;
-    this.controls.autoRotateSpeed = 0.6;
-    this.controls.update();
-
-    this._onResize();
-  }
-
-  get deploy() {
-    return this._t;
-  }
-
-  // Immediate set (live scrub).
-  setT(t) {
-    if (this.disposed) return;
-    this._tween = null;
-    this._t = clamp01(t);
-    this.model.setDeploy(this._t);
-  }
-
-  // Animated tween to target t. onUpdate(t) is called each frame.
-  tweenTo(t, durationMs, onUpdate) {
-    if (this.disposed) return;
-    const from = this._t;
-    const to = clamp01(t);
-    if (prefersReduced || durationMs <= 0) {
-      this.setT(to);
-      if (onUpdate) onUpdate(to);
-      return;
+  // Setup clock: piecewise-linear between the stage timings of the deploy table.
+  function tToSec(t) {
+    for (let i = 1; i < STAGES.length; i++) {
+      const a = STAGES[i - 1], b = STAGES[i];
+      if (t <= b.t) return a.sec + (b.sec - a.sec) * ((t - a.t) / (b.t - a.t));
     }
-    this._tween = {
-      from,
-      to,
-      start: performance.now(),
-      dur: durationMs,
-      onUpdate
+    return STAGES[STAGES.length - 1].sec;
+  }
+  const fmt = (s) => { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+
+  // -------------------------------------------------------------------------
+  // Views: each implements setT(t) and is told when the stage is on screen.
+  // -------------------------------------------------------------------------
+
+  // Still-image view (no WebGL): cross-fades between two <img> layers.
+  function ImageView(stage) {
+    const a = $('posterA'), b = $('posterB');
+    let front = a, back = b, shown = -1;
+    const srcFor = (i) => 'renders/stage-' + i + '.webp';
+    // Preload all six so a scrub never waits on the network.
+    STAGES.forEach((_, i) => { const im = new Image(); im.src = srcFor(i); });
+    return {
+      kind: 'image',
+      setT(t) {
+        const i = stageIndex(t);
+        if (i === shown) return;
+        shown = i;
+        back.src = srcFor(i);
+        back.alt = 'STOWORK, stage: ' + STAGES[i].label;
+        back.removeAttribute('aria-hidden');
+        front.setAttribute('aria-hidden', 'true');
+        back.classList.add('is-on');
+        front.classList.remove('is-on');
+        const tmp = front; front = back; back = tmp;
+      },
+      setVisible() {}
     };
   }
 
-  _stepTween(now) {
-    const tw = this._tween;
-    if (!tw) return;
-    const k = smoothstep((now - tw.start) / tw.dur);
-    const t = lerp(tw.from, tw.to, k);
-    this._t = t;
-    this.model.setDeploy(t);
-    if (tw.onUpdate) tw.onUpdate(t);
-    if (k >= 1) this._tween = null;
-  }
-
-  _onResize() {
-    if (this.disposed) return;
-    const w = this.canvas.clientWidth || 1;
-    const h = this.canvas.clientHeight || 1;
-    this.renderer.setSize(w, h, false);
-    this.camera.aspect = w / h;
-    this.camera.updateProjectionMatrix();
-  }
-
-  render(now) {
-    if (this.disposed || !this.onScreen) return;
-    this._stepTween(now);
-    this.controls.update();
-    this.renderer.render(this.scene, this.camera);
-  }
-
-  dispose() {
-    this.disposed = true;
-    this._tween = null;
-    try {
-      this.controls.dispose();
-    } catch (e) {}
-    try {
-      this.model.dispose();
-    } catch (e) {}
-    try {
-      this.renderer.dispose();
-    } catch (e) {}
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Global render ticker + visibility management
-// ---------------------------------------------------------------------------
-const activeScenes = new Set();
-
-let io = null;
-if (typeof IntersectionObserver === 'function') {
-  io = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries) {
-        const sc = e.target.__stowScene;
-        if (sc) sc.onScreen = e.isIntersecting;
-      }
-    },
-    { threshold: 0.01 }
-  );
-}
-
-function registerScene(scene) {
-  activeScenes.add(scene);
-  scene.__el = scene.canvas;
-  scene.canvas.__stowScene = scene;
-  if (io) io.observe(scene.canvas);
-  else scene.onScreen = true; // no IO -> always render visible ones
-}
-
-let rafId = null;
-function tick(now) {
-  rafId = requestAnimationFrame(tick);
-  for (const s of activeScenes) {
-    if (s.onScreen) s.render(now || performance.now());
-  }
-}
-
-// Resize handling (debounced via rAF).
-let resizePending = false;
-window.addEventListener('resize', () => {
-  if (resizePending) return;
-  resizePending = true;
-  requestAnimationFrame(() => {
-    resizePending = false;
-    for (const s of activeScenes) s._onResize();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Fallback: mark a viz slot as failed so its CSS fallback panel shows.
-// ---------------------------------------------------------------------------
-function markLive(slot) {
-  if (slot) slot.classList.add('is-live');
-}
-function markFallback(slot) {
-  if (slot) slot.classList.add('is-fallback');
-}
-
-// Build a one-line reason string and drop it into every fallback panel. Runs
-// always; on panels that end up hidden (3D worked) it's simply never seen.
-function injectDiagnostic() {
-  const parts = [];
-  parts.push('three:' + (typeof THREE !== 'undefined' ? 'r' + THREE.REVISION : 'MISSING'));
-  const ctx = (t) => {
-    try { return document.createElement('canvas').getContext(t) ? 'y' : 'n'; }
-    catch (e) { return 'err'; }
-  };
-  parts.push('webgl2:' + ctx('webgl2'));
-  parts.push('webgl:' + ctx('webgl'));
-  let rState = 'skip', rErr = '';
-  if (typeof THREE !== 'undefined') {
-    try {
-      const rr = new THREE.WebGLRenderer({ failIfMajorPerformanceCaveat: false });
-      rState = 'ok';
-      if (rr.forceContextLoss) rr.forceContextLoss();
-      rr.dispose();
-    } catch (e) { rState = 'FAIL'; rErr = (e && (e.message || e)) + ''; }
-  }
-  parts.push('renderer:' + rState + (rErr ? '(' + rErr.slice(0, 90) + ')' : ''));
-  const msg = parts.join('  ·  ');
-  document.querySelectorAll('.viz__fallback').forEach((el) => {
-    if (el.querySelector('.viz__diag')) return;
-    const p = document.createElement('p');
-    p.className = 'viz__diag';
-    p.textContent = msg;
-    p.style.cssText =
-      'margin-top:10px;font:11px/1.45 ui-monospace,Menlo,monospace;color:#7b8590;' +
-      'word-break:break-word;max-width:90%;opacity:.9';
-    el.appendChild(p);
-  });
-  // Also expose for quick copy/paste.
-  window.__stoworkDiag = msg;
-}
-
-// Safely build a scene on a canvas; returns StowScene | null.
-function buildScene(canvasId, opts) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return null;
-  const slot = canvas.closest('.viz') || canvas.parentElement;
-  try {
-    const scene = new StowScene(canvas, opts);
-    registerScene(scene);
-    markLive(slot);
-    return scene;
-  } catch (err) {
-    console.warn('[STOWORK] scene init failed for', canvasId, err);
-    markFallback(slot);
-    return null;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Boot
-// ---------------------------------------------------------------------------
-function boot() {
-  const glOk = webglAvailable();
-
-  // Self-diagnosing fallback: write the ACTUAL reason WebGL didn't come up into
-  // every fallback panel, so a screenshot of this page alone reveals the cause.
-  injectDiagnostic();
-
-  // If no WebGL at all, mark every slot as fallback and wire the non-3D UI.
-  if (!glOk) {
-    document.querySelectorAll('.viz').forEach(markFallback);
-  }
-
-  // --- Hero ---------------------------------------------------------------
-  const heroScene = glOk
-    ? buildScene('heroCanvas', { initialT: 1, autoRotate: true })
-    : null;
-
-  const heroStow = document.getElementById('heroStow');
-  const heroReady = document.getElementById('heroReady');
-  if (heroScene) {
-    if (heroStow)
-      heroStow.addEventListener('click', () => {
-        setHeroActive(heroStow);
-        heroScene.tweenTo(0, 1400);
-      });
-    if (heroReady)
-      heroReady.addEventListener('click', () => {
-        setHeroActive(heroReady);
-        heroScene.tweenTo(1, 1800);
-      });
-  } else {
-    // No 3D: buttons have nothing to drive; disable them so they aren't dead.
-    [heroStow, heroReady].forEach((b) => b && b.setAttribute('disabled', ''));
-  }
-  function setHeroActive(btn) {
-    [heroStow, heroReady].forEach((b) => b && b.classList.remove('is-active'));
-    if (btn) btn.classList.add('is-active');
-  }
-
-  // --- See it deploy (centerpiece) ---------------------------------------
-  const deployScene = glOk
-    ? buildScene('deployCanvas', { initialT: 0, autoRotate: false })
-    : null;
-
-  wireDeploy(deployScene);
-
-  // --- Three states gallery ----------------------------------------------
-  if (glOk) {
-    buildScene('galleryStowed', { initialT: 0.0, autoRotate: false });
-    buildScene('galleryTriptych', { initialT: 0.7, autoRotate: false });
-    buildScene('galleryReady', { initialT: 1.0, autoRotate: false });
-  }
-
-  // Debug hook (SPEC §4 allows window.__stowork only).
-  window.__stowork = { heroScene, deployScene, STAGES };
-
-  // Start the loop only if there's at least one scene; the ticker is cheap
-  // but pointless with zero scenes.
-  if (activeScenes.size > 0) rafId = requestAnimationFrame(tick);
-}
-
-// ---------------------------------------------------------------------------
-// Deploy-section UI wiring: scrubber, stage buttons, ticks, caption, clock,
-// play button. Works as informational UI even when deployScene is null.
-// ---------------------------------------------------------------------------
-function wireDeploy(deployScene) {
-  const slider = document.getElementById('deploySlider');
-  const captionEl = document.getElementById('deployCaption');
-  const stageLabelEl = document.getElementById('deployStageLabel');
-  const clockEl = document.getElementById('deployClock');
-  const pctEl = document.getElementById('deployPct');
-  const playBtn = document.getElementById('deployPlay');
-  const stageBtnWrap = document.getElementById('deployStages');
-  const tickWrap = document.getElementById('deployTicks');
-
-  // Build stage tick marks + buttons from STAGES.
-  const stageButtons = [];
-  STAGES.forEach((st, i) => {
-    if (tickWrap) {
-      const tick = document.createElement('span');
-      tick.className = 'scrubber__tick';
-      tick.style.left = st.t * 100 + '%';
-      tick.innerHTML = `<span class="scrubber__tick-dot"></span><span class="scrubber__tick-label">${st.label}</span>`;
-      tickWrap.appendChild(tick);
+  // Live WebGL view.
+  function GLView(stage, canvas) {
+    if (typeof THREE === 'undefined' || typeof createPortableOffice !== 'function' || typeof StoworkStudio === 'undefined') {
+      throw new Error('3D scripts missing');
     }
-    if (stageBtnWrap) {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'stage-btn';
-      b.dataset.idx = String(i);
-      b.innerHTML = `<span class="stage-btn__num">${i + 1}</span>${st.label}`;
-      b.addEventListener('click', () => goToStage(i));
-      stageBtnWrap.appendChild(b);
-      stageButtons.push(b);
+    const S = StoworkStudio;
+    const renderer = S.makeRenderer(canvas);
+    const scene = new THREE.Scene();
+    S.addLights(scene, { shadowSize: coarse ? 1024 : 2048 });
+    const model = createPortableOffice();
+    scene.add(model.root);
+    model.root.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+    const camera = new THREE.PerspectiveCamera(35, 1, 1, 4000);
+
+    let t = 0, visible = false, dirty = true, live = false, raf = 0, lost = false;
+    let aspect = 1.6;
+    // Orbit state: azimuth/polar around the default product-shot angle.
+    const view = { az: S.VIEW.az, pol: S.VIEW.pol, vAz: 0, dragging: false, lastX: 0, lastY: 0, touched: false };
+    const t0 = performance.now();
+
+    function resize() {
+      const w = canvas.clientWidth || 1, h = canvas.clientHeight || 1;
+      // Cap the drawing buffer: a giant buffer (e.g. a full-page capture that
+      // stretches the viewport) can exhaust GPU memory and lose the context.
+      const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.75 : 2, 2600 / w, 1800 / h);
+      renderer.setPixelRatio(dpr);
+      renderer.setSize(w, h, false);
+      aspect = w / h;
+      camera.aspect = aspect;
+      camera.updateProjectionMatrix();
+      dirty = true;
+      draw(); // re-draw immediately: a resize clears the drawing buffer
     }
-  });
 
-  const fmtClock = (secs) => {
-    const s = Math.round(clamp01(secs / DEPLOY_BUDGET_S) * DEPLOY_BUDGET_S);
-    const m = Math.floor(s / 60);
-    const r = s % 60;
-    return `${m}:${String(r).padStart(2, '0')}`;
-  };
-
-  // activeStageIndex: last stage whose t <= current t (with a hair of tolerance).
-  function activeStageIndex(t) {
-    let idx = 0;
-    for (let i = 0; i < STAGES.length; i++) {
-      if (t >= STAGES[i].t - 0.001) idx = i;
+    function draw() {
+      if (lost) return;
+      // A slow idle sway keeps the object reading as 3D until someone grabs it.
+      let sway = 0;
+      if (!reduced && !view.touched) sway = Math.sin((performance.now() - t0) / 2600) * 0.07;
+      S.placeCamera(camera, t, aspect, view.az + sway, view.pol);
+      renderer.render(scene, camera);
+      dirty = false;
+      if (!live) { live = true; stage.classList.add('is-live'); }
     }
-    return idx;
-  }
 
-  // Refresh all readouts for a given t. Optionally move the slider thumb.
-  function refreshUI(t, { moveSlider = true } = {}) {
-    t = clamp01(t);
-    const idx = activeStageIndex(t);
-    const st = STAGES[idx];
-    if (captionEl) captionEl.textContent = st.caption;
-    if (stageLabelEl) stageLabelEl.textContent = st.label;
-    if (clockEl) clockEl.textContent = fmtClock(t * DEPLOY_BUDGET_S);
-    if (pctEl) pctEl.textContent = Math.round(t * 100) + '%';
-    if (moveSlider && slider) slider.value = String(Math.round(t * 1000));
-    stageButtons.forEach((b, i) => b.classList.toggle('is-active', i === idx));
-  }
+    function loop() {
+      raf = 0;
+      if (!visible || lost) return;
+      if (Math.abs(view.vAz) > 0.0002 && !view.dragging) { view.az += view.vAz; view.vAz *= 0.92; dirty = true; }
+      const idle = !reduced && !view.touched;
+      if (dirty || idle || view.dragging) draw();
+      raf = requestAnimationFrame(loop);
+    }
+    function kick() { if (!raf && visible) raf = requestAnimationFrame(loop); }
 
-  // Live scrub from slider.
-  if (slider) {
-    slider.addEventListener('input', () => {
-      const t = Number(slider.value) / 1000;
-      if (deployScene) deployScene.setT(t);
-      refreshUI(t, { moveSlider: false });
+    // Drag to turn. touch-action: pan-y on the canvas lets vertical swipes keep
+    // scrolling the page on phones; horizontal drags turn the model.
+    canvas.addEventListener('pointerdown', (e) => {
+      view.dragging = true; view.touched = true; view.vAz = 0;
+      view.lastX = e.clientX; view.lastY = e.clientY;
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      kick();
     });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!view.dragging) return;
+      const dx = e.clientX - view.lastX, dy = e.clientY - view.lastY;
+      view.lastX = e.clientX; view.lastY = e.clientY;
+      const k = 2.6 / Math.max(canvas.clientWidth, 1);
+      view.az -= dx * k; view.vAz = -dx * k;
+      if (e.pointerType !== 'touch') view.pol = Math.min(1.42, Math.max(0.95, view.pol - dy * k * 0.6));
+      dirty = true;
+    });
+    const end = () => { view.dragging = false; kick(); };
+    canvas.addEventListener('pointerup', end);
+    canvas.addEventListener('pointercancel', end);
+    canvas.addEventListener('dblclick', () => { view.az = S.VIEW.az; view.pol = S.VIEW.pol; view.vAz = 0; dirty = true; kick(); });
+
+    canvas.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault(); lost = true; stage.classList.remove('is-live');
+      if (typeof api.onLost === 'function') api.onLost();
+    });
+
+    let rz = 0;
+    window.addEventListener('resize', () => { if (!rz) rz = requestAnimationFrame(() => { rz = 0; resize(); }); });
+    resize();
+
+    const api = {
+      kind: 'gl',
+      onLost: null,
+      setT(nt) { t = nt; model.setDeploy(t); dirty = true; if (visible) draw(); },
+      setVisible(v) { visible = v; if (v) { dirty = true; kick(); } }
+    };
+    return api;
   }
 
-  // Animate to a stage; keep slider + readouts in sync during the tween.
-  function goToStage(i) {
-    const st = STAGES[i];
-    if (deployScene) {
-      deployScene.tweenTo(st.t, 1100, (t) => refreshUI(t));
-      if (prefersReduced) refreshUI(st.t);
+  // -------------------------------------------------------------------------
+  // Controller
+  // -------------------------------------------------------------------------
+  function boot() {
+    const stage = $('stage');
+    if (!stage) return;
+    const canvas = $('deployCanvas');
+    const slider = $('deploySlider');
+    const playBtn = $('deployPlay');
+    const playLabel = playBtn && playBtn.querySelector('.play__label');
+    const stepEl = $('deployStep');
+    const labelEl = $('deployStageLabel');
+    const clockEl = $('deployClock');
+    const captionEl = $('deployCaption');
+    const hintEl = $('deployHint');
+    const tickWrap = $('deployTicks');
+    const cards = Array.from(document.querySelectorAll('.story__card'));
+
+    // Ticks on the scrubber.
+    const ticks = STAGES.map((st) => {
+      const el = document.createElement('span');
+      el.className = 'scrub__tick';
+      el.style.left = st.t * 100 + '%';
+      el.innerHTML = '<span class="scrub__tick-dot"></span><span class="scrub__tick-label">' + st.label + '</span>';
+      if (tickWrap) tickWrap.appendChild(el);
+      return el;
+    });
+
+    // Pick the richest view this browser can run.
+    let view = null;
+    try { view = GLView(stage, canvas); }
+    catch (err) { view = null; }
+    if (!view) {
+      if (canvas) canvas.remove();
+      stage.classList.add('is-static');
+      view = ImageView(stage);
     } else {
-      refreshUI(st.t);
+      view.onLost = () => {
+        if (canvas) canvas.remove();
+        stage.classList.add('is-static');
+        view = ImageView(stage);
+        view.setT(t);
+      };
     }
-  }
 
-  // Play deployment 0 -> 1 over ~6s.
-  if (playBtn) {
-    playBtn.addEventListener('click', () => {
-      if (deployScene) {
-        deployScene.setT(0);
-        refreshUI(0);
-        deployScene.tweenTo(1, PLAY_DURATION_MS, (t) => refreshUI(t));
-        if (prefersReduced) refreshUI(1);
-      } else {
-        // No 3D: still narrate the sequence by stepping the readouts.
-        narrateFallback(refreshUI);
+    let t = -1;
+    let lastIdx = -1;
+    function setT(nt) {
+      nt = clamp01(nt);
+      t = nt;
+      view.setT(t);
+      const idx = stageIndex(t);
+      if (slider) {
+        slider.value = String(Math.round(t * 1000));
+        slider.style.setProperty('--p', (t * 100).toFixed(2) + '%');
+        slider.setAttribute('aria-valuetext', STAGES[idx].label + ', ' + Math.round(t * 100) + '%');
       }
-    });
-  }
-
-  // Initial state.
-  refreshUI(deployScene ? 0 : 0);
-}
-
-// When 3D is unavailable, the Play button walks the readouts through the
-// stages so the section still communicates the deployment story.
-function narrateFallback(refreshUI) {
-  let i = 0;
-  const step = () => {
-    if (i >= STAGES.length) return;
-    refreshUI(STAGES[i].t);
-    i++;
-    if (i < STAGES.length) setTimeout(step, prefersReduced ? 0 : 900);
-  };
-  step();
-}
-
-// ---------------------------------------------------------------------------
-// Kick off (guarded so any unexpected error still leaves the page readable).
-// ---------------------------------------------------------------------------
-try {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      try {
-        boot();
-      } catch (e) {
-        console.error('[STOWORK] boot failed', e);
-        document.querySelectorAll('.viz').forEach((v) => v.classList.add('is-fallback'));
+      if (clockEl) clockEl.textContent = fmt(tToSec(t));
+      ticks.forEach((el, i) => { el.classList.toggle('is-past', STAGES[i].t <= t + 0.002); });
+      if (idx !== lastIdx) {
+        lastIdx = idx;
+        const st = STAGES[idx];
+        if (labelEl) labelEl.textContent = st.label;
+        if (stepEl) stepEl.textContent = idx === 0 ? 'Closed case' : 'Step ' + idx + ' of 5';
+        if (captionEl) captionEl.textContent = st.caption;
+        ticks.forEach((el, i) => el.classList.toggle('is-active', i === idx));
+        cards.forEach((c, i) => { c.classList.toggle('is-active', i === idx); c.setAttribute('aria-pressed', i === idx ? 'true' : 'false'); });
       }
+    }
+
+    // ---- playback --------------------------------------------------------
+    let anim = null; // { segs, start, raf }
+    function setPlaying(on) {
+      if (!playBtn) return;
+      playBtn.classList.toggle('is-playing', on);
+      playBtn.setAttribute('aria-label', on ? 'Pause the deployment' : 'Play the deployment');
+      if (playLabel) playLabel.textContent = on ? 'Pause' : (t >= 0.999 ? 'Replay' : 'Play');
+    }
+    function stop() {
+      if (anim) { cancelAnimationFrame(anim.raf); clearTimeout(anim.timer); anim = null; }
+      setPlaying(false);
+    }
+    // A timeline of tween + hold segments from the current t to the end.
+    function play() {
+      stop();
+      let from = t >= 0.999 ? 0 : t;
+      const segs = [];
+      if (from !== t) segs.push({ a: 0, b: 0, ms: HOLD_MS + 200 });
+      for (let i = 0; i < STAGES.length - 1; i++) {
+        const s0 = STAGES[i], s1 = STAGES[i + 1];
+        if (s1.t <= from + 0.001) continue;
+        const a = Math.max(from, s0.t);
+        const frac = (s1.t - a) / (s1.t - s0.t);
+        segs.push({ a, b: s1.t, ms: (s1.sec - s0.sec) * PLAY_MS_PER_SEC * frac, ease: true });
+        if (i < STAGES.length - 2) segs.push({ a: s1.t, b: s1.t, ms: HOLD_MS });
+      }
+      if (reduced || view.kind === 'image') {
+        // Step through the stages instead of interpolating motion.
+        const stops = [];
+        let i0 = stageIndex(t) + 1;
+        if (t >= 0.999) { setT(0); i0 = 1; }
+        for (let i = i0; i < STAGES.length; i++) stops.push(i);
+        anim = { raf: 0, timer: 0 };
+        setPlaying(true);
+        const step = () => {
+          if (!anim) return;
+          const i = stops.shift();
+          if (i === undefined) { stop(); return; }
+          setT(STAGES[i].t);
+          anim.timer = setTimeout(step, 1100);
+        };
+        anim.timer = setTimeout(step, 700);
+        return;
+      }
+      anim = { segs, i: 0, start: performance.now(), raf: 0, timer: 0 };
+      setPlaying(true);
+      const frame = (now) => {
+        if (!anim) return;
+        let seg = anim.segs[anim.i];
+        let k = (now - anim.start) / Math.max(seg.ms, 1);
+        while (k >= 1) {
+          setT(seg.b);
+          anim.i++;
+          if (anim.i >= anim.segs.length) { stop(); return; }
+          anim.start += seg.ms;
+          seg = anim.segs[anim.i];
+          k = (now - anim.start) / Math.max(seg.ms, 1);
+        }
+        setT(seg.a + (seg.b - seg.a) * (seg.ease ? easeInOut(k) : k));
+        anim.raf = requestAnimationFrame(frame);
+      };
+      anim.raf = requestAnimationFrame(frame);
+    }
+    function tweenTo(target) {
+      stop();
+      if (reduced || view.kind === 'image') { setT(target); return; }
+      const a = t, b = target, ms = 500 + 900 * Math.abs(b - a);
+      anim = { raf: 0, timer: 0 };
+      const start = performance.now();
+      const frame = (now) => {
+        if (!anim) return;
+        const k = Math.min(1, (now - start) / ms);
+        setT(a + (b - a) * easeInOut(k));
+        if (k < 1) anim.raf = requestAnimationFrame(frame); else anim = null;
+      };
+      anim.raf = requestAnimationFrame(frame);
+    }
+
+    let interacted = false;
+    if (playBtn) playBtn.addEventListener('click', () => { interacted = true; if (anim && playBtn.classList.contains('is-playing')) stop(); else play(); });
+    if (slider) {
+      slider.addEventListener('input', () => {
+        interacted = true;
+        stop();
+        setT(Number(slider.value) / 1000);
+        setPlaying(false);
+      });
+    }
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        interacted = true;
+        const i = Number(card.dataset.stage);
+        tweenTo(STAGES[i].t);
+        setPlaying(false);
+      });
     });
-  } else {
-    boot();
+    if (canvas) canvas.addEventListener('pointerdown', () => { interacted = true; if (hintEl) hintEl.style.opacity = '0.5'; });
+
+    // Start state. With motion allowed, the stage opens closed and plays
+    // itself once when it scrolls into view; otherwise it rests fully deployed.
+    const autoplay = !reduced;
+    setT(autoplay ? 0 : 1);
+    setPlaying(false);
+
+    if (typeof IntersectionObserver === 'function') {
+      let played = false;
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          view.setVisible(e.isIntersecting);
+          if (autoplay && !played && !interacted && e.intersectionRatio >= 0.45) {
+            played = true;
+            setTimeout(() => { if (!interacted) play(); }, 350);
+          }
+        }
+      }, { threshold: [0, 0.45] });
+      io.observe(stage.querySelector('.stage__frame'));
+    } else {
+      view.setVisible(true);
+    }
+
+    window.__stowork = { setT, play, stop, get t() { return t; }, get view() { return view.kind; } };
   }
-} catch (e) {
-  console.error('[STOWORK] fatal', e);
-  document.querySelectorAll('.viz').forEach((v) => v.classList.add('is-fallback'));
-}
-})(); // end IIFE — top-level declarations stay scoped, no global collisions
+
+  try {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+    else boot();
+  } catch (e) {
+    // Leave the static page exactly as the no-JS version.
+    document.documentElement.className = 'no-js';
+  }
+})();

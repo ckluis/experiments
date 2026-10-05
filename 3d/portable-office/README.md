@@ -10,12 +10,14 @@ office. Built as a static, no-build, GitHub-Pages-hostable experiment.
 
 | File | Purpose |
 |------|---------|
-| `index.html` | The landing page that sells the concept. Live 3D + an interactive scrubber that walks the case through every stage of its 6-stage deployment. |
+| `index.html` | The landing page that sells the concept. Its centrepiece is the deploy stage: one live 3D model you can scrub, play or turn, from closed case to full office, with a six-frame storyboard underneath. |
 | `PLAN.md` | The full concept plan: product definition, engineering & mechanism detail, **design & differentiation** (what makes it original and hard to copy), **manufacturing/DFM** (BOM, COGS, MSRP), go-to-market, financials & the ask. Written to be handed to a design engineer, a contract manufacturer, and an investor. |
 | `SPEC.md` | Internal build spec — the physical engineering, deployment kinematics, and the JS module API contract. Source of truth for the model. |
-| `vendor/` | Three.js r128 (`three.min.js`) + classic `OrbitControls.js`, vendored so the page runs from `file://` with no network. |
+| `vendor/` | Three.js r128 (`three.min.js`) + classic `OrbitControls.js` (used by the test harness), vendored so the page runs from `file://` with no network. |
 | `src/caseModel.js` | The parametric Three.js rig. Defines the global `createPortableOffice()` returning `{ root, setDeploy(t), stages, ... }`. A single deploy parameter `t ∈ [0,1]` drives every hinge, the lift, the wing fold, the AV boom, and the keyboard tray. |
-| `src/app.js` | The scene/app: renderer, lighting, OrbitControls, the scrubber, stage animation, the setup clock, and a graceful no-WebGL fallback. |
+| `src/studio.js` | Shared lights, transparent shadow-catcher ground and camera framing (`StoworkStudio`). Used by the live stage and by the offline captures in `renders/`, so stills and live model match. |
+| `src/app.js` | The deploy stage: a single WebGL context, drag-to-turn, scrubber, play timeline, setup clock, storyboard. Falls back to cross-fading the rendered stills without WebGL, and to the static storyboard without JS. |
+| `renders/` | Transparent WebP stills captured from the live model (`stage-0…5` are the six deploy stages; `hero-*` and `detail-*` illustrate the page). |
 | `src/caseModel.test.html` | Standalone self-verification harness for the model — a slider to scrub `t` 0→1. |
 | `style.css` | Landing-page styling. |
 
@@ -28,8 +30,9 @@ It works this way because Three.js is **vendored locally** in `vendor/` and load
 plain classic `<script>` tags (not ES modules, which browsers block over `file://`).
 The same files also drop straight onto any static host (GitHub Pages, Netlify, etc.).
 
-Requires a browser with WebGL (every current desktop browser has it). Where WebGL is
-unavailable, each 3D canvas shows a readable fallback panel and the page stays intact.
+WebGL is optional. Without it the deploy stage steps through the rendered stills; without
+JavaScript the page shows the fully deployed still and the six-stage storyboard. Nothing
+on the page is hidden until a script reveals it.
 
 ## The design, in one paragraph
 
