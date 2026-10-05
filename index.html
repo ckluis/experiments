@@ -5,13 +5,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Experiments — Chris Kluis</title>
-<meta name="description" content="A field index of 29 experiments by Chris Kluis — foundations, frameworks, agent tools, products, field reports and design studies. Most built solo in spare hours, all in the open.">
+<meta name="description" content="A field index of 29 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, field reports and design studies. Most built solo in spare hours, all in the open.">
 <link rel="canonical" href="https://ckluis.github.io/experiments/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ckluis / experiments">
 <meta property="og:url" content="https://ckluis.github.io/experiments/">
 <meta property="og:title" content="Experiments — Chris Kluis">
-<meta property="og:description" content="A field index of 29 experiments by Chris Kluis — foundations, frameworks, agent tools, products, field reports and design studies. Most built solo in spare hours, all in the open.">
+<meta property="og:description" content="A field index of 29 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, field reports and design studies. Most built solo in spare hours, all in the open.">
 <meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-experiments.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -20,7 +20,7 @@
 <meta name="twitter:site" content="@ckluis">
 <meta name="twitter:creator" content="@ckluis">
 <meta name="twitter:title" content="Experiments — Chris Kluis">
-<meta name="twitter:description" content="A field index of 29 experiments by Chris Kluis — foundations, frameworks, agent tools, products, field reports and design studies. Most built solo in spare hours, all in the open.">
+<meta name="twitter:description" content="A field index of 29 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, field reports and design studies. Most built solo in spare hours, all in the open.">
 <meta name="twitter:image" content="https://ckluis.github.io/experiments/previews/social-experiments.png">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,287 +32,192 @@
   --ink:#1a160f; --muted:#6e6455; --faint:#a89c86;
   --line:#ddd3c1; --line-soft:#e9e1d1;
   --accent:#6b4ec2; --accent-ink:#5540a3; --ember:#c56a3a;
-  --night:#110e0a; --night-2:#1a1610; --ivory:#efe6d6;
+  --night:#14110c; --night-2:#1c1812; --ivory:#efe6d6;
   --s-shipped:#3f7d55; --s-spec:#8a6d2f; --s-concept:#9b5aa8; --s-case-study:#3a6ea5; --s-local:#9a5a3c; --s-archived:#857e90;
   --display:"Fraunces","Charter",Georgia,serif;
   --body:"Inter","Helvetica Neue",system-ui,sans-serif;
   --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;
   --ease:cubic-bezier(.2,.7,.2,1);
-  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  --cols:minmax(150px,1.05fr) minmax(0,2.9fr) 118px 58px 58px 22px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:118px}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 ::selection{background:rgba(107,78,194,.18)}
-.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
-.wide{max-width:1480px;margin:0 auto;padding:0 clamp(12px,3vw,40px)}
-.mono{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
-.alias{position:relative;top:-118px;display:block;height:0}
-
-/* reveal: visible without JS; JS hides then shows */
-.reveal{transition:opacity 1s var(--ease),transform 1s var(--ease)}
-html.js .reveal:not(.in){opacity:0;transform:translateY(24px)}
-@media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-  html.js .reveal:not(.in){opacity:1;transform:none}
-}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
+.mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.alias{position:relative;top:-120px;display:block;height:0}
+.s-shipped{--sc:var(--s-shipped)}.s-spec{--sc:var(--s-spec)}.s-concept{--sc:var(--s-concept)}.s-case-study{--sc:var(--s-case-study)}.s-local{--sc:var(--s-local)}.s-archived{--sc:var(--s-archived)}
 
 /* ---------- nav ---------- */
-nav.top{position:fixed;top:0;left:0;right:0;z-index:80;background:rgba(249,244,234,.78);backdrop-filter:saturate(1.4) blur(16px);-webkit-backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid var(--line-soft)}
-nav.top .wrap{display:flex;align-items:center;gap:28px;height:62px}
+nav.top{position:fixed;top:0;left:0;right:0;z-index:80;background:rgba(249,244,234,.82);backdrop-filter:saturate(1.4) blur(16px);-webkit-backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid var(--line-soft)}
+nav.top .wrap{display:flex;align-items:center;gap:26px;height:58px}
 .brand{font-family:var(--mono);font-size:13px;letter-spacing:.04em;font-weight:500;white-space:nowrap}
 .brand b{color:var(--accent-ink);font-weight:600}
-.navlinks{display:flex;gap:22px;margin-left:auto}
-.navlinks a{font-size:13.5px;color:var(--muted);position:relative;padding:4px 0;white-space:nowrap;transition:color .2s}
-.navlinks a span{font-family:var(--mono);font-size:10.5px;margin-right:6px;color:var(--faint)}
-.navlinks a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--g);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.navlinks{display:flex;gap:20px;margin-left:auto}
+.navlinks a{font-size:13px;color:var(--muted);position:relative;padding:4px 0;white-space:nowrap;transition:color .15s}
+.navlinks a span{font-family:var(--mono);font-size:10.5px;margin-right:5px;color:var(--faint)}
+.navlinks a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--g);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
 .navlinks a:hover,.navlinks a.on{color:var(--ink)}
 .navlinks a.on::after,.navlinks a:hover::after{transform:scaleX(1)}
-.navcount{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;border:1px solid var(--line);border-radius:100px;padding:5px 12px;white-space:nowrap;color:var(--muted)}
+.navcount{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;border:1px solid var(--line);border-radius:100px;padding:4px 11px;white-space:nowrap;color:var(--muted)}
 .navcount b{color:var(--ink);font-weight:600}
-.progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--pg,var(--accent));transition:background .4s}
 @media(max-width:1179px){.navlinks{display:none}.navcount{margin-left:auto}}
 
-/* ---------- hero ---------- */
-.hero{padding:clamp(118px,13vw,170px) 0 clamp(40px,5vw,70px);position:relative}
-.hgrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:clamp(30px,5vw,80px);align-items:end}
-.eyebrow{color:var(--accent-ink);margin-bottom:26px;display:flex;align-items:center;gap:12px}
-.eyebrow::before{content:"";width:26px;height:1.5px;background:var(--ember)}
-h1{font-family:var(--display);font-weight:600;font-size:clamp(46px,7.4vw,118px);line-height:.9;letter-spacing:-.035em;font-variation-settings:"opsz" 144}
+/* ---------- hero (tight) ---------- */
+.hero{padding:clamp(104px,11vw,140px) 0 clamp(36px,4vw,56px)}
+.hgrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(28px,5vw,72px);align-items:end}
+.eyebrow{color:var(--accent-ink);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:24px;height:1.5px;background:var(--ember)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(40px,5.8vw,82px);line-height:.92;letter-spacing:-.035em;font-variation-settings:"opsz" 144}
 h1 .dim{color:var(--muted);display:block;font-weight:400}
 h1 em{font-style:italic;color:var(--accent-ink);font-weight:500}
-.hside .lede{font-size:clamp(17px,1.4vw,19px);color:var(--muted);line-height:1.6}
-.hside .lede b{color:var(--ink);font-weight:600}
-.hstats{display:flex;gap:clamp(22px,3vw,40px);margin:30px 0 0;padding-top:22px;border-top:1px solid var(--line)}
-.hstats b{display:block;font-family:var(--display);font-weight:600;font-size:clamp(40px,4.4vw,60px);line-height:.9;letter-spacing:-.03em}
-.hstats span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
-@media(max-width:900px){.hgrid{grid-template-columns:1fr}}
+.lede{font-size:16.5px;color:var(--muted);line-height:1.6}
+.lede b{color:var(--ink);font-weight:600}
+.hstats{display:flex;gap:30px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.hstats b{display:block;font-family:var(--display);font-weight:600;font-size:40px;line-height:.95;letter-spacing:-.03em}
+.hstats span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+@media(max-width:860px){.hgrid{grid-template-columns:1fr}}
 
-/* ---------- the lineup poster ---------- */
-.poster{position:relative;margin-top:clamp(40px,5vw,72px);border-radius:clamp(20px,2.4vw,32px);background:var(--night);color:var(--ivory);padding:clamp(24px,3.6vw,52px) clamp(18px,4vw,64px) clamp(22px,3vw,40px);overflow:hidden;isolation:isolate;box-shadow:0 70px 140px -60px rgba(26,22,15,.6),0 0 0 1px rgba(0,0,0,.4)}
-.poster::after{content:"";position:absolute;inset:0;background-image:var(--grain);mix-blend-mode:overlay;opacity:.35;pointer-events:none;z-index:-1}
-.porb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.42;z-index:-2;pointer-events:none}
-.porb.a{width:46%;aspect-ratio:1;left:-10%;top:-30%;background:#6b4ec2;animation:drift 22s ease-in-out infinite alternate}
-.porb.b{width:40%;aspect-ratio:1;right:-8%;top:-20%;background:#c56a3a;animation:drift 26s ease-in-out infinite alternate-reverse}
-.porb.c{width:44%;aspect-ratio:1;left:30%;bottom:-55%;background:#2f7d6d;opacity:.32;animation:drift 30s ease-in-out infinite alternate}
-@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(8%,10%) scale(1.15)}}
-.plab{display:flex;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(239,230,214,.55)}
-.plab b{color:var(--ivory);font-weight:500}
-.lineup{font-family:var(--display);text-align:center;text-wrap:balance;line-height:1.1;margin:clamp(26px,3.4vw,44px) 0 clamp(26px,3vw,40px);font-size:clamp(21px,4.5vw,70px);font-variation-settings:"opsz" 144}
-.lg{display:inline}
-.lgs{white-space:nowrap}
-.lgtag{display:inline-block;vertical-align:top;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin:1.05em .55em 0 1.1em;line-height:1;font-style:normal;white-space:nowrap}
-.lgtag{font-size:clamp(9px,.75vw,10.5px)}
-.lg:first-child .lgtag{margin-left:0}
-@media(max-width:640px){.lgtag{display:block;margin:.9em auto .35em;width:max-content}.lgs{white-space:normal}}
-.ln{color:var(--ivory);white-space:nowrap;transition:color .25s,text-shadow .25s;position:relative}
-.ln.t1{font-weight:600;letter-spacing:-.03em}
-.ln.t2{font-size:.6em;font-style:italic;font-weight:360;color:rgba(239,230,214,.8);letter-spacing:-.01em}
-.ln.t3{font-size:.44em;font-weight:400;color:rgba(239,230,214,.42);text-decoration:line-through;text-decoration-thickness:1px;text-decoration-color:rgba(239,230,214,.35)}
-.ln:hover,.ln:focus-visible{color:var(--g);text-shadow:0 0 36px var(--g);outline:none}
-.lineup i{font-style:normal;color:var(--g);font-size:.42em;margin:0 .32em;vertical-align:.32em;opacity:.8}
-.plegend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding-top:22px;border-top:1px solid rgba(239,230,214,.12)}
-.plegend a{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:rgba(239,230,214,.82);border:1px solid rgba(239,230,214,.16);border-radius:100px;padding:6px 13px;transition:border-color .2s,background .2s}
-.plegend a i{width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 10px var(--g)}
-.plegend a span{color:rgba(239,230,214,.45)}
-.plegend a:hover{border-color:var(--g);background:rgba(255,255,255,.04)}
-.pkey{margin-top:16px;text-align:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:rgba(239,230,214,.42)}
-.pkey b{font-family:var(--display);font-size:14px;letter-spacing:0;color:rgba(239,230,214,.75);font-weight:600}
-.pkey em{font-family:var(--display);font-size:14px;letter-spacing:0;font-style:italic;color:rgba(239,230,214,.7)}
-.pkey s{font-family:var(--display);font-size:13px;letter-spacing:0}
-
-/* floating preview for the lineup (desktop, JS only) */
-.peek{position:fixed;left:0;top:0;z-index:95;width:300px;pointer-events:none;opacity:0;transform:translate3d(-999px,-999px,0);transition:opacity .2s;border-radius:16px;overflow:hidden;background:var(--night);color:var(--ivory);box-shadow:0 30px 70px -20px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.08)}
-.peek.on{opacity:1}
-.peek img{width:100%;aspect-ratio:1.58;object-fit:cover;object-position:top center}
-.peek p{padding:12px 14px 14px;font-family:var(--display);font-style:italic;font-size:15px;line-height:1.35}
-.peek p span{display:block;font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--g);margin-bottom:5px}
-
-/* ---------- person ---------- */
-.person{position:relative;overflow:hidden;background:var(--paper-deep);padding:clamp(90px,11vw,150px) 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
-.person .orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
-.person .orb.a{width:520px;height:520px;right:-140px;top:-160px;background:rgba(197,106,58,.16)}
-.person .orb.b{width:460px;height:460px;left:-160px;bottom:-200px;background:rgba(107,78,194,.13)}
-.pgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,6vw,96px);align-items:start;position:relative}
-.pk{color:var(--ember);margin-bottom:22px}
-.person h2{font-family:var(--display);font-weight:500;font-size:clamp(36px,4.8vw,70px);line-height:1;letter-spacing:-.03em}
+/* ---------- person (a band, not a section) ---------- */
+.person{background:var(--paper-deep);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);padding:clamp(36px,4vw,52px) 0}
+.pgrid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(24px,5vw,64px);align-items:start}
+.pk{color:var(--ember);margin-bottom:12px}
+.person h2{font-family:var(--display);font-weight:500;font-size:clamp(28px,3vw,40px);line-height:1.02;letter-spacing:-.025em}
 .person h2 em{font-style:italic;color:var(--ember)}
-.pbody{font-size:17.5px;color:#4a4236;margin-bottom:18px}
+.pbody{font-size:15.5px;color:#4a4236;margin-bottom:12px}
 .pbody b{color:var(--ink);font-weight:600}
-.pchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
-.pchips span{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:rgba(253,250,243,.7);border-radius:100px;padding:6px 13px;color:var(--muted)}
+.pchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.pchips span{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);background:rgba(253,250,243,.7);border-radius:100px;padding:4px 11px;color:var(--muted)}
 .pchips b{color:var(--ink);font-weight:600}
-@media(max-width:900px){.pgrid{grid-template-columns:1fr}}
+@media(max-width:860px){.pgrid{grid-template-columns:1fr}}
 
-/* ---------- group chips (sticky, small screens) ---------- */
-.gchips{position:sticky;top:62px;z-index:70;background:rgba(249,244,234,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft)}
-.gchips .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
-.gchips .wrap::-webkit-scrollbar{display:none}
-.gchips a{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;border:1px solid var(--line);border-radius:100px;padding:6px 12px;background:var(--card);color:var(--muted);transition:all .2s}
-.gchips a i{width:7px;height:7px;border-radius:50%;background:var(--g)}
-.gchips a span{font-family:var(--mono);font-size:11px;color:var(--faint)}
-.gchips a.on{color:var(--ink);border-color:var(--g);box-shadow:inset 0 0 0 1px var(--g)}
-@media(min-width:1180px){.gchips{display:none}}
+/* ---------- the index ---------- */
+.ix{padding:clamp(44px,5vw,72px) 0 clamp(60px,7vw,96px)}
+.ixbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;margin-bottom:18px}
+.ixbar h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,3vw,40px);letter-spacing:-.03em;line-height:1}
+.ixbar h2 span{font-family:var(--mono);font-size:12px;letter-spacing:.06em;font-weight:500;color:var(--faint);margin-left:10px;vertical-align:middle}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+html:not(.js) .filters{display:none}
+.filters button{font:500 13px var(--body);border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:100px;padding:5px 12px;cursor:pointer;transition:all .15s}
+.filters button span{font-family:var(--mono);font-size:11px;color:var(--faint);margin-left:6px}
+.filters button:hover{border-color:var(--faint);color:var(--ink)}
+.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.filters button[aria-pressed="true"] span{color:rgba(249,244,234,.6)}
 
-/* ---------- groups ---------- */
-.grp{padding:clamp(80px,10vw,140px) 0;position:relative}
-.grp.alt{background:var(--paper-deep)}
-.gh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(20px,4vw,56px);align-items:end;margin-bottom:clamp(40px,5vw,70px)}
-.gnum{font-family:var(--display);font-weight:700;font-size:clamp(96px,15vw,220px);line-height:.74;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px var(--g);font-variation-settings:"opsz" 144;user-select:none}
-.gk{color:var(--g);margin-bottom:14px}
-.gh h2{font-family:var(--display);font-weight:600;font-size:clamp(42px,5.8vw,86px);line-height:.92;letter-spacing:-.035em;font-variation-settings:"opsz" 144}
-.gline{font-family:var(--display);font-style:italic;font-size:clamp(20px,2vw,27px);color:var(--g);margin:14px 0 10px;line-height:1.25;filter:saturate(.9) brightness(.85)}
-.gblurb{font-size:16px;color:var(--muted);max-width:640px}
-.gmeta{min-width:200px;padding-bottom:6px}
-.gbar{display:flex;gap:3px;height:8px;border-radius:4px;overflow:hidden;margin-bottom:12px}
-.gbar i{display:block;height:100%}
-.gtally{display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
-.gtally span{display:flex;align-items:center;gap:8px}
-.gtally i{width:7px;height:7px;border-radius:50%}
-.s-shipped{--sc:var(--s-shipped)}.s-spec{--sc:var(--s-spec)}.s-concept{--sc:var(--s-concept)}.s-case-study{--sc:var(--s-case-study)}.s-local{--sc:var(--s-local)}.s-archived{--sc:var(--s-archived)}
-.gbar i,.gtally i{background:var(--sc)}
-@media(max-width:900px){.gh{grid-template-columns:auto minmax(0,1fr)}.gmeta{grid-column:1/-1;display:flex;align-items:center;gap:16px;min-width:0}.gbar{flex:0 0 140px;margin:0}.gtally{flex-direction:row;flex-wrap:wrap;gap:4px 14px}}
-@media(max-width:560px){.gh{grid-template-columns:1fr}.gnum{font-size:88px}}
+.thead{position:sticky;top:58px;z-index:30;display:grid;grid-template-columns:var(--cols);gap:20px;padding:10px 16px;background:rgba(249,244,234,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1.5px solid var(--ink);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.thead .r{text-align:right}
 
-/* ---------- the hover list: shared ---------- */
-.hl{list-style:none;position:relative}
-.rlink{display:grid;grid-template-columns:62px minmax(0,1fr) auto 28px;align-items:center;gap:16px;padding:22px 0;border-top:1px solid var(--line);position:relative;transition:opacity .35s var(--ease)}
-.row:last-child .rlink{border-bottom:1px solid var(--line)}
-.rlink::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--g);transform:scaleX(0);transform-origin:left;transition:transform .55s var(--ease);z-index:1}
-.rn{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.04em}
-.rmain{display:flex;flex-direction:column;min-width:0}
-.rname{font-family:var(--display);font-weight:600;font-size:clamp(30px,3.3vw,50px);line-height:1;letter-spacing:-.03em;font-variation-settings:"opsz" 144;transition:transform .5s var(--ease),color .3s;transform-origin:left}
-.rname.long{font-size:clamp(28px,2.9vw,44px)}
-.rname.xlong{font-size:clamp(24px,2.3vw,34px)}
-.rname sup,.card h3 sup{font-family:var(--mono);font-size:.26em;font-weight:500;letter-spacing:.04em;color:var(--g);vertical-align:super;margin-left:.3em}
-.rline{font-size:14.5px;color:var(--muted);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rst{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sc);white-space:nowrap}
-.rst i{width:7px;height:7px;border-radius:50%;background:var(--sc)}
-.rgo{font-size:18px;color:var(--faint);transition:transform .4s var(--ease),color .3s;justify-self:end}
-.pill{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;border-radius:100px;padding:4px 10px;border:1px solid var(--sc);color:var(--sc)}
+.tg{margin-top:26px}
+.tgh{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;align-items:baseline;gap:14px;padding:12px 16px 10px;border-bottom:1px solid var(--line)}
+.tgn{font-family:var(--mono);font-size:11px;color:var(--g);letter-spacing:.06em}
+.tgh h2{font-family:var(--display);font-weight:600;font-size:24px;letter-spacing:-.02em;line-height:1.1;display:flex;align-items:center;gap:10px}
+.tgh h2::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--g)}
+.tgh p{font-family:var(--display);font-style:italic;font-size:16px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tgc{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.tg.empty{display:none}
 
-/* ---------- desktop: rows left, the card swaps in on the right ---------- */
-@media (min-width:1000px) and (hover:hover){
-  .hl{--cw:min(47%,600px);padding-right:calc(var(--cw) + clamp(36px,4vw,64px));min-height:640px}
-  .rlink:hover .rname,.row.on .rname{transform:translateX(14px);color:var(--g)}
-  .rlink:hover .rgo,.row.on .rgo{transform:translateX(4px);color:var(--g)}
-  .row.on .rlink::after{transform:scaleX(1)}
-  html:not(.js) .row:hover .rlink::after{transform:scaleX(1)}
-  .js .hl.live:hover .row:not(.on) .rlink{opacity:.36}
-  html:not(.js) .hl:has(.row:hover) .row:not(:hover) .rlink{opacity:.36}
+.rows{list-style:none}
+.row{position:relative;border-bottom:1px solid var(--line-soft)}
+.rlink{display:grid;grid-template-columns:var(--cols);gap:20px;align-items:center;min-height:56px;padding:9px 16px;border-radius:10px;position:relative;transition:background-color .12s,box-shadow .12s}
+.c-proj{display:flex;align-items:baseline;gap:6px;min-width:0}
+.c-proj b{font-family:var(--display);font-weight:600;font-size:21px;letter-spacing:-.02em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .12s}
+.c-proj sup,.kt sup{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--g);letter-spacing:.04em}
+.c-desc{font-size:15px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .12s}
+.c-st{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sc);white-space:nowrap}
+.c-st i{width:7px;height:7px;border-radius:50%;background:var(--sc)}
+.c-num{font-family:var(--mono);font-size:13px;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+.c-num.zero{color:var(--faint)}
+.c-num.none{color:var(--line)}
+.c-go{font-size:16px;color:var(--faint);transition:transform .15s var(--ease),color .12s;justify-self:end}
+.rlink:hover,.rlink:focus-visible,.row.on .rlink{background:color-mix(in srgb,var(--g) 10%,var(--card));box-shadow:inset 3px 0 0 var(--g);outline:none}
+.rlink:hover .c-proj b,.rlink:focus-visible .c-proj b,.row.on .c-proj b{color:color-mix(in srgb,var(--g) 85%,#000)}
+.rlink:hover .c-desc,.rlink:focus-visible .c-desc{color:var(--ink)}
+.rlink:hover .c-go,.rlink:focus-visible .c-go{transform:translateX(4px);color:var(--g)}
+.more{display:none}
 
-  .card{position:absolute;top:var(--ct,0px);right:0;width:var(--cw);border-radius:24px;overflow:hidden;background:var(--night);color:var(--ivory);box-shadow:0 50px 100px -40px rgba(26,22,15,.55),0 0 0 1px rgba(0,0,0,.35);opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .45s var(--ease),transform .6s var(--ease),visibility 0s linear .45s;isolation:isolate}
-  html:not(.js) .row:hover>.card,html:not(.js) .row:focus-within>.card,
-  html:not(.js) .hl:not(:has(.row:hover,.row:focus-within)) .row:first-child>.card,
-  .js .row.on>.card{opacity:1;visibility:visible;transform:none;transition:opacity .45s var(--ease),transform .6s var(--ease),visibility 0s}
-  .card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 70% at 85% 0%,color-mix(in srgb,var(--g) 38%,transparent),transparent 60%);z-index:-1}
-  .card::after{content:"";position:absolute;inset:0;background-image:var(--grain);mix-blend-mode:overlay;opacity:.25;pointer-events:none;z-index:-1}
-  .cshot{position:relative;padding:20px 20px 0;aspect-ratio:2.05;overflow:hidden}
-  .cshot img{width:100%;height:calc(100% + 40px);object-fit:cover;object-position:top center;border-radius:12px 12px 0 0;box-shadow:0 20px 50px -10px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);transform:scale(1.04) translateY(6px);transition:transform 1.1s var(--ease)}
-  .js .row.on .cshot img,html:not(.js) .row:hover .cshot img{transform:none}
-  .cshot::after{content:"";position:absolute;inset:0;background:var(--g);transform:scaleX(0);transform-origin:left;z-index:2;pointer-events:none}
-  .js .row.on .cshot::after{animation:curtain .9s var(--ease)}
-  @keyframes curtain{0%{transform:scaleX(0);transform-origin:left}45%{transform:scaleX(1);transform-origin:left}55%{transform:scaleX(1);transform-origin:right}100%{transform:scaleX(0);transform-origin:right}}
-  .cbody{padding:22px 28px 26px;position:relative}
-  .cbody>*{transition:opacity .5s var(--ease),transform .6s var(--ease)}
-  .js .row:not(.on) .cbody>*{opacity:0;transform:translateY(8px)}
-  .js .row.on .cbody>:nth-child(2){transition-delay:.05s}.js .row.on .cbody>:nth-child(3){transition-delay:.1s}.js .row.on .cbody>:nth-child(4){transition-delay:.15s}.js .row.on .cbody>:nth-child(n+5){transition-delay:.2s}
-  .ctop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
-  .ctop .pill{--sc:var(--ivory);border-color:rgba(239,230,214,.3);color:var(--ivory)}
-  .ctop .pill.s-shipped{border-color:#7fc49a;color:#a6dcb8}
-  .cnum{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(239,230,214,.5)}
-  .card h3{font-family:var(--display);font-weight:600;font-size:40px;line-height:1;letter-spacing:-.03em;margin-bottom:10px;font-variation-settings:"opsz" 144}
-  .cq{font-family:var(--display);font-style:italic;font-weight:400;font-size:21px;line-height:1.3;color:var(--ivory);margin-bottom:12px;text-wrap:pretty}
-  .cq::before{content:"“";color:var(--g);font-size:1.6em;line-height:0;vertical-align:-.32em;margin-right:.08em;filter:brightness(1.4)}
-  .cdesc{font-size:14.5px;line-height:1.6;color:rgba(239,230,214,.7);margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-  .cfacts{display:flex;gap:22px;margin-bottom:16px}
-  .cfacts b{display:block;font-family:var(--display);font-size:26px;font-weight:600;line-height:1;letter-spacing:-.02em}
-  .cfacts span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(239,230,214,.5)}
-  .cstack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
-  .cstack span{font-family:var(--mono);font-size:11px;border:1px solid rgba(239,230,214,.18);border-radius:6px;padding:3px 8px;color:rgba(239,230,214,.78)}
-  .clinks{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
-  .cbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;background:var(--ivory);color:var(--night);border-radius:100px;padding:10px 18px;transition:background .25s,transform .25s}
-  .cbtn:hover{background:#fff;transform:translateY(-1px)}
-  .clink{font-size:14px;color:rgba(239,230,214,.78);border-bottom:1px solid rgba(239,230,214,.25);padding-bottom:1px;transition:color .2s,border-color .2s}
-  .clink:hover{color:#fff;border-color:var(--g)}
+/* ---------- the card ---------- */
+.card{display:none;width:360px;background:var(--night);color:var(--ivory);border-radius:18px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(26,22,15,.6),0 0 0 1px rgba(0,0,0,.4)}
+.kimg{aspect-ratio:1.6;background:var(--night);border-bottom:1px solid rgba(239,230,214,.08)}
+.kimg img{width:100%;height:100%;object-fit:cover}
+.kbody{padding:16px 18px 18px}
+.kt{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.kt b{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.02em;line-height:1}
+.kst{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(239,230,214,.3);border-radius:100px;padding:3px 9px;color:rgba(239,230,214,.85)}
+.kst.s-shipped{border-color:#7fc49a;color:#a6dcb8}
+.kq{font-family:var(--display);font-style:italic;font-size:17px;line-height:1.32;margin-bottom:8px;text-wrap:pretty}
+.kq::before{content:"“";color:var(--g);filter:brightness(1.5)}
+.kdesc{font-size:13.5px;line-height:1.55;color:rgba(239,230,214,.68);margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.kf{display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:10px;font-family:var(--mono);font-size:10.5px;color:rgba(239,230,214,.55)}
+.kf b{font-family:var(--display);font-size:15px;color:var(--ivory);font-weight:600}
+.ks{display:flex;flex-wrap:wrap;align-items:center;gap:5px}
+.ks span{font-family:var(--mono);font-size:10.5px;border:1px solid rgba(239,230,214,.16);border-radius:5px;padding:2px 7px;color:rgba(239,230,214,.75)}
+.ks .kd{border:0;color:rgba(239,230,214,.45);padding-left:4px}
+.kls{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:14px}
+.kb{font-weight:600;font-size:14px;background:var(--ivory);color:var(--night);border-radius:100px;padding:8px 16px}
+.kl{font-size:14px;color:rgba(239,230,214,.8);border-bottom:1px solid rgba(239,230,214,.3)}
+.khint{display:block;margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,230,214,.4)}
+
+/* desktop, JS: one floating card follows the cursor */
+.hc{position:fixed;left:0;top:0;z-index:90;pointer-events:none;opacity:0;transform:translate3d(-9999px,0,0);transition:opacity .14s ease-out}
+.hc.on{opacity:1}
+.hc .card{display:block}
+.hc .kls,.hc .kdesc{display:none}
+
+/* desktop, no JS: a CSS popover beside the hovered row */
+@media (min-width:900px) and (hover:hover){
+  html:not(.js) .row:hover>.card{display:block;position:absolute;right:120px;top:50%;transform:translateY(-50%);z-index:40;pointer-events:none}
+  html:not(.js) .row:hover>.card .kls,html:not(.js) .row:hover>.card .kdesc{display:none}
 }
 
-/* ---------- small screens & touch: every row is a full card; scroll is the cursor ---------- */
-@media (max-width:999px), (hover:none){
-  .row{padding:6px 0 26px;border-top:1px solid var(--line)}
-  .row:last-child{border-bottom:1px solid var(--line)}
-  .rlink,.row:last-child .rlink{border:0;padding:18px 0 14px;grid-template-columns:40px minmax(0,1fr) auto;gap:12px}
-  .rlink::after{display:none}
-  .rgo{display:none}
-  .rname{font-size:clamp(30px,8vw,40px)}
-  .rname.long{font-size:clamp(26px,7vw,36px)}
-  .rname.xlong{font-size:clamp(22px,6vw,30px);overflow-wrap:anywhere}
-  .rline{white-space:normal}
-  .card{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:4px 20px;align-items:start;padding-left:52px}
-  .cshot{grid-row:1/3;border-radius:12px;overflow:hidden;aspect-ratio:1.58;background:var(--night);box-shadow:0 18px 40px -18px rgba(26,22,15,.5),0 0 0 1px rgba(0,0,0,.12)}
-  .cshot img{width:100%;height:100%;object-fit:cover;object-position:top center}
-  .cbody{display:contents}
-  .ctop,.card h3{display:none}
-  .cq{font-family:var(--display);font-style:italic;font-size:19px;line-height:1.3;color:var(--ink);text-wrap:pretty}
-  .cq::before{content:"“";color:var(--g)}
-  .cdesc,.cfacts,.cstack,.clinks{grid-column:1/-1}
-  .cdesc{font-size:15px;color:var(--muted);margin-top:14px}
-  .cfacts{display:flex;gap:20px;margin-top:12px}
-  .cfacts b{display:block;font-family:var(--display);font-size:24px;font-weight:600;line-height:1}
-  .cfacts span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
-  .cstack{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-  .cstack span{font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:var(--muted);background:var(--card)}
-  .clinks{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:16px}
-  .cbtn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;background:var(--ink);color:var(--paper);border-radius:100px;padding:10px 18px}
-  .clink{font-size:14.5px;color:var(--ink);border-bottom:1.5px solid var(--g);padding-bottom:1px}
-  @supports (animation-timeline: view()){
-    .row{animation:spot linear both;animation-timeline:view();animation-range:entry 10% exit 90%}
-    @keyframes spot{0%{opacity:.35;transform:scale(.97)}32%,68%{opacity:1;transform:none}100%{opacity:.35;transform:scale(.97)}}
-    .rname{animation:spotname linear both;animation-timeline:view();animation-range:entry 10% exit 90%}
-    @keyframes spotname{0%,100%{color:var(--ink)}35%,65%{color:var(--g)}}
-  }
-}
-@media (max-width:640px){
-  .card{grid-template-columns:1fr;padding-left:0}
-  .cshot{grid-row:auto;margin-bottom:12px}
-  .rlink,.row:last-child .rlink{grid-template-columns:34px minmax(0,1fr) auto}
+/* ---------- small screens & touch ---------- */
+@media (max-width:899px), (hover:none){
+  .thead{display:none}
+  .tgh{grid-template-columns:auto minmax(0,1fr) auto;padding:12px 4px 10px}
+  .tgh p{grid-column:1/-1;white-space:normal}
+  .tgc{grid-row:1;grid-column:3}
+  .rlink{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"proj st" "desc desc";gap:4px 12px;padding:12px 52px 12px 4px;min-height:0}
+  .c-proj{grid-area:proj}.c-st{grid-area:st}.c-desc{grid-area:desc;white-space:normal}
+  .c-num,.c-go{display:none}
+  .more{display:block;position:absolute;right:0;top:12px}
+  .more summary{list-style:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer}
+  .more summary::-webkit-details-marker{display:none}
+  .more summary span{position:relative;width:12px;height:12px}
+  .more summary span::before,.more summary span::after{content:"";position:absolute;left:0;right:0;top:50%;height:1.5px;margin-top:-.75px;background:var(--ink);transition:transform .2s}
+  .more summary span::after{transform:rotate(90deg)}
+  .more[open] summary{background:var(--ink);border-color:var(--ink)}
+  .more[open] summary span::before,.more[open] summary span::after{background:var(--paper)}
+  .more[open] summary span::after{transform:rotate(0)}
+  .more[open]~.card{display:block;width:auto;margin:2px 0 14px}
+  .more[open]~.card .kt{display:none}
+  .hc{display:none}
 }
 
-/* ---------- how it's built ---------- */
-.built{padding:clamp(70px,8vw,110px) 0;border-top:1px solid var(--line-soft)}
-.bgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(30px,5vw,80px);align-items:center}
-.built h2{font-family:var(--display);font-weight:500;font-size:clamp(32px,3.6vw,52px);line-height:1;letter-spacing:-.03em}
+/* ---------- built + footer ---------- */
+.built{border-top:1px solid var(--line-soft);padding:clamp(36px,4vw,52px) 0}
+.bgrid{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 40px}
+.built h2{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.4vw,32px);letter-spacing:-.02em;line-height:1.1}
 .built h2 em{font-style:italic;color:var(--accent-ink)}
-.built p{color:var(--muted);margin-top:16px;max-width:520px}
-.pipe{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px}
-.pipe div{border:1px solid var(--line);border-radius:14px;padding:18px 14px;background:var(--card);text-align:center}
-.pipe b{display:block;font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
-.pipe span{color:var(--muted)}
-.pipe i{font-style:normal;color:var(--faint);font-size:18px}
-.pipe code{display:block;grid-column:1/-1;margin-top:8px;padding:12px 16px;border-radius:10px;background:var(--night);color:var(--ivory);font-size:13px}
-.pipe code span{color:#a6dcb8}
-@media(max-width:900px){.bgrid{grid-template-columns:1fr}}
-@media(max-width:520px){.pipe{grid-template-columns:1fr}.pipe i{transform:rotate(90deg);justify-self:center}}
-
-/* ---------- footer ---------- */
-.foot{position:relative;overflow:hidden;background:var(--night);color:var(--ivory);padding:clamp(100px,12vw,170px) 0 60px;isolation:isolate}
-.foot::after{content:"";position:absolute;inset:0;background-image:var(--grain);mix-blend-mode:overlay;opacity:.3;pointer-events:none;z-index:-1}
-.foot .orb{position:absolute;border-radius:50%;filter:blur(100px);z-index:-2;pointer-events:none}
-.foot .orb.a{width:560px;height:560px;left:-160px;top:-200px;background:rgba(107,78,194,.38)}
-.foot .orb.b{width:520px;height:520px;right:-180px;bottom:-240px;background:rgba(197,106,58,.32)}
-.fk{color:#d9a27f;margin-bottom:24px}
-.foot h2{font-family:var(--display);font-weight:500;font-size:clamp(40px,6vw,92px);line-height:.95;letter-spacing:-.035em}
+.built p{color:var(--muted);font-size:15px;max-width:560px;margin-top:6px}
+.built code{font-family:var(--mono);font-size:13px;padding:10px 14px;border-radius:10px;background:var(--night);color:var(--ivory);white-space:nowrap}
+.built code span{color:#a6dcb8}
+.foot{background:var(--night);color:var(--ivory);padding:clamp(60px,8vw,110px) 0 44px;position:relative;overflow:hidden;isolation:isolate}
+.foot .orb{position:absolute;border-radius:50%;filter:blur(100px);z-index:-1;pointer-events:none}
+.foot .orb.a{width:520px;height:520px;left:-160px;top:-220px;background:rgba(107,78,194,.36)}
+.foot .orb.b{width:480px;height:480px;right:-180px;bottom:-260px;background:rgba(197,106,58,.3)}
+.fk{color:#d9a27f;margin-bottom:18px}
+.foot h2{font-family:var(--display);font-weight:500;font-size:clamp(34px,4.6vw,64px);line-height:.98;letter-spacing:-.035em}
 .foot h2 .fade{color:rgba(239,230,214,.45)}
 .foot h2 .ask{font-style:italic;color:#e6b08c}
-.flede{max-width:560px;color:rgba(239,230,214,.7);margin:26px 0 34px;font-size:18px}
-.fcta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:60px}
-.fcta a{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;border-radius:100px;padding:12px 22px;background:var(--ivory);color:var(--night)}
+.fcta{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 44px}
+.fcta a{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;border-radius:100px;padding:11px 20px;background:var(--ivory);color:var(--night)}
 .fcta a.ghost{background:transparent;color:var(--ivory);border:1px solid rgba(239,230,214,.3)}
-.flinks{display:flex;flex-wrap:wrap;gap:10px 26px;padding-top:28px;border-top:1px solid rgba(239,230,214,.14);font-size:15px;color:rgba(239,230,214,.78)}
+.flinks{display:flex;flex-wrap:wrap;gap:8px 24px;padding-top:22px;border-top:1px solid rgba(239,230,214,.14);font-size:15px;color:rgba(239,230,214,.78)}
 .flinks a:hover{color:#fff}
-.fine{margin-top:26px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:rgba(239,230,214,.4)}
+.fine{margin-top:20px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:rgba(239,230,214,.4)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
@@ -320,737 +225,770 @@ h1 em{font-style:italic;color:var(--accent-ink);font-weight:500}
 <nav class="top" aria-label="Experiments">
   <div class="wrap">
     <a href="#" class="brand"><b>ckluis</b> / experiments</a>
-    <div class="navlinks"><a href="#foundations" data-nav="foundations" style="--g:#6b4ec2"><span>01</span>Foundations</a><a href="#frameworks" data-nav="frameworks" style="--g:#c56a3a"><span>02</span>Frameworks</a><a href="#agent-tools" data-nav="agent-tools" style="--g:#2f7d6d"><span>03</span>Agent tools</a><a href="#products" data-nav="products" style="--g:#a87a1f"><span>04</span>Products</a><a href="#field-reports" data-nav="field-reports" style="--g:#3a6ea5"><span>05</span>Field reports</a><a href="#design-studies" data-nav="design-studies" style="--g:#b4456a"><span>06</span>Design studies</a></div>
+    <div class="navlinks"><a href="#foundations" data-nav="foundations" style="--g:#6b4ec2"><span>01</span>Foundations</a><a href="#frameworks" data-nav="frameworks" style="--g:#c56a3a"><span>02</span>Platforms &amp; frameworks</a><a href="#agent-tools" data-nav="agent-tools" style="--g:#2f7d6d"><span>03</span>Agent tools</a><a href="#products" data-nav="products" style="--g:#a87a1f"><span>04</span>Products</a><a href="#field-reports" data-nav="field-reports" style="--g:#3a6ea5"><span>05</span>Field reports</a><a href="#design-studies" data-nav="design-studies" style="--g:#b4456a"><span>06</span>Design studies</a></div>
     <span class="navcount"><b>29</b> experiments</span>
   </div>
-  <div class="progress" aria-hidden="true"></div>
 </nav>
 
 <header class="hero">
-  <div class="wrap">
-    <div class="hgrid">
-      <div>
-        <div class="mono eyebrow reveal">A field index · 29 experiments · 2026</div>
-        <h1 class="reveal"><span class="dim">Experiments used to be expensive.</span><em>Now they cost a weekend.</em></h1>
-      </div>
-      <div class="hside reveal">
-        <p class="lede">So I run a lot of them. Everything here is an idea I gave a night or two — substrates, frameworks, agent tools, products and design studies, most built solo in spare hours. The barrier to trying something didn't move. <b>It disappeared.</b></p>
-        <div class="hstats">
-          <div><b data-count="29">29</b><span>Experiments</span></div>
-          <div><b data-count="10">10</b><span>Shipped</span></div>
-          <div><b data-count="6">6</b><span>Groups</span></div>
-        </div>
-      </div>
+  <div class="wrap hgrid">
+    <div>
+      <div class="mono eyebrow">A field of experiments · 2026</div>
+      <h1><span class="dim">Experiments used to be expensive.</span><em>Now they cost a weekend.</em></h1>
     </div>
-  </div>
-  <div class="wide">
-    <div class="poster reveal">
-      <div class="porb a"></div><div class="porb b"></div><div class="porb c"></div>
-      <div class="plab"><span><b>Field index</b> · CK · the full bill</span><span>29 specimens · 6 groups · 10 shipped</span></div>
-      <p class="lineup"><span class="lg" style="--g:#6b4ec2"><span class="lgs"><a class="lgtag" href="#foundations">01 Foundations</a><a class="ln t1" href="#regel" data-img="groups/foundations/regel/preview.png" data-q="What if deploying were a commit, and rolling back were a WHERE clause?" data-st="Shipped">regel</a></span><i aria-hidden="true">·</i> <a class="ln t2" href="#kern" data-img="groups/foundations/kern/preview.png" data-q="What if every view, workflow and policy — even an agent&#39;s patch — were a versioned row?" data-st="Spec">kern</a><i aria-hidden="true">·</i> <a class="ln t2" href="#eigen" data-img="groups/foundations/eigen/preview.png" data-q="What if one static binary were the app, the desktop and the API — and PII stayed hidden offline?" data-st="Spec">eigen</a><i aria-hidden="true">·</i> <a class="ln t1" href="#tinker" data-img="groups/foundations/tinker/preview.png" data-q="What if you could build internal tools on personal data nobody can read without a second person&#39;s approval?" data-st="Shipped">tinker</a><i aria-hidden="true">·</i> <a class="ln t2" href="#taal" data-img="groups/foundations/taal/preview.png" data-q="What if you could have Erlang&#39;s actors and supervision trees without the Erlang VM?" data-st="Spec">taal</a><i aria-hidden="true">·</i> <a class="ln t2" href="#streng" data-img="groups/foundations/streng/preview.png" data-q="What if TypeScript came with no supply chain at all — the whole corpus vendored and checked in milliseconds?" data-st="Spec">streng</a></span> <span class="lg" style="--g:#c56a3a"><span class="lgs"><a class="lgtag" href="#frameworks">02 Frameworks</a><a class="ln t1" href="#samen" data-img="groups/frameworks/samen/preview.png" data-q="What if the boring 80% of a SaaS product came preset — and you could support tenants without ever seeing their customers?" data-st="Shipped">samen</a></span><i aria-hidden="true">·</i> <a class="ln t2" href="#chord" data-img="groups/frameworks/chord/preview.png" data-q="What would a G# stack look like if every decision were already made for you?" data-st="Spec">chord</a><i aria-hidden="true">·</i> <a class="ln t2" href="#fugue" data-img="groups/frameworks/fugue/preview.png" data-q="What if an app framework were distributed by default, built on virtual actors?" data-st="Spec">fugue</a><i aria-hidden="true">·</i> <a class="ln t2" href="#realbook" data-img="groups/frameworks/realbook/preview.png" data-q="What if content and commerce were governed by admission instead of a plugin free-for-all?" data-st="Spec">realbook</a><i aria-hidden="true">·</i> <a class="ln t2" href="#lui" data-img="groups/frameworks/lui/preview.png" data-q="What if you described a screen&#39;s intent and the framework composed the layout?" data-st="Spec">lui</a><i aria-hidden="true">·</i> <a class="ln t3" href="#cauldron" data-img="groups/frameworks/cauldron/preview.svg" data-q="How much of a modern web stack can one Lisp binary carry with no dependencies at all?" data-st="Archived">cauldron</a><i aria-hidden="true">·</i> <a class="ln t3" href="#crucible-works" data-img="groups/frameworks/crucible-works/preview.svg" data-q="Could a zero-dependency framework carry a real multi-tenant product?" data-st="Archived">crucible-works</a></span> <span class="lg" style="--g:#2f7d6d"><span class="lgs"><a class="lgtag" href="#agent-tools">03 Agent tools</a><a class="ln t1" href="#baton" data-img="groups/agent-tools/baton/preview.svg" data-q="What if every task went to the cheapest model that could actually finish it?" data-st="Shipped">baton</a></span><i aria-hidden="true">·</i> <a class="ln t1" href="#luminaryTeam" data-img="groups/agent-tools/luminaryTeam/preview.png" data-q="What would 40 domain experts find if they reviewed your plan before launch?" data-st="Shipped">luminaryTeam</a><i aria-hidden="true">·</i> <a class="ln t1" href="#senkani" data-img="groups/agent-tools/senkani/preview.png" data-q="How many tokens could a coding agent skip if every read were compressed before it arrived?" data-st="Shipped">senkani</a><i aria-hidden="true">·</i> <a class="ln t1" href="#workflowForge" data-img="groups/agent-tools/workflowForge/preview.svg" data-q="What if any workflow could become a diagram you can send — one where no two lines ever cross?" data-st="Shipped">workflowForge</a></span> <span class="lg" style="--g:#a87a1f"><span class="lgs"><a class="lgtag" href="#products">04 Products</a><a class="ln t1" href="#aiCRO" data-img="groups/products/aiCRO/preview.png" data-q="What if one URL were enough for a whole growth engagement — analysis, positioning, a rebuilt site and a GTM kit?" data-st="Shipped">aiCRO</a></span><i aria-hidden="true">·</i> <a class="ln t1" href="#terminalHelper" data-img="groups/products/terminalHelper/preview.png" data-q="What if your terminal had a browsable library of every command you&#39;ve ever needed?" data-st="Shipped">terminalHelper</a><i aria-hidden="true">·</i> <a class="ln t2" href="#nonprofitEventPlanner" data-img="groups/products/nonprofitEventPlanner/preview.png" data-q="What if one volunteer could run an entire youth trip from their phone?" data-st="Local">nonprofitEventPlanner</a><i aria-hidden="true">·</i> <a class="ln t2" href="#customCMS" data-img="groups/products/customCMS/preview.png" data-q="What if one local brain could research, write and run a dozen niche book sites at zero marginal cost?" data-st="Local">customCMS</a></span> <span class="lg" style="--g:#3a6ea5"><span class="lgs"><a class="lgtag" href="#field-reports">05 Field reports</a><a class="ln t2" href="#bocht" data-img="bend/assets/cards/bocht.png" data-q="Can an AI build a whole backend in Bend — and prove every claim it makes?" data-st="Case study">bocht</a></span><i aria-hidden="true">·</i> <a class="ln t2" href="#bochtCMS" data-img="bend/assets/cards/bochtCMS.png" data-q="What does a passing test suite miss when a CMS freezes on a long post?" data-st="Case study">bochtCMS</a><i aria-hidden="true">·</i> <a class="ln t2" href="#shellOS" data-img="bend/assets/cards/shellOS.png" data-q="Can a desktop shell drawn pixel by pixel in Bend move from Linux to macOS without changing the app?" data-st="Case study">shellOS</a></span> <span class="lg" style="--g:#b4456a"><span class="lgs"><a class="lgtag" href="#design-studies">06 Design studies</a><a class="ln t2" href="#overlook" data-img="groups/design-studies/overlook/preview.png" data-q="What if supervising ten agents felt as calm as reading one channel?" data-st="Concept">Overlook</a></span><i aria-hidden="true">·</i> <a class="ln t2" href="#wijzer" data-img="groups/design-studies/wijzer/preview.png" data-q="What if your watch showed how much of the day is still yours?" data-st="Concept">wijzer</a><i aria-hidden="true">·</i> <a class="ln t1" href="#uiExplorer" data-img="groups/design-studies/uiExplorer/preview.png" data-q="What if every interface experiment documented its own making — prompt, model, agents and lineage?" data-st="Shipped">uiExplorer</a><i aria-hidden="true">·</i> <a class="ln t2" href="#omegaClass" data-img="groups/design-studies/omegaClass/preview.png" data-q="Can one stainless cabinet hold a parrilla, a smoker and a prep station — and let two pitmasters work at once?" data-st="Concept">omegaClass</a><i aria-hidden="true">·</i> <a class="ln t2" href="#stowork" data-img="groups/design-studies/stowork/preview.svg" data-q="Can a carry-on unfold into a three-monitor studio in under two minutes?" data-st="Concept">STOWORK</a></span></p>
-      <div class="plegend"><a href="#foundations" style="--g:#6b4ec2"><i></i>Foundations <span>6</span></a><a href="#frameworks" style="--g:#c56a3a"><i></i>Frameworks <span>7</span></a><a href="#agent-tools" style="--g:#2f7d6d"><i></i>Agent tools <span>4</span></a><a href="#products" style="--g:#a87a1f"><i></i>Products <span>4</span></a><a href="#field-reports" style="--g:#3a6ea5"><i></i>Field reports <span>3</span></a><a href="#design-studies" style="--g:#b4456a"><i></i>Design studies <span>5</span></a></div>
-      <div class="pkey"><b>Large</b> = shipped &nbsp;·&nbsp; <em>italic</em> = spec, concept or case study &nbsp;·&nbsp; <s>struck</s> = archived</div>
+    <div>
+      <p class="lede">So I run a lot of them. Everything here is an idea I gave a night or two, most built solo in spare hours. The barrier to trying something didn't move. <b>It disappeared.</b></p>
+      <div class="hstats">
+        <div><b>29</b><span>Experiments</span></div>
+        <div><b>10</b><span>Shipped</span></div>
+        <div><b>6</b><span>Project types</span></div>
+      </div>
     </div>
   </div>
 </header>
 
 <section class="person">
-  <div class="orb a"></div><div class="orb b"></div>
   <div class="wrap pgrid">
-    <div class="reveal">
+    <div>
       <div class="mono pk">The person behind the index</div>
       <h2>I build software that <em>questions its own foundation.</em></h2>
     </div>
-    <div class="reveal">
-      <p class="pbody">I'm <b>Chris Kluis</b>. For nearly two decades I've worked the seam where product, marketing, and go-to-market meet in B2B SaaS — I took an enterprise software company from on-prem to SaaS to acquisition, and turned one too many <em>"there has to be a better way"</em> posts into co-founding <b>SaaSRock</b>. Back then I was the idea guy; a developer built everything.</p>
-      <p class="pbody">So for years the deal was the same: dream it, write it up, hand it off. A <b>new UX paradigm</b> for relationship-aware data, <b>APIs</b> that could teach an LLM agent themselves — things I had no way to build myself. The tooling finally changed that. Everything here is me building the ideas I used to have to give away — and an open invitation for every other idea person to start experimenting too.</p>
+    <div>
+      <p class="pbody">I'm <b>Chris Kluis</b>. For nearly two decades I've worked the seam where product, marketing, and go-to-market meet in B2B SaaS. I took an enterprise software company from on-prem to SaaS to acquisition, and co-founded <b>SaaSRock</b>. Back then I was the idea guy; a developer built everything.</p>
+      <p class="pbody">The tooling changed that. Everything here is me building the ideas I used to have to give away, and an open invitation for every other idea person to start experimenting too.</p>
       <div class="pchips"><span><b>18+ yrs</b> B2B SaaS</span><span>30% → 80% ARR</span><span>1 acquisition</span><span>Co-founded SaaSRock</span><span>Palm Harbor, FL</span></div>
     </div>
   </div>
 </section>
 
-<div class="gchips" aria-label="Groups"><div class="wrap"><a href="#foundations" data-nav="foundations" style="--g:#6b4ec2"><i></i>Foundations<span>6</span></a><a href="#frameworks" data-nav="frameworks" style="--g:#c56a3a"><i></i>Frameworks<span>7</span></a><a href="#agent-tools" data-nav="agent-tools" style="--g:#2f7d6d"><i></i>Agent tools<span>4</span></a><a href="#products" data-nav="products" style="--g:#a87a1f"><i></i>Products<span>4</span></a><a href="#field-reports" data-nav="field-reports" style="--g:#3a6ea5"><i></i>Field reports<span>3</span></a><a href="#design-studies" data-nav="design-studies" style="--g:#b4456a"><i></i>Design studies<span>5</span></a></div></div>
-
-<section class="grp" id="foundations" style="--g:#6b4ec2"><span id="substrate" class="alias" aria-hidden="true"></span><span id="languages" class="alias" aria-hidden="true"></span>
+<main class="ix" id="index" data-show="all">
   <div class="wrap">
-    <header class="gh reveal">
-      <div class="gnum" aria-hidden="true">01</div>
-      <div class="gt">
-        <div class="mono gk">Group 01 · 6 experiments</div>
+    <div class="ixbar">
+      <h2>The index<span>29 projects</span></h2>
+      <div class="filters" role="group" aria-label="Filter by status"><button type="button" data-filter="all" aria-pressed="true">All<span>29</span></button><button type="button" data-filter="shipped" aria-pressed="false">Shipped<span>10</span></button><button type="button" data-filter="progress" aria-pressed="false">Spec & concept<span>14</span></button><button type="button" data-filter="case" aria-pressed="false">Case studies<span>3</span></button><button type="button" data-filter="archived" aria-pressed="false">Archived<span>2</span></button></div>
+    </div>
+    <div class="thead" aria-hidden="true"><span>Project</span><span>Description</span><span>Status</span><span class="r">Stars</span><span class="r">Forks</span><span></span></div>
+    <section class="tg" id="foundations" style="--g:#6b4ec2"><span id="substrate" class="alias" aria-hidden="true"></span><span id="languages" class="alias" aria-hidden="true"></span>
+      <header class="tgh">
+        <span class="tgn">01</span>
         <h2>Foundations</h2>
-        <p class="gline">What if the layer under everything were different?</p>
-        <p class="gblurb">Substrates, kernels and languages — the floor a product stands on, rebuilt from first principles to see what changes above it.</p>
-      </div>
-      <div class="gmeta"><div class="gbar"><i class="s-shipped" style="flex:2" title="2 shipped"></i><i class="s-spec" style="flex:4" title="4 spec"></i></div><div class="gtally"><span class="s-shipped"><i></i>2 shipped</span><span class="s-spec"><i></i>4 spec</span></div></div>
-    </header>
-    <ol class="hl" data-group="foundations">
-      <li class="row" id="regel">
+        <p>What if the layer under everything were different?</p>
+        <span class="tgc">5</span>
+      </header>
+      <ol class="rows">
+      <li class="row" id="regel" data-status="shipped">
         <a class="rlink" href="https://ckluis.github.io/regel/" target="_blank" rel="noopener">
-          <span class="rn">01.01</span>
-          <span class="rmain"><span class="rname">regel</span><span class="rline">code as governed Postgres rows</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>regel</b></span>
+          <span class="c-desc">code as governed Postgres rows</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="regel">
-          <div class="cshot"><img src="groups/foundations/regel/preview.png" alt="regel — code as governed Postgres rows" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">01.01 · Foundations</span></div>
-            <h3>regel</h3>
-            <p class="cq">What if deploying were a commit, and rolling back were a WHERE clause?</p>
-            <p class="cdesc">A Go kernel runs strict-TypeScript apps admitted as content-addressed Postgres rows. Deploy is a commit; rollback is an as-of WHERE clause — and nothing lands unverified.</p>
-            <div class="cstack"><span>Go</span><span>TypeScript</span><span>Postgres</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/regel/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/regel" target="_blank" rel="noopener">Code <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview regel"><span></span></summary></details>
+        <div class="card" style="--g:#6b4ec2">
+          <div class="kimg"><img src="groups/foundations/regel/preview.svg" alt="regel — code as governed Postgres rows" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>regel</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if deploying were a commit, and rolling back were a WHERE clause?</p>
+            <p class="kdesc">A Go kernel runs strict-TypeScript apps admitted as content-addressed Postgres rows. Deploy is a commit; rollback is an as-of WHERE clause — and nothing lands unverified.</p>
+            
+            <div class="ks"><span>Go</span><span>TypeScript</span><span>Postgres</span><span class="kd">updated Jul 20, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/regel/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/regel" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="kern">
+      <li class="row" id="kern" data-status="progress">
         <a class="rlink" href="kern.html">
-          <span class="rn">01.02</span>
-          <span class="rmain"><span class="rname">kern</span><span class="rline">a homoiconic SaaS substrate</span></span>
-          <span class="rst s-spec"><i></i>Spec</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>kern</b></span>
+          <span class="c-desc">a homoiconic SaaS substrate</span>
+          <span class="c-st s-spec"><i></i>Spec</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="kern">
-          <div class="cshot"><img src="groups/foundations/kern/preview.png" alt="kern — a homoiconic SaaS substrate" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-spec">Spec</span><span class="cnum">01.02 · Foundations</span></div>
-            <h3>kern</h3>
-            <p class="cq">What if every view, workflow and policy — even an agent&#39;s patch — were a versioned row?</p>
-            <p class="cdesc">A homoiconic SaaS substrate in Lisp — every view, workflow, policy, and even agent-written patch is a versioned row, evaluated by a tiny kernel.</p>
-            <div class="cstack"><span>Lisp</span><span>Postgres</span></div>
-            <div class="clinks"><a class="cbtn" href="kern.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview kern"><span></span></summary></details>
+        <div class="card" style="--g:#6b4ec2">
+          <div class="kimg"><img src="groups/foundations/kern/preview.svg" alt="kern — a homoiconic SaaS substrate" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>kern</b><span class="kst s-spec">Spec</span></div>
+            <p class="kq">What if every view, workflow and policy — even an agent&#39;s patch — were a versioned row?</p>
+            <p class="kdesc">A homoiconic SaaS substrate in Lisp — every view, workflow, policy, and even agent-written patch is a versioned row, evaluated by a tiny kernel.</p>
+            
+            <div class="ks"><span>Lisp</span><span>Postgres</span></div>
+            <div class="kls"><a class="kb" href="kern.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="eigen">
+      <li class="row" id="eigen" data-status="progress">
         <a class="rlink" href="eigen.html">
-          <span class="rn">01.03</span>
-          <span class="rmain"><span class="rname">eigen</span><span class="rline">local-first hypermedia in one Rust binary</span></span>
-          <span class="rst s-spec"><i></i>Spec</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>eigen</b></span>
+          <span class="c-desc">local-first hypermedia in one Rust binary</span>
+          <span class="c-st s-spec"><i></i>Spec</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="eigen">
-          <div class="cshot"><img src="groups/foundations/eigen/preview.png" alt="eigen — local-first hypermedia in one Rust binary" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-spec">Spec</span><span class="cnum">01.03 · Foundations</span></div>
-            <h3>eigen</h3>
-            <p class="cq">What if one static binary were the app, the desktop and the API — and PII stayed hidden offline?</p>
-            <p class="cdesc">A local-first hypermedia framework for Rust — one static binary is the app, desktop, and API; Postgres holds everything; PII stays hidden offline.</p>
-            <div class="cstack"><span>Rust</span><span>Postgres</span></div>
-            <div class="clinks"><a class="cbtn" href="eigen.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview eigen"><span></span></summary></details>
+        <div class="card" style="--g:#6b4ec2">
+          <div class="kimg"><img src="groups/foundations/eigen/preview.svg" alt="eigen — local-first hypermedia in one Rust binary" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>eigen</b><span class="kst s-spec">Spec</span></div>
+            <p class="kq">What if one static binary were the app, the desktop and the API — and PII stayed hidden offline?</p>
+            <p class="kdesc">A local-first hypermedia framework for Rust — one static binary is the app, desktop, and API; Postgres holds everything; PII stays hidden offline.</p>
+            
+            <div class="ks"><span>Rust</span><span>Postgres</span></div>
+            <div class="kls"><a class="kb" href="eigen.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="tinker">
-        <a class="rlink" href="https://ckluis.github.io/tinker/" target="_blank" rel="noopener">
-          <span class="rn">01.04</span>
-          <span class="rmain"><span class="rname">tinker</span><span class="rline">internal tools on data you can&#39;t see</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
-        </a>
-        <article class="card" aria-label="tinker">
-          <div class="cshot"><img src="groups/foundations/tinker/preview.png" alt="tinker — internal tools on data you can&#39;t see" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">01.04 · Foundations</span></div>
-            <h3>tinker</h3>
-            <p class="cq">What if you could build internal tools on personal data nobody can read without a second person&#39;s approval?</p>
-            <p class="cdesc">An ontology-driven builder in Rust on PostgreSQL 18. Define an object once and get a row-level-secured table, a governed API and an MCP front door for agents. Email and phone are sealed by type in a separate vault: queries see a mask, automations get a key, and a person sees the value only after a second person approves. Erasure is a crypto-shred.</p>
-            <div class="cfacts"><div><b>662</b><span>tests passing</span></div><div><b>M0–M8</b><span>gated milestones</span></div></div><div class="cstack"><span>Rust</span><span>PostgreSQL 18</span><span>MCP</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/tinker/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/tinker" target="_blank" rel="noopener">Code <span>↗</span></a></div>
-          </div>
-        </article>
-      </li>
-      <li class="row" id="taal">
+      <li class="row" id="taal" data-status="progress">
         <a class="rlink" href="taal.html">
-          <span class="rn">01.05</span>
-          <span class="rmain"><span class="rname">taal</span><span class="rline">the BEAM, built on Go</span></span>
-          <span class="rst s-spec"><i></i>Spec</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>taal</b></span>
+          <span class="c-desc">the BEAM, built on Go</span>
+          <span class="c-st s-spec"><i></i>Spec</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="taal">
-          <div class="cshot"><img src="groups/foundations/taal/preview.png" alt="taal — the BEAM, built on Go" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-spec">Spec</span><span class="cnum">01.05 · Foundations</span></div>
-            <h3>taal</h3>
-            <p class="cq">What if you could have Erlang&#39;s actors and supervision trees without the Erlang VM?</p>
-            <p class="cdesc">A small language for building the BEAM on Go — Erlang-style actors and supervision trees, without the VM.</p>
-            <div class="cstack"><span>Go</span><span>Actor model</span></div>
-            <div class="clinks"><a class="cbtn" href="taal.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview taal"><span></span></summary></details>
+        <div class="card" style="--g:#6b4ec2">
+          <div class="kimg"><img src="groups/foundations/taal/preview.svg" alt="taal — the BEAM, built on Go" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>taal</b><span class="kst s-spec">Spec</span></div>
+            <p class="kq">What if you could have Erlang&#39;s actors and supervision trees without the Erlang VM?</p>
+            <p class="kdesc">A small language for building the BEAM on Go — Erlang-style actors and supervision trees, without the VM.</p>
+            
+            <div class="ks"><span>Go</span><span>Actor model</span></div>
+            <div class="kls"><a class="kb" href="taal.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="streng">
+      <li class="row" id="streng" data-status="progress">
         <a class="rlink" href="streng.html">
-          <span class="rn">01.06</span>
-          <span class="rmain"><span class="rname">streng</span><span class="rline">a closed-world TypeScript</span></span>
-          <span class="rst s-spec"><i></i>Spec</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>streng</b></span>
+          <span class="c-desc">a closed-world TypeScript</span>
+          <span class="c-st s-spec"><i></i>Spec</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="streng">
-          <div class="cshot"><img src="groups/foundations/streng/preview.png" alt="streng — a closed-world TypeScript" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-spec">Spec</span><span class="cnum">01.06 · Foundations</span></div>
-            <h3>streng</h3>
-            <p class="cq">What if TypeScript came with no supply chain at all — the whole corpus vendored and checked in milliseconds?</p>
-            <p class="cdesc">A closed-world TypeScript — all of the corpus, none of the supply chain, checked by a vendored native compiler in milliseconds.</p>
-            <div class="cstack"><span>TypeScript</span><span>Native compiler</span></div>
-            <div class="clinks"><a class="cbtn" href="streng.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview streng"><span></span></summary></details>
+        <div class="card" style="--g:#6b4ec2">
+          <div class="kimg"><img src="groups/foundations/streng/preview.svg" alt="streng — a closed-world TypeScript" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>streng</b><span class="kst s-spec">Spec</span></div>
+            <p class="kq">What if TypeScript came with no supply chain at all — the whole corpus vendored and checked in milliseconds?</p>
+            <p class="kdesc">A closed-world TypeScript — all of the corpus, none of the supply chain, checked by a vendored native compiler in milliseconds.</p>
+            
+            <div class="ks"><span>TypeScript</span><span>Native compiler</span></div>
+            <div class="kls"><a class="kb" href="streng.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-    </ol>
-  </div>
-</section>
-
-<section class="grp alt" id="frameworks" style="--g:#c56a3a">
-  <div class="wrap">
-    <header class="gh reveal">
-      <div class="gnum" aria-hidden="true">02</div>
-      <div class="gt">
-        <div class="mono gk">Group 02 · 7 experiments</div>
-        <h2>Frameworks</h2>
-        <p class="gline">Opinionated ways to build a whole product.</p>
-        <p class="gblurb">Batteries-included stacks with strong opinions — each one a bet on which decisions a framework should make for you.</p>
-      </div>
-      <div class="gmeta"><div class="gbar"><i class="s-shipped" style="flex:1" title="1 shipped"></i><i class="s-spec" style="flex:4" title="4 spec"></i><i class="s-archived" style="flex:2" title="2 archived"></i></div><div class="gtally"><span class="s-shipped"><i></i>1 shipped</span><span class="s-spec"><i></i>4 spec</span><span class="s-archived"><i></i>2 archived</span></div></div>
-    </header>
-    <ol class="hl" data-group="frameworks">
-      <li class="row" id="samen">
+      </ol>
+    </section>
+    <section class="tg" id="frameworks" style="--g:#c56a3a">
+      <header class="tgh">
+        <span class="tgn">02</span>
+        <h2>Platforms &amp; frameworks</h2>
+        <p>Opinionated ways to build a whole product.</p>
+        <span class="tgc">8</span>
+      </header>
+      <ol class="rows">
+      <li class="row" id="samen" data-status="shipped">
         <a class="rlink" href="https://ckluis.github.io/samen/" target="_blank" rel="noopener">
-          <span class="rn">02.01</span>
-          <span class="rmain"><span class="rname">samen</span><span class="rline">a governed B2B-SaaS foundry</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>samen</b></span>
+          <span class="c-desc">a governed B2B-SaaS foundry</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="samen">
-          <div class="cshot"><img src="groups/frameworks/samen/preview.png" alt="samen — a governed B2B-SaaS foundry" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">02.01 · Frameworks</span></div>
-            <h3>samen</h3>
-            <p class="cq">What if the boring 80% of a SaaS product came preset — and you could support tenants without ever seeing their customers?</p>
-            <p class="cdesc">A governed B2B-SaaS foundry that presets the boring 80% — identity, CRM, billing, support, and the product UI — as six governed idioms on one Postgres per product. Support your tenants without ever seeing their customers.</p>
-            <div class="cstack"><span>Elixir</span><span>Ash</span><span>Oban</span><span>Postgres</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/samen/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/samen" target="_blank" rel="noopener">Code <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview samen"><span></span></summary></details>
+        <div class="card" style="--g:#c56a3a">
+          <div class="kimg"><img src="groups/frameworks/samen/preview.svg" alt="samen — a governed B2B-SaaS foundry" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>samen</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if the boring 80% of a SaaS product came preset — and you could support tenants without ever seeing their customers?</p>
+            <p class="kdesc">A governed B2B-SaaS foundry that presets the boring 80% — identity, CRM, billing, support, and the product UI — as six governed idioms on one Postgres per product. Support your tenants without ever seeing their customers.</p>
+            
+            <div class="ks"><span>Elixir</span><span>Ash</span><span>Oban</span><span>Postgres</span><span class="kd">updated Oct 5, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/samen/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/samen" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="chord">
+      <li class="row" id="tinker" data-status="shipped">
+        <a class="rlink" href="https://ckluis.github.io/tinker/" target="_blank" rel="noopener">
+          <span class="c-proj"><b>tinker</b></span>
+          <span class="c-desc">internal tools on data you can&#39;t see</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
+        </a>
+        <details class="more"><summary aria-label="Preview tinker"><span></span></summary></details>
+        <div class="card" style="--g:#c56a3a">
+          <div class="kimg"><img src="groups/frameworks/tinker/preview.svg" alt="tinker — internal tools on data you can&#39;t see" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>tinker</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if you could build internal tools on personal data nobody can read without a second person&#39;s approval?</p>
+            <p class="kdesc">An ontology-driven builder in Rust on PostgreSQL 18. Define an object once and get a row-level-secured table, a governed API and an MCP front door for agents. Email and phone are sealed by type in a separate vault: queries see a mask, automations get a key, and a person sees the value only after a second person approves. Erasure is a crypto-shred.</p>
+            <div class="kf"><span><b>662</b> tests passing</span><span><b>M0–M8</b> gated milestones</span></div>
+            <div class="ks"><span>Rust</span><span>PostgreSQL 18</span><span>MCP</span><span class="kd">updated Oct 5, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/tinker/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/tinker" target="_blank" rel="noopener">Code ↗</a></div>
+          </div>
+        </div>
+      </li>
+      <li class="row" id="chord" data-status="progress">
         <a class="rlink" href="chord.html">
-          <span class="rn">02.02</span>
-          <span class="rmain"><span class="rname">chord</span><span class="rline">the omakase full-stack for G#</span></span>
-          <span class="rst s-spec"><i></i>Spec</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>chord</b></span>
+          <span class="c-desc">the omakase full-stack for G#</span>
+          <span class="c-st s-spec"><i></i>Spec</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="chord">
-          <div class="cshot"><img src="groups/frameworks/chord/preview.png" alt="chord — the omakase full-stack for G#" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-spec">Spec</span><span class="cnum">02.02 · Frameworks</span></div>
-            <h3>chord</h3>
-            <p class="cq">What would a G# stack look like if every decision were already made for you?</p>
-            <p class="cdesc">The omakase full-stack for G# — every decision made for you, batteries included, one blessed way to do each thing.</p>
-            <div class="cstack"><span>G#</span><span>Full-stack</span></div>
-            <div class="clinks"><a class="cbtn" href="chord.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview chord"><span></span></summary></details>
+        <div class="card" style="--g:#c56a3a">
+          <div class="kimg"><img src="groups/frameworks/chord/preview.svg" alt="chord — the omakase full-stack for G#" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>chord</b><span class="kst s-spec">Spec</span></div>
+            <p class="kq">What would a G# stack look like if every decision were already made for you?</p>
+            <p class="kdesc">The omakase full-stack for G# — every decision made for you, batteries included, one blessed way to do each thing.</p>
+            
+            <div class="ks"><span>G#</span><span>Full-stack</span></div>
+            <div class="kls"><a class="kb" href="chord.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="fugue">
+      <li class="row" id="fugue" data-status="progress">
         <a class="rlink" href="fugue.html">
-          <span class="rn">02.03</span>
-          <span class="rmain"><span class="rname">fugue</span><span class="rline">the Phoenix of G#, on Orleans</span></span>
-          <span class="rst s-spec"><i></i>Spec</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>fugue</b></span>
+          <span class="c-desc">the Phoenix of G#, on Orleans</span>
+          <span class="c-st s-spec"><i></i>Spec</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="fugue">
-          <div class="cshot"><img src="groups/frameworks/fugue/preview.png" alt="fugue — the Phoenix of G#, on Orleans" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-spec">Spec</span><span class="cnum">02.03 · Frameworks</span></div>
-            <h3>fugue</h3>
-            <p class="cq">What if an app framework were distributed by default, built on virtual actors?</p>
-            <p class="cdesc">The Phoenix of G#, on Orleans — a distributed-by-default app framework built on virtual actors.</p>
-            <div class="cstack"><span>G#</span><span>Orleans</span></div>
-            <div class="clinks"><a class="cbtn" href="fugue.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview fugue"><span></span></summary></details>
+        <div class="card" style="--g:#c56a3a">
+          <div class="kimg"><img src="groups/frameworks/fugue/preview.svg" alt="fugue — the Phoenix of G#, on Orleans" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>fugue</b><span class="kst s-spec">Spec</span></div>
+            <p class="kq">What if an app framework were distributed by default, built on virtual actors?</p>
+            <p class="kdesc">The Phoenix of G#, on Orleans — a distributed-by-default app framework built on virtual actors.</p>
+            
+            <div class="ks"><span>G#</span><span>Orleans</span></div>
+            <div class="kls"><a class="kb" href="fugue.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="realbook">
+      <li class="row" id="realbook" data-status="progress">
         <a class="rlink" href="realbook.html">
-          <span class="rn">02.04</span>
-          <span class="rmain"><span class="rname">realbook</span><span class="rline">the WordPress of G#, with a gate</span></span>
-          <span class="rst s-spec"><i></i>Spec</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>realbook</b></span>
+          <span class="c-desc">the WordPress of G#, with a gate</span>
+          <span class="c-st s-spec"><i></i>Spec</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="realbook">
-          <div class="cshot"><img src="groups/frameworks/realbook/preview.png" alt="realbook — the WordPress of G#, with a gate" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-spec">Spec</span><span class="cnum">02.04 · Frameworks</span></div>
-            <h3>realbook</h3>
-            <p class="cq">What if content and commerce were governed by admission instead of a plugin free-for-all?</p>
-            <p class="cdesc">The WordPress of G#, with a gate — content and commerce, governed by admission instead of a plugin free-for-all.</p>
-            <div class="cstack"><span>G#</span><span>CMS</span></div>
-            <div class="clinks"><a class="cbtn" href="realbook.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview realbook"><span></span></summary></details>
+        <div class="card" style="--g:#c56a3a">
+          <div class="kimg"><img src="groups/frameworks/realbook/preview.svg" alt="realbook — the WordPress of G#, with a gate" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>realbook</b><span class="kst s-spec">Spec</span></div>
+            <p class="kq">What if content and commerce were governed by admission instead of a plugin free-for-all?</p>
+            <p class="kdesc">The WordPress of G#, with a gate — content and commerce, governed by admission instead of a plugin free-for-all.</p>
+            
+            <div class="ks"><span>G#</span><span>CMS</span></div>
+            <div class="kls"><a class="kb" href="realbook.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="lui">
+      <li class="row" id="lui" data-status="progress">
         <a class="rlink" href="lui.html">
-          <span class="rn">02.05</span>
-          <span class="rmain"><span class="rname">lui</span><span class="rline">layout-first UI with an AI sidecar</span></span>
-          <span class="rst s-spec"><i></i>Spec</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>lui</b></span>
+          <span class="c-desc">layout-first UI with an AI sidecar</span>
+          <span class="c-st s-spec"><i></i>Spec</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="lui">
-          <div class="cshot"><img src="groups/frameworks/lui/preview.png" alt="lui — layout-first UI with an AI sidecar" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-spec">Spec</span><span class="cnum">02.05 · Frameworks</span></div>
-            <h3>lui</h3>
-            <p class="cq">What if you described a screen&#39;s intent and the framework composed the layout?</p>
-            <p class="cdesc">Layout User Interface — a layout-first UI framework with an AI sidecar that composes screens from intent.</p>
-            <div class="cstack"><span>UI framework</span><span>AI sidecar</span></div>
-            <div class="clinks"><a class="cbtn" href="lui.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview lui"><span></span></summary></details>
+        <div class="card" style="--g:#c56a3a">
+          <div class="kimg"><img src="groups/frameworks/lui/preview.svg" alt="lui — layout-first UI with an AI sidecar" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>lui</b><span class="kst s-spec">Spec</span></div>
+            <p class="kq">What if you described a screen&#39;s intent and the framework composed the layout?</p>
+            <p class="kdesc">Layout User Interface — a layout-first UI framework with an AI sidecar that composes screens from intent.</p>
+            
+            <div class="ks"><span>UI framework</span><span>AI sidecar</span></div>
+            <div class="kls"><a class="kb" href="lui.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="cauldron">
+      <li class="row" id="cauldron" data-status="archived">
         <a class="rlink" href="https://github.com/ckluis/cauldron" target="_blank" rel="noopener">
-          <span class="rn">02.06</span>
-          <span class="rmain"><span class="rname">cauldron</span><span class="rline">a web framework from zero dependencies</span></span>
-          <span class="rst s-archived"><i></i>Archived</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>cauldron</b></span>
+          <span class="c-desc">a web framework from zero dependencies</span>
+          <span class="c-st s-archived"><i></i>Archived</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="cauldron">
-          <div class="cshot"><img src="groups/frameworks/cauldron/preview.svg" alt="cauldron — one sealed binary holding a whole web stack, nothing crossing in from outside" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-archived">Archived</span><span class="cnum">02.06 · Frameworks</span></div>
-            <h3>cauldron</h3>
-            <p class="cq">How much of a modern web stack can one Lisp binary carry with no dependencies at all?</p>
-            <p class="cdesc">A whole web framework from zero dependencies in Common Lisp — HTTP server, Postgres wire protocol, crypto, a LiveView-style UI engine, an admin panel, and an agent system — shipped as one SBCL binary. No Quicklisp, no FFI, no C.</p>
-            <div class="cfacts"><div><b>1,554</b><span>tests green</span></div><div><b>17–21 Mar</b><span>built → archived</span></div></div><div class="cstack"><span>Common Lisp</span><span>SBCL</span><span>Zero deps</span><span>One binary</span></div>
-            <div class="clinks"><a class="cbtn" href="https://github.com/ckluis/cauldron" target="_blank" rel="noopener">Code <span>↗</span></a><a class="clink" href="kern.html">kern took it further <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview cauldron"><span></span></summary></details>
+        <div class="card" style="--g:#c56a3a">
+          <div class="kimg"><img src="groups/frameworks/cauldron/preview.svg" alt="cauldron — one sealed binary holding a whole web stack, nothing crossing in from outside" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>cauldron</b><span class="kst s-archived">Archived</span></div>
+            <p class="kq">How much of a modern web stack can one Lisp binary carry with no dependencies at all?</p>
+            <p class="kdesc">A whole web framework from zero dependencies in Common Lisp — HTTP server, Postgres wire protocol, crypto, a LiveView-style UI engine, an admin panel, and an agent system — shipped as one SBCL binary. No Quicklisp, no FFI, no C.</p>
+            <div class="kf"><span><b>1,554</b> tests green</span><span><b>17–21 Mar</b> built → archived</span></div>
+            <div class="ks"><span>Common Lisp</span><span>SBCL</span><span>Zero deps</span><span>One binary</span><span class="kd">updated Mar 17, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://github.com/ckluis/cauldron" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="kern.html">kern took it further →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="crucible-works">
+      <li class="row" id="crucible-works" data-status="archived">
         <a class="rlink" href="https://github.com/ckluis/crucible-works" target="_blank" rel="noopener">
-          <span class="rn">02.07</span>
-          <span class="rmain"><span class="rname long">crucible-works</span><span class="rline">a business platform built to prove cauldron</span></span>
-          <span class="rst s-archived"><i></i>Archived</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>crucible-works</b></span>
+          <span class="c-desc">a business platform built to prove cauldron</span>
+          <span class="c-st s-archived"><i></i>Archived</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="crucible-works">
-          <div class="cshot"><img src="groups/frameworks/crucible-works/preview.svg" alt="crucible-works — tenants standing on their own schema slices of one Postgres, on a cauldron foundation" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-archived">Archived</span><span class="cnum">02.07 · Frameworks</span></div>
-            <h3>crucible-works</h3>
-            <p class="cq">Could a zero-dependency framework carry a real multi-tenant product?</p>
-            <p class="cdesc">A multi-tenant business platform built on cauldron to prove it could carry a real product — CRM, CMS, knowledge base, billing, and two agent runtimes on schema-per-tenant Postgres — archived with it once the point was made.</p>
-            <div class="cfacts"><div><b>540</b><span>tests green</span></div><div><b>17–21 Mar</b><span>built → archived</span></div></div><div class="cstack"><span>Common Lisp</span><span>On cauldron</span><span>Multi-tenant Postgres</span></div>
-            <div class="clinks"><a class="cbtn" href="https://github.com/ckluis/crucible-works" target="_blank" rel="noopener">Code <span>↗</span></a><a class="clink" href="https://ckluis.github.io/samen/" target="_blank" rel="noopener">samen took it further <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview crucible-works"><span></span></summary></details>
+        <div class="card" style="--g:#c56a3a">
+          <div class="kimg"><img src="groups/frameworks/crucible-works/preview.svg" alt="crucible-works — tenants standing on their own schema slices of one Postgres, on a cauldron foundation" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>crucible-works</b><span class="kst s-archived">Archived</span></div>
+            <p class="kq">Could a zero-dependency framework carry a real multi-tenant product?</p>
+            <p class="kdesc">A multi-tenant business platform built on cauldron to prove it could carry a real product — CRM, CMS, knowledge base, billing, and two agent runtimes on schema-per-tenant Postgres — archived with it once the point was made.</p>
+            <div class="kf"><span><b>540</b> tests green</span><span><b>17–21 Mar</b> built → archived</span></div>
+            <div class="ks"><span>Common Lisp</span><span>On cauldron</span><span>Multi-tenant Postgres</span><span class="kd">updated Mar 17, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://github.com/ckluis/crucible-works" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="https://ckluis.github.io/samen/" target="_blank" rel="noopener">samen took it further ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-    </ol>
-  </div>
-</section>
-
-<section class="grp" id="agent-tools" style="--g:#2f7d6d"><span id="tools" class="alias" aria-hidden="true"></span>
-  <div class="wrap">
-    <header class="gh reveal">
-      <div class="gnum" aria-hidden="true">03</div>
-      <div class="gt">
-        <div class="mono gk">Group 03 · 4 experiments</div>
+      </ol>
+    </section>
+    <section class="tg" id="agent-tools" style="--g:#2f7d6d"><span id="tools" class="alias" aria-hidden="true"></span>
+      <header class="tgh">
+        <span class="tgn">03</span>
         <h2>Agent tools</h2>
-        <p class="gline">Making agents cheaper, better reviewed, and easier to steer.</p>
-        <p class="gblurb">Orchestrators, review frameworks and native tools for working with AI agents every day — measured, routed and reviewed.</p>
-      </div>
-      <div class="gmeta"><div class="gbar"><i class="s-shipped" style="flex:4" title="4 shipped"></i></div><div class="gtally"><span class="s-shipped"><i></i>4 shipped</span></div></div>
-    </header>
-    <ol class="hl" data-group="agent-tools">
-      <li class="row" id="baton">
+        <p>Making agents cheaper, better reviewed, and easier to steer.</p>
+        <span class="tgc">4</span>
+      </header>
+      <ol class="rows">
+      <li class="row" id="baton" data-status="shipped">
         <a class="rlink" href="https://ckluis.github.io/baton/" target="_blank" rel="noopener">
-          <span class="rn">03.01</span>
-          <span class="rmain"><span class="rname">baton<sup>v3.1</sup></span><span class="rline">an orchestrator of orchestrators</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>baton</b><sup>v5</sup></span>
+          <span class="c-desc">the accountability layer for agent runs</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="baton">
-          <div class="cshot"><img src="groups/agent-tools/baton/preview.svg" alt="baton — six rungs of model × effort, a task graph routed to the cheapest rung that can finish it" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">03.01 · Agent tools</span></div>
-            <h3>baton<sup>v3.1</sup></h3>
-            <p class="cq">What if every task went to the cheapest model that could actually finish it?</p>
-            <p class="cdesc">An orchestrator of orchestrators, routed by what it costs. Say what you want and it picks a mode, plans a graph, and sends every task to the cheapest rung that can finish it — escalating one rung at a time, asking before it spends the expensive one, and handing you a one-slide brief at each decision instead of a report to dig through.</p>
-            <div class="cfacts"><div><b>6</b><span>rungs</span></div><div><b>10</b><span>modes</span></div><div><b>44</b><span>personas</span></div><div><b>40</b><span>experts</span></div></div><div class="cstack"><span>Prompts</span><span>Multi-agent</span><span>Claude</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/baton/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/baton" target="_blank" rel="noopener">Code <span>↗</span></a><a class="clink" href="https://ckluis.github.io/baton/baton-v2.html" target="_blank" rel="noopener">v2 <span>↗</span></a><a class="clink" href="https://ckluis.github.io/baton/baton-v1.html" target="_blank" rel="noopener">v1 <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview baton"><span></span></summary></details>
+        <div class="card" style="--g:#2f7d6d">
+          <div class="kimg"><img src="groups/agent-tools/baton/preview.svg" alt="baton v5 — work routed to three tiers (cheap, frontier, a person) while every step lands in a record of evidence, verdicts and gates" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>baton <sup>v5</sup></b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if every agent run kept a record — evidence that cites, verdicts per criterion, and gates a person holds?</p>
+            <p class="kdesc">A router prompt that turns a fresh session into a multi-agent run with a record: evidence that cites or retracts, verdicts computed per criterion, gates a person holds, and state that outlives the laptop. Three tiers replace six rungs — cheap for what a command can settle, frontier for everything with judgment, a person when frontier has failed twice. One more line, TEAM: github, hands the same run to a team.</p>
+            <div class="kf"><span><b>3</b> tiers</span><span><b>48</b> rules</span><span><b>40</b> named experts</span></div>
+            <div class="ks"><span>Prompts</span><span>Multi-agent</span><span>Claude</span><span class="kd">updated Oct 3, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/baton/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/baton" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="https://ckluis.github.io/baton/baton-v2.html" target="_blank" rel="noopener">v2 ↗</a><a class="kl" href="https://ckluis.github.io/baton/baton-v1.html" target="_blank" rel="noopener">v1 ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="luminaryTeam">
+      <li class="row" id="luminaryTeam" data-status="shipped">
         <a class="rlink" href="https://ckluis.github.io/luminaryTeam/" target="_blank" rel="noopener">
-          <span class="rn">03.02</span>
-          <span class="rmain"><span class="rname">luminaryTeam</span><span class="rline">a 40-expert adversarial review</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>luminaryTeam</b></span>
+          <span class="c-desc">a 40-expert adversarial review</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num">1</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="luminaryTeam">
-          <div class="cshot"><img src="groups/agent-tools/luminaryTeam/preview.png" alt="luminaryTeam — a 40-expert adversarial review" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">03.02 · Agent tools</span></div>
-            <h3>luminaryTeam</h3>
-            <p class="cq">What would 40 domain experts find if they reviewed your plan before launch?</p>
-            <p class="cdesc">A multi-agent technical review framework — drop in a codebase, spec, or launch plan and get an adversarial audit from 40 domain experts across 7 phases, synthesized into ranked fixes.</p>
-            <div class="cstack"><span>Prompts</span><span>Multi-agent</span><span>Claude</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/luminaryTeam/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/luminaryTeam" target="_blank" rel="noopener">Code <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview luminaryTeam"><span></span></summary></details>
+        <div class="card" style="--g:#2f7d6d">
+          <div class="kimg"><img src="groups/agent-tools/luminaryTeam/preview.svg" alt="luminaryTeam — a 40-expert adversarial review" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>luminaryTeam</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What would 40 domain experts find if they reviewed your plan before launch?</p>
+            <p class="kdesc">A multi-agent technical review framework — drop in a codebase, spec, or launch plan and get an adversarial audit from 40 domain experts across 7 phases, synthesized into ranked fixes.</p>
+            
+            <div class="ks"><span>Prompts</span><span>Multi-agent</span><span>Claude</span><span class="kd">updated Jul 2, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/luminaryTeam/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/luminaryTeam" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="senkani">
+      <li class="row" id="senkani" data-status="shipped">
         <a class="rlink" href="https://ckluis.github.io/senkani" target="_blank" rel="noopener">
-          <span class="rn">03.03</span>
-          <span class="rmain"><span class="rname">senkani</span><span class="rline">token compression for coding agents</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>senkani</b></span>
+          <span class="c-desc">token compression for coding agents</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="senkani">
-          <div class="cshot"><img src="groups/agent-tools/senkani/preview.png" alt="senkani — token compression for coding agents" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">03.03 · Agent tools</span></div>
-            <h3>senkani</h3>
-            <p class="cq">How many tokens could a coding agent skip if every read were compressed before it arrived?</p>
-            <p class="cdesc">Token compression for AI coding agents — a native macOS binary that compresses every file read and filters shell output from a local index before a token reaches Claude Code, Cursor, or any MCP agent.</p>
-            <div class="cstack"><span>Swift</span><span>macOS</span><span>MCP</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/senkani" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/senkani" target="_blank" rel="noopener">Code <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview senkani"><span></span></summary></details>
+        <div class="card" style="--g:#2f7d6d">
+          <div class="kimg"><img src="groups/agent-tools/senkani/preview.svg" alt="senkani — token compression for coding agents" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>senkani</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">How many tokens could a coding agent skip if every read were compressed before it arrived?</p>
+            <p class="kdesc">Token compression for AI coding agents — a native macOS binary that compresses every file read and filters shell output from a local index before a token reaches Claude Code, Cursor, or any MCP agent.</p>
+            
+            <div class="ks"><span>Swift</span><span>macOS</span><span>MCP</span><span class="kd">updated Sep 13, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/senkani" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/senkani" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="workflowForge">
+      <li class="row" id="workflowForge" data-status="shipped">
         <a class="rlink" href="https://ckluis.github.io/workflowForge/" target="_blank" rel="noopener">
-          <span class="rn">03.04</span>
-          <span class="rmain"><span class="rname">workflowForge</span><span class="rline">paste a workflow, get a page you can send</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>workflowForge</b></span>
+          <span class="c-desc">paste a workflow, get a page you can send</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="workflowForge">
-          <div class="cshot"><img src="groups/agent-tools/workflowForge/preview.svg" alt="workflowForge — a DRAKON-style workflow diagram rendered as one sendable page" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">03.04 · Agent tools</span></div>
-            <h3>workflowForge</h3>
-            <p class="cq">What if any workflow could become a diagram you can send — one where no two lines ever cross?</p>
-            <p class="cdesc">Paste a workflow, get a page you can send. Whatever model you already use writes the JSON; one self-contained HTML file draws it as a DRAKON-style diagram — happy path down the left, exceptions fanning right, severity by shape, and no two lines ever cross. Every step carries a verified, disputed, or unverified state only a human can advance, and the page never reads your process.</p>
-            <div class="cstack"><span>Single-file HTML</span><span>SVG renderer</span><span>Bring your own model</span><span>No server</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/workflowForge/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/workflowForge" target="_blank" rel="noopener">Code <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview workflowForge"><span></span></summary></details>
+        <div class="card" style="--g:#2f7d6d">
+          <div class="kimg"><img src="groups/agent-tools/workflowForge/preview.svg" alt="workflowForge — a DRAKON-style workflow diagram rendered as one sendable page" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>workflowForge</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if any workflow could become a diagram you can send — one where no two lines ever cross?</p>
+            <p class="kdesc">Paste a workflow, get a page you can send. Whatever model you already use writes the JSON; one self-contained HTML file draws it as a DRAKON-style diagram — happy path down the left, exceptions fanning right, severity by shape, and no two lines ever cross. Every step carries a verified, disputed, or unverified state only a human can advance, and the page never reads your process.</p>
+            
+            <div class="ks"><span>Single-file HTML</span><span>SVG renderer</span><span>Bring your own model</span><span>No server</span><span class="kd">updated Sep 5, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/workflowForge/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/workflowForge" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-    </ol>
-  </div>
-</section>
-
-<section class="grp alt" id="products" style="--g:#a87a1f">
-  <div class="wrap">
-    <header class="gh reveal">
-      <div class="gnum" aria-hidden="true">04</div>
-      <div class="gt">
-        <div class="mono gk">Group 04 · 4 experiments</div>
+      </ol>
+    </section>
+    <section class="tg" id="products" style="--g:#a87a1f">
+      <header class="tgh">
+        <span class="tgn">04</span>
         <h2>Products</h2>
-        <p class="gline">Built to be used — by someone, this week.</p>
-        <p class="gblurb">Software with a user in mind: a growth engagement from one URL, a terminal reference, a youth-trip planner, a book-site engine.</p>
-      </div>
-      <div class="gmeta"><div class="gbar"><i class="s-shipped" style="flex:2" title="2 shipped"></i><i class="s-local" style="flex:2" title="2 local"></i></div><div class="gtally"><span class="s-shipped"><i></i>2 shipped</span><span class="s-local"><i></i>2 local</span></div></div>
-    </header>
-    <ol class="hl" data-group="products">
-      <li class="row" id="aiCRO">
+        <p>Built to be used — by someone, this week.</p>
+        <span class="tgc">4</span>
+      </header>
+      <ol class="rows">
+      <li class="row" id="aiCRO" data-status="shipped">
         <a class="rlink" href="https://ckluis.github.io/aiCRO/" target="_blank" rel="noopener">
-          <span class="rn">04.01</span>
-          <span class="rmain"><span class="rname">aiCRO</span><span class="rline">a full growth engagement from one URL</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>aiCRO</b></span>
+          <span class="c-desc">a full growth engagement from one URL</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num">1</span>
+          <span class="c-num">1</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="aiCRO">
-          <div class="cshot"><img src="groups/products/aiCRO/preview.png" alt="aiCRO — a full growth engagement from one URL" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">04.01 · Products</span></div>
-            <h3>aiCRO</h3>
-            <p class="cq">What if one URL were enough for a whole growth engagement — analysis, positioning, a rebuilt site and a GTM kit?</p>
-            <p class="cdesc">A full growth engagement from one URL — analysis, positioning, a rebuilt site inside a guided preview, and a GTM kit per customer group. Evidence-graded and self-contained: it opens from a file, no server, no AI slop.</p>
-            <div class="cstack"><span>Node.js</span><span>Claude</span><span>Self-contained HTML</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/aiCRO/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/aiCRO" target="_blank" rel="noopener">Code <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview aiCRO"><span></span></summary></details>
+        <div class="card" style="--g:#a87a1f">
+          <div class="kimg"><img src="groups/products/aiCRO/preview.svg" alt="aiCRO — a full growth engagement from one URL" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>aiCRO</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if one URL were enough for a whole growth engagement — analysis, positioning, a rebuilt site and a GTM kit?</p>
+            <p class="kdesc">A full growth engagement from one URL — analysis, positioning, a rebuilt site inside a guided preview, and a GTM kit per customer group. Evidence-graded and self-contained: it opens from a file, no server, no AI slop.</p>
+            
+            <div class="ks"><span>Node.js</span><span>Claude</span><span>Self-contained HTML</span><span class="kd">updated Jul 20, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/aiCRO/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/aiCRO" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="terminalHelper">
+      <li class="row" id="terminalHelper" data-status="shipped">
         <a class="rlink" href="terminalHelper.html">
-          <span class="rn">04.02</span>
-          <span class="rmain"><span class="rname long">terminalHelper</span><span class="rline">a searchable terminal command reference</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>terminalHelper</b></span>
+          <span class="c-desc">a searchable terminal command reference</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="terminalHelper">
-          <div class="cshot"><img src="groups/products/terminalHelper/preview.png" alt="terminalHelper — a searchable terminal command reference" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">04.02 · Products</span></div>
-            <h3>terminalHelper</h3>
-            <p class="cq">What if your terminal had a browsable library of every command you&#39;ve ever needed?</p>
-            <p class="cdesc">A searchable, browsable command reference for your terminal — a Miller-column TUI, full-text search, and an ask-Claude escape hatch that saves answers to your library.</p>
-            <div class="cstack"><span>Go</span><span>Bubble Tea</span><span>SQLite</span></div>
-            <div class="clinks"><a class="cbtn" href="terminalHelper.html">Read the spec <span>→</span></a><a class="clink" href="https://github.com/ckluis/terminalHelper" target="_blank" rel="noopener">Code <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview terminalHelper"><span></span></summary></details>
+        <div class="card" style="--g:#a87a1f">
+          <div class="kimg"><img src="groups/products/terminalHelper/preview.svg" alt="terminalHelper — a searchable terminal command reference" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>terminalHelper</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if your terminal had a browsable library of every command you&#39;ve ever needed?</p>
+            <p class="kdesc">A searchable, browsable command reference for your terminal — a Miller-column TUI, full-text search, and an ask-Claude escape hatch that saves answers to your library.</p>
+            
+            <div class="ks"><span>Go</span><span>Bubble Tea</span><span>SQLite</span><span class="kd">updated Apr 3, 2026</span></div>
+            <div class="kls"><a class="kb" href="terminalHelper.html">Read the spec →</a><a class="kl" href="https://github.com/ckluis/terminalHelper" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="nonprofitEventPlanner">
+      <li class="row" id="nonprofitEventPlanner" data-status="progress">
         <a class="rlink" href="nonprofitEventPlanner.html">
-          <span class="rn">04.03</span>
-          <span class="rmain"><span class="rname xlong">nonprofitEventPlanner</span><span class="rline">run a whole youth trip from your phone</span></span>
-          <span class="rst s-local"><i></i>Local</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>nonprofitEventPlanner</b></span>
+          <span class="c-desc">run a whole youth trip from your phone</span>
+          <span class="c-st s-local"><i></i>Local</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="nonprofitEventPlanner">
-          <div class="cshot"><img src="groups/products/nonprofitEventPlanner/preview.png" alt="nonprofitEventPlanner — run a whole youth trip from your phone" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-local">Local</span><span class="cnum">04.03 · Products</span></div>
-            <h3>nonprofitEventPlanner</h3>
-            <p class="cq">What if one volunteer could run an entire youth trip from their phone?</p>
-            <p class="cdesc">One place for a volunteer to run a whole youth trip — rooming, chaperones, money tracked (not chased), and parents onboarded by magic link.</p>
-            <div class="cstack"><span>Rails 8</span><span>Hotwire</span><span>Postgres</span></div>
-            <div class="clinks"><a class="cbtn" href="nonprofitEventPlanner.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview nonprofitEventPlanner"><span></span></summary></details>
+        <div class="card" style="--g:#a87a1f">
+          <div class="kimg"><img src="groups/products/nonprofitEventPlanner/preview.svg" alt="nonprofitEventPlanner — run a whole youth trip from your phone" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>nonprofitEventPlanner</b><span class="kst s-local">Local</span></div>
+            <p class="kq">What if one volunteer could run an entire youth trip from their phone?</p>
+            <p class="kdesc">One place for a volunteer to run a whole youth trip — rooming, chaperones, money tracked (not chased), and parents onboarded by magic link.</p>
+            
+            <div class="ks"><span>Rails 8</span><span>Hotwire</span><span>Postgres</span></div>
+            <div class="kls"><a class="kb" href="nonprofitEventPlanner.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="customCMS">
+      <li class="row" id="customCMS" data-status="progress">
         <a class="rlink" href="customCMS.html">
-          <span class="rn">04.04</span>
-          <span class="rmain"><span class="rname">customCMS</span><span class="rline">one brain, many book storefronts</span></span>
-          <span class="rst s-local"><i></i>Local</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>customCMS</b></span>
+          <span class="c-desc">one brain, many book storefronts</span>
+          <span class="c-st s-local"><i></i>Local</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="customCMS">
-          <div class="cshot"><img src="groups/products/customCMS/preview.png" alt="customCMS — one brain, many book storefronts" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-local">Local</span><span class="cnum">04.04 · Products</span></div>
-            <h3>customCMS</h3>
-            <p class="cq">What if one local brain could research, write and run a dozen niche book sites at zero marginal cost?</p>
-            <p class="cdesc">BookEngine — one local brain that researches, writes, compiles, and runs many niche book-review sites on cheap VPSes, driven by Claude at zero marginal cost.</p>
-            <div class="cstack"><span>Go</span><span>SQLite</span><span>Claude Code</span></div>
-            <div class="clinks"><a class="cbtn" href="customCMS.html">Read the spec <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview customCMS"><span></span></summary></details>
+        <div class="card" style="--g:#a87a1f">
+          <div class="kimg"><img src="groups/products/customCMS/preview.svg" alt="customCMS — one brain, many book storefronts" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>customCMS</b><span class="kst s-local">Local</span></div>
+            <p class="kq">What if one local brain could research, write and run a dozen niche book sites at zero marginal cost?</p>
+            <p class="kdesc">BookEngine — one local brain that researches, writes, compiles, and runs many niche book-review sites on cheap VPSes, driven by Claude at zero marginal cost.</p>
+            
+            <div class="ks"><span>Go</span><span>SQLite</span><span>Claude Code</span></div>
+            <div class="kls"><a class="kb" href="customCMS.html">Read the spec →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-    </ol>
-  </div>
-</section>
-
-<section class="grp" id="field-reports" style="--g:#3a6ea5">
-  <div class="wrap">
-    <header class="gh reveal">
-      <div class="gnum" aria-hidden="true">05</div>
-      <div class="gt">
-        <div class="mono gk">Group 05 · 3 experiments</div>
+      </ol>
+    </section>
+    <section class="tg" id="field-reports" style="--g:#3a6ea5">
+      <header class="tgh">
+        <span class="tgn">05</span>
         <h2>Field reports</h2>
-        <p class="gline">Long-form notes from building with AI — curve and all.</p>
-        <p class="gblurb">The Bend series: three projects built by an AI app builder, then measured, broken and fixed in public.</p>
-      </div>
-      <div class="gmeta"><div class="gbar"><i class="s-case-study" style="flex:3" title="3 case study"></i></div><div class="gtally"><span class="s-case-study"><i></i>3 case study</span></div></div>
-    </header>
-    <ol class="hl" data-group="field-reports">
-      <li class="row" id="bocht">
+        <p>Long-form notes from building with AI — curve and all.</p>
+        <span class="tgc">3</span>
+      </header>
+      <ol class="rows">
+      <li class="row" id="bocht" data-status="case">
         <a class="rlink" href="https://ckluis.github.io/bocht/" target="_blank" rel="noopener">
-          <span class="rn">05.01</span>
-          <span class="rmain"><span class="rname">bocht</span><span class="rline">a whole backend in one Bend binary</span></span>
-          <span class="rst s-case-study"><i></i>Case study</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>bocht</b></span>
+          <span class="c-desc">a whole backend in one Bend binary</span>
+          <span class="c-st s-case-study"><i></i>Case study</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="bocht">
-          <div class="cshot"><img src="bend/assets/cards/bocht.png" alt="bocht: the whole backend as one 1.70 MB arm64 binary" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-case-study">Case study</span><span class="cnum">05.01 · Field reports</span></div>
-            <h3>bocht</h3>
-            <p class="cq">Can an AI build a whole backend in Bend — and prove every claim it makes?</p>
-            <p class="cdesc">Bend series, part 1. A whole backend (HTTP, auth, rate limits, WAL storage, REST and MCP) written as one Bend program by an AI app builder, shipped with an evidence discipline worth stealing: no claim without a re-derivable result.</p>
-            <div class="cfacts"><div><b>r61</b><span>pinned</span></div><div><b>8,793</b><span>lines of Bend</span></div><div><b>1</b><span>binary</span></div></div><div class="cstack"><span>Bend</span><span>C</span><span>WAL</span><span>MCP</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/bocht/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/bocht" target="_blank" rel="noopener">Code <span>↗</span></a><a class="clink" href="bend/index.html">The Bend series <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview bocht"><span></span></summary></details>
+        <div class="card" style="--g:#3a6ea5">
+          <div class="kimg"><img src="groups/field-reports/bocht/preview.svg" alt="bocht: the whole backend as one 1.70 MB arm64 binary" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>bocht</b><span class="kst s-case-study">Case study</span></div>
+            <p class="kq">Can an AI build a whole backend in Bend — and prove every claim it makes?</p>
+            <p class="kdesc">Bend series, part 1. A whole backend (HTTP, auth, rate limits, WAL storage, REST and MCP) written as one Bend program by an AI app builder, shipped with an evidence discipline worth stealing: no claim without a re-derivable result.</p>
+            <div class="kf"><span><b>r61</b> pinned</span><span><b>8,793</b> lines of Bend</span><span><b>1</b> binary</span></div>
+            <div class="ks"><span>Bend</span><span>C</span><span>WAL</span><span>MCP</span><span class="kd">updated Oct 5, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/bocht/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/bocht" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="bend/index.html">The Bend series →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="bochtCMS">
+      <li class="row" id="bochtCMS" data-status="case">
         <a class="rlink" href="https://ckluis.github.io/bochtCMS/" target="_blank" rel="noopener">
-          <span class="rn">05.02</span>
-          <span class="rmain"><span class="rname">bochtCMS</span><span class="rline">an MCP-only CMS, and the curve its tests missed</span></span>
-          <span class="rst s-case-study"><i></i>Case study</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>bochtCMS</b></span>
+          <span class="c-desc">an MCP-only CMS, and the curve its tests missed</span>
+          <span class="c-st s-case-study"><i></i>Case study</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="bochtCMS">
-          <div class="cshot"><img src="bend/assets/cards/bochtCMS.png" alt="bochtCMS: time to save one post bending upward with size before the fix, flat after it" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-case-study">Case study</span><span class="cnum">05.02 · Field reports</span></div>
-            <h3>bochtCMS</h3>
-            <p class="cq">What does a passing test suite miss when a CMS freezes on a long post?</p>
-            <p class="cdesc">Bend series, part 2. A blog CMS on bocht whose only interface is seven MCP tools. Its 43 tests passed on every version, including the one that froze for two minutes on a long post. One function fixed: 1,200× faster, same bytes out.</p>
-            <div class="cfacts"><div><b>43/43</b><span>tests passed</span></div><div><b>2 min</b><span>freeze on a long post</span></div><div><b>1,200×</b><span>faster after one fix</span></div></div><div class="cstack"><span>Bend</span><span>MCP</span><span>JSON-RPC</span><span>Claude Code</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/bochtCMS/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/bochtCMS" target="_blank" rel="noopener">Code <span>↗</span></a><a class="clink" href="bend/index.html">The Bend series <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview bochtCMS"><span></span></summary></details>
+        <div class="card" style="--g:#3a6ea5">
+          <div class="kimg"><img src="groups/field-reports/bochtCMS/preview.svg" alt="bochtCMS: time to save one post bending upward with size before the fix, flat after it" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>bochtCMS</b><span class="kst s-case-study">Case study</span></div>
+            <p class="kq">What does a passing test suite miss when a CMS freezes on a long post?</p>
+            <p class="kdesc">Bend series, part 2. A blog CMS on bocht whose only interface is seven MCP tools. Its 43 tests passed on every version, including the one that froze for two minutes on a long post. One function fixed: 1,200× faster, same bytes out.</p>
+            <div class="kf"><span><b>43/43</b> tests passed</span><span><b>2 min</b> freeze on a long post</span><span><b>1,200×</b> faster after one fix</span></div>
+            <div class="ks"><span>Bend</span><span>MCP</span><span>JSON-RPC</span><span>Claude Code</span><span class="kd">updated Oct 5, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/bochtCMS/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/bochtCMS" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="bend/index.html">The Bend series →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="shellOS">
+      <li class="row" id="shellOS" data-status="case">
         <a class="rlink" href="https://ckluis.github.io/shellOS/" target="_blank" rel="noopener">
-          <span class="rn">05.03</span>
-          <span class="rmain"><span class="rname">shellOS</span><span class="rline">a desktop shell drawn in pure Bend</span></span>
-          <span class="rst s-case-study"><i></i>Case study</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>shellOS</b></span>
+          <span class="c-desc">a desktop shell drawn in pure Bend</span>
+          <span class="c-st s-case-study"><i></i>Case study</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="shellOS">
-          <div class="cshot"><img src="bend/assets/cards/shellOS.png" alt="shellOS after the redesign: panes for themes, saved articles, items, the reader and a live terminal" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-case-study">Case study</span><span class="cnum">05.03 · Field reports</span></div>
-            <h3>shellOS</h3>
-            <p class="cq">Can a desktop shell drawn pixel by pixel in Bend move from Linux to macOS without changing the app?</p>
-            <p class="cdesc">Bend series, part 3. A single-window desktop shell drawn pixel by pixel in pure Bend (terminal over a real PTY, reader, palette), ported from a Linux VM to macOS with no app changes, three screen-only bugs fixed, then redesigned.</p>
-            <div class="cfacts"><div><b>VM → Mac</b><span>ported</span></div><div><b>3</b><span>bugs fixed</span></div><div><b>2×</b><span>frames</span></div></div><div class="cstack"><span>Bend</span><span>PTY</span><span>VT100</span><span>Claude Code</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/shellOS/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/shellOS" target="_blank" rel="noopener">Code <span>↗</span></a><a class="clink" href="bend/index.html">The Bend series <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview shellOS"><span></span></summary></details>
+        <div class="card" style="--g:#3a6ea5">
+          <div class="kimg"><img src="groups/field-reports/shellOS/preview.svg" alt="shellOS after the redesign: panes for themes, saved articles, items, the reader and a live terminal" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>shellOS</b><span class="kst s-case-study">Case study</span></div>
+            <p class="kq">Can a desktop shell drawn pixel by pixel in Bend move from Linux to macOS without changing the app?</p>
+            <p class="kdesc">Bend series, part 3. A single-window desktop shell drawn pixel by pixel in pure Bend (terminal over a real PTY, reader, palette), ported from a Linux VM to macOS with no app changes, three screen-only bugs fixed, then redesigned.</p>
+            <div class="kf"><span><b>VM → Mac</b> ported</span><span><b>3</b> bugs fixed</span><span><b>2×</b> frames</span></div>
+            <div class="ks"><span>Bend</span><span>PTY</span><span>VT100</span><span>Claude Code</span><span class="kd">updated Oct 5, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/shellOS/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/shellOS" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="bend/index.html">The Bend series →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-    </ol>
-  </div>
-</section>
-
-<section class="grp alt" id="design-studies" style="--g:#b4456a"><span id="design" class="alias" aria-hidden="true"></span><span id="interfaces" class="alias" aria-hidden="true"></span>
-  <div class="wrap">
-    <header class="gh reveal">
-      <div class="gnum" aria-hidden="true">06</div>
-      <div class="gt">
-        <div class="mono gk">Group 06 · 5 experiments</div>
+      </ol>
+    </section>
+    <section class="tg" id="design-studies" style="--g:#b4456a"><span id="design" class="alias" aria-hidden="true"></span><span id="interfaces" class="alias" aria-hidden="true"></span>
+      <header class="tgh">
+        <span class="tgn">06</span>
         <h2>Design studies</h2>
-        <p class="gline">Designs taken far enough to argue with.</p>
-        <p class="gblurb">Open letters with working prototypes, 3D objects you can rotate, and interfaces at true scale — built to answer what a sketch can&#39;t.</p>
-      </div>
-      <div class="gmeta"><div class="gbar"><i class="s-shipped" style="flex:1" title="1 shipped"></i><i class="s-concept" style="flex:4" title="4 concept"></i></div><div class="gtally"><span class="s-shipped"><i></i>1 shipped</span><span class="s-concept"><i></i>4 concept</span></div></div>
-    </header>
-    <ol class="hl" data-group="design-studies">
-      <li class="row" id="overlook">
+        <p>Designs taken far enough to argue with.</p>
+        <span class="tgc">5</span>
+      </header>
+      <ol class="rows">
+      <li class="row" id="overlook" data-status="progress">
         <a class="rlink" href="overlook/index.html">
-          <span class="rn">06.01</span>
-          <span class="rmain"><span class="rname">Overlook</span><span class="rline">an open letter to Slack</span></span>
-          <span class="rst s-concept"><i></i>Concept</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>Overlook</b></span>
+          <span class="c-desc">an open letter to Slack</span>
+          <span class="c-st s-concept"><i></i>Concept</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="Overlook">
-          <div class="cshot"><img src="groups/design-studies/overlook/preview.png" alt="Overlook — supervising ten agents should feel as calm as reading one channel" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-concept">Concept</span><span class="cnum">06.01 · Design studies</span></div>
-            <h3>Overlook</h3>
-            <p class="cq">What if supervising ten agents felt as calm as reading one channel?</p>
-            <p class="cdesc">An open letter to Slack, with the product built first. Columns instead of tabs, a room per project, humans and agents on one roster, and two signals — new, and needs you. Underneath, a graph that can recall what a wrong fact touched, fork a decision into its futures, and blame any line.</p>
-            <div class="cstack"><span>Vanilla JS</span><span>12 live demos</span><span>Agent sim</span><span>No-build</span></div>
-            <div class="clinks"><a class="cbtn" href="overlook/index.html">Read the letter <span>→</span></a><a class="clink" href="overlook/index.html#graph">See the graph <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview Overlook"><span></span></summary></details>
+        <div class="card" style="--g:#b4456a">
+          <div class="kimg"><img src="groups/design-studies/overlook/preview.svg" alt="Overlook — supervising ten agents should feel as calm as reading one channel" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>Overlook</b><span class="kst s-concept">Concept</span></div>
+            <p class="kq">What if supervising ten agents felt as calm as reading one channel?</p>
+            <p class="kdesc">An open letter to Slack, with the product built first. Columns instead of tabs, a room per project, humans and agents on one roster, and two signals — new, and needs you. Underneath, a graph that can recall what a wrong fact touched, fork a decision into its futures, and blame any line.</p>
+            
+            <div class="ks"><span>Vanilla JS</span><span>12 live demos</span><span>Agent sim</span><span>No-build</span></div>
+            <div class="kls"><a class="kb" href="overlook/index.html">Read the letter →</a><a class="kl" href="overlook/index.html#graph">See the graph →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="wijzer">
+      <li class="row" id="wijzer" data-status="progress">
         <a class="rlink" href="wijzer/index.html">
-          <span class="rn">06.02</span>
-          <span class="rmain"><span class="rname">wijzer</span><span class="rline">an open letter to Apple</span></span>
-          <span class="rst s-concept"><i></i>Concept</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>wijzer</b></span>
+          <span class="c-desc">an open letter to Apple</span>
+          <span class="c-st s-concept"><i></i>Concept</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="wijzer">
-          <div class="cshot"><img src="groups/design-studies/wijzer/preview.png" alt="wijzer — a 24-hour almanac watch face" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-concept">Concept</span><span class="cnum">06.02 · Design studies</span></div>
-            <h3>wijzer</h3>
-            <p class="cq">What if your watch showed how much of the day is still yours?</p>
-            <p class="cdesc">A watch face that draws your calendar and your sky on one 24-hour dial — meetings as arcs, the sun, moon and tide resting at their true hours. Three faces, prototyped in HTML at true widget scale, with the ephemeris computed rather than invented. Written up as an open letter to Apple, because watchOS does not open the face.</p>
-            <div class="cstack"><span>SVG</span><span>Computed ephemeris</span><span>True scale</span><span>No-build</span></div>
-            <div class="clinks"><a class="cbtn" href="wijzer/index.html">Read the letter <span>→</span></a><a class="clink" href="wijzer/index.html#swipe">Try the faces <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview wijzer"><span></span></summary></details>
+        <div class="card" style="--g:#b4456a">
+          <div class="kimg"><img src="groups/design-studies/wijzer/preview.svg" alt="wijzer — a 24-hour almanac watch face" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>wijzer</b><span class="kst s-concept">Concept</span></div>
+            <p class="kq">What if your watch showed how much of the day is still yours?</p>
+            <p class="kdesc">A watch face that draws your calendar and your sky on one 24-hour dial — meetings as arcs, the sun, moon and tide resting at their true hours. Three faces, prototyped in HTML at true widget scale, with the ephemeris computed rather than invented. Written up as an open letter to Apple, because watchOS does not open the face.</p>
+            
+            <div class="ks"><span>SVG</span><span>Computed ephemeris</span><span>True scale</span><span>No-build</span></div>
+            <div class="kls"><a class="kb" href="wijzer/index.html">Read the letter →</a><a class="kl" href="wijzer/index.html#swipe">Try the faces →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="uiExplorer">
+      <li class="row" id="uiExplorer" data-status="shipped">
         <a class="rlink" href="https://ckluis.github.io/uiExplorer/" target="_blank" rel="noopener">
-          <span class="rn">06.03</span>
-          <span class="rmain"><span class="rname">uiExplorer</span><span class="rline">the UI Lab</span></span>
-          <span class="rst s-shipped"><i></i>Shipped</span>
-          <span class="rgo" aria-hidden="true">↗</span>
+          <span class="c-proj"><b>uiExplorer</b></span>
+          <span class="c-desc">the UI Lab</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
         </a>
-        <article class="card" aria-label="uiExplorer">
-          <div class="cshot"><img src="groups/design-studies/uiExplorer/preview.png" alt="uiExplorer — the UI Lab" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-shipped">Shipped</span><span class="cnum">06.03 · Design studies</span></div>
-            <h3>uiExplorer</h3>
-            <p class="cq">What if every interface experiment documented its own making — prompt, model, agents and lineage?</p>
-            <p class="cdesc">The UI Lab — a forkable, zero-dependency framework where every interface experiment is pure HTML/CSS and documents its own making: prompt, model, agents, version lineage.</p>
-            <div class="cfacts"><div><b>25</b><span>experiments</span></div><div><b>138</b><span>versions</span></div></div><div class="cstack"><span>HTML/CSS</span><span>Zero-dep</span><span>AI-native</span></div>
-            <div class="clinks"><a class="cbtn" href="https://ckluis.github.io/uiExplorer/" target="_blank" rel="noopener">Live <span>↗</span></a><a class="clink" href="https://github.com/ckluis/uiExplorer" target="_blank" rel="noopener">Code <span>↗</span></a></div>
+        <details class="more"><summary aria-label="Preview uiExplorer"><span></span></summary></details>
+        <div class="card" style="--g:#b4456a">
+          <div class="kimg"><img src="groups/design-studies/uiExplorer/preview.svg" alt="uiExplorer — the UI Lab" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>uiExplorer</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if every interface experiment documented its own making — prompt, model, agents and lineage?</p>
+            <p class="kdesc">The UI Lab — a forkable, zero-dependency framework where every interface experiment is pure HTML/CSS and documents its own making: prompt, model, agents, version lineage.</p>
+            <div class="kf"><span><b>25</b> experiments</span><span><b>138</b> versions</span></div>
+            <div class="ks"><span>HTML/CSS</span><span>Zero-dep</span><span>AI-native</span><span class="kd">updated Jul 20, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/uiExplorer/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/uiExplorer" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="omegaClass">
+      <li class="row" id="omegaClass" data-status="progress">
         <a class="rlink" href="3d/omegaClassGrills/index.html">
-          <span class="rn">06.04</span>
-          <span class="rmain"><span class="rname">omegaClass</span><span class="rline">an outdoor fire station in one cabinet</span></span>
-          <span class="rst s-concept"><i></i>Concept</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>omegaClass</b></span>
+          <span class="c-desc">an outdoor fire station in one cabinet</span>
+          <span class="c-st s-concept"><i></i>Concept</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="omegaClass">
-          <div class="cshot"><img src="groups/design-studies/omegaClass/preview.png" alt="omegaClass — a stainless grill that deploys a sheltered fire station" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-concept">Concept</span><span class="cnum">06.04 · Design studies</span></div>
-            <h3>omegaClass</h3>
-            <p class="cq">Can one stainless cabinet hold a parrilla, a smoker and a prep station — and let two pitmasters work at once?</p>
-            <p class="cdesc">One wide sealed stainless cabinet that opens into a full outdoor fire station in three zones: a prep + sink counter, a brasero-fed Argentine parrilla, and a vertical rack smoker — sheltered by two lift-up roofs. Designed so a master asador and a master pitmaster can both work it at once. Configure it live, then read the full plan.</p>
-            <div class="cstack"><span>Three.js</span><span>Two-axis rig</span><span>PBR + reflections</span><span>No-build</span></div>
-            <div class="clinks"><a class="cbtn" href="3d/omegaClassGrills/index.html">Open the 3D <span>→</span></a><a class="clink" href="3d/omegaClassGrills/PLAN.md">Read the plan <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview omegaClass"><span></span></summary></details>
+        <div class="card" style="--g:#b4456a">
+          <div class="kimg"><img src="groups/design-studies/omegaClass/preview.svg" alt="omegaClass — a stainless grill that deploys a sheltered fire station" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>omegaClass</b><span class="kst s-concept">Concept</span></div>
+            <p class="kq">Can one stainless cabinet hold a parrilla, a smoker and a prep station — and let two pitmasters work at once?</p>
+            <p class="kdesc">One wide sealed stainless cabinet that opens into a full outdoor fire station in three zones: a prep + sink counter, a brasero-fed Argentine parrilla, and a vertical rack smoker — sheltered by two lift-up roofs. Designed so a master asador and a master pitmaster can both work it at once. Configure it live, then read the full plan.</p>
+            
+            <div class="ks"><span>Three.js</span><span>Two-axis rig</span><span>PBR + reflections</span><span>No-build</span></div>
+            <div class="kls"><a class="kb" href="3d/omegaClassGrills/index.html">Open the 3D →</a><a class="kl" href="3d/omegaClassGrills/PLAN.md">Read the plan →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-      <li class="row" id="stowork">
+      <li class="row" id="stowork" data-status="progress">
         <a class="rlink" href="3d/portable-office/index.html">
-          <span class="rn">06.05</span>
-          <span class="rmain"><span class="rname">STOWORK</span><span class="rline">a carry-on that becomes a workstation</span></span>
-          <span class="rst s-concept"><i></i>Concept</span>
-          <span class="rgo" aria-hidden="true">→</span>
+          <span class="c-proj"><b>STOWORK</b></span>
+          <span class="c-desc">a carry-on that becomes a workstation</span>
+          <span class="c-st s-concept"><i></i>Concept</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-num none" title="no public repository">—</span>
+          <span class="c-go" aria-hidden="true">→</span>
         </a>
-        <article class="card" aria-label="STOWORK">
-          <div class="cshot"><img src="groups/design-studies/stowork/preview.svg" alt="STOWORK — a carry-on that becomes a workstation" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-concept">Concept</span><span class="cnum">06.05 · Design studies</span></div>
-            <h3>STOWORK</h3>
-            <p class="cq">Can a carry-on unfold into a three-monitor studio in under two minutes?</p>
-            <p class="cdesc">A carry-on that unfolds into a full three-monitor workstation — broadcast-grade AV and a swappable compute bay for your own Mac mini or Studio — in under two minutes.</p>
-            <div class="cstack"><span>Three.js</span><span>Parametric rig</span><span>No-build</span></div>
-            <div class="clinks"><a class="cbtn" href="3d/portable-office/index.html">Open the 3D <span>→</span></a><a class="clink" href="3d/portable-office/PLAN.md">Read the plan <span>→</span></a></div>
+        <details class="more"><summary aria-label="Preview STOWORK"><span></span></summary></details>
+        <div class="card" style="--g:#b4456a">
+          <div class="kimg"><img src="groups/design-studies/stowork/preview.svg" alt="STOWORK — a carry-on that becomes a workstation" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>STOWORK</b><span class="kst s-concept">Concept</span></div>
+            <p class="kq">Can a carry-on unfold into a three-monitor studio in under two minutes?</p>
+            <p class="kdesc">A carry-on that unfolds into a full three-monitor workstation — broadcast-grade AV and a swappable compute bay for your own Mac mini or Studio — in under two minutes.</p>
+            
+            <div class="ks"><span>Three.js</span><span>Parametric rig</span><span>No-build</span></div>
+            <div class="kls"><a class="kb" href="3d/portable-office/index.html">Open the 3D →</a><a class="kl" href="3d/portable-office/PLAN.md">Read the plan →</a></div>
           </div>
-        </article>
+        </div>
       </li>
-    </ol>
+      </ol>
+    </section>
   </div>
-</section>
+</main>
 
 <section class="built">
   <div class="wrap bgrid">
-    <div class="reveal">
-      <div class="mono pk" style="color:var(--accent-ink)">How this page is built</div>
-      <h2>29 folders. One registry. <em>One page.</em></h2>
-      <p>Every experiment is a folder with its own <code>item.json</code> and preview. A zero-dependency script reads them into <code>registry.json</code> and writes this page, the README table and the counts. Adding an experiment is adding a folder.</p>
+    <div>
+      <h2>29 folders, one registry, <em>one page.</em></h2>
+      <p>Each project is a folder with an <code style="padding:1px 5px;font-size:12px">item.json</code> and a drawing of its idea. A zero-dependency script writes this page from them. Stars and forks from GitHub, Oct 5, 2026.</p>
     </div>
-    <div class="pipe reveal" aria-label="groups to registry to index">
-      <div><b>29</b><span>folders</span></div><i>→</i>
-      <div><b>1</b><span>registry.json</span></div><i>→</i>
-      <div><b>1</b><span>index.html</span></div>
-      <code><span>$</span> node build/build.mjs</code>
-    </div>
+    <code><span>$</span> node build/build.mjs</code>
   </div>
 </section>
 
 <footer class="foot">
   <div class="orb a"></div><div class="orb b"></div>
   <div class="wrap">
-    <div class="mono fk reveal">Your turn</div>
-    <h2 class="reveal">Most of these are ideas.<br><span class="fade">A few became experiments.</span><br><span class="ask">What do you dream of?</span></h2>
-    <p class="flede reveal">The tools finally caught up. A dream is a weekend away from a working experiment now — so start one.</p>
-    <div class="fcta reveal">
-      <a href="#foundations">Explore the experiments ↑</a>
+    <div class="mono fk">Your turn</div>
+    <h2>Most of these are ideas.<br><span class="fade">A few became experiments.</span><br><span class="ask">What do you dream of?</span></h2>
+    <div class="fcta">
+      <a href="#index">Back to the index ↑</a>
       <a href="https://github.com/ckluis" target="_blank" rel="noopener" class="ghost">See how they're built ↗</a>
     </div>
-    <div class="flinks reveal">
+    <div class="flinks">
       <a href="https://github.com/ckluis" target="_blank" rel="noopener">GitHub ↗</a><a href="https://ckluis.com" target="_blank" rel="noopener">ckluis.com ↗</a>
       <a href="https://kilofeet.com" target="_blank" rel="noopener">kilofeet ↗</a><a href="https://www.linkedin.com/in/ckluis" target="_blank" rel="noopener">LinkedIn ↗</a>
       <a href="https://medium.com/@ckluis" target="_blank" rel="noopener">Medium ↗</a><a href="https://x.com/ckluis" target="_blank" rel="noopener">X ↗</a>
@@ -1059,113 +997,67 @@ h1 em{font-style:italic;color:var(--accent-ink);font-weight:500}
   </div>
 </footer>
 
-<div class="peek" aria-hidden="true"><img alt=""><p><span></span><em></em></p></div>
+<div class="hc" aria-hidden="true"></div>
 
 <script>
 (() => {
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const DESK = matchMedia('(min-width:1000px) and (hover:hover)');
-  const FINE = matchMedia('(hover:hover) and (pointer:fine)');
+  const DESK = matchMedia('(min-width:900px) and (hover:hover) and (pointer:fine)');
+  const ix = document.getElementById('index');
 
-  /* reveals */
-  if (!RM && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-  } else document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
-
-  /* the visible card follows the reader down a long group, staying inside it */
-  const follow = () => {
-    if (!DESK.matches) return;
-    document.querySelectorAll('.hl.live').forEach(list => {
-      const r = list.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > innerHeight) return;
-      const card = list.querySelector('.row.on > .card');
-      if (!card) return;
-      list.style.setProperty('--ct', Math.max(0, Math.min(r.height - card.offsetHeight, 88 - r.top)) + 'px');
-    });
+  /* the hover card: one floating copy of the row's card, shown at once, following the cursor */
+  const hc = document.querySelector('.hc');
+  let cur = null, x = 0, y = 0, tx = 0, ty = 0, raf = 0, shown = false;
+  const W = 360, GAP = 28, M = 12;
+  const tick = () => {
+    const k = RM ? 1 : .24;
+    x += (tx - x) * k; y += (ty - y) * k;
+    hc.style.transform = `translate3d(${Math.round(x)}px,${Math.round(y)}px,0)`;
+    raf = (Math.abs(tx - x) > .5 || Math.abs(ty - y) > .5) ? requestAnimationFrame(tick) : 0;
   };
-
-  /* start loading a group's card images before the reader reaches it, so the first hover never flashes */
-  if ('IntersectionObserver' in window) {
-    const pre = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.querySelectorAll('img[loading="lazy"]').forEach(i => { i.loading = 'eager'; }); pre.unobserve(e.target); } }), { rootMargin: '800px 0px' });
-    document.querySelectorAll('.hl').forEach(l => pre.observe(l));
-  }
-
-  /* hover lists: intent delay, last-hovered sticks, arrow keys */
-  document.querySelectorAll('.hl').forEach(list => {
-    const rows = [...list.querySelectorAll('.row')];
-    let timer = 0;
-    const set = r => { rows.forEach(x => x.classList.toggle('on', x === r)); follow(); };
-    list.classList.add('live');
-    set(rows[0]);
-    rows.forEach((r, i) => {
-      const link = r.querySelector('.rlink');
-      link.addEventListener('pointerenter', () => {
-        if (!DESK.matches || r.classList.contains('on')) return;
-        clearTimeout(timer);
-        timer = setTimeout(() => set(r), 70);
-      });
-      link.addEventListener('pointerleave', () => clearTimeout(timer));
-      r.addEventListener('focusin', () => set(r));
-      link.addEventListener('keydown', e => {
-        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
-        e.preventDefault();
-        rows[(i + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length].querySelector('.rlink').focus();
-      });
-    });
+  const aim = e => {
+    const h = hc.offsetHeight || 420;
+    const right = e.clientX + GAP + W + M <= innerWidth;
+    tx = right ? e.clientX + GAP : e.clientX - GAP - W;
+    ty = Math.max(70, Math.min(innerHeight - h - M, e.clientY - h * .4));
+    if (!shown) { x = tx; y = ty; }
+    if (!raf) raf = requestAnimationFrame(tick);
+  };
+  const show = (row, e) => {
+    if (cur !== row) {
+      cur?.classList.remove('on');
+      cur = row; row.classList.add('on');
+      hc.innerHTML = row.querySelector('.card').outerHTML.replace('</div>\n        </div>', '<span class="khint">Click the row to open ' + (row.querySelector('.c-go').textContent.trim()) + '</span></div>\n        </div>');
+    }
+    aim(e); hc.classList.add('on'); shown = true;
+  };
+  const hide = () => { hc.classList.remove('on'); shown = false; cur?.classList.remove('on'); cur = null; };
+  document.querySelectorAll('.row').forEach(row => {
+    const link = row.querySelector('.rlink');
+    link.addEventListener('pointerenter', e => { if (DESK.matches) show(row, e); });
+    link.addEventListener('pointermove', e => { if (DESK.matches && shown) aim(e); });
+    link.addEventListener('pointerleave', e => { if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest('.rlink')) hide(); });
   });
+  addEventListener('scroll', () => { if (shown) hide(); }, { passive: true });
 
-  /* lineup: names jump to their row and light it up */
-  document.querySelectorAll('.ln').forEach(a => a.addEventListener('click', () => {
-    const row = document.getElementById(a.hash.slice(1));
-    if (!row) return;
-    row.closest('.hl').querySelectorAll('.row').forEach(x => x.classList.toggle('on', x === row));
+  /* status filters */
+  document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
+    const f = b.dataset.filter;
+    document.querySelectorAll('.filters button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll('.row').forEach(r => { r.hidden = f !== 'all' && r.dataset.status !== f; });
+    document.querySelectorAll('.tg').forEach(g => g.classList.toggle('empty', !g.querySelector('.row:not([hidden])')));
+    ix.dataset.show = f;
   }));
 
-  /* lineup: floating preview that follows the cursor (desktop only) */
-  const peek = document.querySelector('.peek');
-  if (peek && FINE.matches) {
-    const img = peek.querySelector('img'), st = peek.querySelector('span'), q = peek.querySelector('em');
-    let x = 0, y = 0, tx = 0, ty = 0, raf = 0, on = false;
-    const loop = () => { x += (tx - x) * (RM ? 1 : .18); y += (ty - y) * (RM ? 1 : .18); peek.style.transform = `translate3d(${x}px,${y}px,0)`; if (on || Math.abs(tx - x) > .5) raf = requestAnimationFrame(loop); else raf = 0; };
-    const place = e => { const w = 300, h = peek.offsetHeight || 260; tx = Math.min(innerWidth - w - 16, e.clientX + 22); ty = e.clientY + h + 30 > innerHeight ? e.clientY - h - 18 : e.clientY + 22; };
-    document.querySelectorAll('.ln').forEach(a => {
-      a.addEventListener('pointerenter', e => {
-        img.src = a.dataset.img; st.textContent = `${a.closest('.lg').querySelector('.lgtag').textContent} · ${a.dataset.st}`; q.textContent = a.dataset.q;
-        peek.style.setProperty('--g', getComputedStyle(a.closest('.lg')).getPropertyValue('--g'));
-        place(e); if (!on) { x = tx; y = ty; } on = true; peek.classList.add('on'); if (!raf) raf = requestAnimationFrame(loop);
-      });
-      a.addEventListener('pointermove', place);
-      a.addEventListener('pointerleave', () => { on = false; peek.classList.remove('on'); });
-    });
-  }
-
-  /* hero numbers count up */
-  if (!RM) document.querySelectorAll('[data-count]').forEach(b => {
-    const n = +b.dataset.count, t0 = performance.now(), D = 1100;
-    const f = t => { const p = Math.min(1, (t - t0) / D); b.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f); };
-    b.textContent = '0'; requestAnimationFrame(f);
-  });
-
-  /* which group are we in: nav underline, chips, progress bar colour */
-  const groups = [...document.querySelectorAll('.grp')];
+  /* which project type are we in */
+  const groups = [...document.querySelectorAll('.tg')];
   const navs = [...document.querySelectorAll('[data-nav]')];
-  const bar = document.querySelector('.progress');
-  const onScroll = () => {
-    const h = document.documentElement;
-    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
-    let cur = null;
-    for (const g of groups) if (g.getBoundingClientRect().top < innerHeight * .4) cur = g;
-    navs.forEach(a => a.classList.toggle('on', !!cur && a.dataset.nav === cur.id));
-    bar.style.setProperty('--pg', cur ? getComputedStyle(cur).getPropertyValue('--g') : '');
-    const chip = cur && document.querySelector(`.gchips [data-nav="${cur.id}"]`);
-    if (chip && chip.classList.contains('on') && !chip.dataset.seen) { chip.dataset.seen = 1; chip.scrollIntoView({ block: 'nearest', inline: 'center', behavior: RM ? 'auto' : 'smooth' }); }
-    document.querySelectorAll('.gchips [data-nav]').forEach(c => { if (c !== chip) delete c.dataset.seen; });
+  const spy = () => {
+    let on = null;
+    for (const g of groups) if (g.getBoundingClientRect().top < innerHeight * .35) on = g;
+    navs.forEach(a => a.classList.toggle('on', !!on && a.dataset.nav === on.id));
   };
-  let ticking = false;
-  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; onScroll(); follow(); }); } }, { passive: true });
-  addEventListener('resize', follow);
-  onScroll(); follow();
+  addEventListener('scroll', spy, { passive: true }); spy();
 })();
 </script>
 </body>

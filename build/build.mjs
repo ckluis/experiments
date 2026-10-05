@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 // Builds the index from the folders under groups/.
 //
-//   groups/<group>/group.json          one per group: title, question line, accent, order
-//   groups/<group>/<item>/item.json    one per experiment: name, status, copy, stack, links
-//   groups/<group>/<item>/preview.*    the card image (or item.json "preview": "/repo/path.png")
+//   groups/<group>/group.json          one per project type: title, question line, accent, order
+//   groups/<group>/<item>/item.json    one per experiment: name, status, repo, copy, stack, links
+//   groups/<group>/<item>/preview.*    the card image (preview.svg preferred), or "preview": "/repo/path"
 //
 // Writes registry.json, index.html, the README table and the social-card counts.
-// Run from anywhere:  node build/build.mjs          (write)
-//                     node build/build.mjs --check  (exit 1 if anything is stale)
+//   node build/build.mjs           write
+//   node build/build.mjs --check   exit 1 if anything is stale
+//   node build/build.mjs --stats   refresh GitHub stars/forks into build/github-stats.json first
+//                                  (uses GITHUB_TOKEN if set, otherwise the unauthenticated API)
 // No dependencies.
 
 import fs from 'node:fs';
@@ -16,22 +18,26 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const GROUPS = path.join(ROOT, 'groups');
+const STATS = path.join(ROOT, 'build', 'github-stats.json');
 const CHECK = process.argv.includes('--check');
+const REFRESH = process.argv.includes('--stats');
 
 const STATUS = {
-  shipped:      { label: 'Shipped',    tier: 1 },
-  spec:         { label: 'Spec',       tier: 2 },
-  concept:      { label: 'Concept',    tier: 2 },
-  'case-study': { label: 'Case study', tier: 2 },
-  local:        { label: 'Local',      tier: 2 },
-  archived:     { label: 'Archived',   tier: 3 },
+  shipped:      { label: 'Shipped',    filter: 'shipped' },
+  spec:         { label: 'Spec',       filter: 'progress' },
+  concept:      { label: 'Concept',    filter: 'progress' },
+  local:        { label: 'Local',      filter: 'progress' },
+  'case-study': { label: 'Case study', filter: 'case' },
+  archived:     { label: 'Archived',   filter: 'archived' },
 };
+const FILTERS = [['all', 'All'], ['shipped', 'Shipped'], ['progress', 'Spec & concept'], ['case', 'Case studies'], ['archived', 'Archived']];
 
 const errors = [];
 const rel = p => path.relative(ROOT, p).split(path.sep).join('/');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const pad = n => String(n).padStart(2, '0');
 const isExternal = href => /^https?:\/\//.test(href);
+const fmtDate = iso => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 function readJSON(file) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
@@ -45,7 +51,7 @@ const groups = dirs(GROUPS).map(slug => {
   const dir = path.join(GROUPS, slug);
   const g = readJSON(path.join(dir, 'group.json'));
   if (!g) return null;
-  for (const k of ['order', 'title', 'line', 'blurb', 'accent']) if (g[k] == null) errors.push(`groups/${slug}/group.json: missing "${k}"`);
+  for (const k of ['order', 'title', 'line', 'accent']) if (g[k] == null) errors.push(`groups/${slug}/group.json: missing "${k}"`);
   g.slug = slug;
   g.aliases = g.aliases || [];
   g.items = dirs(dir).map(islug => {
@@ -57,10 +63,11 @@ const groups = dirs(GROUPS).map(slug => {
     it.folder = rel(idir);
     for (const k of ['name', 'order', 'status', 'line', 'question', 'body', 'links']) if (it[k] == null) errors.push(`${where}: missing "${k}"`);
     if (it.status && !STATUS[it.status]) errors.push(`${where}: unknown status "${it.status}" (use ${Object.keys(STATUS).join(', ')})`);
+    if (it.repo && !/^[\w.-]+\/[\w.-]+$/.test(it.repo)) errors.push(`${where}: "repo" must look like owner/name`);
     if (!Array.isArray(it.links) || !it.links.length) errors.push(`${where}: needs at least one link`);
     it.stack = it.stack || [];
     it.facts = it.facts || [];
-    const local = ['png', 'jpg', 'jpeg', 'webp', 'svg'].map(x => `preview.${x}`).find(f => fs.existsSync(path.join(idir, f)));
+    const local = ['svg', 'png', 'jpg', 'jpeg', 'webp'].map(x => `preview.${x}`).find(f => fs.existsSync(path.join(idir, f)));
     it.previewPath = it.preview
       ? (it.preview.startsWith('/') ? it.preview.slice(1) : `${it.folder}/${it.preview}`)
       : local ? `${it.folder}/${local}` : null;
@@ -86,102 +93,110 @@ if (errors.length) {
   process.exit(1);
 }
 
+const all = groups.flatMap(g => g.items);
+
+/* ---------- GitHub stats (cached; refreshed only with --stats) ---------- */
+
+let stats = fs.existsSync(STATS) ? JSON.parse(fs.readFileSync(STATS, 'utf8')) : { fetched: null, repos: {} };
+if (REFRESH) {
+  const headers = { 'User-Agent': 'ckluis-experiments-build', Accept: 'application/vnd.github+json' };
+  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  const next = { fetched: new Date().toISOString().slice(0, 10), repos: {} };
+  for (const repo of [...new Set(all.filter(i => i.repo).map(i => i.repo))].sort()) {
+    const res = await fetch(`https://api.github.com/repos/${repo}`, { headers });
+    if (!res.ok) { console.error(`✗ GitHub ${res.status} for ${repo}${res.status === 403 ? ' (rate limited, set GITHUB_TOKEN)' : ''}`); process.exit(1); }
+    const j = await res.json();
+    next.repos[repo] = { stars: j.stargazers_count, forks: j.forks_count, pushed: j.pushed_at };
+  }
+  stats = next;
+  fs.writeFileSync(STATS, JSON.stringify(stats, null, 2) + '\n');
+  console.log(`✓ refreshed GitHub stats for ${Object.keys(stats.repos).length} repos`);
+}
+for (const it of all) if (it.repo && !stats.repos[it.repo]) console.warn(`! no cached stats for ${it.repo}; run node build/build.mjs --stats`);
+
 /* ---------- derive ---------- */
 
-const all = groups.flatMap(g => g.items);
 const counts = { experiments: all.length, shipped: all.filter(i => i.status === 'shipped').length, groups: groups.length };
 groups.forEach((g, gi) => {
   g.num = pad(gi + 1);
-  g.items.forEach((it, ii) => { it.num = `${g.num}.${pad(ii + 1)}`; it.group = g; it.primary = it.links[0]; });
+  g.items.forEach((it, ii) => { it.num = `${g.num}.${pad(ii + 1)}`; it.group = g; it.primary = it.links[0]; it.gh = it.repo ? stats.repos[it.repo] || null : null; });
 });
 
 /* ---------- render pieces ---------- */
 
 const linkAttrs = href => isExternal(href) ? ` href="${esc(href)}" target="_blank" rel="noopener"` : ` href="${esc(href)}"`;
 const arrow = href => isExternal(href) ? '↗' : '→';
-const statusTally = g => Object.keys(STATUS).map(s => [s, g.items.filter(i => i.status === s).length]).filter(([, n]) => n);
+const num = (it, k) => it.gh
+  ? `<span class="c-num${it.gh[k] ? '' : ' zero'}">${it.gh[k]}</span>`
+  : `<span class="c-num none" title="${it.repo ? 'not fetched yet' : 'no public repository'}">—</span>`;
 
 const nav = groups.map(g => `<a href="#${g.slug}" data-nav="${g.slug}" style="--g:${g.accent}"><span>${g.num}</span>${esc(g.title)}</a>`).join('');
-
 const chips = groups.map(g => `<a href="#${g.slug}" data-nav="${g.slug}" style="--g:${g.accent}"><i></i>${esc(g.title)}<span>${g.items.length}</span></a>`).join('');
-
-const lineup = groups.map(g => {
-  const names = g.items.map(it =>
-    `<a class="ln t${STATUS[it.status].tier}" href="#${it.slug}" data-img="${esc(it.previewPath)}" data-q="${esc(it.question)}" data-st="${esc(STATUS[it.status].label)}">${esc(it.name)}</a>`
-  );
-  // the group tag is glued to its first name so a line never ends on a stranded label
-  const first = `<span class="lgs"><a class="lgtag" href="#${g.slug}">${g.num} ${esc(g.title)}</a>${names[0]}</span>`;
-  return `<span class="lg" style="--g:${g.accent}">${[first, ...names.slice(1)].join('<i aria-hidden="true">·</i> ')}</span>`;
-}).join(' ');
-
-const legend = groups.map(g => `<a href="#${g.slug}" style="--g:${g.accent}"><i></i>${esc(g.title)} <span>${g.items.length}</span></a>`).join('');
+const filters = FILTERS.map(([k, label], i) => {
+  const n = k === 'all' ? all.length : all.filter(it => STATUS[it.status].filter === k).length;
+  return `<button type="button" data-filter="${k}" aria-pressed="${i === 0}">${label}<span>${n}</span></button>`;
+}).join('');
 
 function card(it) {
-  const st = STATUS[it.status];
-  const facts = it.facts.length ? `<div class="cfacts">${it.facts.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join('')}</div>` : '';
-  const stack = it.stack.length ? `<div class="cstack">${it.stack.map(s => `<span>${esc(s)}</span>`).join('')}</div>` : '';
-  const links = it.links.map((l, i) => `<a class="${i === 0 ? 'cbtn' : 'clink'}"${linkAttrs(l.href)}>${esc(l.label)} <span>${arrow(l.href)}</span></a>`).join('');
-  return `<article class="card" aria-label="${esc(it.name)}">
-          <div class="cshot"><img src="${esc(it.previewPath)}" alt="${esc(it.alt || it.name)}" loading="lazy" decoding="async"></div>
-          <div class="cbody">
-            <div class="ctop"><span class="pill s-${it.status}">${st.label}</span><span class="cnum">${it.num} · ${esc(it.group.title)}</span></div>
-            <h3>${esc(it.name)}${it.version ? `<sup>${esc(it.version)}</sup>` : ''}</h3>
-            <p class="cq">${esc(it.question)}</p>
-            <p class="cdesc">${esc(it.body)}</p>
-            ${facts}${stack}
-            <div class="clinks">${links}</div>
+  const facts = it.facts.length ? `<div class="kf">${it.facts.slice(0, 3).map(([n, l]) => `<span><b>${esc(n)}</b> ${esc(l)}</span>`).join('')}</div>` : '';
+  const links = it.links.map((l, i) => `<a class="${i === 0 ? 'kb' : 'kl'}"${linkAttrs(l.href)}>${esc(l.label)} ${arrow(l.href)}</a>`).join('');
+  const updated = it.gh && it.gh.pushed ? `<span class="kd">updated ${fmtDate(it.gh.pushed)}</span>` : '';
+  return `<div class="card" style="--g:${it.group.accent}">
+          <div class="kimg"><img src="${esc(it.previewPath)}" alt="${esc(it.alt || it.name)}" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>${esc(it.name)}${it.version ? ` <sup>${esc(it.version)}</sup>` : ''}</b><span class="kst s-${it.status}">${STATUS[it.status].label}</span></div>
+            <p class="kq">${esc(it.question)}</p>
+            <p class="kdesc">${esc(it.body)}</p>
+            ${facts}
+            <div class="ks">${it.stack.map(s => `<span>${esc(s)}</span>`).join('')}${updated}</div>
+            <div class="kls">${links}</div>
           </div>
-        </article>`;
+        </div>`;
 }
 
 function row(it) {
-  return `<li class="row" id="${it.slug}">
+  return `<li class="row" id="${it.slug}" data-status="${STATUS[it.status].filter}">
         <a class="rlink"${linkAttrs(it.primary.href)}>
-          <span class="rn">${it.num}</span>
-          <span class="rmain"><span class="rname${it.name.length > 18 ? ' xlong' : it.name.length > 13 ? ' long' : ''}">${esc(it.name)}${it.version ? `<sup>${esc(it.version)}</sup>` : ''}</span><span class="rline">${esc(it.line)}</span></span>
-          <span class="rst s-${it.status}"><i></i>${STATUS[it.status].label}</span>
-          <span class="rgo" aria-hidden="true">${arrow(it.primary.href)}</span>
+          <span class="c-proj"><b>${esc(it.name)}</b>${it.version ? `<sup>${esc(it.version)}</sup>` : ''}</span>
+          <span class="c-desc">${esc(it.line)}</span>
+          <span class="c-st s-${it.status}"><i></i>${STATUS[it.status].label}</span>
+          ${num(it, 'stars')}
+          ${num(it, 'forks')}
+          <span class="c-go" aria-hidden="true">${arrow(it.primary.href)}</span>
         </a>
+        <details class="more"><summary aria-label="Preview ${esc(it.name)}"><span></span></summary></details>
         ${card(it)}
       </li>`;
 }
 
-function section(g, gi) {
-  const tally = statusTally(g);
-  const bar = tally.map(([s, n]) => `<i class="s-${s}" style="flex:${n}" title="${n} ${STATUS[s].label.toLowerCase()}"></i>`).join('');
-  const tallyText = tally.map(([s, n]) => `<span class="s-${s}"><i></i>${n} ${STATUS[s].label.toLowerCase()}</span>`).join('');
+function section(g) {
   const aliases = g.aliases.map(a => `<span id="${esc(a)}" class="alias" aria-hidden="true"></span>`).join('');
-  return `<section class="grp${gi % 2 ? ' alt' : ''}" id="${g.slug}" style="--g:${g.accent}">${aliases}
-  <div class="wrap">
-    <header class="gh reveal">
-      <div class="gnum" aria-hidden="true">${g.num}</div>
-      <div class="gt">
-        <div class="mono gk">Group ${g.num} · ${g.items.length} experiment${g.items.length === 1 ? '' : 's'}</div>
+  return `<section class="tg" id="${g.slug}" style="--g:${g.accent}">${aliases}
+      <header class="tgh">
+        <span class="tgn">${g.num}</span>
         <h2>${esc(g.title)}</h2>
-        <p class="gline">${esc(g.line)}</p>
-        <p class="gblurb">${esc(g.blurb)}</p>
-      </div>
-      <div class="gmeta"><div class="gbar">${bar}</div><div class="gtally">${tallyText}</div></div>
-    </header>
-    <ol class="hl" data-group="${g.slug}">
+        <p>${esc(g.line)}</p>
+        <span class="tgc">${g.items.length}</span>
+      </header>
+      <ol class="rows">
       ${g.items.map(row).join('\n      ')}
-    </ol>
-  </div>
-</section>`;
+      </ol>
+    </section>`;
 }
 
 const groupList = groups.map(g => g.title.toLowerCase());
-const describe = `A field index of ${counts.experiments} experiments by Chris Kluis — ${groupList.slice(0, -1).join(', ')} and ${groupList.at(-1)}. Most built solo in spare hours, all in the open.`;
+const describe = `A field index of ${counts.experiments} experiments by Chris Kluis: ${groupList.slice(0, -1).join(', ')} and ${groupList.at(-1)}. Most built solo in spare hours, all in the open.`;
 
 /* ---------- index.html ---------- */
 
 const template = fs.readFileSync(path.join(ROOT, 'build', 'index.template.html'), 'utf8');
 const vars = {
   COUNT: counts.experiments, SHIPPED: counts.shipped, GROUPS: counts.groups,
-  DESCRIPTION: esc(describe), NAV: nav, CHIPS: chips, LINEUP: lineup, LEGEND: legend,
-  SECTIONS: groups.map(section).join('\n\n'), FIRST: groups[0].slug,
+  DESCRIPTION: esc(describe), NAV: nav, CHIPS: chips, FILTERS: filters,
+  SECTIONS: groups.map(section).join('\n    '), FIRST: groups[0].slug,
+  STATS_DATE: stats.fetched ? fmtDate(stats.fetched) : 'not yet fetched',
 };
-let html = template.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
+const html = template.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
 const left = html.match(/\{\{\w+\}\}/g);
 if (left) { console.error(`✗ template has unknown placeholders: ${[...new Set(left)].join(', ')}`); process.exit(1); }
 
@@ -190,11 +205,13 @@ if (left) { console.error(`✗ template has unknown placeholders: ${[...new Set(
 const registry = {
   $comment: 'Generated by build/build.mjs from the folders under groups/. Edit the folders, not this file.',
   counts,
+  stats_fetched: stats.fetched,
   groups: groups.map(g => ({
-    slug: g.slug, folder: `groups/${g.slug}`, number: g.num, title: g.title, line: g.line, blurb: g.blurb, accent: g.accent, aliases: g.aliases,
+    slug: g.slug, folder: `groups/${g.slug}`, number: g.num, title: g.title, line: g.line, accent: g.accent, aliases: g.aliases,
     items: g.items.map(it => ({
       slug: it.slug, folder: it.folder, number: it.num, name: it.name, ...(it.version ? { version: it.version } : {}),
-      status: it.status, line: it.line, question: it.question, body: it.body, stack: it.stack,
+      status: it.status, ...(it.repo ? { repo: it.repo, github: it.gh } : {}),
+      line: it.line, question: it.question, body: it.body, stack: it.stack,
       ...(it.facts.length ? { facts: it.facts } : {}), links: it.links, preview: it.previewPath, alt: it.alt || it.name,
     })),
   })),
@@ -204,7 +221,7 @@ const registry = {
 
 const mdLinks = it => it.links.map(l => `[${l.label.toLowerCase()}](${isExternal(l.href) ? l.href : l.href})`).join(' · ');
 const table = [
-  '| Group | Project | Stack | Status | Links |',
+  '| Type | Project | Stack | Status | Links |',
   '|---|---|---|---|---|',
   ...all.map(it => `| ${it.group.title} | **${it.name}**${it.version ? ` ${it.version}` : ''} — ${it.line} | ${it.stack.join(' · ')} | ${STATUS[it.status].label} | ${mdLinks(it)} |`),
 ].join('\n');

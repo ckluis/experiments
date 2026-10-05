@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="nonprofitEventPlanner — a volunteer's phone shows one trip with rooming, money and logistics, and a magic link text that lets a parent pay and confirm without an account">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%">
+      <stop offset="0" stop-color="#d9a94a" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#d9a94a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">Everyone on the bus.</text>
+  <rect x="52" y="92" width="150" height="270" rx="22" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".3" stroke-width="1.5"/>
+  <line x1="102" y1="106" x2="152" y2="106" stroke="#efe6d6" stroke-opacity=".2" stroke-width="3" stroke-linecap="round"/>
+  <text x="70" y="138" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".5">YOUTH TRIP</text>
+  <rect x="68" y="152" width="118" height="34" rx="8" fill="none" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2"/>
+  <text x="80" y="173" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">ROOMING</text>
+  <circle cx="172" cy="169" r="4" fill="#d9a94a"/>
+  <rect x="68" y="196" width="118" height="34" rx="8" fill="none" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2"/>
+  <text x="80" y="217" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">CHAPERONES</text>
+  <circle cx="172" cy="213" r="4" fill="#d9a94a"/>
+  <rect x="68" y="240" width="118" height="34" rx="8" fill="none" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2"/>
+  <text x="80" y="261" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">MONEY</text>
+  <circle cx="172" cy="257" r="4" fill="#d9a94a"/>
+  <rect x="68" y="284" width="118" height="34" rx="8" fill="none" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2"/>
+  <text x="80" y="305" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">VENDORS</text>
+  <circle cx="172" cy="301" r="4" fill="#d9a94a"/>
+  <path d="M202 227 C 250 227, 262 227, 300 227" fill="none" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M294 221 l8 6 -8 6" fill="none" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="252" y="214" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#d9a94a" text-anchor="middle">MAGIC LINK</text>
+  <rect x="312" y="150" width="288" height="64" rx="12" fill="#d9a94a" fill-opacity=".1" stroke="#d9a94a" stroke-width="1.5"/>
+  <text x="330" y="176" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#d9a94a">TEXT · ONE SIGNED URL</text>
+  <text x="330" y="198" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing=".02em" fill="#efe6d6" fill-opacity=".9">a signed link ••••</text>
+  <rect x="312" y="236" width="288" height="100" rx="12" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+  <text x="330" y="262" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".5">PARENT · NO ACCOUNT</text>
+  <circle cx="336" cy="280" r="3.5" fill="none" stroke="#d9a94a" stroke-width="1.5"/>
+  <text x="350" y="284" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#efe6d6" fill-opacity=".85">see what you owe</text>
+  <circle cx="336" cy="300" r="3.5" fill="none" stroke="#d9a94a" stroke-width="1.5"/>
+  <text x="350" y="304" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#efe6d6" fill-opacity=".85">pay, or mark a check sent</text>
+  <circle cx="336" cy="320" r="3.5" fill="none" stroke="#d9a94a" stroke-width="1.5"/>
+  <text x="350" y="324" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0" fill="#efe6d6" fill-opacity=".85">confirm the permission slip</text>
+  <path d="M456 214 V236" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="600" y="362" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".45" text-anchor="end">RECORDED, NOT PROCESSED</text>
+</svg>

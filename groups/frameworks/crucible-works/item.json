@@ -2,6 +2,7 @@
   "name": "crucible-works",
   "order": 70,
   "status": "archived",
+  "repo": "ckluis/crucible-works",
   "line": "a business platform built to prove cauldron",
   "question": "Could a zero-dependency framework carry a real multi-tenant product?",
   "body": "A multi-tenant business platform built on cauldron to prove it could carry a real product — CRM, CMS, knowledge base, billing, and two agent runtimes on schema-per-tenant Postgres — archived with it once the point was made.",

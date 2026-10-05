@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="regel — code enters through one admission gate that runs six verifiers and lands as content-addressed Postgres rows; rolling back is a WHERE as_of clause that selects an earlier row">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%">
+      <stop offset="0" stop-color="#9b86e8" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#9b86e8" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <g stroke-linecap="round" stroke-linejoin="round">
+<rect x="40" y="130" width="120" height="56" rx="10" fill="#1c1812" fill-opacity="1" stroke="#efe6d6" stroke-opacity="0.2" stroke-width="1.5"/>
+<text x="56" y="154" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0.06em" fill="#efe6d6" fill-opacity="0.85" text-anchor="start" >DEAL.TS</text>
+<text x="56" y="172" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.1em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start" >strict TS</text>
+<path d="M160 158 H214" fill="none" stroke="#efe6d6" stroke-opacity="0.45" stroke-width="1.5"/>
+<path d="M208 153 L214 158 L208 163" fill="none" stroke="#efe6d6" stroke-opacity="0.45" stroke-width="1.5"/>
+<rect x="214" y="98" width="104" height="120" rx="12" fill="#9b86e8" fill-opacity="0.1" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.5"/>
+<text x="266" y="122" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="0.1em" fill="#9b86e8" fill-opacity="1" text-anchor="middle" >ADMIT</text>
+<circle cx="234" cy="150" r="7" fill="none" stroke="#9b86e8" stroke-width="1.5"/>
+<path d="M231 150 L233 153 L238 147" fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.2"/>
+<circle cx="266" cy="150" r="7" fill="none" stroke="#9b86e8" stroke-width="1.5"/>
+<path d="M263 150 L265 153 L270 147" fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.2"/>
+<circle cx="298" cy="150" r="7" fill="none" stroke="#9b86e8" stroke-width="1.5"/>
+<path d="M295 150 L297 153 L302 147" fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.2"/>
+<circle cx="234" cy="178" r="7" fill="none" stroke="#9b86e8" stroke-width="1.5"/>
+<path d="M231 178 L233 181 L238 175" fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.2"/>
+<circle cx="266" cy="178" r="7" fill="none" stroke="#9b86e8" stroke-width="1.5"/>
+<path d="M263 178 L265 181 L270 175" fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.2"/>
+<circle cx="298" cy="178" r="7" fill="none" stroke="#9b86e8" stroke-width="1.5"/>
+<path d="M295 178 L297 181 L302 175" fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.2"/>
+<text x="266" y="206" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9.5" letter-spacing="0.06em" fill="#9b86e8" fill-opacity="0.9" text-anchor="middle" >6 VERIFIERS</text>
+<path d="M318 158 H370" fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.5"/>
+<path d="M364 153 L370 158 L364 163" fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.5"/>
+<rect x="378" y="94" width="222" height="36" rx="8" fill="#1c1812" fill-opacity="1" stroke="#efe6d6" stroke-opacity="0.22" stroke-width="1.5"/>
+<text x="394" y="116" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0.06em" fill="#efe6d6" fill-opacity="0.6" text-anchor="start" >V1</text>
+<text x="430" y="116" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0em" fill="#efe6d6" fill-opacity="0.6" text-anchor="start" >sha256 a41c…</text>
+<rect x="378" y="138" width="222" height="36" rx="8" fill="#9b86e8" fill-opacity="0.12" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.5"/>
+<text x="394" y="160" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0.06em" fill="#9b86e8" fill-opacity="1" text-anchor="start" >V2</text>
+<text x="430" y="160" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0em" fill="#efe6d6" fill-opacity="0.9" text-anchor="start" >sha256 7e0d…</text>
+<rect x="378" y="182" width="222" height="36" rx="8" fill="#1c1812" fill-opacity="0.6" stroke="#efe6d6" stroke-opacity="0.12" stroke-width="1.5"/>
+<text x="394" y="204" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0.06em" fill="#efe6d6" fill-opacity="0.3" text-anchor="start" >V3</text>
+<text x="430" y="204" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0em" fill="#efe6d6" fill-opacity="0.3" text-anchor="start" >sha256 c93b…</text>
+<rect x="378" y="226" width="222" height="36" rx="8" fill="#1c1812" fill-opacity="0.6" stroke="#efe6d6" stroke-opacity="0.12" stroke-width="1.5"/>
+<text x="394" y="248" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0.06em" fill="#efe6d6" fill-opacity="0.3" text-anchor="start" >V4</text>
+<text x="430" y="248" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" letter-spacing="0em" fill="#efe6d6" fill-opacity="0.3" text-anchor="start" >sha256 5d28…</text>
+<text x="584" y="160" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.1em" fill="#9b86e8" fill-opacity="1" text-anchor="end" >LIVE</text>
+<text x="584" y="204" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9.5" letter-spacing="0.1em" fill="#efe6d6" fill-opacity="0.3" text-anchor="end" >LATER</text>
+<text x="584" y="248" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9.5" letter-spacing="0.1em" fill="#efe6d6" fill-opacity="0.3" text-anchor="end" >LATER</text>
+<text x="584" y="116" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9.5" letter-spacing="0.1em" fill="#efe6d6" fill-opacity="0.4" text-anchor="end" >PAST</text>
+<rect x="378" y="286" width="222" height="40" rx="8" fill="#1c1812" fill-opacity="1" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.5"/>
+<text x="394" y="311" font-family="JetBrains Mono, ui-monospace, monospace" font-size="13" letter-spacing="0em" fill="#9b86e8" fill-opacity="1" text-anchor="start" >WHERE as_of &lt;= t2</text>
+<path d="M489 286 V 266 H 372 V 132 L 376 132" fill="none" stroke="#9b86e8" stroke-opacity="0.8" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text x="40" y="352" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.1em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start" >DEPLOY = COMMIT</text>
+<text x="40" y="370" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.1em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start" >ROLLBACK = WHERE CLAUSE</text>
+  </g>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">Deploy is a commit.</text>
+</svg>

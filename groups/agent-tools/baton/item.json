@@ -1,11 +1,12 @@
 {
   "name": "baton",
-  "version": "v3.1",
+  "version": "v5",
   "order": 10,
   "status": "shipped",
-  "line": "an orchestrator of orchestrators",
-  "question": "What if every task went to the cheapest model that could actually finish it?",
-  "body": "An orchestrator of orchestrators, routed by what it costs. Say what you want and it picks a mode, plans a graph, and sends every task to the cheapest rung that can finish it — escalating one rung at a time, asking before it spends the expensive one, and handing you a one-slide brief at each decision instead of a report to dig through.",
+  "repo": "ckluis/baton",
+  "line": "the accountability layer for agent runs",
+  "question": "What if every agent run kept a record — evidence that cites, verdicts per criterion, and gates a person holds?",
+  "body": "A router prompt that turns a fresh session into a multi-agent run with a record: evidence that cites or retracts, verdicts computed per criterion, gates a person holds, and state that outlives the laptop. Three tiers replace six rungs — cheap for what a command can settle, frontier for everything with judgment, a person when frontier has failed twice. One more line, TEAM: github, hands the same run to a team.",
   "stack": [
     "Prompts",
     "Multi-agent",
@@ -13,20 +14,20 @@
   ],
   "facts": [
     [
-      "6",
-      "rungs"
+      "3",
+      "tiers"
+    ],
+    [
+      "48",
+      "rules"
+    ],
+    [
+      "40",
+      "named experts"
     ],
     [
       "10",
       "modes"
-    ],
-    [
-      "44",
-      "personas"
-    ],
-    [
-      "40",
-      "experts"
     ]
   ],
   "links": [
@@ -47,5 +48,5 @@
       "href": "https://ckluis.github.io/baton/baton-v1.html"
     }
   ],
-  "alt": "baton — six rungs of model × effort, a task graph routed to the cheapest rung that can finish it"
+  "alt": "baton v5 — work routed to three tiers (cheap, frontier, a person) while every step lands in a record of evidence, verdicts and gates"
 }

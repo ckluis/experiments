@@ -5,6 +5,7 @@
     "shipped": 10,
     "groups": 6
   },
+  "stats_fetched": "2026-10-05",
   "groups": [
     {
       "slug": "foundations",
@@ -12,7 +13,6 @@
       "number": "01",
       "title": "Foundations",
       "line": "What if the layer under everything were different?",
-      "blurb": "Substrates, kernels and languages — the floor a product stands on, rebuilt from first principles to see what changes above it.",
       "accent": "#6b4ec2",
       "aliases": [
         "substrate",
@@ -25,6 +25,12 @@
           "number": "01.01",
           "name": "regel",
           "status": "shipped",
+          "repo": "ckluis/regel",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-07-20T11:47:08Z"
+          },
           "line": "code as governed Postgres rows",
           "question": "What if deploying were a commit, and rolling back were a WHERE clause?",
           "body": "A Go kernel runs strict-TypeScript apps admitted as content-addressed Postgres rows. Deploy is a commit; rollback is an as-of WHERE clause — and nothing lands unverified.",
@@ -43,7 +49,7 @@
               "href": "https://github.com/ckluis/regel"
             }
           ],
-          "preview": "groups/foundations/regel/preview.png",
+          "preview": "groups/foundations/regel/preview.svg",
           "alt": "regel — code as governed Postgres rows"
         },
         {
@@ -65,7 +71,7 @@
               "href": "kern.html"
             }
           ],
-          "preview": "groups/foundations/kern/preview.png",
+          "preview": "groups/foundations/kern/preview.svg",
           "alt": "kern — a homoiconic SaaS substrate"
         },
         {
@@ -87,15 +93,110 @@
               "href": "eigen.html"
             }
           ],
-          "preview": "groups/foundations/eigen/preview.png",
+          "preview": "groups/foundations/eigen/preview.svg",
           "alt": "eigen — local-first hypermedia in one Rust binary"
         },
         {
-          "slug": "tinker",
-          "folder": "groups/foundations/tinker",
+          "slug": "taal",
+          "folder": "groups/foundations/taal",
           "number": "01.04",
+          "name": "taal",
+          "status": "spec",
+          "line": "the BEAM, built on Go",
+          "question": "What if you could have Erlang's actors and supervision trees without the Erlang VM?",
+          "body": "A small language for building the BEAM on Go — Erlang-style actors and supervision trees, without the VM.",
+          "stack": [
+            "Go",
+            "Actor model"
+          ],
+          "links": [
+            {
+              "label": "Read the spec",
+              "href": "taal.html"
+            }
+          ],
+          "preview": "groups/foundations/taal/preview.svg",
+          "alt": "taal — the BEAM, built on Go"
+        },
+        {
+          "slug": "streng",
+          "folder": "groups/foundations/streng",
+          "number": "01.05",
+          "name": "streng",
+          "status": "spec",
+          "line": "a closed-world TypeScript",
+          "question": "What if TypeScript came with no supply chain at all — the whole corpus vendored and checked in milliseconds?",
+          "body": "A closed-world TypeScript — all of the corpus, none of the supply chain, checked by a vendored native compiler in milliseconds.",
+          "stack": [
+            "TypeScript",
+            "Native compiler"
+          ],
+          "links": [
+            {
+              "label": "Read the spec",
+              "href": "streng.html"
+            }
+          ],
+          "preview": "groups/foundations/streng/preview.svg",
+          "alt": "streng — a closed-world TypeScript"
+        }
+      ]
+    },
+    {
+      "slug": "frameworks",
+      "folder": "groups/frameworks",
+      "number": "02",
+      "title": "Platforms & frameworks",
+      "line": "Opinionated ways to build a whole product.",
+      "accent": "#c56a3a",
+      "aliases": [],
+      "items": [
+        {
+          "slug": "samen",
+          "folder": "groups/frameworks/samen",
+          "number": "02.01",
+          "name": "samen",
+          "status": "shipped",
+          "repo": "ckluis/samen",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-10-05T12:11:59Z"
+          },
+          "line": "a governed B2B-SaaS foundry",
+          "question": "What if the boring 80% of a SaaS product came preset — and you could support tenants without ever seeing their customers?",
+          "body": "A governed B2B-SaaS foundry that presets the boring 80% — identity, CRM, billing, support, and the product UI — as six governed idioms on one Postgres per product. Support your tenants without ever seeing their customers.",
+          "stack": [
+            "Elixir",
+            "Ash",
+            "Oban",
+            "Postgres"
+          ],
+          "links": [
+            {
+              "label": "Live",
+              "href": "https://ckluis.github.io/samen/"
+            },
+            {
+              "label": "Code",
+              "href": "https://github.com/ckluis/samen"
+            }
+          ],
+          "preview": "groups/frameworks/samen/preview.svg",
+          "alt": "samen — a governed B2B-SaaS foundry"
+        },
+        {
+          "slug": "tinker",
+          "folder": "groups/frameworks/tinker",
+          "number": "02.02",
           "name": "tinker",
           "status": "shipped",
+          "repo": "ckluis/tinker",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-10-05T11:47:10Z"
+          },
           "line": "internal tools on data you can't see",
           "question": "What if you could build internal tools on personal data nobody can read without a second person's approval?",
           "body": "An ontology-driven builder in Rust on PostgreSQL 18. Define an object once and get a row-level-secured table, a governed API and an MCP front door for agents. Email and phone are sealed by type in a separate vault: queries see a mask, automations get a key, and a person sees the value only after a second person approves. Erasure is a crypto-shred.",
@@ -124,97 +225,13 @@
               "href": "https://github.com/ckluis/tinker"
             }
           ],
-          "preview": "groups/foundations/tinker/preview.png",
+          "preview": "groups/frameworks/tinker/preview.svg",
           "alt": "tinker — internal tools on data you can't see"
-        },
-        {
-          "slug": "taal",
-          "folder": "groups/foundations/taal",
-          "number": "01.05",
-          "name": "taal",
-          "status": "spec",
-          "line": "the BEAM, built on Go",
-          "question": "What if you could have Erlang's actors and supervision trees without the Erlang VM?",
-          "body": "A small language for building the BEAM on Go — Erlang-style actors and supervision trees, without the VM.",
-          "stack": [
-            "Go",
-            "Actor model"
-          ],
-          "links": [
-            {
-              "label": "Read the spec",
-              "href": "taal.html"
-            }
-          ],
-          "preview": "groups/foundations/taal/preview.png",
-          "alt": "taal — the BEAM, built on Go"
-        },
-        {
-          "slug": "streng",
-          "folder": "groups/foundations/streng",
-          "number": "01.06",
-          "name": "streng",
-          "status": "spec",
-          "line": "a closed-world TypeScript",
-          "question": "What if TypeScript came with no supply chain at all — the whole corpus vendored and checked in milliseconds?",
-          "body": "A closed-world TypeScript — all of the corpus, none of the supply chain, checked by a vendored native compiler in milliseconds.",
-          "stack": [
-            "TypeScript",
-            "Native compiler"
-          ],
-          "links": [
-            {
-              "label": "Read the spec",
-              "href": "streng.html"
-            }
-          ],
-          "preview": "groups/foundations/streng/preview.png",
-          "alt": "streng — a closed-world TypeScript"
-        }
-      ]
-    },
-    {
-      "slug": "frameworks",
-      "folder": "groups/frameworks",
-      "number": "02",
-      "title": "Frameworks",
-      "line": "Opinionated ways to build a whole product.",
-      "blurb": "Batteries-included stacks with strong opinions — each one a bet on which decisions a framework should make for you.",
-      "accent": "#c56a3a",
-      "aliases": [],
-      "items": [
-        {
-          "slug": "samen",
-          "folder": "groups/frameworks/samen",
-          "number": "02.01",
-          "name": "samen",
-          "status": "shipped",
-          "line": "a governed B2B-SaaS foundry",
-          "question": "What if the boring 80% of a SaaS product came preset — and you could support tenants without ever seeing their customers?",
-          "body": "A governed B2B-SaaS foundry that presets the boring 80% — identity, CRM, billing, support, and the product UI — as six governed idioms on one Postgres per product. Support your tenants without ever seeing their customers.",
-          "stack": [
-            "Elixir",
-            "Ash",
-            "Oban",
-            "Postgres"
-          ],
-          "links": [
-            {
-              "label": "Live",
-              "href": "https://ckluis.github.io/samen/"
-            },
-            {
-              "label": "Code",
-              "href": "https://github.com/ckluis/samen"
-            }
-          ],
-          "preview": "groups/frameworks/samen/preview.png",
-          "alt": "samen — a governed B2B-SaaS foundry"
         },
         {
           "slug": "chord",
           "folder": "groups/frameworks/chord",
-          "number": "02.02",
+          "number": "02.03",
           "name": "chord",
           "status": "spec",
           "line": "the omakase full-stack for G#",
@@ -230,13 +247,13 @@
               "href": "chord.html"
             }
           ],
-          "preview": "groups/frameworks/chord/preview.png",
+          "preview": "groups/frameworks/chord/preview.svg",
           "alt": "chord — the omakase full-stack for G#"
         },
         {
           "slug": "fugue",
           "folder": "groups/frameworks/fugue",
-          "number": "02.03",
+          "number": "02.04",
           "name": "fugue",
           "status": "spec",
           "line": "the Phoenix of G#, on Orleans",
@@ -252,13 +269,13 @@
               "href": "fugue.html"
             }
           ],
-          "preview": "groups/frameworks/fugue/preview.png",
+          "preview": "groups/frameworks/fugue/preview.svg",
           "alt": "fugue — the Phoenix of G#, on Orleans"
         },
         {
           "slug": "realbook",
           "folder": "groups/frameworks/realbook",
-          "number": "02.04",
+          "number": "02.05",
           "name": "realbook",
           "status": "spec",
           "line": "the WordPress of G#, with a gate",
@@ -274,13 +291,13 @@
               "href": "realbook.html"
             }
           ],
-          "preview": "groups/frameworks/realbook/preview.png",
+          "preview": "groups/frameworks/realbook/preview.svg",
           "alt": "realbook — the WordPress of G#, with a gate"
         },
         {
           "slug": "lui",
           "folder": "groups/frameworks/lui",
-          "number": "02.05",
+          "number": "02.06",
           "name": "lui",
           "status": "spec",
           "line": "layout-first UI with an AI sidecar",
@@ -296,15 +313,21 @@
               "href": "lui.html"
             }
           ],
-          "preview": "groups/frameworks/lui/preview.png",
+          "preview": "groups/frameworks/lui/preview.svg",
           "alt": "lui — layout-first UI with an AI sidecar"
         },
         {
           "slug": "cauldron",
           "folder": "groups/frameworks/cauldron",
-          "number": "02.06",
+          "number": "02.07",
           "name": "cauldron",
           "status": "archived",
+          "repo": "ckluis/cauldron",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-03-17T15:56:46Z"
+          },
           "line": "a web framework from zero dependencies",
           "question": "How much of a modern web stack can one Lisp binary carry with no dependencies at all?",
           "body": "A whole web framework from zero dependencies in Common Lisp — HTTP server, Postgres wire protocol, crypto, a LiveView-style UI engine, an admin panel, and an agent system — shipped as one SBCL binary. No Quicklisp, no FFI, no C.",
@@ -340,9 +363,15 @@
         {
           "slug": "crucible-works",
           "folder": "groups/frameworks/crucible-works",
-          "number": "02.07",
+          "number": "02.08",
           "name": "crucible-works",
           "status": "archived",
+          "repo": "ckluis/crucible-works",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-03-17T15:57:23Z"
+          },
           "line": "a business platform built to prove cauldron",
           "question": "Could a zero-dependency framework carry a real multi-tenant product?",
           "body": "A multi-tenant business platform built on cauldron to prove it could carry a real product — CRM, CMS, knowledge base, billing, and two agent runtimes on schema-per-tenant Postgres — archived with it once the point was made.",
@@ -382,7 +411,6 @@
       "number": "03",
       "title": "Agent tools",
       "line": "Making agents cheaper, better reviewed, and easier to steer.",
-      "blurb": "Orchestrators, review frameworks and native tools for working with AI agents every day — measured, routed and reviewed.",
       "accent": "#2f7d6d",
       "aliases": [
         "tools"
@@ -393,11 +421,17 @@
           "folder": "groups/agent-tools/baton",
           "number": "03.01",
           "name": "baton",
-          "version": "v3.1",
+          "version": "v5",
           "status": "shipped",
-          "line": "an orchestrator of orchestrators",
-          "question": "What if every task went to the cheapest model that could actually finish it?",
-          "body": "An orchestrator of orchestrators, routed by what it costs. Say what you want and it picks a mode, plans a graph, and sends every task to the cheapest rung that can finish it — escalating one rung at a time, asking before it spends the expensive one, and handing you a one-slide brief at each decision instead of a report to dig through.",
+          "repo": "ckluis/baton",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-10-03T01:09:08Z"
+          },
+          "line": "the accountability layer for agent runs",
+          "question": "What if every agent run kept a record — evidence that cites, verdicts per criterion, and gates a person holds?",
+          "body": "A router prompt that turns a fresh session into a multi-agent run with a record: evidence that cites or retracts, verdicts computed per criterion, gates a person holds, and state that outlives the laptop. Three tiers replace six rungs — cheap for what a command can settle, frontier for everything with judgment, a person when frontier has failed twice. One more line, TEAM: github, hands the same run to a team.",
           "stack": [
             "Prompts",
             "Multi-agent",
@@ -405,20 +439,20 @@
           ],
           "facts": [
             [
-              "6",
-              "rungs"
+              "3",
+              "tiers"
+            ],
+            [
+              "48",
+              "rules"
+            ],
+            [
+              "40",
+              "named experts"
             ],
             [
               "10",
               "modes"
-            ],
-            [
-              "44",
-              "personas"
-            ],
-            [
-              "40",
-              "experts"
             ]
           ],
           "links": [
@@ -440,7 +474,7 @@
             }
           ],
           "preview": "groups/agent-tools/baton/preview.svg",
-          "alt": "baton — six rungs of model × effort, a task graph routed to the cheapest rung that can finish it"
+          "alt": "baton v5 — work routed to three tiers (cheap, frontier, a person) while every step lands in a record of evidence, verdicts and gates"
         },
         {
           "slug": "luminaryTeam",
@@ -448,6 +482,12 @@
           "number": "03.02",
           "name": "luminaryTeam",
           "status": "shipped",
+          "repo": "ckluis/luminaryTeam",
+          "github": {
+            "stars": 0,
+            "forks": 1,
+            "pushed": "2026-07-02T17:51:06Z"
+          },
           "line": "a 40-expert adversarial review",
           "question": "What would 40 domain experts find if they reviewed your plan before launch?",
           "body": "A multi-agent technical review framework — drop in a codebase, spec, or launch plan and get an adversarial audit from 40 domain experts across 7 phases, synthesized into ranked fixes.",
@@ -466,7 +506,7 @@
               "href": "https://github.com/ckluis/luminaryTeam"
             }
           ],
-          "preview": "groups/agent-tools/luminaryTeam/preview.png",
+          "preview": "groups/agent-tools/luminaryTeam/preview.svg",
           "alt": "luminaryTeam — a 40-expert adversarial review"
         },
         {
@@ -475,6 +515,12 @@
           "number": "03.03",
           "name": "senkani",
           "status": "shipped",
+          "repo": "ckluis/senkani",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-09-13T19:16:50Z"
+          },
           "line": "token compression for coding agents",
           "question": "How many tokens could a coding agent skip if every read were compressed before it arrived?",
           "body": "Token compression for AI coding agents — a native macOS binary that compresses every file read and filters shell output from a local index before a token reaches Claude Code, Cursor, or any MCP agent.",
@@ -493,7 +539,7 @@
               "href": "https://github.com/ckluis/senkani"
             }
           ],
-          "preview": "groups/agent-tools/senkani/preview.png",
+          "preview": "groups/agent-tools/senkani/preview.svg",
           "alt": "senkani — token compression for coding agents"
         },
         {
@@ -502,6 +548,12 @@
           "number": "03.04",
           "name": "workflowForge",
           "status": "shipped",
+          "repo": "ckluis/workflowForge",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-09-05T19:58:07Z"
+          },
           "line": "paste a workflow, get a page you can send",
           "question": "What if any workflow could become a diagram you can send — one where no two lines ever cross?",
           "body": "Paste a workflow, get a page you can send. Whatever model you already use writes the JSON; one self-contained HTML file draws it as a DRAKON-style diagram — happy path down the left, exceptions fanning right, severity by shape, and no two lines ever cross. Every step carries a verified, disputed, or unverified state only a human can advance, and the page never reads your process.",
@@ -532,7 +584,6 @@
       "number": "04",
       "title": "Products",
       "line": "Built to be used — by someone, this week.",
-      "blurb": "Software with a user in mind: a growth engagement from one URL, a terminal reference, a youth-trip planner, a book-site engine.",
       "accent": "#a87a1f",
       "aliases": [],
       "items": [
@@ -542,6 +593,12 @@
           "number": "04.01",
           "name": "aiCRO",
           "status": "shipped",
+          "repo": "ckluis/aiCRO",
+          "github": {
+            "stars": 1,
+            "forks": 1,
+            "pushed": "2026-07-20T11:48:18Z"
+          },
           "line": "a full growth engagement from one URL",
           "question": "What if one URL were enough for a whole growth engagement — analysis, positioning, a rebuilt site and a GTM kit?",
           "body": "A full growth engagement from one URL — analysis, positioning, a rebuilt site inside a guided preview, and a GTM kit per customer group. Evidence-graded and self-contained: it opens from a file, no server, no AI slop.",
@@ -560,7 +617,7 @@
               "href": "https://github.com/ckluis/aiCRO"
             }
           ],
-          "preview": "groups/products/aiCRO/preview.png",
+          "preview": "groups/products/aiCRO/preview.svg",
           "alt": "aiCRO — a full growth engagement from one URL"
         },
         {
@@ -569,6 +626,12 @@
           "number": "04.02",
           "name": "terminalHelper",
           "status": "shipped",
+          "repo": "ckluis/terminalHelper",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-04-03T12:17:44Z"
+          },
           "line": "a searchable terminal command reference",
           "question": "What if your terminal had a browsable library of every command you've ever needed?",
           "body": "A searchable, browsable command reference for your terminal — a Miller-column TUI, full-text search, and an ask-Claude escape hatch that saves answers to your library.",
@@ -587,7 +650,7 @@
               "href": "https://github.com/ckluis/terminalHelper"
             }
           ],
-          "preview": "groups/products/terminalHelper/preview.png",
+          "preview": "groups/products/terminalHelper/preview.svg",
           "alt": "terminalHelper — a searchable terminal command reference"
         },
         {
@@ -610,7 +673,7 @@
               "href": "nonprofitEventPlanner.html"
             }
           ],
-          "preview": "groups/products/nonprofitEventPlanner/preview.png",
+          "preview": "groups/products/nonprofitEventPlanner/preview.svg",
           "alt": "nonprofitEventPlanner — run a whole youth trip from your phone"
         },
         {
@@ -633,7 +696,7 @@
               "href": "customCMS.html"
             }
           ],
-          "preview": "groups/products/customCMS/preview.png",
+          "preview": "groups/products/customCMS/preview.svg",
           "alt": "customCMS — one brain, many book storefronts"
         }
       ]
@@ -644,7 +707,6 @@
       "number": "05",
       "title": "Field reports",
       "line": "Long-form notes from building with AI — curve and all.",
-      "blurb": "The Bend series: three projects built by an AI app builder, then measured, broken and fixed in public.",
       "accent": "#3a6ea5",
       "aliases": [],
       "items": [
@@ -654,6 +716,12 @@
           "number": "05.01",
           "name": "bocht",
           "status": "case-study",
+          "repo": "ckluis/bocht",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-10-05T11:50:11Z"
+          },
           "line": "a whole backend in one Bend binary",
           "question": "Can an AI build a whole backend in Bend — and prove every claim it makes?",
           "body": "Bend series, part 1. A whole backend (HTTP, auth, rate limits, WAL storage, REST and MCP) written as one Bend program by an AI app builder, shipped with an evidence discipline worth stealing: no claim without a re-derivable result.",
@@ -691,7 +759,7 @@
               "href": "bend/index.html"
             }
           ],
-          "preview": "bend/assets/cards/bocht.png",
+          "preview": "groups/field-reports/bocht/preview.svg",
           "alt": "bocht: the whole backend as one 1.70 MB arm64 binary"
         },
         {
@@ -700,6 +768,12 @@
           "number": "05.02",
           "name": "bochtCMS",
           "status": "case-study",
+          "repo": "ckluis/bochtCMS",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-10-05T11:51:00Z"
+          },
           "line": "an MCP-only CMS, and the curve its tests missed",
           "question": "What does a passing test suite miss when a CMS freezes on a long post?",
           "body": "Bend series, part 2. A blog CMS on bocht whose only interface is seven MCP tools. Its 43 tests passed on every version, including the one that froze for two minutes on a long post. One function fixed: 1,200× faster, same bytes out.",
@@ -737,7 +811,7 @@
               "href": "bend/index.html"
             }
           ],
-          "preview": "bend/assets/cards/bochtCMS.png",
+          "preview": "groups/field-reports/bochtCMS/preview.svg",
           "alt": "bochtCMS: time to save one post bending upward with size before the fix, flat after it"
         },
         {
@@ -746,6 +820,12 @@
           "number": "05.03",
           "name": "shellOS",
           "status": "case-study",
+          "repo": "ckluis/shellOS",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-10-05T11:58:02Z"
+          },
           "line": "a desktop shell drawn in pure Bend",
           "question": "Can a desktop shell drawn pixel by pixel in Bend move from Linux to macOS without changing the app?",
           "body": "Bend series, part 3. A single-window desktop shell drawn pixel by pixel in pure Bend (terminal over a real PTY, reader, palette), ported from a Linux VM to macOS with no app changes, three screen-only bugs fixed, then redesigned.",
@@ -783,7 +863,7 @@
               "href": "bend/index.html"
             }
           ],
-          "preview": "bend/assets/cards/shellOS.png",
+          "preview": "groups/field-reports/shellOS/preview.svg",
           "alt": "shellOS after the redesign: panes for themes, saved articles, items, the reader and a live terminal"
         }
       ]
@@ -794,7 +874,6 @@
       "number": "06",
       "title": "Design studies",
       "line": "Designs taken far enough to argue with.",
-      "blurb": "Open letters with working prototypes, 3D objects you can rotate, and interfaces at true scale — built to answer what a sketch can't.",
       "accent": "#b4456a",
       "aliases": [
         "design",
@@ -826,7 +905,7 @@
               "href": "overlook/index.html#graph"
             }
           ],
-          "preview": "groups/design-studies/overlook/preview.png",
+          "preview": "groups/design-studies/overlook/preview.svg",
           "alt": "Overlook — supervising ten agents should feel as calm as reading one channel"
         },
         {
@@ -854,7 +933,7 @@
               "href": "wijzer/index.html#swipe"
             }
           ],
-          "preview": "groups/design-studies/wijzer/preview.png",
+          "preview": "groups/design-studies/wijzer/preview.svg",
           "alt": "wijzer — a 24-hour almanac watch face"
         },
         {
@@ -863,6 +942,12 @@
           "number": "06.03",
           "name": "uiExplorer",
           "status": "shipped",
+          "repo": "ckluis/uiExplorer",
+          "github": {
+            "stars": 0,
+            "forks": 0,
+            "pushed": "2026-07-20T11:49:34Z"
+          },
           "line": "the UI Lab",
           "question": "What if every interface experiment documented its own making — prompt, model, agents and lineage?",
           "body": "The UI Lab — a forkable, zero-dependency framework where every interface experiment is pure HTML/CSS and documents its own making: prompt, model, agents, version lineage.",
@@ -891,7 +976,7 @@
               "href": "https://github.com/ckluis/uiExplorer"
             }
           ],
-          "preview": "groups/design-studies/uiExplorer/preview.png",
+          "preview": "groups/design-studies/uiExplorer/preview.svg",
           "alt": "uiExplorer — the UI Lab"
         },
         {
@@ -919,7 +1004,7 @@
               "href": "3d/omegaClassGrills/PLAN.md"
             }
           ],
-          "preview": "groups/design-studies/omegaClass/preview.png",
+          "preview": "groups/design-studies/omegaClass/preview.svg",
           "alt": "omegaClass — a stainless grill that deploys a sheltered fire station"
         },
         {

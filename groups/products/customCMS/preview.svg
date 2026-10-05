@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="customCMS — one local brain owns the database and the thinking, and pushes static HTML to several niche book-review sites that each sit on a five-dollar VPS">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%">
+      <stop offset="0" stop-color="#d9a94a" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#d9a94a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">One brain. Many storefronts.</text>
+  <rect x="40" y="100" width="214" height="240" rx="14" fill="#d9a94a" fill-opacity=".1" stroke="#d9a94a" stroke-width="1.5"/>
+  <text x="58" y="128" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#d9a94a">LOCAL BRAIN</text>
+  <text x="58" y="148" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity=".5">CLAUDE CODE · SQLITE</text>
+  <rect x="58" y="168" width="178" height="28" rx="7" fill="#14110c" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2"/>
+  <text x="72" y="186" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">RESEARCH</text>
+  <rect x="58" y="206" width="178" height="28" rx="7" fill="#14110c" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2"/>
+  <text x="72" y="224" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">WRITE + EVAL</text>
+  <rect x="58" y="244" width="178" height="28" rx="7" fill="#14110c" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2"/>
+  <text x="72" y="262" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">COMPILE</text>
+  <text x="58" y="306" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".45">NO ADMIN PANEL</text>
+  <text x="58" y="324" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".45">ON THE INTERNET</text>
+  <path d="M254 220 C 310 220, 310 144, 362 144" fill="none" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="362" y="120" width="238" height="48" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+  <text x="378" y="141" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="0" fill="#efe6d6" fill-opacity=".9">scifi-reads.com</text>
+  <text x="378" y="158" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity=".45">STATIC HTML · VPS $5/MO</text>
+  <path d="M254 220 C 310 220, 310 224, 362 224" fill="none" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="362" y="200" width="238" height="48" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+  <text x="378" y="221" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="0" fill="#efe6d6" fill-opacity=".9">biz-books.co</text>
+  <text x="378" y="238" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity=".45">STATIC HTML · VPS $5/MO</text>
+  <path d="M254 220 C 310 220, 310 304, 362 304" fill="none" stroke="#d9a94a" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="362" y="280" width="238" height="48" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+  <text x="378" y="301" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="0" fill="#efe6d6" fill-opacity=".9">selfhelp-shelf.com</text>
+  <text x="378" y="318" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".06em" fill="#efe6d6" fill-opacity=".45">STATIC HTML · VPS $5/MO</text>
+  <circle cx="254" cy="220" r="4" fill="#d9a94a"/>
+  <text x="600" y="362" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".45" text-anchor="end">SITES ONLY SERVE</text>
+</svg>

@@ -2,6 +2,7 @@
   "name": "senkani",
   "order": 30,
   "status": "shipped",
+  "repo": "ckluis/senkani",
   "line": "token compression for coding agents",
   "question": "How many tokens could a coding agent skip if every read were compressed before it arrived?",
   "body": "Token compression for AI coding agents — a native macOS binary that compresses every file read and filters shell output from a local index before a token reaches Claude Code, Cursor, or any MCP agent.",

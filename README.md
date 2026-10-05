@@ -34,22 +34,22 @@ folder and its metadata — don't edit it by hand.
 ## The experiments
 
 <!-- registry:start -->
-| Group | Project | Stack | Status | Links |
+| Type | Project | Stack | Status | Links |
 |---|---|---|---|---|
 | Foundations | **regel** — code as governed Postgres rows | Go · TypeScript · Postgres | Shipped | [live](https://ckluis.github.io/regel/) · [code](https://github.com/ckluis/regel) |
 | Foundations | **kern** — a homoiconic SaaS substrate | Lisp · Postgres | Spec | [read the spec](kern.html) |
 | Foundations | **eigen** — local-first hypermedia in one Rust binary | Rust · Postgres | Spec | [read the spec](eigen.html) |
-| Foundations | **tinker** — internal tools on data you can't see | Rust · PostgreSQL 18 · MCP | Shipped | [live](https://ckluis.github.io/tinker/) · [code](https://github.com/ckluis/tinker) |
 | Foundations | **taal** — the BEAM, built on Go | Go · Actor model | Spec | [read the spec](taal.html) |
 | Foundations | **streng** — a closed-world TypeScript | TypeScript · Native compiler | Spec | [read the spec](streng.html) |
-| Frameworks | **samen** — a governed B2B-SaaS foundry | Elixir · Ash · Oban · Postgres | Shipped | [live](https://ckluis.github.io/samen/) · [code](https://github.com/ckluis/samen) |
-| Frameworks | **chord** — the omakase full-stack for G# | G# · Full-stack | Spec | [read the spec](chord.html) |
-| Frameworks | **fugue** — the Phoenix of G#, on Orleans | G# · Orleans | Spec | [read the spec](fugue.html) |
-| Frameworks | **realbook** — the WordPress of G#, with a gate | G# · CMS | Spec | [read the spec](realbook.html) |
-| Frameworks | **lui** — layout-first UI with an AI sidecar | UI framework · AI sidecar | Spec | [read the spec](lui.html) |
-| Frameworks | **cauldron** — a web framework from zero dependencies | Common Lisp · SBCL · Zero deps · One binary | Archived | [code](https://github.com/ckluis/cauldron) · [kern took it further](kern.html) |
-| Frameworks | **crucible-works** — a business platform built to prove cauldron | Common Lisp · On cauldron · Multi-tenant Postgres | Archived | [code](https://github.com/ckluis/crucible-works) · [samen took it further](https://ckluis.github.io/samen/) |
-| Agent tools | **baton** v3.1 — an orchestrator of orchestrators | Prompts · Multi-agent · Claude | Shipped | [live](https://ckluis.github.io/baton/) · [code](https://github.com/ckluis/baton) · [v2](https://ckluis.github.io/baton/baton-v2.html) · [v1](https://ckluis.github.io/baton/baton-v1.html) |
+| Platforms & frameworks | **samen** — a governed B2B-SaaS foundry | Elixir · Ash · Oban · Postgres | Shipped | [live](https://ckluis.github.io/samen/) · [code](https://github.com/ckluis/samen) |
+| Platforms & frameworks | **tinker** — internal tools on data you can't see | Rust · PostgreSQL 18 · MCP | Shipped | [live](https://ckluis.github.io/tinker/) · [code](https://github.com/ckluis/tinker) |
+| Platforms & frameworks | **chord** — the omakase full-stack for G# | G# · Full-stack | Spec | [read the spec](chord.html) |
+| Platforms & frameworks | **fugue** — the Phoenix of G#, on Orleans | G# · Orleans | Spec | [read the spec](fugue.html) |
+| Platforms & frameworks | **realbook** — the WordPress of G#, with a gate | G# · CMS | Spec | [read the spec](realbook.html) |
+| Platforms & frameworks | **lui** — layout-first UI with an AI sidecar | UI framework · AI sidecar | Spec | [read the spec](lui.html) |
+| Platforms & frameworks | **cauldron** — a web framework from zero dependencies | Common Lisp · SBCL · Zero deps · One binary | Archived | [code](https://github.com/ckluis/cauldron) · [kern took it further](kern.html) |
+| Platforms & frameworks | **crucible-works** — a business platform built to prove cauldron | Common Lisp · On cauldron · Multi-tenant Postgres | Archived | [code](https://github.com/ckluis/crucible-works) · [samen took it further](https://ckluis.github.io/samen/) |
+| Agent tools | **baton** v5 — the accountability layer for agent runs | Prompts · Multi-agent · Claude | Shipped | [live](https://ckluis.github.io/baton/) · [code](https://github.com/ckluis/baton) · [v2](https://ckluis.github.io/baton/baton-v2.html) · [v1](https://ckluis.github.io/baton/baton-v1.html) |
 | Agent tools | **luminaryTeam** — a 40-expert adversarial review | Prompts · Multi-agent · Claude | Shipped | [live](https://ckluis.github.io/luminaryTeam/) · [code](https://github.com/ckluis/luminaryTeam) |
 | Agent tools | **senkani** — token compression for coding agents | Swift · macOS · MCP | Shipped | [live](https://ckluis.github.io/senkani) · [code](https://github.com/ckluis/senkani) |
 | Agent tools | **workflowForge** — paste a workflow, get a page you can send | Single-file HTML · SVG renderer · Bring your own model · No server | Shipped | [live](https://ckluis.github.io/workflowForge/) · [code](https://github.com/ckluis/workflowForge) |
@@ -67,17 +67,12 @@ folder and its metadata — don't edit it by hand.
 | Design studies | **STOWORK** — a carry-on that becomes a workstation | Three.js · Parametric rig · No-build | Concept | [open the 3d](3d/portable-office/index.html) · [read the plan](3d/portable-office/PLAN.md) |
 <!-- registry:end -->
 
-## Regenerating previews
+## Card drawings
 
-Card images live in each item's folder as `preview.png` (1200×760) or `preview.svg`. Spec pages are
-shot from their masthead; shipped projects from their live site:
-
-```sh
-npx playwright screenshot --viewport-size=1200,760 --wait-for-timeout=1600 \
-  kern.html groups/foundations/kern/preview.png
-npx playwright screenshot --viewport-size=1200,760 --wait-for-timeout=1600 \
-  https://ckluis.github.io/tinker/ groups/foundations/tinker/preview.png
-```
+Each card shows `preview.svg` from the item's folder: a drawing of the project's mechanism or signature
+UI on a dark ground, in one shared style. The spec is in [`build/card-style.md`](build/card-style.md).
+Stars and forks come from GitHub and are cached in `build/github-stats.json`; refresh them with
+`node build/build.mjs --stats`.
 
 The index's own social card is generated from `previews/_social-experiments-src.html`:
 

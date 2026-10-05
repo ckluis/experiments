@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="taal — humans write Taal, the taalc compiler emits idiomatic Go that agents verify with Go tools, and the result runs as actors under a supervision tree">
+  <defs>
+    <radialGradient id="glow" cx="12%" cy="10%" r="70%">
+      <stop offset="0" stop-color="#9b86e8" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#9b86e8" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#efe6d6" fill-opacity=".06"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="#14110c"/>
+  <rect width="640" height="400" fill="url(#dots)"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <g stroke-linecap="round" stroke-linejoin="round">
+<rect x="40" y="152" width="176" height="64" rx="12" fill="#1c1812" fill-opacity="1" stroke="#efe6d6" stroke-opacity="0.2" stroke-width="1.5"/>
+<text x="56" y="180" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="0.06em" fill="#efe6d6" fill-opacity="0.85" text-anchor="start" >INVOICE.TAAL</text>
+<text x="56" y="200" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.04em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start" >humans author</text>
+<rect x="232" y="152" width="176" height="64" rx="12" fill="#9b86e8" fill-opacity="0.12" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.5"/>
+<text x="248" y="180" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="0.06em" fill="#9b86e8" fill-opacity="1" text-anchor="start" >TAALC</text>
+<text x="248" y="200" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.04em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start" >the framework</text>
+<rect x="424" y="152" width="176" height="64" rx="12" fill="#1c1812" fill-opacity="1" stroke="#efe6d6" stroke-opacity="0.2" stroke-width="1.5"/>
+<text x="440" y="180" font-family="JetBrains Mono, ui-monospace, monospace" font-size="12" letter-spacing="0.06em" fill="#efe6d6" fill-opacity="0.85" text-anchor="start" >INVOICE.GO</text>
+<text x="440" y="200" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.04em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start" >agents verify</text>
+<path d="M216 184 H228" fill="none" stroke="#efe6d6" stroke-opacity="0.45" stroke-width="1.5"/>
+<path d="M222 179 L228 184 L222 189" fill="none" stroke="#efe6d6" stroke-opacity="0.45" stroke-width="1.5"/>
+<path d="M408 184 H420" fill="none" stroke="#efe6d6" stroke-opacity="0.45" stroke-width="1.5"/>
+<path d="M414 179 L420 184 L414 189" fill="none" stroke="#efe6d6" stroke-opacity="0.45" stroke-width="1.5"/>
+<g fill="none" stroke="#efe6d6" stroke-opacity="0.7" stroke-width="1.5"><circle cx="70" cy="112" r="6"/><path d="M60 134 c0-8 4-12 10-12 s10 4 10 12"/></g>
+<text x="92" y="118" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.1em" fill="#efe6d6" fill-opacity="0.5" text-anchor="start" >HUMANS</text>
+<g fill="none" stroke="#9b86e8" stroke-opacity="1" stroke-width="1.5"><circle cx="454" cy="112" r="6"/><path d="M444 134 c0-8 4-12 10-12 s10 4 10 12"/></g>
+<text x="476" y="118" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.1em" fill="#9b86e8" fill-opacity="1" text-anchor="start" >AGENTS</text>
+<text x="512" y="236" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9.5" letter-spacing="0.04em" fill="#efe6d6" fill-opacity="0.45" text-anchor="middle" >go vet · race · pprof</text>
+<path d="M512 216 V252" fill="none" stroke="#9b86e8" stroke-opacity="0.9" stroke-width="1.5"/>
+<circle cx="512" cy="262" r="8" fill="#9b86e8"/>
+<path d="M512 270 V286 H440 V300" fill="none" stroke="#9b86e8" stroke-opacity="0.7" stroke-width="1.2"/>
+<circle cx="440" cy="308" r="6" fill="#1c1812" stroke="#9b86e8" stroke-width="1.5"/>
+<path d="M512 270 V286 H512 V300" fill="none" stroke="#9b86e8" stroke-opacity="0.7" stroke-width="1.2"/>
+<circle cx="512" cy="308" r="6" fill="#1c1812" stroke="#9b86e8" stroke-width="1.5"/>
+<path d="M512 270 V286 H584 V300" fill="none" stroke="#9b86e8" stroke-opacity="0.7" stroke-width="1.2"/>
+<circle cx="584" cy="308" r="6" fill="#1c1812" stroke="#9b86e8" stroke-width="1.5"/>
+<text x="300" y="266" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.1em" fill="#9b86e8" fill-opacity="1" text-anchor="end" >SUPERVISION TREE</text>
+<text x="300" y="284" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.04em" fill="#efe6d6" fill-opacity="0.45" text-anchor="end" >actors on the Go runtime</text>
+<text x="40" y="356" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.1em" fill="#efe6d6" fill-opacity="0.45" text-anchor="start" >ONE BINARY · ONE POSTGRES</text>
+  </g>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">Humans write Taal.</text>
+</svg>

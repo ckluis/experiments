@@ -2,6 +2,7 @@
   "name": "uiExplorer",
   "order": 30,
   "status": "shipped",
+  "repo": "ckluis/uiExplorer",
   "line": "the UI Lab",
   "question": "What if every interface experiment documented its own making — prompt, model, agents and lineage?",
   "body": "The UI Lab — a forkable, zero-dependency framework where every interface experiment is pure HTML/CSS and documents its own making: prompt, model, agents, version lineage.",
