@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="baton v5 — a run's tasks are routed to three tiers: cheap for what a command can settle, frontier for judgment, a person when frontier has failed twice; every step writes evidence, a verdict per criterion and a gate into one record">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="baton v7.5 — a prime that only dispatches sends goals to three sub-orchestrators, each runs its workers and hands back one line of at most 280 bytes into the prime's memory, while a guard refuses the prime's file reads and commands">
   <defs>
-    <radialGradient id="glow" cx="88%" cy="8%" r="70%">
-      <stop offset="0" stop-color="#5fb3a1" stop-opacity=".2"/>
+    <radialGradient id="glow" cx="4%" cy="96%" r="70%">
+      <stop offset="0" stop-color="#5fb3a1" stop-opacity=".18"/>
       <stop offset="1" stop-color="#5fb3a1" stop-opacity="0"/>
     </radialGradient>
     <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -12,55 +12,65 @@
   <rect width="640" height="400" fill="url(#dots)"/>
   <rect width="640" height="400" fill="url(#glow)"/>
 
-  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">Agents work. baton keeps the record.</text>
+  <text x="40" y="58" font-family="Fraunces, Georgia, serif" font-style="italic" font-size="26" fill="#efe6d6">One thread that never fills up.</text>
 
-  <!-- three tiers -->
   <g font-family="JetBrains Mono, ui-monospace, monospace">
-    <rect x="40" y="96" width="350" height="56" rx="12" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
-    <text x="58" y="120" font-size="11" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".85">CHEAP</text>
-    <text x="58" y="138" font-size="10" fill="#efe6d6" fill-opacity=".45">what a command can settle</text>
+    <!-- the prime, holding its memory -->
+    <rect x="40" y="96" width="190" height="164" rx="12" fill="#5fb3a1" fill-opacity=".1" stroke="#5fb3a1" stroke-width="1.5"/>
+    <text x="58" y="120" font-size="12" letter-spacing=".1em" fill="#5fb3a1">PRIME</text>
+    <text x="58" y="138" font-size="10" fill="#efe6d6" fill-opacity=".55">only dispatches</text>
+    <path d="M58 152H212" stroke="#5fb3a1" stroke-opacity=".3" stroke-width="1"/>
+    <text x="58" y="172" font-size="10" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".45">MEMORY</text>
+    <rect x="58" y="186" width="154" height="5" rx="2.5" fill="#5fb3a1" fill-opacity=".8"/>
+    <rect x="58" y="200" width="154" height="5" rx="2.5" fill="#efe6d6" fill-opacity=".35"/>
+    <rect x="58" y="214" width="120" height="5" rx="2.5" fill="#efe6d6" fill-opacity=".28"/>
+    <rect x="58" y="228" width="88" height="5" rx="2.5" fill="#efe6d6" fill-opacity=".2"/>
+    <rect x="58" y="242" width="56" height="5" rx="2.5" fill="#efe6d6" fill-opacity=".12"/>
 
-    <rect x="40" y="166" width="350" height="56" rx="12" fill="#5fb3a1" fill-opacity=".1" stroke="#5fb3a1" stroke-width="1.5"/>
-    <text x="58" y="190" font-size="11" letter-spacing=".1em" fill="#5fb3a1">FRONTIER</text>
-    <text x="58" y="208" font-size="10" fill="#efe6d6" fill-opacity=".55">everything with judgment</text>
+    <!-- the guard -->
+    <rect x="40" y="276" width="190" height="34" rx="10" fill="#1c1812" stroke="#e07a5f" stroke-opacity=".6" stroke-width="1.2" stroke-dasharray="4 4"/>
+    <text x="58" y="297" font-size="10" letter-spacing=".08em" fill="#e07a5f">READ ✕  BASH ✕  EDIT ✕</text>
 
-    <rect x="40" y="236" width="350" height="56" rx="12" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5" stroke-dasharray="4 4"/>
-    <text x="58" y="260" font-size="11" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".85">A PERSON</text>
-    <text x="58" y="278" font-size="10" fill="#efe6d6" fill-opacity=".45">when frontier has failed twice</text>
+    <!-- sub-orchestrators -->
+    <text x="280" y="86" font-size="10" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".45">SUB-ORCHESTRATORS</text>
+    <rect x="280" y="96" width="160" height="44" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+    <text x="298" y="122" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">BOOTSTRAP</text>
+    <rect x="280" y="156" width="160" height="44" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+    <text x="298" y="182" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">PHASE P3</text>
+    <rect x="280" y="216" width="160" height="44" rx="10" fill="#1c1812" stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.5"/>
+    <text x="298" y="242" font-size="11" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".85">FINAL</text>
+
+    <!-- one line back -->
+    <text x="236" y="268" font-size="10" fill="#5fb3a1">≤280 B</text>
+    <text x="476" y="86" font-size="10" letter-spacing=".08em" fill="#efe6d6" fill-opacity=".45">WORKERS</text>
+
+    <text x="40" y="356" font-size="10" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".45">V7.5 · 27 HOOKS · 30 RULES · OPUS 5.5 + SONNET 5.5</text>
   </g>
 
-  <!-- tasks on the tiers -->
-  <g stroke-width="1.5">
-    <circle cx="266" cy="124" r="7" fill="#14110c" stroke="#7fc49a"/><path d="M262.5 124l2.5 2.5 4.5-5" fill="none" stroke="#7fc49a" stroke-linecap="round"/>
-    <circle cx="300" cy="124" r="7" fill="#14110c" stroke="#7fc49a"/><path d="M296.5 124l2.5 2.5 4.5-5" fill="none" stroke="#7fc49a" stroke-linecap="round"/>
-    <circle cx="232" cy="194" r="7" fill="#14110c" stroke="#7fc49a"/><path d="M228.5 194l2.5 2.5 4.5-5" fill="none" stroke="#7fc49a" stroke-linecap="round"/>
-    <circle cx="266" cy="194" r="7" fill="#5fb3a1" fill-opacity=".25" stroke="#5fb3a1"/>
-    <circle cx="300" cy="194" r="7" fill="#14110c" stroke="#e07a5f"/><path d="M297 191l6 6M303 191l-6 6" stroke="#e07a5f" stroke-linecap="round"/>
-    <circle cx="334" cy="194" r="7" fill="#14110c" stroke="#e07a5f"/><path d="M331 191l6 6M337 191l-6 6" stroke="#e07a5f" stroke-linecap="round"/>
-    <path d="M334 202 C 334 236, 334 236, 334 252" fill="none" stroke="#e07a5f" stroke-opacity=".7" stroke-dasharray="3 4" stroke-linecap="round"/>
-    <!-- person -->
-    <circle cx="334" cy="258" r="5" fill="none" stroke="#efe6d6" stroke-opacity=".85"/>
-    <path d="M325 276c0-6 4-9 9-9s9 3 9 9" fill="none" stroke="#efe6d6" stroke-opacity=".85" stroke-linecap="round"/>
-  </g>
-  <text x="326" y="233" text-anchor="end" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9.5" letter-spacing=".08em" fill="#e07a5f" fill-opacity=".85">FAILED ×2</text>
-
-  <!-- the record -->
-  <g fill="none" stroke-width="1.5" stroke-linecap="round" stroke="#5fb3a1" stroke-opacity=".55">
-    <path d="M390 124 C 420 124, 420 160, 436 160"/>
-    <path d="M390 194 L 436 194"/>
-    <path d="M390 264 C 420 264, 420 228, 436 228"/>
-  </g>
-  <g font-family="JetBrains Mono, ui-monospace, monospace">
-    <rect x="436" y="96" width="164" height="196" rx="12" fill="#1c1812" stroke="#5fb3a1" stroke-width="1.5"/>
-    <text x="452" y="120" font-size="10.5" letter-spacing=".1em" fill="#5fb3a1">THE RECORD</text>
-    <line x1="452" y1="132" x2="584" y2="132" stroke="#efe6d6" stroke-opacity=".12"/>
-    <text x="452" y="156" font-size="9.8" fill="#efe6d6" fill-opacity=".8">evidence · cites</text>
-    <text x="452" y="180" font-size="9.8" fill="#efe6d6" fill-opacity=".8">verdict · per criterion</text>
-    <text x="452" y="204" font-size="9.8" fill="#efe6d6" fill-opacity=".8">gate · a person holds</text>
-    <text x="452" y="228" font-size="9.8" fill="#efe6d6" fill-opacity=".8">state · outlives laptop</text>
-    <line x1="452" y1="246" x2="584" y2="246" stroke="#efe6d6" stroke-opacity=".12"/>
-    <text x="452" y="272" font-size="10" fill="#efe6d6" fill-opacity=".45">TEAM: github → PR</text>
+  <!-- dispatch out (solid), one line back (dashed) -->
+  <g fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#efe6d6" stroke-opacity=".35">
+      <path d="M232 110H276M271 106l5 4-5 4"/>
+      <path d="M232 170H276M271 166l5 4-5 4"/>
+      <path d="M232 230H276M271 226l5 4-5 4"/>
+    </g>
+    <g stroke="#5fb3a1">
+      <path d="M276 126H234" stroke-dasharray="3 4"/><path d="M239 122l-5 4 5 4"/>
+      <path d="M276 186H234" stroke-dasharray="3 4"/><path d="M239 182l-5 4 5 4"/>
+      <path d="M276 246H234" stroke-dasharray="3 4"/><path d="M239 242l-5 4 5 4"/>
+    </g>
+    <g stroke="#efe6d6" stroke-opacity=".2" stroke-width="1.2">
+      <path d="M442 118H470"/><path d="M442 178H470"/><path d="M442 238H470"/>
+    </g>
   </g>
 
-  <text x="40" y="340" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing=".1em" fill="#efe6d6" fill-opacity=".45">3 TIERS · 48 RULES · 40 EXPERTS · 10 MODES</text>
+  <!-- workers -->
+  <g stroke-width="1.5" stroke-linecap="round">
+    <circle cx="482" cy="118" r="8" fill="#14110c" stroke="#7fc49a"/><path d="M478 118l3 3 5-6" fill="none" stroke="#7fc49a"/>
+    <circle cx="512" cy="118" r="8" fill="#14110c" stroke="#7fc49a"/><path d="M508 118l3 3 5-6" fill="none" stroke="#7fc49a"/>
+    <circle cx="482" cy="178" r="8" fill="#14110c" stroke="#7fc49a"/><path d="M478 178l3 3 5-6" fill="none" stroke="#7fc49a"/>
+    <circle cx="512" cy="178" r="8" fill="#5fb3a1" fill-opacity=".25" stroke="#5fb3a1"/>
+    <circle cx="542" cy="178" r="8" fill="#14110c" stroke="#efe6d6" stroke-opacity=".35"/>
+    <circle cx="482" cy="238" r="8" fill="#14110c" stroke="#efe6d6" stroke-opacity=".35"/>
+  </g>
 </svg>

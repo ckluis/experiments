@@ -161,7 +161,7 @@
           "github": {
             "stars": 0,
             "forks": 0,
-            "pushed": "2026-10-05T12:11:59Z"
+            "pushed": "2026-10-05T18:15:01Z"
           },
           "line": "a governed B2B-SaaS foundry",
           "question": "What if the boring 80% of a SaaS product came preset — and you could support tenants without ever seeing their customers?",
@@ -421,38 +421,38 @@
           "folder": "groups/agent-tools/baton",
           "number": "03.01",
           "name": "baton",
-          "version": "v5",
+          "version": "v7.5",
           "status": "shipped",
           "repo": "ckluis/baton",
           "github": {
             "stars": 0,
             "forks": 0,
-            "pushed": "2026-10-03T01:09:08Z"
+            "pushed": "2026-10-05T17:25:22Z"
           },
-          "line": "the accountability layer for agent runs",
-          "question": "What if every agent run kept a record — evidence that cites, verdicts per criterion, and gates a person holds?",
-          "body": "A router prompt that turns a fresh session into a multi-agent run with a record: evidence that cites or retracts, verdicts computed per criterion, gates a person holds, and state that outlives the laptop. Three tiers replace six rungs — cheap for what a command can settle, frontier for everything with judgment, a person when frontier has failed twice. One more line, TEAM: github, hands the same run to a team.",
+          "line": "one thread that never fills up",
+          "question": "What if the orchestrator never read a file, and its thread lasted as long as the work did?",
+          "body": "A Claude Code mod. During a run the prime may only dispatch, ask and use its memory; a guard refuses everything else. Sub-orchestrators run each phase and hand back one line of at most 280 bytes, noted into a memory the prime can zoom into. Rulings you give stick across runs, irreversible commands from any agent wait for you, and every behavior change lands red, green, blue. Underneath is still the router prompt and its record: evidence that cites, verdicts per criterion, gates a person holds, and TEAM: github for a team.",
           "stack": [
-            "Prompts",
-            "Multi-agent",
-            "Claude"
+            "Claude Code mod",
+            "JavaScript",
+            "Multi-agent"
           ],
           "facts": [
             [
-              "3",
-              "tiers"
+              "0",
+              "files the prime reads"
             ],
             [
-              "48",
+              "≤280 B",
+              "back from a phase"
+            ],
+            [
+              "27",
+              "hooks"
+            ],
+            [
+              "30",
               "rules"
-            ],
-            [
-              "40",
-              "named experts"
-            ],
-            [
-              "10",
-              "modes"
             ]
           ],
           "links": [
@@ -465,16 +465,16 @@
               "href": "https://github.com/ckluis/baton"
             },
             {
-              "label": "v2",
-              "href": "https://ckluis.github.io/baton/baton-v2.html"
+              "label": "Changelog",
+              "href": "https://github.com/ckluis/baton/blob/main/CHANGELOG.md"
             },
             {
-              "label": "v1",
-              "href": "https://ckluis.github.io/baton/baton-v1.html"
+              "label": "v6",
+              "href": "https://ckluis.github.io/baton/baton-v6.html"
             }
           ],
           "preview": "groups/agent-tools/baton/preview.svg",
-          "alt": "baton v5 — work routed to three tiers (cheap, frontier, a person) while every step lands in a record of evidence, verdicts and gates"
+          "alt": "baton v7.5 — a prime that only dispatches to three sub-orchestrators, each handing back one line of at most 280 bytes into the prime's memory, while a guard refuses the prime's file reads and commands"
         },
         {
           "slug": "luminaryTeam",
@@ -486,7 +486,7 @@
           "github": {
             "stars": 0,
             "forks": 1,
-            "pushed": "2026-07-02T17:51:06Z"
+            "pushed": "2026-10-05T13:18:08Z"
           },
           "line": "a 40-expert adversarial review",
           "question": "What would 40 domain experts find if they reviewed your plan before launch?",
@@ -519,7 +519,7 @@
           "github": {
             "stars": 0,
             "forks": 0,
-            "pushed": "2026-09-13T19:16:50Z"
+            "pushed": "2026-10-05T13:17:43Z"
           },
           "line": "token compression for coding agents",
           "question": "How many tokens could a coding agent skip if every read were compressed before it arrived?",
