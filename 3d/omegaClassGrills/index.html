@@ -1,3 +1,6 @@
+<!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>omegaClass — One cabinet. Every fire.</title>
@@ -6,7 +9,7 @@
 <meta property="og:site_name" content="ckluis / experiments">
 <meta property="og:url" content="https://ckluis.github.io/experiments/3d/omegaClassGrills/">
 <meta property="og:title" content="omegaClass — One cabinet. Every fire.">
-<meta property="og:description" content="One wide sealed stainless cabinet that opens into a full outdoor fire station in three zones: a prep + sink counter, a brasero-fed Argentine parrilla, and a vertical rack smoker.">
+<meta property="og:description" content="One wide sealed stainless cabinet that opens into a full outdoor fire station in three zones: a prep + sink counter, a brasero-fed Argentine parrilla, and a vertical rack smoker — built so an asador and a pitmaster can cook at once.">
 <meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-omegaClassGrills.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -15,14 +18,19 @@
 <meta name="twitter:site" content="@ckluis">
 <meta name="twitter:creator" content="@ckluis">
 <meta name="twitter:title" content="omegaClass — One cabinet. Every fire.">
-<meta name="twitter:description" content="One wide sealed stainless cabinet that opens into a full outdoor fire station in three zones: a prep + sink counter, a brasero-fed Argentine parrilla, and a vertical rack smoker.">
+<meta name="twitter:description" content="One wide sealed stainless cabinet that opens into a full outdoor fire station in three zones: a prep + sink counter, a brasero-fed Argentine parrilla, and a vertical rack smoker — built so an asador and a pitmaster can cook at once.">
 <meta name="twitter:image" content="https://ckluis.github.io/experiments/previews/social-omegaClassGrills.png">
 <meta name="description" content="omegaClass — one wide sealed stainless cabinet that opens into a full outdoor fire station: a brasero-fed parrilla, a vertical smoker with racks, and a prep + sink counter, sheltered by two lift-up roofs. Built so a master asador and a master pitmaster can both work it at once.">
+<meta name="theme-color" content="#0b0b0d">
 <link rel="stylesheet" href="style.css">
 <script defer src="vendor/three.min.js"></script>
 <script defer src="vendor/OrbitControls.js"></script>
 <script defer src="src/grillModel.js"></script>
 <script defer src="src/app.js"></script>
+</head>
+<body>
+
+<a href="../../index.html" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
 
 <!-- ============================ NAV ============================ -->
 <header class="nav" id="top">
@@ -31,241 +39,311 @@
     <span class="nav__word">omegaClass</span>
   </a>
   <nav class="nav__links" aria-label="Primary">
-    <a href="#story">The cabinet</a>
-    <a href="#zones">The zones</a>
-    <a href="#postures">Postures</a>
+    <a href="#idea">The idea</a>
+    <a href="#zones">Three zones</a>
     <a href="#configurator">Configure</a>
-    <a href="#reserve" class="nav__cta">Reserve</a>
+    <a href="#specs">Specs</a>
+    <a href="#plan" class="nav__cta">The plan</a>
   </nav>
 </header>
 
+<main>
 <!-- ============================ HERO ============================ -->
 <section class="hero" id="hero">
-  <img class="hero__bg" src="assets/hero.png" alt="omegaClass open fire station with both roofs raised and the fires lit" fetchpriority="high">
+  <div class="hero__media" aria-hidden="true">
+    <img class="hero__bg" src="assets/hero.png" alt="" fetchpriority="high">
+  </div>
   <div class="hero__scrim" aria-hidden="true"></div>
   <div class="hero__inner">
-    <p class="hero__eyebrow reveal">Ω &nbsp;·&nbsp; A whole asado + smoke station in one cabinet</p>
-    <h1 class="hero__title reveal">
+    <p class="hero__eyebrow">Ω &nbsp;·&nbsp; An asado + smoke station in one cabinet</p>
+    <h1 class="hero__title">
       <span class="hero__word">omega</span><span class="hero__word hero__word--molten">Class</span>
     </h1>
-    <p class="hero__tag reveal">One cabinet. Every fire.</p>
-    <p class="hero__sub reveal">A wide sealed stainless cabinet that opens into a full outdoor fire station — a brasero-fed parrilla, a vertical rack smoker, and a prep + sink counter, sheltered by two lift-up roofs. Built so a master asador and a master pitmaster can both work it at once.</p>
-    <div class="hero__cta reveal">
-      <a href="#configurator" class="btn btn--molten">Configure it <span aria-hidden="true">↓</span></a>
-      <a href="#reserve" class="btn btn--ghost">Reserve yours</a>
+    <p class="hero__tag">One cabinet. Every fire.</p>
+    <p class="hero__sub">A wide, sealed stainless cabinet that opens into a full outdoor fire station — a prep&nbsp;+&nbsp;sink counter, a brasero-fed Argentine parrilla and a vertical rack smoker, under two lift-up roofs. Laid out so an asador and a pitmaster can both cook at once.</p>
+    <div class="hero__cta">
+      <a href="#configurator" class="btn btn--molten">Open it in 3D <span aria-hidden="true">↓</span></a>
+      <a href="#plan" class="btn btn--ghost">Read the plan</a>
     </div>
   </div>
-  <div class="hero__scroll" aria-hidden="true"><span>Scroll</span></div>
 </section>
 
-<!-- ============================ THE STORY ============================ -->
-<section class="section story" id="story">
+<!-- ============================ THE IDEA: closed → open ============================ -->
+<section class="section idea" id="idea">
   <div class="section__head reveal">
-    <p class="kicker">Built for two masters</p>
-    <h2 class="display">One sealed cabinet.<br>A full fire station inside.</h2>
-    <p class="lede">Closed, omegaClass is a single weatherproof stainless monolith on leveling feet. Open, it becomes a complete outdoor fire station — laid out left to right so an asador and a pitmaster can each work their own fire without ever fighting for space.</p>
+    <p class="kicker">The idea</p>
+    <h2 class="display">Closed, it’s furniture.<br><span class="molten-text">Open, it’s a fire station.</span></h2>
+    <p class="lede">Serious outdoor cooks buy one fire, then build a kitchen around it — counters, a sink, shelter — and it never packs away. omegaClass puts the whole station in one stainless cabinet that locks shut, weatherproof, when you’re done.</p>
   </div>
 
-  <figure class="story__hero reveal">
-    <img src="assets/open-station.png" alt="omegaClass fully open and revealed: prep and sink, brasero and parrilla, and the vertical smoker, all sheltered by two raised roofs" loading="lazy">
-    <figcaption class="story__cap">
-      <span class="story__cap-k">Open Station</span>
-      Both roofs up — prep + sink, the brasero-fed parrilla, and the sealed vertical smoker, all revealed and sheltered under two lift-up lids.
+  <div class="duo">
+    <figure class="frame duo__a reveal">
+      <div class="frame__img"><img src="assets/closed.png" alt="omegaClass closed: one sealed stainless cabinet with a flue on top, on leveling feet" loading="lazy" width="1500" height="950"></div>
+      <figcaption class="frame__cap"><span class="frame__k">Closed</span> A sealed, lockable stainless monolith on leveling feet. Every fire, sink and drawer is inside.</figcaption>
+    </figure>
+    <div class="duo__arrow" aria-hidden="true">
+      <span class="duo__arrow-line"></span>
+      <span class="duo__arrow-label">lift two roofs</span>
+    </div>
+    <figure class="frame duo__b reveal">
+      <div class="frame__img"><img src="assets/open-station.png" alt="omegaClass open: both roofs raised over prep and sink, brasero and parrilla, and the vertical smoker" loading="lazy" width="1500" height="950"></div>
+      <figcaption class="frame__cap"><span class="frame__k">Open</span> Two roofs rise overhead and three working zones appear at a ~92&nbsp;cm counter.</figcaption>
+    </figure>
+  </div>
+
+  <dl class="facts reveal" aria-label="Key dimensions">
+    <div class="fact"><dt>Width</dt><dd>240<small>cm</small></dd></div>
+    <div class="fact"><dt>Depth</dt><dd>68<small>cm</small></dd></div>
+    <div class="fact"><dt>Height, closed</dt><dd>205<small>cm</small></dd></div>
+    <div class="fact"><dt>Counter</dt><dd>~92<small>cm</small></dd></div>
+    <div class="fact"><dt>Roof edge, open</dt><dd>~230<small>cm</small></dd></div>
+    <div class="fact"><dt>Mass</dt><dd>~300<small>kg</small></dd></div>
+  </dl>
+</section>
+
+<!-- ============================ THREE ZONES / TWO MASTERS ============================ -->
+<section class="section zones" id="zones">
+  <div class="section__head reveal">
+    <p class="kicker">Three zones · two masters</p>
+    <h2 class="display">Each cook gets<br>their own fire.</h2>
+    <p class="lede">An asador and a pitmaster want different things. One wants a brasero, a rake and a crank grate. The other wants sealed, insulated racks and a fire he can tend without opening the chamber. omegaClass lays them out side by side, left to right, with a shared prep counter, so neither has to wait for the other.</p>
+  </div>
+
+  <figure class="elev reveal">
+    <div class="elev__draw">
+      <svg viewBox="-62 -6 384 316" role="img" aria-labeledby="elev-t elev-d">
+        <title id="elev-t">Front elevation of omegaClass, open, drawn to scale</title>
+        <desc id="elev-d">A 240 cm wide cabinet split into three zones: A, prep and sink, about 60 cm; B, brasero and crank parrilla, about 90 cm; C, vertical smoker, about 90 cm. The counter is at about 92 cm. Two roofs are raised with their front edges at about 230 cm. Two cooks stand at the cabinet: the asador in front of zone B and the pitmaster in front of zone C.</desc>
+        <defs>
+          <linearGradient id="g-steel" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2a2c31"/><stop offset="1" stop-color="#18191c"/></linearGradient>
+          <linearGradient id="g-fire" x1="0" x2="0" y1="1" y2="0"><stop offset="0" stop-color="#ff5e1e"/><stop offset="1" stop-color="#ffab40" stop-opacity="0"/></linearGradient>
+          <pattern id="p-logs" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="3.6" fill="none" stroke="#a9743f" stroke-width="1"/></pattern>
+        </defs>
+        <!-- zone tints -->
+        <rect class="z z--a" x="0" y="75" width="60" height="191"/>
+        <rect class="z z--b" x="60" y="75" width="90" height="191"/>
+        <rect class="z z--c" x="150" y="75" width="90" height="191"/>
+        <!-- flue (behind roof) -->
+        <rect class="ln" x="212" y="55" width="10" height="22" fill="#18191c"/>
+        <!-- carcass -->
+        <rect class="ln ln--h" x="0" y="75" width="240" height="191" fill="none"/>
+        <line class="ln" x1="60" y1="75" x2="60" y2="266"/>
+        <line class="ln" x1="150" y1="75" x2="150" y2="266"/>
+        <!-- feet -->
+        <rect class="ln" x="8" y="266" width="8" height="4"/><rect class="ln" x="224" y="266" width="8" height="4"/>
+        <!-- roofs raised: front edges at ~230 cm -->
+        <line class="ln ln--soft" x1="20" y1="76" x2="34" y2="46"/><line class="ln ln--soft" x1="120" y1="76" x2="108" y2="46"/>
+        <line class="ln ln--soft" x1="170" y1="76" x2="180" y2="46"/><line class="ln ln--soft" x1="226" y1="76" x2="216" y2="46"/>
+        <rect class="roof" x="-6" y="38" width="155" height="7" rx="1.5"/>
+        <rect class="roof" x="151" y="38" width="95" height="7" rx="1.5"/>
+        <rect x="-6" y="45" width="155" height="2" fill="#ffd7a8" opacity=".55"/>
+        <rect x="151" y="45" width="95" height="2" fill="#ffd7a8" opacity=".55"/>
+        <!-- ZONE A: counter, sink, faucet, cabinets -->
+        <rect class="wood" x="1" y="174" width="59" height="4"/>
+        <path class="ln" d="M14 174 v-4 h22 v4" fill="none"/>
+        <path class="ln" d="M33 170 v-20 q0 -7 -7 -7 q-6 0 -6 6" fill="none"/>
+        <rect class="ln" x="4" y="184" width="24" height="76" rx="1" fill="none"/>
+        <rect class="ln" x="32" y="184" width="24" height="22" rx="1" fill="none"/>
+        <rect class="ln" x="32" y="211" width="24" height="22" rx="1" fill="none"/>
+        <rect class="ln" x="32" y="238" width="24" height="22" rx="1" fill="none"/>
+        <!-- ZONE B: hanging rack, brasero, parrilla on crank, wood store -->
+        <line class="ln ln--soft" x1="96" y1="120" x2="146" y2="120"/>
+        <line class="ln ln--soft" x1="104" y1="120" x2="104" y2="132"/><line class="ln ln--soft" x1="122" y1="120" x2="122" y2="130"/><line class="ln ln--soft" x1="138" y1="120" x2="138" y2="134"/>
+        <rect class="ln" x="64" y="150" width="33" height="28" fill="#111214"/>
+        <path d="M68 172 q4 -14 8 -4 q3 -12 7 -2 q4 -14 9 -1 v7 h-24z" fill="url(#g-fire)"/>
+        <rect x="66" y="172" width="29" height="5" fill="#ff6a24" opacity=".9"/>
+        <path class="ln ln--molten" d="M97 168 h52 M101 168 v-3 M107 168 v-3 M113 168 v-3 M119 168 v-3 M125 168 v-3 M131 168 v-3 M137 168 v-3 M143 168 v-3"/>
+        <rect x="98" y="174" width="51" height="4" fill="#ff6a24" opacity=".75"/>
+        <path d="M104 167 q3 -10 6 -2 q4 -12 7 -1 q3 -9 6 0 q3 -11 7 -1 q3 -8 6 1" fill="none" stroke="#ffab40" stroke-width="1.2" opacity=".9"/>
+        <path class="dim" d="M153 168 h6 M153 153 h6 M156 168 v-15"/>
+        <rect x="64" y="186" width="33" height="74" fill="url(#p-logs)" stroke="#3a3c42" stroke-width=".8"/>
+        <rect class="ln" x="102" y="184" width="22" height="76" rx="1" fill="none"/>
+        <rect class="ln" x="126" y="184" width="22" height="76" rx="1" fill="none"/>
+        <!-- ZONE C: smoker chamber, dual doors, 3 racks, firebox below -->
+        <rect class="ln ln--h" x="156" y="82" width="78" height="100" fill="#141518"/>
+        <line class="ln" x1="195" y1="82" x2="195" y2="182"/>
+        <line class="rack" x1="160" y1="108" x2="230" y2="108"/>
+        <line class="rack" x1="160" y1="134" x2="230" y2="134"/>
+        <line class="rack" x1="160" y1="160" x2="230" y2="160"/>
+        <rect class="ln" x="156" y="188" width="78" height="22" rx="1" fill="none"/>
+        <rect class="ln ln--h" x="156" y="216" width="78" height="44" rx="1" fill="#111214"/>
+        <rect x="166" y="228" width="58" height="10" rx="2" fill="#ff6a24" opacity=".8"/>
+        <path d="M195 214 v-28" stroke="#ffab40" stroke-width="1" stroke-dasharray="2 3" opacity=".8" fill="none"/>
+        <path d="M188 200 l7 -8 l7 8" stroke="#ffab40" stroke-width="1" fill="none" opacity=".8"/>
+        <!-- ZONE LETTERS -->
+        <g class="zl"><circle cx="30" cy="96" r="9"/><text x="30" y="100">A</text></g>
+        <g class="zl"><circle cx="78" cy="96" r="9"/><text x="78" y="100">B</text></g>
+        <!-- COOKS (ghosted, 178 cm) -->
+        <g class="cook cook--b">
+          <circle cx="122" cy="103" r="10.5"/>
+          <path d="M100 126 q0 -9 9 -10 h26 q9 1 9 10 l2 56 h-6 l-2 -30 l-3 118 h-11 l-2 -78 l-2 78 h-11 l-3 -118 l-2 30 h-6z"/>
+        </g>
+        <g class="cook cook--c">
+          <circle cx="198" cy="103" r="10.5"/>
+          <path d="M176 126 q0 -9 9 -10 h26 q9 1 9 10 l2 56 h-6 l-2 -30 l-3 118 h-11 l-2 -78 l-2 78 h-11 l-3 -118 l-2 30 h-6z"/>
+        </g>
+        <g class="zl"><circle cx="168" cy="96" r="9"/><text x="168" y="100">C</text></g>
+        <!-- ground -->
+        <line class="ground" x1="-56" y1="270" x2="316" y2="270"/>
+        <!-- DIMENSIONS -->
+        <g class="dim">
+          <path d="M0 280 v10 M240 280 v10 M0 286 h240"/>
+          <path d="M-14 75 h-10 M-14 270 h-10 M-19 75 v195"/>
+          <path d="M-36 174 h-10 M-41 174 v96"/>
+          <path d="M252 40 h10 M257 40 v230"/>
+        </g>
+        <g class="dimt">
+          <text x="120" y="302">240 cm</text>
+          <text x="-23" y="168" transform="rotate(-90 -23 168)">205 closed</text>
+          <text x="-45" y="226" transform="rotate(-90 -45 226)">92</text>
+          <text x="267" y="160" transform="rotate(90 267 160)">~230 roof edge</text>
+          <text x="164" y="146" class="dimt--s">15</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption class="elev__legend">
+      <div class="lg lg--a"><span class="lg__k">A</span><div><b>Prep + sink</b><span>~60 cm · shared by both cooks</span></div></div>
+      <div class="lg lg--b"><span class="lg__k">B</span><div><b>Brasero + crank parrilla</b><span>~90 cm · the asador</span></div></div>
+      <div class="lg lg--c"><span class="lg__k">C</span><div><b>Vertical rack smoker</b><span>~90 cm · the pitmaster</span></div></div>
+      <p class="elev__note">Front elevation, open, to scale (1 unit = 1 cm). Ghosted figures are 178 cm tall.</p>
     </figcaption>
   </figure>
 
-  <div class="story__split">
-    <figure class="story__fig reveal">
-      <img src="assets/closed.png" alt="omegaClass closed — a clean sealed stainless cabinet with a flue on top" loading="lazy">
+  <!-- Zone cards, in physical order A → B → C -->
+  <div class="zcards">
+    <article class="zc zc--a reveal">
+      <div class="frame__img"><img src="assets/detail-prep.png" alt="Prep zone close-up: stainless sink with gooseneck faucet, wood cutting board, counter and lower storage" loading="lazy" width="1500" height="950"></div>
+      <div class="zc__body">
+        <p class="zc__k"><span class="zc__letter">A</span> Shared · ~60 cm</p>
+        <h3 class="zc__t">Prep, sink &amp; storage</h3>
+        <p class="zc__p">The landing counter an asador needs beside the fire and the wrap station a pitmaster needs beside the smoker, built as one surface.</p>
+        <ul class="chips">
+          <li>Butcher-block counter, ~92 cm</li>
+          <li>Stainless sink + gooseneck</li>
+          <li>Cutting board</li>
+          <li>Cabinets, drawers, tool hooks</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="zc zc--b reveal">
+      <div class="frame__img"><img src="assets/detail-parrilla.png" alt="Parrilla zone close-up: brasero embers, crank-lift grate with flames, overhead hanging rack and a wood store below" loading="lazy" width="1500" height="950"></div>
+      <div class="zc__body">
+        <p class="zc__k"><span class="zc__letter">B</span> The asador · ~90 cm</p>
+        <h3 class="zc__t">Brasero &amp; crank parrilla</h3>
+        <ol class="steps">
+          <li><b>Burn</b> wood down to embers in a separate ~35 cm brasero.</li>
+          <li><b>Rake</b> glowing coals sideways under the grate.</li>
+          <li><b>Crank</b> the ~55 cm V-channel grate through ~15 cm to set the heat.</li>
+          <li><b>Plate</b> on the counter right beside it. Fat drains to a grease cup.</li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="zc zc--c reveal">
+      <div class="frame__img"><img src="assets/detail-smoker.png" alt="Smoker close-up: dual cabinet doors open on three stacked racks over a firebox below" loading="lazy" width="1500" height="950"></div>
+      <div class="zc__body">
+        <p class="zc__k"><span class="zc__letter">C</span> The pitmaster · ~90 cm</p>
+        <h3 class="zc__t">Vertical rack smoker</h3>
+        <ol class="steps">
+          <li><b>Load</b> three stacked racks through dual doors hinged at the outer edges.</li>
+          <li><b>Seal</b> the gasketed doors on an insulated double-wall chamber.</li>
+          <li><b>Tend</b> the firebox below without opening the chamber. Smoke rises through the food.</li>
+          <li><b>Wrap</b> on the shared counter. Low racks run hotter, high racks cooler.</li>
+        </ol>
+      </div>
+    </article>
+  </div>
+
+  <!-- Overhead -->
+  <div class="roofs reveal">
+    <figure class="frame roofs__img">
+      <div class="frame__img"><img src="assets/asado.png" alt="omegaClass in asado posture: both roofs raised, flames over the parrilla, smoker sealed" loading="lazy" width="1500" height="950"></div>
     </figure>
-    <div class="story__copy reveal">
-      <p class="story__no">Ω / the craft</p>
-      <h3 class="story__title">Made to be lived with for a lifetime.</h3>
-      <p class="story__body">Marine 304/316 stainless, brushed and polished, folded and welded into one clean carcass — <strong>240 × 68 × 205 cm</strong>, roughly <strong>300 kg</strong> of grounded steel on adjustable leveling feet. Warm butcher-block counters. Corrugated roof undersides. Visible gas struts. Every seam and reveal is meant to be seen up close.</p>
-      <p class="story__body">Sealed, it locks away weatherproof — a quiet monolith on the terrace. It is not a parts-bin outdoor kitchen. It is one considered object, engineered end to end, built to outlast the people who cook on it.</p>
-      <ul class="story__ticks">
-        <li>Marine 304 / 316 stainless</li>
-        <li>Handmade, welded &amp; polished</li>
-        <li>Two lift-up roofs on gas struts</li>
-        <li>Locks weatherproof shut</li>
-      </ul>
+    <div class="roofs__copy">
+      <p class="kicker">Overhead</p>
+      <h3 class="roofs__t">Two roofs. Raise only the one you’re using.</h3>
+      <p class="roofs__p">The top of the cabinet is two independent lids. Each one hinges at the top-back and lifts up and forward about 100° on visible gas struts. Raised, it becomes a roof over the cook, front edge at ~230&nbsp;cm, with a task light underneath. Lowered, it seals the top against a weather gasket.</p>
+      <dl class="mini">
+        <div><dt>Lid L</dt><dd>Covers prep + parrilla</dd></div>
+        <div><dt>Lid R</dt><dd>Covers the smoker</dd></div>
+        <div><dt>Lift</dt><dd>Gas struts, one hand, locks at full raise</dd></div>
+        <div><dt>Wind</dt><dd>Designed load case; lower in high wind</dd></div>
+      </dl>
     </div>
   </div>
 </section>
 
-<!-- ============================ THE THREE ZONES ============================ -->
-<section class="section zones" id="zones">
-  <div class="section__head reveal">
-    <p class="kicker">The anatomy · three zones</p>
-    <h2 class="display">Three fires. One counter.</h2>
-    <p class="lede">Open, the station runs left to right in three zones at a ~92 cm working counter — prep + sink, the asador's brasero and crank parrilla, and the pitmaster's vertical smoker. Wide enough that two masters never share a fire.</p>
-  </div>
-
-  <!-- Zone: Parrilla -->
-  <article class="zone reveal">
-    <figure class="zone__media">
-      <img src="assets/detail-parrilla.png" alt="Close-up of the parrilla zone — brasero embers, crank-lift grate with flames, an overhead hanging rack, and a wood store of split logs below" loading="lazy">
-    </figure>
-    <div class="zone__copy">
-      <p class="zone__no">Ω 01 · the asador</p>
-      <h3 class="zone__title">Brasero &amp; wide crank parrilla</h3>
-      <p class="zone__body">A dedicated <strong>brasero</strong> burns wood and charcoal down to embers; rake the glowing coals under a wide <strong>V-channel parrilla</strong> on a front crank — the real Argentine method. Ride the crank across a ~15 cm range to dial the heat, hang a sausage coil from the overhead rack, and let fat drain to a channel and grease cup. A <strong>wood store</strong> of split dried logs sits right below the fire.</p>
-      <dl class="zone__dl">
-        <div><dt>Brasero</dt><dd>Wood-fired ember maker</dd></div>
-        <div><dt>Parrilla</dt><dd>Wide V-channel grate</dd></div>
-        <div><dt>Crank</dt><dd>~15 cm height range</dd></div>
-        <div><dt>Fuel</dt><dd>Wood store + hanging rack</dd></div>
-      </dl>
-    </div>
-  </article>
-
-  <!-- Zone: Smoker -->
-  <article class="zone zone--flip reveal">
-    <figure class="zone__media">
-      <img src="assets/detail-smoker.png" alt="Close-up of the vertical smoker with its dual cabinet doors open on three stacked racks over a firebox below" loading="lazy">
-    </figure>
-    <div class="zone__copy">
-      <p class="zone__no">Ω 02 · the pitmaster</p>
-      <h3 class="zone__title">The vertical smoker</h3>
-      <p class="zone__body">An insulated double-wall chamber with <strong>dual cabinet doors</strong> hinged at the outer edges and <strong>three stacked racks</strong> inside. A <strong>firebox below</strong> drives heat and clean smoke up through a baffle and out a top flue with a damper and cap — a true vertical cabinet smoker. Seal the doors and smoke rises through the food; it shows at the flue while it runs low and slow.</p>
-      <dl class="zone__dl">
-        <div><dt>Chamber</dt><dd>Insulated double-wall</dd></div>
-        <div><dt>Doors</dt><dd>Dual, hinged outer edges</dd></div>
-        <div><dt>Racks</dt><dd>Three stacked</dd></div>
-        <div><dt>Draft</dt><dd>Firebox below + damped flue</dd></div>
-      </dl>
-    </div>
-  </article>
-
-  <!-- Zone: Prep -->
-  <article class="zone reveal">
-    <figure class="zone__media">
-      <img src="assets/detail-prep.png" alt="Close-up of the prep zone — a stainless sink with gooseneck faucet, a wood cutting board, open counter and lower storage" loading="lazy">
-    </figure>
-    <div class="zone__copy">
-      <p class="zone__no">Ω 03 · the shared zone</p>
-      <h3 class="zone__title">Sink, counter &amp; storage</h3>
-      <p class="zone__body">The shared left zone is a real prep station: a stainless / butcher-block <strong>counter</strong> at ~92 cm, a stainless <strong>sink</strong> with a gooseneck faucet, and a wood <strong>cutting board</strong> — the surface both masters use to prep, plate and wrap. Below, lower cabinets and drawers keep tools inside the sealed box. Closed, the whole station locks away weatherproof.</p>
-      <dl class="zone__dl">
-        <div><dt>Counter</dt><dd>Butcher-block, ~92 cm</dd></div>
-        <div><dt>Sink</dt><dd>Stainless bowl + gooseneck</dd></div>
-        <div><dt>Storage</dt><dd>Lower cabinets + drawers</dd></div>
-        <div><dt>Roofs</dt><dd>Two lids, front edge ~230 cm</dd></div>
-      </dl>
-    </div>
-  </article>
-</section>
-
-<!-- ============================ POSTURES GALLERY ============================ -->
-<section class="section postures" id="postures">
-  <div class="section__head reveal">
-    <p class="kicker">Postures gallery</p>
-    <h2 class="display">From sealed cabinet<br>to full fire station.</h2>
-    <p class="lede">Four states, one station — the sealed monolith, both roofs raised, the asador's flames up, and the pitmaster's smoker loaded on its racks.</p>
-  </div>
-
-  <div class="gallery">
-    <figure class="shot reveal">
-      <img src="assets/closed.png" alt="omegaClass closed — a sealed stainless cabinet" loading="lazy">
-      <figcaption class="shot__cap">
-        <span class="shot__no">Ω 01</span>
-        <span class="shot__label">Closed</span>
-        <span class="shot__text">One sealed stainless cabinet on leveling feet — weatherproof and locked. 240×68×205 cm.</span>
-      </figcaption>
-    </figure>
-    <figure class="shot reveal">
-      <img src="assets/open-station.png" alt="omegaClass open station — both roofs up, everything revealed and cold" loading="lazy">
-      <figcaption class="shot__cap">
-        <span class="shot__no">Ω 02</span>
-        <span class="shot__label">Open Station</span>
-        <span class="shot__text">Both roofs up — brasero, wide parrilla, sink and counter, and the sealed smoker, all revealed and sheltered.</span>
-      </figcaption>
-    </figure>
-    <figure class="shot reveal">
-      <img src="assets/asado.png" alt="omegaClass in asado — brasero lit, flames over the parrilla, smoker running sealed" loading="lazy">
-      <figcaption class="shot__cap">
-        <span class="shot__no">Ω 03</span>
-        <span class="shot__label">Asado</span>
-        <span class="shot__text">Brasero lit, coals raked under the parrilla, flames up — and the smoker running sealed, smoke curling from its flue.</span>
-      </figcaption>
-    </figure>
-    <figure class="shot reveal">
-      <img src="assets/smoker.png" alt="omegaClass loading the smoker — cookbox doors open on three racks, firebox glowing below" loading="lazy">
-      <figcaption class="shot__cap">
-        <span class="shot__no">Ω 04</span>
-        <span class="shot__label">Load the Smoker</span>
-        <span class="shot__text">Cookbox doors open on three racks, firebox glowing below — a vertical smoker, smoke rising through the food.</span>
-      </figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ============================ THE CONFIGURATOR (the one live 3D) ============================ -->
-<section class="section config" id="configurator">
-  <div class="section__head reveal">
-    <p class="kicker">Interactive · the one live model</p>
-    <h2 class="display">Configure the station.</h2>
-    <p class="lede">This one is live. Drag to orbit the real 3D model, then lift the roofs, open the smoker, and light the fires — or drop into a posture and watch the station move.</p>
-  </div>
-
-  <div class="config__stage reveal">
-    <div class="config__canvas-wrap">
-      <div class="viz" data-viz="config">
-        <div class="viz__fallback" hidden>
-          <div class="fallback__omega">Ω</div>
-          <p class="fallback__title">Live configurator unavailable</p>
-          <p class="fallback__body">WebGL is required to drive the 3D model. The postures gallery and full spec above cover every state.</p>
-          <p class="viz__diag" aria-hidden="true"></p>
-        </div>
-      </div>
-      <div class="config__caption">
-        <p class="config__posture" id="config-posture-label">Closed</p>
-        <p class="config__cap" id="config-caption">One sealed stainless cabinet on leveling feet — weatherproof and locked. 240×68×205 cm.</p>
-      </div>
+<!-- ============================ CONFIGURATOR ============================ -->
+<section class="config" id="configurator">
+  <div class="config__inner">
+    <div class="section__head section__head--center reveal">
+      <p class="kicker">Live 3D · the model</p>
+      <h2 class="display">Open it yourself.</h2>
+      <p class="lede">The same parametric model that made every render on this page. Drag to orbit. Pick a posture, or drive the three controls one at a time.</p>
     </div>
 
-    <div class="config__controls">
-      <div class="presets" role="group" aria-label="Posture presets">
-        <button class="preset is-active" data-posture="closed">Closed</button>
-        <button class="preset" data-posture="station">Open Station</button>
-        <button class="preset" data-posture="asado">Asado</button>
-        <button class="preset" data-posture="smoker">Load the Smoker</button>
+    <div class="stage">
+      <div class="stage__view">
+        <div class="viz" data-viz="config">
+          <img class="viz__poster" src="assets/open-station.png" alt="omegaClass open station render, shown when the live 3D model is not running" width="1500" height="950">
+          <p class="viz__nojs">Static render · live 3D needs JavaScript</p>
+          <div class="viz__fallback" hidden>
+            <div class="fallback__omega">Ω</div>
+            <p class="fallback__title">Live configurator unavailable</p>
+            <p class="fallback__body">This browser has no WebGL, so you are looking at a static render. The renders above cover every posture.</p>
+            <p class="viz__diag" aria-hidden="true"></p>
+          </div>
+          <span class="viz__hint" aria-hidden="true">Drag to orbit</span>
+        </div>
+        <div class="stage__caption" aria-live="polite">
+          <p class="stage__posture" id="config-posture-label">Open Station</p>
+          <p class="stage__cap" id="config-caption">Both roofs up — brasero, wide parrilla, sink and counter, and the sealed smoker, all revealed and sheltered.</p>
+        </div>
       </div>
 
-      <div class="scrub" data-axis="roof">
-        <div class="scrub__top">
-          <label for="scrub-roof">Open the roof</label>
-          <output id="out-roof">0%</output>
+      <div class="stage__panel">
+        <p class="panel__k">Postures</p>
+        <div class="presets" role="group" aria-label="Posture presets">
+          <button class="preset" data-posture="closed" type="button">
+            <img src="assets/closed.png" alt="" loading="lazy" width="1500" height="950">
+            <span class="preset__l"><span class="preset__n">01</span>Closed</span>
+          </button>
+          <button class="preset is-active" data-posture="station" type="button">
+            <img src="assets/open-station.png" alt="" loading="lazy" width="1500" height="950">
+            <span class="preset__l"><span class="preset__n">02</span>Open Station</span>
+          </button>
+          <button class="preset" data-posture="asado" type="button">
+            <img src="assets/asado.png" alt="" loading="lazy" width="1500" height="950">
+            <span class="preset__l"><span class="preset__n">03</span>Asado</span>
+          </button>
+          <button class="preset" data-posture="smoker" type="button">
+            <img src="assets/smoker.png" alt="" loading="lazy" width="1500" height="950">
+            <span class="preset__l"><span class="preset__n">04</span>Load the Smoker</span>
+          </button>
         </div>
-        <input type="range" id="scrub-roof" min="0" max="100" value="0" step="1" aria-label="Open the roof">
-        <p class="scrub__hint">Both lids sealed ↔ lifted into high overhead roofs · station revealed</p>
-      </div>
 
-      <div class="scrub" data-axis="doors">
-        <div class="scrub__top">
-          <label for="scrub-doors">Open the smoker</label>
-          <output id="out-doors">0%</output>
+        <p class="panel__k">Controls</p>
+        <div class="scrub">
+          <div class="scrub__top"><label for="scrub-roof">Open the roofs</label><output id="out-roof" for="scrub-roof">100%</output></div>
+          <input type="range" id="scrub-roof" min="0" max="100" value="100" step="1">
+          <p class="scrub__hint">Lids sealed ↔ raised into overhead roofs</p>
         </div>
-        <input type="range" id="scrub-doors" min="0" max="100" value="0" step="1" aria-label="Open the smoker">
-        <p class="scrub__hint">Dual doors sealed ↔ swung open · three racks revealed</p>
-      </div>
-
-      <div class="scrub" data-axis="fire">
-        <div class="scrub__top">
-          <label for="scrub-fire">Light the fires</label>
-          <output id="out-fire">0%</output>
+        <div class="scrub">
+          <div class="scrub__top"><label for="scrub-doors">Open the smoker</label><output id="out-doors" for="scrub-doors">0%</output></div>
+          <input type="range" id="scrub-doors" min="0" max="100" value="0" step="1">
+          <p class="scrub__hint">Dual doors shut ↔ swung open on three racks</p>
         </div>
-        <input type="range" id="scrub-fire" min="0" max="100" value="0" step="1" aria-label="Light the fires">
-        <p class="scrub__hint">Cold ↔ brasero + parrilla flames · smoker firebox glowing · flue smoke when the doors are shut</p>
-      </div>
-
-      <div class="scrub scrub--minor" data-axis="grate">
-        <div class="scrub__top">
-          <label for="scrub-grate">Grate height</label>
-          <output id="out-grate">40%</output>
+        <div class="scrub">
+          <div class="scrub__top"><label for="scrub-fire">Light the fires</label><output id="out-fire" for="scrub-fire">0%</output></div>
+          <input type="range" id="scrub-fire" min="0" max="100" value="0" step="1">
+          <p class="scrub__hint">Cold ↔ brasero, parrilla and firebox lit. Flue smoke shows when the doors are shut.</p>
         </div>
-        <input type="range" id="scrub-grate" min="0" max="100" value="40" step="1" aria-label="Grate height">
-        <p class="scrub__hint">Low sear ↔ gentle · ~15 cm crank range</p>
+        <div class="scrub scrub--minor">
+          <div class="scrub__top"><label for="scrub-grate">Grate height</label><output id="out-grate" for="scrub-grate">40%</output></div>
+          <input type="range" id="scrub-grate" min="0" max="100" value="40" step="1">
+          <p class="scrub__hint">Low sear ↔ gentle, across ~15 cm of crank travel</p>
+        </div>
       </div>
     </div>
   </div>
@@ -275,68 +353,136 @@
 <section class="section specs" id="specs">
   <div class="section__head reveal">
     <p class="kicker">The specification</p>
-    <h2 class="display">Every number is real.</h2>
-    <p class="lede">A complete asado + smoke station that seals into one weatherproof stainless cabinet — engineered on paper, end to end.</p>
+    <h2 class="display">Built to outlast<br>the people cooking on it.</h2>
+    <p class="lede">Marine stainless, folded, TIG-welded and polished into one carcass. The numbers below come from the concept plan; performance figures are design targets until a prototype measures them.</p>
   </div>
 
-  <div class="spectable reveal">
-    <div class="spectable__scroll">
+  <div class="specgrid reveal">
+    <div class="spec"><p class="spec__k">Cabinet</p><p class="spec__v">240 × 68 × 205 cm</p><p class="spec__d">Marine 304/316 stainless on adjustable leveling feet. Sealed and lockable.</p></div>
+    <div class="spec"><p class="spec__k">Roofs</p><p class="spec__v">2 lids · ~100° lift</p><p class="spec__d">Corrugated undersides, gas struts, mechanical locks, task lights. Front edge ~230 cm.</p></div>
+    <div class="spec"><p class="spec__k">Parrilla</p><p class="spec__v">~55 cm · ~15 cm crank</p><p class="spec__d">V-channel grate fed by a ~35 cm brasero. Hanging rack, grease channel and cup.</p></div>
+    <div class="spec"><p class="spec__k">Smoker</p><p class="spec__v">3 racks · 2 doors</p><p class="spec__d">Insulated double wall, firebox below, baffle, intake damper, damped top flue.</p></div>
+    <div class="spec"><p class="spec__k">Prep</p><p class="spec__v">~92 cm counter</p><p class="spec__d">Stainless sink, gooseneck faucet, butcher-block accent, cabinets and drawers.</p></div>
+    <div class="spec"><p class="spec__k">Fuel</p><p class="spec__v">Wood + charcoal</p><p class="spec__d">A charcoal and wood purist’s station. Wood store under the brasero.</p></div>
+  </div>
+
+  <div class="eng">
+    <div class="eng__col reveal">
+      <h3 class="eng__t">Engineering, in three ideas</h3>
+      <div class="idea-row">
+        <p class="idea-row__n">01</p>
+        <div><h4>Heavy low, light high</h4><p>The carcass, smoker chamber, fireboxes and stored fuel sit low in a 240 × 68 cm footprint. The raised lids are light panels, so they add height without moving the center of gravity much.</p></div>
+      </div>
+      <div class="idea-row">
+        <p class="idea-row__n">02</p>
+        <div><h4>A smoker that drafts itself</h4><p>Fire below, racks above, flue on top: the stack effect pulls air in low and pushes smoke out high. Intake and flue dampers meter the burn.</p><p class="formula">ΔP ≈ g · H · (ρ<sub>ambient</sub> − ρ<sub>flue</sub>)</p></div>
+      </div>
+      <div class="idea-row">
+        <p class="idea-row__n">03</p>
+        <div><h4>Insulation that saves fuel</h4><p>A ceramic-fiber double wall (k ≈ 0.06 W/m·K) keeps heat in the chamber. Target: <b>~50–75% less fuel</b> than an uninsulated thin-wall smoker at the same temperature — to be verified by calorimetry.</p></div>
+      </div>
+    </div>
+
+    <figure class="eng__col weight reveal">
+      <h3 class="eng__t">Where the 300 kg goes</h3>
+      <p class="weight__sub">Concept weight budget, by system</p>
+      <ul class="bars" aria-label="Weight budget by system, in kilograms">
+        <li style="--v:80" title="Smoker zone: chamber 28, doors 16, racks 10, firebox 18, flue 8"><span class="bars__l">Smoker zone</span><span class="bars__t"><span class="bars__f"></span></span><span class="bars__v">80 kg</span></li>
+        <li style="--v:78" title="Carcass 52, back wall 12, base frame and feet 14"><span class="bars__l">Carcass &amp; base</span><span class="bars__t"><span class="bars__f"></span></span><span class="bars__v">78 kg</span></li>
+        <li style="--v:50" title="Two lid panels 36, struts and hinges 14"><span class="bars__l">Two roofs</span><span class="bars__t"><span class="bars__f"></span></span><span class="bars__v">50 kg</span></li>
+        <li style="--v:36" title="Brasero 16, grate and crank 14, ember bed and grease 6"><span class="bars__l">Asador zone</span><span class="bars__t"><span class="bars__f"></span></span><span class="bars__v">36 kg</span></li>
+        <li style="--v:34" title="Counter 12, sink and plumbing 8, cabinets and drawers 14"><span class="bars__l">Prep zone</span><span class="bars__t"><span class="bars__f"></span></span><span class="bars__v">34 kg</span></li>
+        <li style="--v:22" title="Insulation and gaskets 10, lighting and controls 6, hardware 6"><span class="bars__l">Insulation, lights, hardware</span><span class="bars__t"><span class="bars__f"></span></span><span class="bars__v">22 kg</span></li>
+      </ul>
+      <figcaption class="weight__cap">Grouped from the plan’s 20-line budget (PLAN §4.9). Cycle-life target for lids, doors, crank and dampers: ≥10,000 cycles.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ DIFFERENTIATION ============================ -->
+<section class="section compare" id="compare">
+  <div class="section__head reveal">
+    <p class="kicker">Why it doesn’t exist yet</p>
+    <h2 class="display">Everyone sells a piece.<br>Nobody sells the station.</h2>
+    <p class="lede">Each reference product does one thing very well. omegaClass keeps the best idea from each and puts them in one cabinet that closes. The originality is in the integration, not in any single hinge or grate.</p>
+  </div>
+
+  <div class="matrix reveal">
+    <div class="matrix__scroll" tabindex="0" role="region" aria-label="Comparison table">
       <table>
-        <caption class="sr-only">omegaClass full specification</caption>
+        <caption class="sr-only">What each reference category offers compared with omegaClass</caption>
         <thead>
-          <tr><th scope="col">System</th><th scope="col">Spec</th><th scope="col">Detail</th></tr>
+          <tr>
+            <th scope="col">Category</th>
+            <th scope="col">Live-fire parrilla</th>
+            <th scope="col">Low &amp; slow smoke</th>
+            <th scope="col">Sink, counter, storage</th>
+            <th scope="col">Overhead shelter</th>
+            <th scope="col">Closes &amp; locks</th>
+            <th scope="col">Two cooks at once</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>Cabinet</td><td>240 × 68 × 205 cm</td><td>Wide sealed, lockable, weatherproof marine 304/316 stainless on leveling feet</td></tr>
-          <tr><td>Layout</td><td>Three zones</td><td>Left-to-right: prep + sink · brasero + crank parrilla · vertical smoker — two masters at once</td></tr>
-          <tr><td>Mass</td><td>~300 kg</td><td>Grounded all-stainless station; anti-tip weighting for the raised roof lids</td></tr>
-          <tr><td>Counter</td><td>~92 cm</td><td>Stainless / butcher-block working height across the shared prep zone</td></tr>
-          <tr><td>Roof lids</td><td>Two · ~230 cm</td><td>Corrugated-underside lids on gas struts; each lifts up-and-forward into an overhead roof, task lights below</td></tr>
-          <tr><td>Brasero</td><td>Wood-fired</td><td>Burns wood/charcoal to embers; ledge rakes glowing coals under the parrilla; wood store below</td></tr>
-          <tr><td>Parrilla</td><td>~15 cm travel</td><td>Wide V-channel grate on a front crank; overhead hanging rack; fat drains to a grease cup</td></tr>
-          <tr><td>Vertical smoker</td><td>Dual doors · 3 racks</td><td>Insulated chamber; firebox below drives smoke up through a baffle and the racks, out a damped flue</td></tr>
-          <tr><td>Prep</td><td>Sink + counter</td><td>Stainless sink bowl + gooseneck faucet; wood cutting board; lower cabinets and drawers</td></tr>
+          <tr><th scope="row">Argentine parrilla<small>Acuarinox class</small></th><td class="y" data-l="Fire">●</td><td data-l="Smoke">–</td><td data-l="Kitchen">–</td><td data-l="Shelter">–</td><td data-l="Closes">–</td><td data-l="2 cooks">–</td></tr>
+          <tr><th scope="row">Insulated steel cabinet<small>Keveri class</small></th><td data-l="Fire">–</td><td class="y" data-l="Smoke">●</td><td data-l="Kitchen">–</td><td data-l="Shelter">–</td><td data-l="Closes">–</td><td data-l="2 cooks">–</td></tr>
+          <tr><th scope="row">Kamado / ceramic dome</th><td data-l="Fire">–</td><td class="y" data-l="Smoke">●</td><td data-l="Kitchen">–</td><td data-l="Shelter">–</td><td data-l="Closes">–</td><td data-l="2 cooks">–</td></tr>
+          <tr><th scope="row">Vertical / offset smoker</th><td data-l="Fire">–</td><td class="y" data-l="Smoke">●</td><td data-l="Kitchen">–</td><td data-l="Shelter">–</td><td data-l="Closes">–</td><td data-l="2 cooks">–</td></tr>
+          <tr><th scope="row">Prefab outdoor kitchen</th><td class="p" data-l="Fire">◐</td><td class="p" data-l="Smoke">◐</td><td class="y" data-l="Kitchen">●</td><td data-l="Shelter">–</td><td data-l="Closes">–</td><td data-l="2 cooks">–</td></tr>
+          <tr class="us"><th scope="row">omegaClass</th><td class="y" data-l="Fire">●</td><td class="y" data-l="Smoke">●</td><td class="y" data-l="Kitchen">●</td><td class="y" data-l="Shelter">●</td><td class="y" data-l="Closes">●</td><td class="y" data-l="2 cooks">●</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="matrix__note">● does it &nbsp;·&nbsp; ◐ usually one cooking mode &nbsp;·&nbsp; – doesn’t. Categories are public reference points only; no relationship with any company is implied. Source: PLAN §5.2.</p>
   </div>
 </section>
 
-<!-- ============================ RESERVE ============================ -->
-<section class="section reserve" id="reserve">
-  <div class="reserve__inner reveal">
-    <img class="reserve__bg" src="assets/asado.png" alt="" aria-hidden="true" loading="lazy">
-    <div class="reserve__content">
-      <p class="kicker">Reserve</p>
-      <h2 class="reserve__title">Claim a place<br>in the first run.</h2>
-      <p class="reserve__lede">A lifetime asado + smoke station in marine stainless that seals into one weatherproof cabinet — the two roofs, the brasero-fed parrilla, the vertical smoker, the sink and the storage, in a single object. This is a consultative build: reserve, and we walk the full plan with you. Concept reservation, fully refundable.</p>
-      <div class="reserve__price">
-        <div class="price">
-          <span class="price__label">MSRP from</span>
-          <span class="price__amount"><span class="price__cur">$</span>21,000</span>
-          <span class="price__note">Founder's edition · limited first run</span>
-        </div>
-        <div class="price price--deposit">
-          <span class="price__label">Reserve with</span>
-          <span class="price__amount"><span class="price__cur">$</span>500</span>
-          <span class="price__note">Refundable deposit</span>
-        </div>
-      </div>
-      <div class="reserve__cta">
-        <a href="#reserve" class="btn btn--molten btn--lg">Reserve yours</a>
-        <a href="PLAN.md" class="btn btn--ghost btn--lg">Request the full plan</a>
-      </div>
-      <ul class="reserve__ticks">
-        <li>Marine 304/316 stainless</li>
-        <li>Two lids lift into roofs</li>
-        <li>Brasero-fed parrilla</li>
-        <li>Vertical rack smoker</li>
-        <li>Sink + counter + storage</li>
-        <li>Seals weatherproof shut</li>
-      </ul>
+<!-- ============================ THE PLAN ============================ -->
+<section class="section plan" id="plan">
+  <div class="section__head reveal">
+    <p class="kicker">The plan</p>
+    <h2 class="display">Priced against<br>what it replaces.</h2>
+    <p class="lede">A full written plan covers product, engineering, manufacturing, go-to-market and the raise. The headline: more than any single premium appliance, less than a custom outdoor kitchen that can never close.</p>
+  </div>
+
+  <figure class="price reveal">
+    <figcaption class="price__h">Price ranges by category, USD <span>(public reference bands, PLAN §6.5)</span></figcaption>
+    <div class="price__rows">
+      <div class="pr" style="--a:2;--b:7"><span class="pr__l">Premium smoker <small>smoker only</small></span><span class="pr__t"><span class="pr__r"></span></span><span class="pr__v">$2k–$7k</span></div>
+      <div class="pr" style="--a:4;--b:15"><span class="pr__l">Premium parrilla <small>grill only</small></span><span class="pr__t"><span class="pr__r"></span></span><span class="pr__v">$4k–$15k</span></div>
+      <div class="pr" style="--a:15;--b:45"><span class="pr__l">Modular outdoor kitchen <small>installed, permanent</small></span><span class="pr__t"><span class="pr__r"></span></span><span class="pr__v">$15k–$45k+</span></div>
+      <div class="pr" style="--a:20;--b:60"><span class="pr__l">Custom outdoor kitchen <small>installed, permanent</small></span><span class="pr__t"><span class="pr__r"></span></span><span class="pr__v">$20k–$60k+</span></div>
+      <div class="pr pr--us" style="--a:18;--b:24;--m:21"><span class="pr__l">omegaClass <small>reasoned bracket</small></span><span class="pr__t"><span class="pr__r"></span><span class="pr__m"></span></span><span class="pr__v">$21,000</span></div>
+    </div>
+    <div class="price__axis" aria-hidden="true"><span style="--x:0">$0</span><span style="--x:20">$20k</span><span style="--x:40">$40k</span><span style="--x:60">$60k</span></div>
+  </figure>
+
+  <dl class="econ reveal">
+    <div><dt>MSRP, direct</dt><dd>$21,000</dd><p>Middle of an ~$18k–$24k bracket</p></div>
+    <div><dt>Unit cost</dt><dd>~$5.6k <span class="econ__arr">→</span> ~$4.2k</dd><p>Pilot → at scale</p></div>
+    <div><dt>Gross margin</dt><dd>~73% <span class="econ__arr">→</span> ~80%</dd><p>Direct channel</p></div>
+    <div><dt>Seed raise</dt><dd>$3.0M</dd><p>18–24 months to first revenue</p></div>
+  </dl>
+
+  <ol class="road reveal" aria-label="Roadmap">
+    <li class="is-done"><span class="road__w">Now</span><b>Concept</b><p>Thesis, spec, 3D configurator, this plan.</p></li>
+    <li><span class="road__w">Months 0–3</span><b>Seed &amp; foundation</b><p>Close the round. Freeze form, zones and roof geometry.</p></li>
+    <li><span class="road__w">Months 3–9</span><b>Engineering &amp; Alpha</b><p>Real fire in both zones. Measure fuel, heat and rack gradient.</p></li>
+    <li><span class="road__w">Months 9–15</span><b>Certification &amp; pilot</b><p>UL/CE and structural sign-off. A 25-unit pilot fleet.</p></li>
+    <li><span class="road__w">Months 15–24</span><b>Production &amp; launch</b><p>First ~120-unit run against reservations.</p></li>
+  </ol>
+
+  <div class="ask reveal">
+    <div class="ask__copy">
+      <h3 class="ask__t">Read the whole plan.</h3>
+      <p>Market sizing, the 20-line weight budget, an indicative BOM, tooling and NRE, risks and mitigations, and the full roadmap. Every figure in it is a labeled concept-stage estimate.</p>
+    </div>
+    <div class="ask__cta">
+      <a href="PLAN.md" class="btn btn--molten btn--lg">Read PLAN.md</a>
+      <a href="SPEC.md" class="btn btn--ghost btn--lg">Build spec</a>
     </div>
   </div>
 </section>
+</main>
 
 <!-- ============================ FOOTER ============================ -->
 <footer class="footer">
@@ -346,11 +492,15 @@
   </div>
   <p class="footer__tag">One cabinet. Every fire.</p>
   <nav class="footer__nav" aria-label="Footer">
-    <a href="#story">The cabinet</a>
-    <a href="#zones">The zones</a>
+    <a href="#idea">The idea</a>
+    <a href="#zones">Three zones</a>
     <a href="#configurator">Configure</a>
-    <a href="#reserve">Reserve</a>
+    <a href="#specs">Specs</a>
+    <a href="#plan">The plan</a>
     <a href="../../index.html">← Experiments hub</a>
   </nav>
-  <p class="footer__fine">Concept reveal. A 3D product study — real numbers, engineered on paper. Ω</p>
+  <p class="footer__fine">A 3D product concept study. Renders are from the page’s own Three.js model; all market, cost and performance figures are concept-stage estimates from PLAN.md.</p>
 </footer>
+
+</body>
+</html>
