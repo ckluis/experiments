@@ -130,8 +130,8 @@ const num = (it, k) => it.gh
   ? `<span class="c-num${it.gh[k] ? '' : ' zero'}">${it.gh[k]}</span>`
   : `<span class="c-num none" title="${it.repo ? 'not fetched yet' : 'no public repository'}">—</span>`;
 
-const nav = groups.map(g => `<a href="#${g.slug}" data-nav="${g.slug}" style="--g:${g.accent}"><span>${g.num}</span>${esc(g.title)}</a>`).join('');
-const chips = groups.map(g => `<a href="#${g.slug}" data-nav="${g.slug}" style="--g:${g.accent}"><i></i>${esc(g.title)}<span>${g.items.length}</span></a>`).join('');
+const nav = groups.map(g => `<a href="#${g.slug}" data-nav="${g.slug}" style="--g:${g.accent}"><span>${g.num}</span>${esc(g.nav || g.title)}</a>`).join('');
+const chips = groups.map(g => `<a href="#${g.slug}" data-nav="${g.slug}" style="--g:${g.accent}"><i></i>${esc(g.nav || g.title)}<span>${g.items.length}</span></a>`).join('');
 const filters = FILTERS.map(([k, label], i) => {
   const n = k === 'all' ? all.length : all.filter(it => STATUS[it.status].filter === k).length;
   return `<button type="button" data-filter="${k}" aria-pressed="${i === 0}">${label}<span>${n}</span></button>`;
@@ -184,7 +184,7 @@ function section(g) {
     </section>`;
 }
 
-const groupList = groups.map(g => g.title.toLowerCase());
+const groupList = groups.map(g => (g.nav || g.title).toLowerCase());
 const describe = `A field index of ${counts.experiments} experiments by Chris Kluis: ${groupList.slice(0, -1).join(', ')} and ${groupList.at(-1)}. Most built solo in spare hours, all in the open.`;
 
 /* ---------- index.html ---------- */
@@ -207,7 +207,7 @@ const registry = {
   counts,
   stats_fetched: stats.fetched,
   groups: groups.map(g => ({
-    slug: g.slug, folder: `groups/${g.slug}`, number: g.num, title: g.title, line: g.line, accent: g.accent, aliases: g.aliases,
+    slug: g.slug, folder: `groups/${g.slug}`, number: g.num, title: g.title, ...(g.nav ? { nav: g.nav } : {}), line: g.line, accent: g.accent, aliases: g.aliases,
     items: g.items.map(it => ({
       slug: it.slug, folder: it.folder, number: it.num, name: it.name, ...(it.version ? { version: it.version } : {}),
       status: it.status, ...(it.repo ? { repo: it.repo, github: it.gh } : {}),

@@ -1,8 +1,9 @@
 {
   "order": 5,
-  "title": "Field reports",
+  "title": "Experiments in an experimental language",
   "accent": "#3a6ea5",
   "aliases": [],
-  "line": "Long-form notes from building with AI — curve and all.",
-  "blurb": "The Bend series: three projects built by an AI app builder, then measured, broken and fixed in public."
+  "line": "An AI writing a whole stack in Bend? Yes, please.",
+  "blurb": "The Bend series: three projects built by an AI app builder in an experimental language, then measured, broken and fixed in public.",
+  "nav": "Bend experiments"
 }
