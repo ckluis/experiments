@@ -48,7 +48,7 @@
       <nav class="jump reveal d3" aria-label="Sections"><a href="#projects">The three</a><a href="#bend">The language</a><a href="#method">The method</a><a href="#found">What it found</a></nav>
     </div>
     <figure class="spec reveal d2" aria-label="The series at a glance">
-      <div class="lab"><span>The series</span><span>Bend 2.0.32–2.0.34</span></div>
+      <div class="lab"><span>The series</span><span>Bend 2.0.32–2.0.35</span></div>
       <div class="x">1 → 3</div>
       <div class="c">one language · one method · three builds</div>
       <div class="chips">
@@ -75,10 +75,10 @@
       <p class="tl2">A whole backend, <em>one</em> binary.</p>
       <p>HTTP with keep-alive, bearer-key auth with roles, per-credential rate limits, a segmented write-ahead log with HMAC-bound snapshots, 20 REST routes and an MCP endpoint, all one Bend program with no sidecars.</p>
       <div class="pills"><span>Bend 2</span><span>C via clang</span><span>WAL + fsync</span><span>REST</span><span>MCP</span></div>
-      <div class="kv"><div><b>8,777</b><span>lines</span></div><div><b>1.97 MB</b><span>binary</span></div><div><b>12</b><span>C effects</span></div></div>
+      <div class="kv"><div><b>8,793</b><span>lines</span></div><div><b>1.70 MB</b><span>binary</span></div><div><b>12</b><span>C effects</span></div></div>
       <a class="open" href="https://ckluis.github.io/bocht/">Open bocht →</a> <a class="open ghost" href="https://github.com/ckluis/bocht">Source ↗</a>
     </div>
-    <a class="pshot" href="https://ckluis.github.io/bocht/" aria-label="bocht"><img src="assets/cards/bocht.png" width="1200" height="760" alt="bocht: the whole backend as one 1.97 MB arm64 binary"></a>
+    <a class="pshot" href="https://ckluis.github.io/bocht/" aria-label="bocht"><img src="assets/cards/bocht.png" width="1200" height="760" alt="bocht: the whole backend as one 1.70 MB arm64 binary"></a>
   </article>
 
   <article class="ptile flip reveal" style="--glow:rgba(232,137,77,.30)">
@@ -121,7 +121,7 @@
     <div class="lf reveal"><div class="k">Compiles to C</div><p>One C file serves as both the CPU program and the GPU kernel. clang builds a native binary; the same source can emit JS.</p></div>
     <div class="lf reveal d1"><div class="k">Affine by default</div><p>A value is used once unless marked reusable. Matches only work on parameters, there are no forward references, and no mutual recursion.</p></div>
     <div class="lf reveal d2"><div class="k">Strict, so helpers bite</div><p>A <code>pick(cond, a, b)</code> helper evaluates both sides. That one line made the bochtCMS parser quadratic.</p></div>
-    <div class="lf reveal d3"><div class="k">Moving fast</div><p>The builder logged breaking changes in 2.0.27, 2.0.29, 2.0.32 and 2.0.34, four in 12 days. bocht's pinned release no longer builds on the current one.</p></div>
+    <div class="lf reveal d3"><div class="k">Moving fast</div><p>The builder logged breaking changes in 2.0.27, 2.0.29, 2.0.32 and 2.0.34, four in 12 days. Bend 2.0.35 (3 Oct) needed one line, in bocht; the CMS and the shell built unchanged.</p></div>
   </div>
 </div></section>
 
@@ -163,7 +163,7 @@
   <h2>Three builds. Three audits. <em>Every claim re-derived from disk.</em></h2>
   <div class="credits"><div class="credit"><div class="k">Builds</div><p>An AI app builder, under its evidence-first methodology, in Bend 2.0.18–2.0.34.</p></div><div class="credit"><div class="k">Audits &amp; fixes</div><p>Claude Code (Opus 5.5): reproduction, adversarial testing, profiling, minimal fixes, differentials, the shellOS port and redesign.</p></div><div class="credit"><div class="k">Direction</div><p>Chris Kluis: commissioned each evaluation, made the calls, and published the series.</p></div></div>
   <div class="links"><a href="https://bend-lang.com" target="_blank" rel="noopener">Bend ↗</a><a href="https://ckluis.github.io/bocht/">bocht</a><a href="https://ckluis.github.io/bochtCMS/">bochtCMS</a><a href="https://ckluis.github.io/shellOS/">shellOS</a><a href="https://ckluis.github.io/experiments/">All experiments ↗</a></div>
-  <p class="fine">Each program's source is in its own repository: github.com/ckluis/bocht, bochtCMS and shellOS. Measured on one Apple-silicon Mac, Bend 2.0.34, late September 2026.</p>
+  <p class="fine">Each program's source is in its own repository: github.com/ckluis/bocht, bochtCMS and shellOS. Measured on one Apple-silicon Mac, Bend 2.0.34, late September 2026; all three re-verified on Bend 2.0.35, 5 Oct 2026.</p>
 </div></footer>
 <script src="assets/series.js"></script>
 </body>
