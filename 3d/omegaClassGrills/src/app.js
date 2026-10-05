@@ -5,12 +5,12 @@
    collide with grillModel.js globals. Consumes the global
    createOmegaGrill(). NO import/export/module.
 
-   This premium, imagery-led rebuild keeps exactly ONE live 3D view:
-   the Configurator. The hero and the postures gallery are now static
-   pre-rendered images (assets/*.png), so this file drives a SINGLE
-   THREE.WebGLRenderer / scene / camera bound to the one .viz slot in
-   the configurator card. One WebGL context, IIFE-wrapped, graceful
-   fallback + self-diagnostic, reduced-motion honored.
+   The page is imagery-led and complete without JS. This file adds:
+   ONE live 3D view (the configurator) on a single WebGLRenderer that
+   renders on demand and pauses off screen; context-loss / no-WebGL
+   fallbacks back to the static poster render; posture tweens and an
+   intro lift of the roofs; and transform-only scroll reveals (content
+   is never hidden). Reduced motion is honored throughout.
 
    CONCEPT (v6): ONE wide stainless cabinet that opens into a zoned
    outdoor fire station — prep + sink | brasero-fed parrilla | vertical
@@ -64,6 +64,7 @@
   /* Show the configurator's fallback panel + inject a self-diagnostic line. */
   function showFallback(vizEl, errMsg) {
     if (!vizEl) return;
+    vizEl.classList.add("is-fallback");
     var fb = vizEl.querySelector(".viz__fallback");
     if (fb) {
       fb.hidden = false;
@@ -107,19 +108,23 @@
     };
   }
 
-  /* ---------- scroll reveals ---------- */
+  /* ---------- scroll reveals (enhancement only) ----------
+     Content is visible by default. Here we only nudge elements that start
+     BELOW the fold (a small translate, never opacity) and settle them as they
+     enter. If this never runs — no JS, a failed load, reduced motion — the
+     page is simply static and complete. */
   function initReveals() {
-    var els = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
-    if (REDUCED || !("IntersectionObserver" in window)) {
-      els.forEach(function (el) { el.classList.add("is-in"); });
-      return;
-    }
+    if (REDUCED || !("IntersectionObserver" in window)) return;
+    var vh = window.innerHeight || 800;
+    var els = Array.prototype.slice.call(document.querySelectorAll(".reveal"))
+      .filter(function (el) { return el.getBoundingClientRect().top > vh * 0.95; });
+    if (!els.length) return;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+        if (e.isIntersecting) { e.target.classList.add("rv-in"); io.unobserve(e.target); }
       });
-    }, { threshold: 0.14, rootMargin: "0px 0px -8% 0px" });
-    els.forEach(function (el) { io.observe(el); });
+    }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+    els.forEach(function (el) { el.classList.add("rv-pre"); io.observe(el); });
   }
 
   /* radial studio-floor gradient as a CanvasTexture */
@@ -128,9 +133,9 @@
     c.width = c.height = 512;
     var ctx = c.getContext("2d");
     var g = ctx.createRadialGradient(256, 200, 20, 256, 256, 300);
-    g.addColorStop(0, "#26211b");
-    g.addColorStop(0.35, "#141315");
-    g.addColorStop(1, "#0b0b0d");
+    g.addColorStop(0, "#2a2622");
+    g.addColorStop(0.35, "#121214");
+    g.addColorStop(1, "#060607");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, 512, 512);
     var tex = new THREE.CanvasTexture(c);
@@ -160,7 +165,7 @@
       });
       renderer.setClearColor(0x0b0b0d, 1);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.05;
+      renderer.toneMappingExposure = 1.25;
       renderer.outputEncoding = THREE.sRGBEncoding; /* r128 */
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -191,7 +196,7 @@
       rim.position.set(-60, 120, -200);
       scene.add(rim);
 
-      scene.add(new THREE.HemisphereLight(0x1a2233, 0x0b0b0d, 0.35));
+      scene.add(new THREE.HemisphereLight(0x3a4458, 0x14110e, 0.8));
 
       /* ember glow light near the fire-core (flickers with `fire`) */
       var emberLight = new THREE.PointLight(0xff5e1e, 0, 260, 2);
@@ -200,7 +205,7 @@
 
       /* reflective/gradient studio ground */
       var groundMat = new THREE.MeshStandardMaterial({
-        map: makeGroundTexture(), color: 0x0e0e11, metalness: 0.55, roughness: 0.5
+        map: makeGroundTexture(), color: 0x3a3a40, metalness: 0.0, roughness: 0.92
       });
       var ground = new THREE.Mesh(new THREE.CircleGeometry(900, 64), groundMat);
       ground.rotation.x = -Math.PI / 2;
@@ -215,22 +220,37 @@
       /* frame camera via fitRadius */
       var r = (typeof model.fitRadius === "number" && model.fitRadius > 0) ? model.fitRadius : 140;
       var fovR = camera.fov * Math.PI / 180;
-      var dist = (r / Math.sin(fovR / 2)) * 0.60;
-      camera.position.set(dist * 0.62, dist * 0.44, dist * 0.72);
+      var dist = (r / Math.sin(fovR / 2)) * 0.92;
+      /* a 3/4 view from front-right, matching the page's renders */
+      camera.position.set(dist * 0.42, dist * 0.30, dist * 0.86);
 
       /* OrbitControls attach to the .viz placeholder (captures pointer) */
-      var controls = new THREE.OrbitControls(camera, vizEl);
+      var controls = new THREE.OrbitControls(camera, canvas);
       controls.enableDamping = true;
       controls.dampingFactor = 0.06;
       controls.enablePan = false;
+      controls.enableZoom = false; /* never hijack the page's wheel scroll */
       controls.minDistance = r * 0.9;
-      controls.maxDistance = r * 3.2;
+      controls.maxDistance = r * 5;
       controls.minPolarAngle = 0.15 * Math.PI;
       controls.maxPolarAngle = 0.52 * Math.PI;
-      controls.target.set(0, r * 0.28, 0);
+      controls.target.set(0, 116, 8); /* mid-height of the open station (cm) */
       controls.autoRotate = false;
       controls.autoRotateSpeed = 0.9;
       controls.update();
+
+      /* Fit the open station (~300 cm wide with roof overhang, ~250 cm tall)
+         to whatever aspect the stage has, keeping the current orbit direction. */
+      function frameCamera() {
+        var vf = fovR / 2;
+        var hf = Math.atan(Math.tan(vf) * camera.aspect);
+        var need = Math.max(150 / Math.tan(vf), 165 / Math.tan(hf)) * 1.26 + 40;
+        var dir = camera.position.clone().sub(controls.target).normalize();
+        camera.position.copy(controls.target).addScaledVector(dir, need);
+        /* fog only swallows the far floor, never the cabinet */
+        if (scene.fog) { scene.fog.near = need + 110; scene.fog.far = need + 620; }
+        controls.update();
+      }
 
       /* --- sizing to the .viz box --- */
       function resize() {
@@ -240,6 +260,8 @@
         renderer.setSize(w, h, false);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
+        frameCamera();
+        if (typeof ctrl !== "undefined" && ctrl && ctrl.invalidate) ctrl.invalidate();
       }
       resize();
       window.addEventListener("resize", resize);
@@ -257,37 +279,68 @@
           if (d != null)  { driveDoors(model, d); ctrl.doors = clamp01(d); }
           if (f != null)  { driveFire(model, f); ctrl.fire = clamp01(f); }
           if (gr != null) driveGrate(model, gr);
+          if (ctrl.invalidate) ctrl.invalidate();
         }
       };
 
       /* initial pose — Closed, grate default 0.4 */
       ctrl.set(0, 0, 0, 0.4);
 
-      /* --- master render loop --- */
-      var running = true;
-      var last = performance.now();
-      var clock = 0;
+      /* --- render on demand ---------------------------------------
+         Only draw while the stage is on screen and the tab is visible,
+         and only when something changed: a control, an orbit drag/damping,
+         a resize, or live fire flicker. Off screen it costs nothing. */
+      var dirty = true, onScreen = true, tabVisible = !document.hidden, rafId = null;
+      var last = performance.now(), clock = 0, firstFrame = true;
+      function invalidate() { dirty = true; kick(); }
+      ctrl.invalidate = invalidate;
+      controls.addEventListener("change", function () { dirty = true; });
+      window.addEventListener("resize", invalidate);
 
       function frame(now) {
-        if (!running) return;
+        rafId = null;
+        if (!onScreen || !tabVisible) return;
         var dt = Math.min(0.05, (now - last) / 1000);
-        last = now;
-        clock += dt;
-
-        var noise = REDUCED ? 1 : (0.75 + 0.25 * Math.sin(clock * 11) * Math.sin(clock * 6.3 + 1.7));
-        emberLight.intensity = ctrl.fire * 3.2 * noise;
-
-        controls.update();
-        renderer.render(scene, camera);
-        requestAnimationFrame(frame);
+        last = now; clock += dt;
+        var moving = controls.update(); /* true while damping */
+        var flicker = !REDUCED && ctrl.fire > 0.01;
+        if (flicker) {
+          var noise = 0.75 + 0.25 * Math.sin(clock * 11) * Math.sin(clock * 6.3 + 1.7);
+          emberLight.intensity = ctrl.fire * 3.2 * noise;
+        } else {
+          emberLight.intensity = ctrl.fire * 3.2;
+        }
+        if (dirty || moving || flicker) {
+          renderer.render(scene, camera);
+          dirty = false;
+          if (firstFrame) { firstFrame = false; vizEl.classList.add("is-live"); var st = vizEl.closest(".stage"); if (st) st.classList.add("is-live"); }
+        }
+        kick();
       }
-      requestAnimationFrame(frame);
+      function kick() {
+        if (rafId == null && onScreen && tabVisible) { last = performance.now(); rafId = requestAnimationFrame(frame); }
+      }
 
-      /* pause when tab hidden (battery) */
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (entries) {
+          onScreen = entries[0].isIntersecting;
+          if (onScreen) invalidate();
+        }, { rootMargin: "120px 0px" }).observe(vizEl);
+      }
       document.addEventListener("visibilitychange", function () {
-        if (document.hidden) { running = false; }
-        else if (!running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
+        tabVisible = !document.hidden;
+        if (tabVisible) invalidate();
       });
+      /* If the GPU drops the context (memory pressure, a full-page capture),
+         fall back to the static poster instead of showing a blank stage. */
+      canvas.addEventListener("webglcontextlost", function (e) {
+        e.preventDefault();
+        vizEl.classList.remove("is-live");
+      });
+      canvas.addEventListener("webglcontextrestored", function () {
+        firstFrame = true; invalidate();
+      });
+      kick();
 
       return ctrl;
     } catch (err) {
@@ -399,7 +452,7 @@
         btn.classList.add("is-active");
         if (labelEl) labelEl.textContent = p.label;
         if (capEl) capEl.textContent = p.caption;
-        tween.run(from, to, 900, function (cur) {
+        tween.run(from, to, 1400, function (cur) {
           applyRoof(cur.r, true);
           applyDoors(cur.d, true);
           applyFire(cur.f, true);
@@ -416,6 +469,7 @@
     paintRange(sRoof); paintRange(sDoors); paintRange(sFire); paintRange(sGrate);
     applyGrate((+sGrate.value) / 100);
     var s0 = vals();
+    applyRoof(s0.r, false); applyDoors(s0.d, false); applyFire(s0.f, false);
     refreshCaption(s0.r, s0.d, s0.f);
   }
 
@@ -426,7 +480,26 @@
     initReveals();
     var vizEl = document.querySelector('.viz[data-viz="config"]');
     var ctrl = vizEl ? buildConfigurator(vizEl) : null;
+    /* The markup ships in "Open Station" so the no-JS poster and caption
+       agree. With motion allowed and a live model, start sealed and lift
+       the roofs the first time the stage scrolls into view. */
+    var intro = ctrl && !REDUCED && ("IntersectionObserver" in window);
+    if (intro) {
+      var sr = document.getElementById("scrub-roof");
+      if (sr) sr.value = 0;
+    }
     wireConfigurator(ctrl, POSTURES);
+    if (intro) {
+      var btn = document.querySelector('.preset[data-posture="station"]');
+      var touched = false;
+      document.querySelector(".stage").addEventListener("pointerdown", function () { touched = true; }, { once: true });
+      var io = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        setTimeout(function () { if (!touched && btn) btn.click(); }, 450);
+      }, { threshold: 0.45 });
+      io.observe(vizEl);
+    }
   }
 
   /* ---------- go ---------- */

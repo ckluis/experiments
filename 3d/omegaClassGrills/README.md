@@ -12,11 +12,11 @@ how a master **asador** and a master **pitmaster** actually cook, so both can wo
 
 | File | Purpose |
 |------|---------|
-| `index.html` | The product-launch landing page. Cinematic "molten steel" art direction, a live 3D **configurator** with three scrubbers (Open the roof / Open the smoker / Light the fires) + a grate control + four posture presets. |
-| `PLAN.md` | The full concept plan: product, engineering, **design & differentiation** (a complete two-master station in one cabinet), manufacturing/DFM (BOM, COGS, MSRP $12,500), go-to-market, financials, the ask. |
+| `index.html` | The product page: hero → closed/open idea → a to-scale front elevation of the three zones and two cooks → zone cards → a live 3D **configurator** (four posture presets with thumbnails, three scrubbers + grate) → specs, engineering and weight budget → comparison matrix → the plan (price bands, unit economics, roadmap). Every section is visible without JavaScript; the configurator shows a static render until WebGL is running. |
+| `PLAN.md` | The full concept plan: product, engineering, **design & differentiation** (a complete two-master station in one cabinet), manufacturing/DFM (BOM, COGS, MSRP $21,000), go-to-market, financials, the ask. |
 | `SPEC.md` | Internal build spec — dimensions, the three-transformation kinematics, the module API, art direction, and build conventions. |
 | `src/grillModel.js` | The parametric Three.js rig. Global `createOmegaGrill()` → `{ root, setRoof, setDoors, setFire, setGrate, getState, postures, parts, dispose, fitRadius }` (with setLid alias). Three independent axes + grate. |
-| `src/app.js` | Scene/app: **one shared WebGLRenderer** drives all 3D views (via scissor per slot), cinematic lighting, OrbitControls, the three scrubbers + posture tweens, ember flicker, smoke, and a graceful no-WebGL fallback. **IIFE-wrapped**. |
+| `src/app.js` | Scene/app: **one WebGLRenderer** for the configurator, cinematic lighting, OrbitControls (orbit only, no wheel hijack), the scrubbers + posture tweens, ember flicker, render-on-demand that pauses off screen, context-loss and no-WebGL fallbacks to the poster render, and transform-only scroll reveals. **IIFE-wrapped**. |
 | `src/grillModel.test.html` | Standalone model harness — roof/doors/fire/grate sliders + posture buttons. |
 | `vendor/` | Three.js r128 + classic OrbitControls, vendored so the page runs from `file://`. |
 
