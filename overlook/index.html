@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overlook — a love letter to chat</title>
+<meta name="description" content="Overlook is a working sketch of the chat interface the agent era is missing: columns instead of tabs, rooms instead of threads, humans and agents on one roster, knowledge that files itself, and two signals — new, and needs you.">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://ckluis.github.io/experiments/overlook/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ckluis / experiments">
+<meta property="og:url" content="https://ckluis.github.io/experiments/overlook/">
+<meta property="og:title" content="Overlook — a love letter to chat">
+<meta property="og:description" content="An open letter to Slack. The chat interface the agent era is missing — columns, rooms, one roster, two signals, decisions you make once, and a graph that can recall, fork and blame any line.">
+<meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-overlook.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Supervising ten agents should feel as calm as reading one channel. — Overlook, a love letter to chat.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ckluis">
+<meta name="twitter:creator" content="@ckluis">
+<meta name="twitter:title" content="Overlook — a love letter to chat">
+<meta name="twitter:description" content="An open letter to Slack. The chat interface the agent era is missing — columns, rooms, one roster, two signals, decisions you make once, and a graph that can recall, fork and blame any line.">
+<meta name="twitter:image" content="https://ckluis.github.io/experiments/previews/social-overlook.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06070b; --bg2:#0a0c12; --panel:#0f121a; --panel2:#151925; --panel3:#1b2030;
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13); --line3:rgba(255,255,255,.22);
+  --txt:#eceef5; --dim:#9ba2b4; --faint:#5d6476;
+  --new:#fbbf24; --you:#fb7185; --agent:#5eead4; --human:#c4b5fd; --know:#86efac;
+  --violet:#8b7cf6; --sky:#7dd3fc; --dusk:#f59e6b;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --sans:"Inter Tight",-apple-system,"SF Pro Text",Inter,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(139,124,246,.35)}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.wide{max-width:1420px;margin:0 auto;padding:0 24px}
+.kicker{font:700 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.kicker::before{content:"";width:22px;height:1px;background:currentColor;opacity:.7}
+h2.sec{font-size:clamp(34px,5.4vw,68px);font-weight:800;letter-spacing:-.035em;line-height:1.02;margin-bottom:22px;max-width:960px}
+h2.sec em,h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
+.lede{font-size:clamp(17px,1.6vw,19.5px);color:var(--dim);max-width:740px;line-height:1.6}
+.lede b{color:var(--txt);font-weight:650}
+section.block{padding:clamp(90px,12vw,150px) 0;position:relative}
+section.block + section.block{border-top:1px solid var(--line)}
+.mono{font-family:var(--mono)}
+
+/* reveal: visible by default; JS only enhances */
+@media (prefers-reduced-motion:no-preference){
+  html.js .rv{transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+  html.js .rv:not(.in){opacity:0;transform:translateY(22px)}
+}
+
+/* top bar */
+#bar{position:sticky;top:0;z-index:60;background:rgba(6,7,11,.72);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);border-bottom:1px solid var(--line)}
+#bar .wide{display:flex;align-items:center;gap:12px;height:58px}
+.logo{width:26px;height:26px;border-radius:50%;background:conic-gradient(from 200deg,var(--violet),var(--sky),var(--dusk),var(--violet));position:relative;flex:0 0 auto}
+.logo::after{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--bg)}
+#bar .name{font-weight:750;font-size:15px;letter-spacing:-.01em}
+#bar .tag{font:italic 15px var(--serif);color:var(--faint)}
+#bar nav{margin-left:auto;display:flex;gap:22px}
+#bar nav a{color:var(--dim);text-decoration:none;font-size:13px;font-weight:500}
+#bar nav a:hover{color:#fff}
+@media(max-width:1100px){#bar nav{display:none}}
+
+/* hero */
+.hero{position:relative;padding:clamp(70px,10vw,120px) 0 40px;text-align:center;overflow:hidden;isolation:isolate}
+.sky{position:absolute;inset:0;z-index:-2;background:
+  radial-gradient(900px 520px at 22% 8%,rgba(139,124,246,.22),transparent 65%),
+  radial-gradient(800px 480px at 82% 2%,rgba(125,211,252,.14),transparent 65%),
+  radial-gradient(1100px 600px at 50% 105%,rgba(245,158,107,.16),transparent 60%);
+  background-size:140% 140%;animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{0%{background-position:0% 0%,100% 0%,50% 100%}100%{background-position:30% 20%,70% 30%,40% 80%}}
+.ridges{position:absolute;left:0;right:0;bottom:0;height:46%;z-index:-1;opacity:.9;pointer-events:none}
+.stars{position:absolute;inset:0;z-index:-2;background-image:radial-gradient(1px 1px at 12% 18%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 72% 12%,rgba(255,255,255,.35),transparent),radial-gradient(1px 1px at 38% 30%,rgba(255,255,255,.3),transparent),radial-gradient(1.5px 1.5px at 88% 34%,rgba(255,255,255,.4),transparent),radial-gradient(1px 1px at 55% 8%,rgba(255,255,255,.45),transparent),radial-gradient(1px 1px at 6% 40%,rgba(255,255,255,.3),transparent),radial-gradient(1px 1px at 94% 6%,rgba(255,255,255,.4),transparent)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line2);border-radius:100px;padding:7px 14px 7px 10px;background:rgba(255,255,255,.02);margin-bottom:30px}
+.eyebrow .ind{position:static}
+.hero h1{font-size:clamp(42px,7.6vw,104px);font-weight:800;letter-spacing:-.045em;line-height:.98;max-width:1100px;margin:0 auto 28px}
+.hero h1 em{background:linear-gradient(100deg,#d4cbff 10%,#9fe2ff 55%,#ffc9a6 95%);-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 .04em}
+.hero .lede{margin:0 auto 18px;text-align:center}
+.hero .try{font-size:15px;color:var(--faint);margin-bottom:56px}
+.hero .try b{color:var(--txt);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;max-width:980px;margin:64px auto 0}
+.stats div{background:rgba(10,12,18,.92);padding:26px 18px;text-align:left}
+.stats b{display:block;font-size:clamp(34px,4.4vw,54px);font-weight:800;letter-spacing:-.04em;line-height:1}
+.stats span{display:block;margin-top:10px;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.stats div:last-child b{background:linear-gradient(100deg,var(--violet),var(--sky));-webkit-background-clip:text;background-clip:text;color:transparent}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* demo frame */
+.frame{border:1px solid var(--line2);border-radius:18px;overflow:hidden;background:#090b10;box-shadow:0 50px 120px -40px rgba(0,0,0,.9),0 0 0 1px rgba(139,124,246,.06),0 0 120px -30px rgba(139,124,246,.25);position:relative;text-align:left}
+.frame .fbar{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line);background:#0c0e14}
+.frame .fbar i{width:11px;height:11px;border-radius:50%;background:#2a2f3c;flex:0 0 auto}
+.frame .fbar i:nth-child(1){background:#ff5f57}.frame .fbar i:nth-child(2){background:#febc2e}.frame .fbar i:nth-child(3){background:#28c840}
+.frame .url{flex:1;max-width:420px;margin:0 auto;text-align:center;font:12px var(--mono);color:var(--faint);background:#14171f;border:1px solid var(--line);border-radius:8px;padding:5px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.frame .fbar .sp{width:51px;flex:0 0 auto}
+.hero-obj{position:relative}
+.hero-obj::before{content:"";position:absolute;inset:8% 6% -6%;background:radial-gradient(closest-side,rgba(139,124,246,.35),transparent);filter:blur(40px);z-index:-1}
+.cap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;margin-top:16px;font-size:13.5px;color:var(--faint);text-align:left}
+.cap i{font-style:italic;font-family:var(--serif);font-size:16px;color:var(--dim)}
+.cap b{color:var(--txt);font-weight:600}
+.counter{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font:12px var(--mono);color:var(--dim)}
+.counter .ind{position:static}
+.counter span{white-space:nowrap}
+.btn-sim{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--txt);background:var(--panel2);border:1px solid var(--line2);border-radius:100px;padding:6px 12px;cursor:pointer}
+.btn-sim:hover{border-color:var(--line3)}
+
+/* fallback image (no JS) */
+.demo .fb{display:block;width:100%;height:auto}
+.demo .fbnote{font:12px var(--mono);color:var(--faint);padding:10px 16px;border-top:1px solid var(--line)}
+
+/* ========== the strip ========== */
+.strip{--h:540px;display:flex;gap:8px;height:var(--h);padding:8px;overflow-x:auto;overflow-y:hidden;background:#090b10;scrollbar-width:thin;scrollbar-color:#262b38 transparent;font-size:13px;line-height:1.45;scroll-behavior:smooth;overscroll-behavior-x:contain}
+.strip.tall{--h:600px}
+.col{flex:0 0 auto;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:12px;min-height:0;overflow:hidden;position:relative}
+.col .sc{flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin;scrollbar-color:#262b38 transparent}
+.rail{width:54px;padding:10px 0;align-items:center;gap:10px;background:#0c0f16}
+.c-ch{width:196px}.c-chan{width:220px}.c-inbox{width:248px;background:linear-gradient(180deg,rgba(251,113,133,.06),transparent 40%),var(--panel);border-color:rgba(251,113,133,.22)}.pane{flex:1 0 288px;max-width:520px}
+.org{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font:800 12px var(--sans);color:#0a0c10;position:relative;cursor:pointer;border:2px solid transparent;opacity:.75}
+.org.on{border-color:#fff;opacity:1;box-shadow:0 0 0 3px rgba(255,255,255,.08)}
+.org .ind{position:absolute;right:-3px;top:-3px}
+.hd{padding:12px 12px 10px;border-bottom:1px solid var(--line)}
+.lbl{font:700 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.hd .t{font-weight:650;font-size:13px;margin-top:3px;display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd .s{font-size:11.5px;color:var(--faint)}
+.hd .s a{color:var(--violet);text-decoration:none;cursor:pointer}
+.search{margin:10px 10px 4px;background:#0b0d13;border:1px solid var(--line);border-radius:8px;padding:7px 10px;color:var(--txt);font:12.5px var(--sans);width:calc(100% - 20px);outline:none}
+.search:focus{border-color:var(--line3)}
+.grp{padding:12px 8px 4px}
+.grp>.lbl{padding:0 6px 6px;display:flex;align-items:center;justify-content:space-between}
+.grp>.lbl a{color:var(--violet);cursor:pointer;letter-spacing:.04em;text-transform:none;font-weight:600}
+.it{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;color:var(--dim);position:relative;min-height:30px;user-select:none}
+.it:hover{background:rgba(255,255,255,.04);color:var(--txt)}
+.it.on{background:rgba(139,124,246,.17);color:#fff}
+.it .h{color:var(--faint);font-weight:600;width:10px;text-align:center}
+.it .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .ind{margin-left:auto}
+.it.closed{opacity:.5}
+.room{display:block;border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin:0 0 6px;cursor:pointer;background:rgba(255,255,255,.015);position:relative;transition:border-color .15s}
+.room:hover{border-color:var(--line2)}
+.room.on{border-color:rgba(139,124,246,.65);background:rgba(139,124,246,.09)}
+.room .nm{font-weight:650;color:var(--txt);font-size:13px;padding-right:16px}
+.room .meta{font-size:11px;color:var(--faint);margin-top:1px}
+.room .ind{position:absolute;right:10px;top:12px}
+.room.closed{opacity:.55;border-style:dashed}
+.av{width:20px;height:20px;border-radius:6px;background:var(--c);color:#0a0c10;font:800 10px/20px var(--sans);text-align:center;flex:0 0 auto;position:relative}
+.av.agent{border-radius:50%}
+.av.agent::after{content:"";position:absolute;right:-2px;bottom:-2px;width:7px;height:7px;border-radius:50%;background:var(--agent);border:2px solid var(--panel)}
+.av.lg{width:28px;height:28px;font-size:12px;line-height:28px;border-radius:8px}.av.lg.agent{border-radius:50%}
+.role{font:600 9.5px var(--mono);color:var(--faint);border:1px solid var(--line2);border-radius:5px;padding:1px 5px;letter-spacing:.03em}
+.kind{margin-left:auto;font:700 9px var(--mono);letter-spacing:.1em;padding:2px 6px;border-radius:5px}
+.kind.human{color:var(--human);background:rgba(196,181,253,.1)}
+.kind.agent{color:var(--agent);background:rgba(94,234,212,.1)}
+.mini{width:34px;height:4px;border-radius:3px;background:#232838;overflow:hidden;flex:0 0 auto}
+.mini i{display:block;height:100%;background:var(--agent);border-radius:3px}
+.mini.hot i{background:var(--you)}
+
+/* indicators — the whole attention model */
+.ind{display:inline-block;flex:0 0 auto}
+.ind.dot{width:7px;height:7px;border-radius:50%;background:var(--new);box-shadow:0 0 10px rgba(251,191,36,.7)}
+.ind.ring{width:11px;height:11px;border-radius:50%;border:2.5px solid var(--you);box-shadow:0 0 12px rgba(251,113,133,.6)}
+@media (prefers-reduced-motion:no-preference){.ind.ring{animation:ringpulse 2.4s ease-in-out infinite}}
+@keyframes ringpulse{0%,100%{box-shadow:0 0 0 0 rgba(251,113,133,.55)}50%{box-shadow:0 0 0 5px rgba(251,113,133,0)}}
+
+/* details mode */
+.back{font-size:12px;color:var(--violet);cursor:pointer;padding:10px 12px 0;display:inline-block}
+.chcard{margin:10px 12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);display:flex;gap:10px;align-items:center}
+.chcard .ico{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--violet),var(--sky));flex:0 0 auto}
+.acting{margin:4px 12px 8px;display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--faint)}
+.acting select{flex:1;background:#0b0d13;color:var(--txt);border:1px solid var(--line2);border-radius:7px;padding:5px 6px;font:12px var(--sans)}
+.addp{margin:0 12px 8px;display:flex;gap:6px}
+.addp select{flex:1;background:#0b0d13;color:var(--txt);border:1px solid var(--line2);border-radius:7px;padding:5px 6px;font:12px var(--sans);min-width:0}
+.b{font:600 11.5px var(--sans);border-radius:7px;padding:6px 10px;cursor:pointer;border:1px solid var(--line2);background:var(--panel3);color:var(--txt);white-space:nowrap}
+.b:hover{border-color:var(--line3)}
+.b.pri{background:var(--violet);border-color:transparent;color:#fff}
+.b.pri:hover{filter:brightness(1.1)}
+.b.you{background:var(--you);border-color:transparent;color:#1a0a0e}
+.b[disabled]{opacity:.38;cursor:not-allowed;filter:none}
+.prow{display:flex;align-items:center;gap:8px;padding:7px 12px;font-size:12.5px;cursor:pointer}
+.prow:hover{background:rgba(255,255,255,.03)}
+.prow.pending{background:rgba(251,113,133,.06)}
+.pex{margin:0 12px 8px;padding:10px;border:1px solid rgba(94,234,212,.25);border-radius:10px;background:rgba(94,234,212,.04);font-size:11.5px;color:var(--dim)}
+.pex .r{display:flex;justify-content:space-between;gap:8px;padding:2px 0}
+.pex .r b{color:var(--txt);font-weight:600}
+.pex .ok{color:var(--know)}.pex .no{color:var(--you)}
+.pex .gauge{height:5px;border-radius:3px;background:#232838;margin:4px 0 6px;overflow:hidden}.pex .gauge i{display:block;height:100%;background:var(--agent)}
+.pex .gauge.hot i{background:var(--you)}
+.pex .ctl{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+
+/* inbox */
+.dc{margin:0 10px 8px;border:1px solid rgba(251,113,133,.25);border-radius:11px;padding:10px 11px;background:rgba(251,113,133,.045);position:relative}
+.dc .who{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--dim)}
+.dc .who b{color:var(--txt);font-weight:650}
+.dc .where{font:10.5px var(--mono);color:var(--faint);margin:4px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dc .ti{font-weight:650;font-size:13px;line-height:1.3}
+.dc .bo{font-size:12px;color:var(--dim);margin-top:3px}
+.dc .ac{display:flex;gap:6px;margin-top:9px}
+.dc .need{position:absolute;right:10px;top:10px;font:600 9px var(--mono);color:var(--you);letter-spacing:.06em;text-transform:uppercase}
+.calm{margin:14px 10px;padding:12px;border:1px dashed var(--line2);border-radius:11px;font-size:12px;color:var(--faint);text-align:center}
+.calm b{display:block;color:var(--txt);font-size:13px;margin-bottom:2px}
+.fresh{animation:fresh 1.2s ease-out}
+@keyframes fresh{0%{background:rgba(251,113,133,.25);transform:translateY(-4px)}100%{transform:none}}
+
+/* ring evidence, standing orders, brief */
+.dc .ev{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:10.5px;color:var(--faint);margin-top:6px;font-family:var(--mono)}
+.rvb{font:700 8.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:1px 5px;border-radius:4px;background:rgba(134,239,172,.12);color:var(--know)}
+.rvb.irr{background:rgba(251,191,36,.13);color:var(--new)}
+.dc .nev{font-size:10.5px;color:var(--faint);margin-top:6px;font-style:italic}
+.b.alw{background:transparent;border-color:rgba(251,113,133,.55);color:var(--you)}
+.b.alw:hover{background:rgba(251,113,133,.1)}
+.grp2{margin:14px 10px 0;padding-top:12px;border-top:1px solid var(--line)}
+.grp2>.lbl{margin-bottom:8px;color:var(--know)}
+.hint{font-size:11.5px;color:var(--faint);line-height:1.5}
+.hint b{color:var(--you);font-weight:600}
+.so{border:1px solid rgba(134,239,172,.25);background:rgba(134,239,172,.045);border-radius:10px;padding:9px 10px;margin-bottom:7px}
+.so .sot{font-size:12px;color:var(--txt);line-height:1.35}
+.so .sot b{font:700 10.5px var(--mono);color:var(--know);margin-right:6px}
+.so .som{font:10px/1.55 var(--mono);color:var(--faint);margin:5px 0 7px}
+.so .som b{color:var(--know)}
+.so .b{padding:3px 8px;font-size:10.5px}
+.so.fresh{animation:sofresh 1.4s ease-out}
+@keyframes sofresh{0%{background:rgba(134,239,172,.28)}100%{}}
+.brief{margin:0 10px 12px;border:1px solid rgba(251,191,36,.25);border-radius:11px;padding:10px;background:rgba(251,191,36,.04)}
+.brief .bh{font:600 9.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--new);margin-bottom:6px}
+.bl{padding:7px 6px;border-radius:7px;cursor:pointer}
+.bl:hover{background:rgba(255,255,255,.04)}
+.bl .blh{display:flex;justify-content:space-between;gap:6px;font-size:11px}
+.bl .blh b{color:var(--txt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bl .blh span{color:var(--new);font:600 10px var(--mono);white-space:nowrap}
+.bl p{font-size:11.5px;color:var(--dim);line-height:1.4;margin-top:2px}
+.brief .none{font-size:12px;color:var(--faint)}
+.brief .b{margin-top:6px}
+.counter .so-ic{color:var(--know);font-size:11px}
+
+/* recall */
+.c-recall{width:340px;border-color:rgba(251,191,36,.38);background:linear-gradient(180deg,rgba(251,191,36,.07),transparent 35%),var(--panel)}
+.rroot{margin:10px;border:1px solid rgba(251,191,36,.3);border-radius:10px;padding:10px;background:rgba(251,191,36,.05)}
+.rroot b{font:600 11.5px var(--mono);color:var(--new)}
+.rroot .del,.rroot .add{font-size:12px;margin-top:5px;display:flex;gap:7px;align-items:baseline}
+.rroot .del{color:var(--faint);text-decoration:line-through}
+.rroot .add{color:var(--txt)}
+.rroot span{font:700 9px var(--mono);padding:1px 5px;border-radius:4px;background:#232838;color:var(--dim);text-decoration:none;display:inline-block}
+.rroot .add span{background:rgba(134,239,172,.15);color:var(--know)}
+.rsrc{font:10px var(--mono);color:var(--faint);margin-top:7px}
+.ri{margin:0 10px 8px 22px;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:rgba(255,255,255,.02);position:relative;transition:opacity .3s}
+.ri::before{content:"";position:absolute;left:-13px;top:-9px;bottom:50%;width:11px;border-left:1px solid rgba(251,191,36,.35);border-bottom:1px solid rgba(251,191,36,.35);border-bottom-left-radius:6px}
+.ri.wait{opacity:.45}
+.ri.trace{border-color:rgba(251,191,36,.45)}
+.ri.off{opacity:.55}
+.rih{display:flex;align-items:center;gap:7px;font-size:12px}
+.rih b{font-weight:650}
+.rih .rvb{margin-left:auto}
+.rih input{accent-color:var(--you)}
+.rwhat{font:10.5px var(--mono);color:var(--faint);margin:4px 0 6px}
+.rst{font:10.5px var(--mono);color:var(--faint)}
+.rst.on{color:var(--new)}
+@media (prefers-reduced-motion:no-preference){.rst.on{animation:blink 1s ease-in-out infinite}}
+@keyframes blink{50%{opacity:.4}}
+.diff{border-radius:7px;overflow:hidden;font-size:11.5px;border:1px solid var(--line)}
+.diff.code{font:10.5px/1.5 var(--mono)}
+.diff div{padding:3px 7px;display:flex;gap:6px}
+.diff span{opacity:.6;flex:0 0 auto}
+.diff .del{background:rgba(251,113,133,.09);color:#f4a3b0;text-decoration:line-through;text-decoration-color:rgba(251,113,133,.5)}
+.diff .add{background:rgba(134,239,172,.08);color:#b5f5c9}
+.rnote{font-size:10.5px;color:var(--new);margin-top:6px;font-style:italic}
+.rdone{font:600 10.5px var(--mono);color:var(--know);margin-top:6px}
+.rdone.st{color:var(--new)}
+.rft{display:flex;gap:6px;align-items:center;padding:10px;border-top:1px solid var(--line);flex-wrap:wrap}
+.rsum{font-size:11.5px;color:var(--dim);flex:1 1 100%;margin-bottom:4px}
+.basis{font:10px var(--mono);color:var(--faint);margin-top:4px;padding-left:2px}
+.basis.revd{color:var(--know)}
+.basis.stale{color:var(--new)}
+.kb .kv2{font:700 9px var(--mono);padding:1px 5px;border-radius:4px;background:#232838;color:var(--dim)}
+
+/* graph tools: chips, fork, coherence, changelog, blame */
+.chips{display:flex;gap:6px;margin-top:8px}
+.chip{font:600 11px var(--mono);border-radius:100px;padding:3px 9px;border:1px solid var(--line2);background:#0b0d13;color:var(--dim);cursor:pointer}
+.chip:hover{border-color:var(--line3);color:var(--txt)}
+.chip.coh.hot{border-color:rgba(139,124,246,.6);color:#c9c0ff}
+.chip.lg{color:var(--sky)}
+.chip.on{background:var(--panel3);color:#fff}
+.cw{margin-top:8px;padding:7px 8px;border-radius:8px;background:rgba(139,124,246,.1);border:1px solid rgba(139,124,246,.35);font-size:11px;color:var(--dim);line-height:1.4}
+.cw span{font:700 10px var(--mono);color:#c9c0ff;margin-right:4px}
+.cw a{color:#c9c0ff;cursor:pointer;text-decoration:underline;white-space:nowrap}
+.b.fk{background:var(--sky);border-color:transparent;color:#06212e}
+.blk{margin-left:auto;font:600 9.5px var(--mono);color:var(--faint);cursor:pointer;letter-spacing:.04em;text-decoration:none;border:1px solid var(--line);border-radius:5px;padding:0 5px}
+.blk:hover{color:var(--know);border-color:rgba(134,239,172,.4)}
+.c-fork{width:300px;border-color:rgba(125,211,252,.35);background:linear-gradient(180deg,rgba(125,211,252,.07),transparent 35%),var(--panel)}
+.c-fork.won{border-color:rgba(134,239,172,.55)}
+.c-fork.lost{opacity:.55}
+.fmet{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+.fmet div{background:#0d1017;padding:7px 8px}
+.fmet span{display:block;font:600 8.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.fmet b{font-size:12.5px}
+.fi{display:flex;gap:8px;margin:8px 10px 0;padding:8px 9px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)}
+.fi.wait{opacity:.4}
+.fi.trace{border-color:rgba(125,211,252,.45)}
+.fib{flex:1;min-width:0}
+.fih{display:flex;gap:6px;align-items:baseline;font-size:12px}
+.fih span{font:10px var(--mono);color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fiw{font:10.5px var(--mono);color:var(--dim);margin:2px 0 5px}
+.fin{font-size:11px;color:var(--faint);font-style:italic}
+.fint{font:10.5px var(--mono);color:var(--sky)}
+.fflag{display:flex;gap:6px;align-items:center;margin-top:6px;font-size:11px;color:var(--you)}
+.c-coh{width:330px;border-color:rgba(139,124,246,.4);background:linear-gradient(180deg,rgba(139,124,246,.08),transparent 35%),var(--panel)}
+.cc{margin:10px;border:1px solid var(--line2);border-radius:12px;padding:10px;background:#0d1017}
+.cc.ring{border-color:rgba(251,113,133,.4)}
+.cc.res{border-color:rgba(134,239,172,.35);opacity:.85}
+.cch{display:flex;align-items:center;gap:7px;font-size:12px}
+.cch b{font:700 11px var(--mono)}
+.cch .ok{color:var(--know)}
+.ck{font:10.5px var(--mono);color:var(--violet)}
+.csev{margin-left:auto;font:600 9px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.cc.ring .csev{color:var(--you)}
+.ct{font-weight:650;font-size:13.5px;margin:5px 0 8px}
+.cpair{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:stretch}
+.cvs{align-self:center;font:700 16px var(--mono);color:var(--violet)}
+.cs{border:1px solid var(--line);border-radius:9px;padding:7px;background:rgba(255,255,255,.02);min-width:0}
+.csv{font-weight:750;font-size:15px}
+.csb{font:9.5px var(--mono);color:var(--faint);margin:2px 0 5px;word-break:break-word}
+.csq span{display:flex;gap:5px;align-items:center;font-size:10.5px;color:var(--dim);margin-top:3px;flex-wrap:wrap}
+.csq a{font:600 9px var(--mono);color:var(--know);cursor:pointer}
+.copts{display:flex;flex-direction:column;gap:5px;margin-top:9px}
+.copts .b{text-align:left}
+.copts .b span{opacity:.7;font-weight:500}
+.cres{font-size:11.5px;color:var(--know)}
+.c-log{width:310px;border-color:rgba(125,211,252,.35);background:linear-gradient(180deg,rgba(125,211,252,.06),transparent 35%),var(--panel)}
+.lgs{font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:12px 12px 4px}
+.lgl{display:flex;gap:9px;padding:7px 12px;cursor:pointer;align-items:flex-start}
+.lgl:hover{background:rgba(255,255,255,.03)}
+.lgl.nw{background:rgba(125,211,252,.05)}
+.lgl p{font-size:12px;line-height:1.4;color:var(--dim)}
+.lgl p b{color:var(--txt);font-weight:600}
+.lgl small{font:10px var(--mono);color:var(--faint)}
+.lgg{flex:0 0 20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font:700 12px var(--mono);background:#1b2030;color:var(--dim)}
+.lgg.g0{color:var(--know);background:rgba(134,239,172,.12)}
+.lgg.g1{color:var(--new);background:rgba(251,191,36,.12)}
+.lgg.g2{color:var(--you);background:rgba(251,113,133,.12)}
+.lgg.g3{color:var(--know);background:rgba(134,239,172,.12)}
+.lgg.g4{color:#c9c0ff;background:rgba(139,124,246,.15)}
+.lgg.g5{color:var(--sky);background:rgba(125,211,252,.13)}
+.c-blame{width:390px;border-color:rgba(134,239,172,.35);background:linear-gradient(180deg,rgba(134,239,172,.06),transparent 35%),var(--panel)}
+.bgut{margin:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#07090d}
+.bln{display:grid;grid-template-columns:34px 20px 40px 1fr;gap:6px;align-items:center;padding:5px 8px;font:10.5px var(--mono);color:var(--faint);cursor:pointer;border-top:1px solid rgba(255,255,255,.04)}
+.bln:first-child{border-top:0}
+.bln:hover{background:rgba(255,255,255,.03)}
+.bln.on{background:rgba(134,239,172,.08)}
+.bln .bh{color:#6b7385}
+.bln .av{width:16px;height:16px;font-size:8px;line-height:16px}
+.bln code{font:10.5px var(--mono);color:#cfd5e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1/-1;padding-left:0}
+.bsrc{grid-column:1/-1;font:600 9px var(--mono);justify-self:start;padding:0 5px;border-radius:4px}
+.bsrc.kb{color:var(--know);background:rgba(134,239,172,.1)}
+.bsrc.dec{color:var(--you);background:rgba(251,113,133,.1)}
+.bsrc.msg{color:var(--sky);background:rgba(125,211,252,.1)}
+.bsrc.none{color:var(--faint);background:#1b2030}
+.bchain{margin:0 10px;border-left:1px solid rgba(134,239,172,.35);padding-left:0}
+.bc{display:grid;grid-template-columns:70px 1fr;gap:8px;padding:6px 0 6px 10px;font-size:12px;color:var(--txt);position:relative}
+.bc::before{content:"";position:absolute;left:-4px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--know)}
+.bc.q::before{background:#2b3142}
+.bc .bk{font:600 9.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding-top:2px}
+.bc small{display:block;font:10px var(--mono);color:var(--faint);margin-top:2px}
+.bc.q div{color:var(--dim);font-style:italic}
+.bc .g{color:var(--know);font:600 11px var(--mono)}
+.bc a{color:var(--sky);cursor:pointer}
+
+/* panes */
+.pane .ph{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--faint)}
+.pane .crumb{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pane .crumb b{color:var(--txt);font-weight:650}
+.ctx{display:flex;align-items:center;gap:5px;font:10.5px var(--mono);color:var(--faint);flex:0 0 auto}
+.ctx .mini{width:28px}
+.x{cursor:pointer;color:var(--faint);font-size:15px;line-height:1;padding:0 2px}
+.x:hover{color:#fff}
+.kb{margin:8px 10px 0;border:1px solid rgba(134,239,172,.22);background:rgba(134,239,172,.05);border-radius:9px;padding:7px 10px;font-size:11.5px;color:var(--dim);cursor:pointer}
+.kb .top{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.kb .top b{color:var(--know);font:600 11px var(--mono)}
+.kb .sub{color:var(--faint);font-size:10.5px}
+.kb .st{font:700 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:1px 5px;border-radius:4px;background:rgba(134,239,172,.14);color:var(--know)}
+.kb .st.superseded{background:rgba(251,191,36,.14);color:var(--new)}
+.kb .rc{display:none;margin-top:7px;padding-top:7px;border-top:1px dashed rgba(134,239,172,.2);font-size:11.5px;line-height:1.5}
+.kb.open .rc{display:block}
+.kb .rc .body{color:var(--txt);margin-bottom:5px}
+.kb .rc .r{display:flex;justify-content:space-between;gap:10px;font:10.5px var(--mono);color:var(--faint)}
+.kb .rc .r span:last-child{color:var(--dim);text-align:right}
+.msgs{padding:8px 0 10px}
+.msg{display:flex;gap:9px;padding:6px 12px}
+.msg .mh{font-size:11px;color:var(--faint);margin-bottom:3px;display:flex;gap:6px;align-items:center}
+.msg .mh b{color:var(--txt);font-weight:650;font-size:12px}
+.msg .mh .ag{color:var(--agent);font:600 9.5px var(--mono);letter-spacing:.05em}
+.msg .mb{flex:1;min-width:0}
+.bub{background:var(--panel2);border:1px solid var(--line);border-radius:4px 11px 11px 11px;padding:8px 10px;color:#dde1ea;font-size:12.8px}
+.bub .kw{font:600 11.5px var(--mono);color:var(--know)}
+.msg.new .bub{border-color:rgba(251,191,36,.35)}
+.sys{display:flex;gap:7px;align-items:flex-start;margin:6px 12px;padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.025);font:10.5px/1.5 var(--mono);color:var(--faint)}
+.sys .g{color:var(--know)}
+.sys .y{color:var(--you)}
+.sys b{color:var(--dim);font-weight:600}
+.card{margin-top:6px;border:1px solid var(--line2);border-radius:10px;padding:10px;background:#11141d}
+.card label{display:block;font:600 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:6px 0 3px}
+.card label:first-child{margin-top:0}
+.card input[type=text],.card select{width:100%;background:#0b0d13;border:1px solid var(--line2);border-radius:7px;padding:6px 8px;color:var(--txt);font:12.5px var(--sans)}
+.card .chk{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--dim);margin-top:8px}
+.card .ac{display:flex;gap:6px;margin-top:10px}
+.card.done{border-color:rgba(134,239,172,.3)}
+.card .stamp{font:600 11px var(--mono);color:var(--know);margin-top:8px}
+.chart{margin-top:6px;border:1px solid var(--line);border-radius:10px;padding:10px;background:#0d1017}
+.bars{display:flex;align-items:flex-end;gap:5px;height:64px}
+.bars i{flex:1;border-radius:3px 3px 0 0;background:#2d3346}
+.bars i.hi{background:linear-gradient(180deg,var(--violet),#5b4fd1)}
+.chart .kv{display:flex;gap:12px;font-size:11px;color:var(--faint);margin-top:8px;flex-wrap:wrap}
+.chart .kv b{color:var(--txt)}
+.log{margin-top:6px;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#0a0c11;font:10.8px/1.65 var(--mono);color:#aab1c2}
+.log .k{color:var(--sky)}
+.log .t{color:var(--faint)}
+.prog{height:5px;border-radius:3px;background:#1d2230;margin-top:8px;overflow:hidden}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--know),var(--sky));transition:width .6s}
+.comp{display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)}
+.comp input{flex:1;min-width:0;background:#0b0d13;border:1px solid var(--line2);border-radius:8px;padding:8px 10px;color:var(--txt);font:12.5px var(--sans);outline:none}
+.comp input:focus{border-color:rgba(139,124,246,.6)}
+.comp .as{font:10px var(--mono);color:var(--faint);align-self:center;white-space:nowrap}
+.flash{animation:flash .9s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 2px rgba(139,124,246,.9)}100%{box-shadow:0 0 0 0 rgba(139,124,246,0)}}
+
+/* compact: phone + narrow screens — every column is a swipe page */
+.strip.compact{scroll-snap-type:x mandatory;gap:6px;padding:6px}
+.strip.compact .col{flex:0 0 calc(100% - 56px);width:auto;scroll-snap-align:start}
+.strip.compact .rail{flex:0 0 50px;width:50px}
+.strip.tablet{scroll-snap-type:x proximity}
+.strip.tablet .col{scroll-snap-align:start}
+
+/* sections */
+.creaks{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:56px}
+@media(max-width:1000px){.creaks{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.creaks{grid-template-columns:1fr}}
+.creak{border:1px solid var(--line);border-radius:18px;padding:26px 22px 24px;background:linear-gradient(180deg,rgba(255,255,255,.025),transparent)}
+.creak .n{font:600 11px var(--mono);color:var(--violet);letter-spacing:.1em}
+.creak h3{font-size:20px;font-weight:750;letter-spacing:-.02em;line-height:1.2;margin:14px 0 10px}
+.creak p{font-size:14.5px;color:var(--dim)}
+.creak.hot{border-color:rgba(251,191,36,.28);background:linear-gradient(180deg,rgba(251,191,36,.06),transparent)}
+.creak.hot .n{color:var(--new)}
+.bigstat{display:grid;grid-template-columns:auto 1fr;gap:20px 48px;align-items:center;margin-top:90px;padding:48px clamp(24px,5vw,64px);border:1px solid var(--line);border-radius:28px;background:radial-gradient(600px 300px at 0% 50%,rgba(251,191,36,.10),transparent 70%),#0a0c12;overflow:hidden;position:relative}
+.bigstat .num{font-size:clamp(96px,17vw,220px);font-weight:800;letter-spacing:-.06em;line-height:.85;color:var(--new);text-shadow:0 0 80px rgba(251,191,36,.35)}
+.bigstat p{font-size:clamp(17px,1.8vw,22px);color:var(--dim);max-width:520px;line-height:1.5}
+.bigstat p b{color:var(--txt)}
+.bigstat .fine{display:block;margin-top:14px;font:12px var(--mono);color:var(--faint)}
+@media(max-width:760px){.bigstat{grid-template-columns:1fr}}
+
+.moves{margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line2)}
+.moves a{display:block;padding:22px 18px 22px 18px;text-decoration:none;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.moves a:nth-child(3n+1){padding-left:0}
+.moves a:nth-child(3n){border-right:0}
+.moves a:nth-child(n+4){border-bottom:0}
+.moves .n{font:600 11px var(--mono);color:var(--faint)}
+.moves .t{display:block;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:8px 0 6px;line-height:1.2}
+.moves .d{font-size:13.5px;color:var(--dim)}
+.moves a:hover .t{color:var(--sky)}
+@media(max-width:900px){.moves{grid-template-columns:1fr}.moves a,.moves a:first-child{padding:18px 0;border-right:0;border-bottom:1px solid var(--line)}}
+
+.anat{display:grid;grid-template-columns:.7fr 1.2fr 1.3fr 1.2fr 1.7fr;gap:10px;margin-top:56px;align-items:stretch}
+.anat .a{border:1px solid var(--line2);border-radius:16px;padding:18px 16px;background:var(--panel);position:relative;min-height:220px;display:flex;flex-direction:column}
+.anat .a .lbl{margin-bottom:12px}
+.anat .a h4{font-size:18px;font-weight:750;letter-spacing:-.02em;margin-bottom:6px}
+.anat .a p{font-size:13.5px;color:var(--dim)}
+.anat .a .ghost{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:6px}
+.anat .a .ghost i{display:block;height:8px;border-radius:4px;background:#1e2331}
+.anat .a .ghost i.on{background:rgba(139,124,246,.5)}
+.anat .a.inbox{border-color:rgba(251,113,133,.35);background:linear-gradient(180deg,rgba(251,113,133,.08),transparent 60%),var(--panel)}
+.anat .a.inbox .lbl{color:var(--you)}
+.anat .a .tagnew{position:absolute;top:14px;right:14px;font:700 9px var(--mono);letter-spacing:.1em;color:var(--you);border:1px solid rgba(251,113,133,.4);padding:2px 6px;border-radius:5px}
+@media(max-width:1000px){.anat{grid-template-columns:1fr 1fr}.anat .a{min-height:0}.anat .a.inbox{grid-column:1/-1}}
+@media(max-width:560px){.anat{grid-template-columns:1fr}}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
+.rules div{border-top:1px solid var(--line2);padding-top:16px}
+.rules b{display:block;font-size:16px;margin-bottom:6px}
+.rules p{font-size:14.5px;color:var(--dim)}
+@media(max-width:800px){.rules{grid-template-columns:1fr}}
+
+.demo-wrap{margin-top:52px}
+
+.split{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(30px,5vw,72px);align-items:center;margin-top:90px}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.split h3{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:16px}
+.split h3 em{font-family:var(--serif);font-style:italic;font-weight:400}
+.split p{color:var(--dim);font-size:16.5px;margin-bottom:14px}
+.split p b{color:var(--txt)}
+.badge{border:1px solid rgba(94,234,212,.25);border-radius:24px;padding:26px;background:radial-gradient(500px 260px at 100% 0%,rgba(94,234,212,.12),transparent 70%),#0b0e14;box-shadow:0 40px 100px -40px rgba(0,0,0,.9)}
+.badge .top{display:flex;gap:14px;align-items:center;margin-bottom:20px}
+.badge .top .av{width:52px;height:52px;font-size:22px;line-height:52px}
+.badge .top .av.agent::after{width:14px;height:14px;border-width:3px;border-color:#0b0e14}
+.badge .top h4{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.badge .top .s{font-size:13px;color:var(--dim)}
+.gauges{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.gauges>div{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(255,255,255,.02)}
+.gauges b{display:block;font-size:28px;font-weight:800;letter-spacing:-.03em}
+.gauges .lbl{display:block;margin-bottom:6px}
+.gauges .gauge{height:6px;border-radius:3px;background:#1f2432;margin-top:8px;overflow:hidden}
+.gauges .gauge i{display:block;height:100%;background:linear-gradient(90deg,var(--agent),var(--sky))}
+.scope{list-style:none;font-size:14px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px}
+.scope li{display:flex;gap:10px;padding:4px 0}
+.scope .ok{color:var(--know);font-family:var(--mono)}
+.scope .no{color:var(--you);font-family:var(--mono)}
+.scope .rq{color:var(--new);font-family:var(--mono)}
+.badge .ctl{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.badge .ctl span{font:600 12px var(--sans);border:1px solid var(--line2);border-radius:9px;padding:8px 12px;color:var(--txt);background:var(--panel2)}
+.badge .ctl span.red{border-color:rgba(251,113,133,.4);color:var(--you)}
+
+.lifecycle{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:72px;position:relative}
+.lifecycle::before{content:"";position:absolute;left:12px;right:12px;top:15px;height:2px;background:linear-gradient(90deg,var(--know),var(--sky),var(--violet),var(--new),var(--faint))}
+.lifecycle div{position:relative;padding:40px 16px 0 0}
+.lifecycle div::before{content:"";position:absolute;left:4px;top:7px;width:18px;height:18px;border-radius:50%;background:var(--bg);border:3px solid var(--c)}
+.lifecycle b{display:block;font-size:17px;font-weight:750;margin-bottom:6px;color:var(--c)}
+.lifecycle p{font-size:14px;color:var(--dim)}
+@media(max-width:900px){.lifecycle{grid-template-columns:1fr;gap:22px}.lifecycle::before{left:12px;right:auto;top:10px;bottom:10px;width:2px;height:auto;background:linear-gradient(180deg,var(--know),var(--sky),var(--violet),var(--new),var(--faint))}.lifecycle div{padding:0 0 0 40px}.lifecycle div::before{top:2px}}
+
+/* attention */
+.signals{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:56px}
+@media(max-width:760px){.signals{grid-template-columns:1fr}}
+.sig{border:1px solid var(--line);border-radius:22px;padding:30px;background:#0a0c12;position:relative;overflow:hidden}
+.sig .big{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.sig .big .ind.dot{width:22px;height:22px;box-shadow:0 0 30px rgba(251,191,36,.7)}
+.sig .big .ind.ring{width:26px;height:26px;border-width:5px}
+.sig h3{font-size:30px;font-weight:800;letter-spacing:-.03em}
+.sig h3 em{font-family:var(--serif);font-weight:400}
+.sig p{color:var(--dim);font-size:15.5px;margin-bottom:12px}
+.sig ul{list-style:none;font-size:14px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px}
+.sig ul li{padding:3px 0 3px 18px;position:relative}
+.sig ul li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+.sig.d{background:radial-gradient(500px 240px at 0% 0%,rgba(251,191,36,.09),transparent 70%),#0a0c12}
+.sig.r{background:radial-gradient(500px 240px at 0% 0%,rgba(251,113,133,.11),transparent 70%),#0a0c12;border-color:rgba(251,113,133,.25)}
+.day{margin-top:56px;border:1px solid var(--line2);border-radius:24px;background:#090b10;padding:clamp(18px,3vw,32px);overflow:hidden}
+.day .top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between;margin-bottom:22px}
+.day h4{font-size:20px;font-weight:750;letter-spacing:-.02em}
+.day h4 span{font:12px var(--mono);color:var(--faint);font-weight:400;margin-left:8px}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:100px;padding:3px;background:#0d1017}
+.seg button{font:600 12px var(--sans);color:var(--dim);background:none;border:0;border-radius:100px;padding:7px 14px;cursor:pointer}
+.seg button.on{background:var(--panel3);color:#fff}
+.lanes{display:grid;grid-template-columns:76px 1fr;gap:5px 12px;align-items:center}
+.lanes .ln{font:600 11px var(--mono);color:var(--dim);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.lanes .ln i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.cells{display:grid;grid-template-columns:repeat(96,1fr);gap:2px;height:14px}
+.cells i{border-radius:2px;background:#151925;transition:background .3s,opacity .4s,transform .3s}
+.cells i.m{background:rgba(251,191,36,.75)}
+.cells i.d{background:var(--you);box-shadow:0 0 8px rgba(251,113,133,.9);transform:scaleY(1.25)}
+.day.only .cells i.m{opacity:.08}
+.day .axis{display:grid;grid-template-columns:76px 1fr;gap:12px;margin-top:8px}
+.day .axis div{display:flex;justify-content:space-between;font:10.5px var(--mono);color:var(--faint)}
+.tally{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:26px}
+.tally div{background:#0c0e14;padding:18px 20px}
+.tally b{display:block;font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-.04em;line-height:1}
+.tally span{display:block;font:500 11px var(--mono);color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-top:8px}
+.tally .y b{color:var(--new)}.tally .r b{color:var(--you)}.tally .c b{color:var(--know)}
+@media(max-width:620px){.tally{grid-template-columns:1fr}.lanes{grid-template-columns:54px 1fr}.lanes .ln{font-size:9.5px}.day .axis{grid-template-columns:54px 1fr}.cells{gap:1px;height:12px}}
+.day .note{margin-top:18px;font-size:14px;color:var(--dim);max-width:820px}
+.day .note b{color:var(--txt)}
+.rulebook{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px}
+.rulebook div{border-top:1px solid var(--line2);padding-top:14px}
+.rulebook .n{font:600 11px var(--mono);color:var(--you)}
+.rulebook b{display:block;font-size:16px;margin:6px 0 6px}
+.rulebook p{font-size:14px;color:var(--dim)}
+@media(max-width:900px){.rulebook{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.rulebook{grid-template-columns:1fr}}
+
+/* decide once */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+.trio div{border-top:1px solid rgba(134,239,172,.35);padding-top:16px}
+.trio .n{font:600 10.5px var(--mono);letter-spacing:.1em;color:var(--know)}
+.trio b{display:block;font-size:19px;letter-spacing:-.02em;margin:8px 0 6px}
+.trio p{font-size:14.5px;color:var(--dim)}
+@media(max-width:800px){.trio{grid-template-columns:1fr}}
+.trend{margin-top:72px;border:1px solid var(--line2);border-radius:24px;background:radial-gradient(600px 260px at 0% 0%,rgba(251,113,133,.08),transparent 70%),#090b10;padding:clamp(20px,3vw,34px)}
+.trh{display:flex;justify-content:space-between;align-items:baseline;gap:8px 20px;flex-wrap:wrap;margin-bottom:24px}
+.trh h4{font-size:20px;font-weight:750;letter-spacing:-.02em}
+.trh span{font:12px var(--mono);color:var(--faint)}
+.tbars{display:grid;grid-template-columns:repeat(20,1fr);gap:clamp(3px,.8vw,10px);align-items:end;height:170px;border-bottom:1px solid var(--line2)}
+.tbars i{display:block;height:var(--h);border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--you),rgba(251,113,133,.25));position:relative}
+.tbars i[data-v]::after{content:attr(data-v);position:absolute;top:-22px;left:50%;transform:translateX(-50%);font:700 13px var(--mono);color:var(--you)}
+.tax{display:flex;justify-content:space-between;gap:10px;margin-top:10px;font:11px var(--mono);color:var(--faint)}
+.trend p{margin-top:22px;color:var(--dim);font-size:15.5px;max-width:860px}
+.trend p b{color:var(--txt)}
+@media(max-width:560px){.tax span:nth-child(2),.tax span:nth-child(3){display:none}}
+.ledger{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:90px}
+.lgh{grid-column:1/-1;margin-bottom:10px}
+.lgh h3{font-size:clamp(28px,3.6vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1.05;max-width:860px}
+.lgh h3 em,.lt em{font-family:var(--serif);font-style:italic;font-weight:400}
+.lgc{border:1px solid rgba(134,239,172,.22);border-radius:22px;padding:24px;background:radial-gradient(400px 200px at 100% 0%,rgba(134,239,172,.08),transparent 70%),#0a0c12}
+.lgc.o{border-color:rgba(251,113,133,.25);background:radial-gradient(400px 200px at 100% 0%,rgba(251,113,133,.08),transparent 70%),#0a0c12}
+.lt{font-size:24px;font-weight:750;letter-spacing:-.02em;display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:16px}
+.lt h4{font:inherit}
+.lt span{font:600 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--know)}
+.lgc.o .lt span{color:var(--you)}
+.le{border:1px solid var(--line);border-radius:14px;padding:16px;background:rgba(255,255,255,.02)}
+.le b{font:600 13px var(--mono);color:var(--know)}
+.lgc.o .le b{color:var(--you)}
+.le p{color:var(--txt);font-size:15px;margin:6px 0 12px}
+.le dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font:12px var(--mono)}
+.le dt{color:var(--faint)}.le dd{color:var(--dim)}
+.lgf{grid-column:1/-1;color:var(--dim);font-size:16.5px;max-width:860px;margin-top:10px}
+.lgf b{color:var(--txt)}
+@media(max-width:800px){.ledger{grid-template-columns:1fr}}
+
+/* what's new */
+.pa{margin-top:52px;border:1px solid var(--line2);border-radius:20px;overflow:hidden}
+.pr{display:grid;grid-template-columns:1fr 1fr 2fr;gap:20px;padding:18px 24px;border-top:1px solid var(--line);font-size:15px;color:var(--dim);align-items:baseline}
+.pr:first-child{border-top:0}
+.pr b{color:var(--txt);font-weight:650}
+.pr span:last-child{color:var(--txt)}
+.pr.ph{background:#0c0e14;font:600 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.pr.ph span:last-child{color:var(--violet)}
+@media(max-width:760px){.pr{grid-template-columns:1fr;gap:4px}.pr.ph{display:none}.pr span:nth-child(2)::before{content:"First: ";color:var(--faint)}}
+.loop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:44px;padding:26px clamp(16px,3vw,34px);border:1px solid var(--line2);border-radius:22px;background:#0a0c12;flex-wrap:wrap}
+.loop>i{font-style:normal;color:var(--faint);font-size:22px}
+.lp{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:120px}
+.lp .ind.dot{width:14px;height:14px}.lp .ind.ring{width:18px;height:18px;border-width:3.5px}
+.lpd{font-size:17px;line-height:18px;color:var(--txt)}
+.lp b{font-size:17px;letter-spacing:-.01em}
+.lp small{font-size:12.5px;color:var(--faint)}
+@media(max-width:700px){.loop{flex-direction:column}.loop>i{transform:rotate(90deg)}}
+
+/* survival */
+.surv{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:52px}
+@media(max-width:800px){.surv{grid-template-columns:1fr}}
+.sv{border:1px solid var(--line);border-radius:22px;padding:28px;background:radial-gradient(500px 220px at 0% 0%,rgba(125,211,252,.07),transparent 70%),#0a0c12;min-width:0}
+.sv .n{font:600 11px var(--mono);color:var(--sky)}
+.sv h3{font-size:24px;font-weight:800;letter-spacing:-.025em;margin:10px 0 10px}
+.sv p{color:var(--dim);font-size:15.5px}
+.sv p b{color:var(--txt)}
+.ring-json{margin-top:16px;background:#07090d;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font:12px/1.65 var(--mono);color:#b9c0d0;overflow-x:auto}
+.price{margin-top:16px;border:1px dashed var(--line2);border-radius:16px;padding:18px 22px;color:var(--dim);font-size:15.5px}
+.price b{color:var(--txt)}
+
+/* recall section */
+.recall-sec{background:radial-gradient(900px 500px at 50% 0%,rgba(251,191,36,.07),transparent 70%)}
+.recall-go{border-color:rgba(251,191,36,.5);color:var(--new)}
+.recall-go:disabled{opacity:.6;cursor:default}
+.steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px}
+.steps4 div{border-top:1px solid rgba(251,191,36,.4);padding-top:14px}
+.steps4 .n{font:600 10.5px var(--mono);letter-spacing:.1em;color:var(--new)}
+.steps4 b{display:block;font-size:17px;letter-spacing:-.01em;margin:8px 0 6px}
+.steps4 p{font-size:14px;color:var(--dim)}
+@media(max-width:900px){.steps4{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.steps4{grid-template-columns:1fr}}
+.graph{display:grid;grid-template-columns:minmax(0,1fr) 60px minmax(0,1.3fr);align-items:center;margin-top:64px;padding:clamp(18px,3vw,34px);border:1px solid rgba(251,191,36,.25);border-radius:24px;background:#090b10}
+.gnode{border:1px solid var(--line2);border-radius:14px;padding:12px 14px;background:#0d1017}
+.gnode b{display:block;font-size:14.5px;font-weight:650}
+.gnode small{display:block;font:11px var(--mono);color:var(--know);margin-top:3px}
+.gnode .ch{font:10.5px var(--mono);color:var(--faint)}
+.gnode.irr small{color:var(--new)}
+.gnode.root{border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.06);padding:18px}
+.gnode.root b{font:600 14px var(--mono);color:var(--new);margin:6px 0 8px}
+.gnode.root s{color:var(--faint);font-size:14px}
+.gnode.root .nw{color:var(--txt);font-size:15px;margin-top:2px}
+.gnode.root small{color:var(--faint);margin-top:10px}
+.gedges{align-self:stretch;position:relative}
+.gedges::before{content:"";position:absolute;left:0;right:50%;top:50%;border-top:1.5px solid rgba(251,191,36,.5)}
+.gedges::after{content:"";position:absolute;left:50%;right:0;top:9%;bottom:9%;border:1.5px solid rgba(251,191,36,.5);border-right:0;border-radius:10px 0 0 10px}
+.gdeps{display:flex;flex-direction:column;gap:8px}
+@media(max-width:760px){.graph{grid-template-columns:1fr}.gedges{height:28px}.gedges::before{left:50%;right:auto;top:0;bottom:0;border-top:0;border-left:1.5px solid rgba(251,191,36,.5)}.gedges::after{display:none}}
+.rstats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:18px}
+.rstats div{background:#0c0e14;padding:18px 20px}
+.rstats b{display:block;font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--new)}
+.rstats div:last-child b{color:var(--you)}
+.rstats span{display:block;font:500 11px var(--mono);color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-top:8px}
+@media(max-width:700px){.rstats{grid-template-columns:1fr 1fr}}
+.compounds{margin-top:28px;color:var(--dim);font-size:16.5px;max-width:860px}
+.compounds b{color:var(--txt)}
+.omt{display:grid;grid-template-columns:auto 1fr auto;gap:6px 28px;align-items:center;margin-top:18px;padding:24px 28px;border:1px solid rgba(251,191,36,.35);border-radius:20px;background:radial-gradient(500px 200px at 0% 50%,rgba(251,191,36,.12),transparent 70%),#0a0c12;text-decoration:none}
+.omt .n{grid-column:1/-1;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--new)}
+.omt .t{font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-.03em}
+.omt .d{color:var(--dim);font-size:15.5px;max-width:640px}
+.omt .go{font:600 13px var(--mono);color:var(--new)}
+.omt:hover .t{color:var(--new)}
+@media(max-width:700px){.omt{grid-template-columns:1fr}}
+.pr.hl{background:rgba(251,191,36,.05)}
+.pr.hl b{color:var(--new)}
+
+/* graph intro + sections */
+.graph-intro{background:radial-gradient(1000px 500px at 50% 0%,rgba(251,191,36,.08),transparent 70%)}
+.five{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:52px}
+.five a{display:block;text-decoration:none;border:1px solid var(--line2);border-radius:18px;padding:20px 18px;background:#0a0c12;transition:border-color .2s,transform .2s}
+.five a:hover{border-color:rgba(251,191,36,.45);transform:translateY(-2px)}
+.five .tense{font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--new)}
+.five b{display:block;font-size:24px;font-weight:800;letter-spacing:-.03em;margin:10px 0 6px}
+.five p{font-size:13.5px;color:var(--dim)}
+.five a:nth-child(2) .tense{color:var(--sky)}.five a:nth-child(3) .tense{color:var(--violet)}.five a:nth-child(4) .tense{color:var(--sky)}.five a:nth-child(5) .tense{color:var(--know)}
+@media(max-width:1000px){.five{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.five{grid-template-columns:1fr}}
+.fork-go{border-color:rgba(125,211,252,.5);color:var(--sky)}
+.fork-go:disabled{opacity:.6;cursor:default}
+code.ic{font:500 .86em var(--mono);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--txt)}
+code.big{font:700 .78em var(--mono);color:var(--know);letter-spacing:-.04em}
+.glyphs{display:flex;flex-wrap:wrap;gap:12px 26px;margin-top:40px;font-size:14px;color:var(--dim)}
+.glyphs div{display:flex;align-items:center;gap:9px}
+
+/* devices */
+.devices>div{min-width:0;max-width:100%}
+.devices{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);align-items:end;margin-top:60px}
+@media(max-width:860px){.devices{grid-template-columns:minmax(0,1fr);justify-items:center}}
+.tab{border:10px solid #1a1d26;border-radius:30px;background:#090b10;overflow:hidden;box-shadow:0 40px 100px -40px rgba(0,0,0,.9),inset 0 0 0 1px rgba(255,255,255,.05);width:100%;max-width:680px}
+.tab .strip{--h:460px}
+.phone{border:9px solid #1a1d26;border-radius:44px;background:#090b10;overflow:hidden;width:300px;position:relative;box-shadow:0 40px 100px -40px rgba(0,0,0,.9)}
+.phone::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:84px;height:22px;border-radius:14px;background:#000;z-index:3}
+.phone .strip{--h:560px;padding-top:38px}
+.dcap{font-style:italic;font-family:var(--serif);font-size:17px;color:var(--dim);text-align:center;margin-top:14px}
+
+/* honest edges */
+.edges{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:56px}
+@media(max-width:960px){.edges{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.edges{grid-template-columns:1fr}}
+.edge{border:1px solid var(--line);border-radius:18px;padding:24px 22px;background:#0a0c12}
+.edge .n{font:600 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dusk)}
+.edge h3{font-size:19px;font-weight:750;letter-spacing:-.02em;margin:10px 0 8px;line-height:1.25}
+.edge p{font-size:14.5px;color:var(--dim)}
+.edge p b{color:var(--txt);font-weight:600}
+.edge .fix{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line2);font-size:13.5px;color:var(--dim)}
+.edge .fix::before{content:"In this sketch → ";font:600 11px var(--mono);color:var(--know)}
+
+/* the letter */
+.letter-sec{padding:clamp(100px,13vw,170px) 0;background:radial-gradient(1000px 600px at 50% 0%,rgba(245,158,107,.10),transparent 70%),var(--bg);border-top:1px solid var(--line)}
+.paper{max-width:780px;margin:0 auto;background:#f4efe4;color:#22201b;border-radius:6px;padding:clamp(34px,7vw,80px) clamp(26px,7vw,84px);box-shadow:0 60px 140px -50px rgba(0,0,0,.95),0 0 0 1px rgba(0,0,0,.2);position:relative;transform:rotate(-.4deg)}
+.paper .dl{font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8b7f6a;margin-bottom:28px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-right:100px}
+@media(max-width:560px){.paper .dl{padding-right:0}}
+.paper h2{font:400 clamp(38px,5.5vw,58px)/1.05 var(--serif);letter-spacing:-.01em;margin-bottom:28px}
+.paper p{font:400 clamp(19px,2vw,22px)/1.6 var(--serif);margin-bottom:20px;color:#2b2822}
+.paper p b{font-weight:400;background:linear-gradient(transparent 62%,rgba(245,158,107,.38) 62%)}
+.paper .em{font-style:italic}
+.paper .sign{margin-top:36px;font:italic 400 30px var(--serif)}
+.paper .sign .also{display:block;font:italic 400 21px/1.35 var(--serif);color:#5a5348;letter-spacing:0;margin:6px 0 10px;max-width:520px}
+.paper .sign span{display:block;font:500 12px var(--mono);font-style:normal;color:#8b7f6a;letter-spacing:.06em;margin-top:4px}
+.paper .ps{margin-top:30px;padding-top:20px;border-top:1px solid rgba(34,32,27,.15);font-size:18px!important;color:#5a5348}
+.paper .stamp{position:absolute;right:clamp(18px,5vw,48px);top:clamp(18px,4vw,40px);width:76px;height:76px;border-radius:50%;border:2px dashed rgba(139,124,246,.55);display:flex;align-items:center;justify-content:center;transform:rotate(14deg);font:700 9px/1.25 var(--mono);color:rgba(110,96,220,.85);text-align:center;letter-spacing:.08em}
+@media(max-width:560px){.paper .stamp{display:none}}
+
+footer{padding:60px 0 90px;border-top:1px solid var(--line);color:var(--faint);font-size:13.5px}
+footer .wide{display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between;align-items:center}
+footer em{font-family:var(--serif);font-size:17px;color:var(--dim)}
+
+.xa-back{position:fixed;left:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.02em;color:#1c1811;background:#fbf7ee;border:1px solid #d9cfbd;border-radius:100px;padding:8px 15px;text-decoration:none;box-shadow:0 6px 20px -8px rgba(28,24,17,.4);transition:transform .18s ease,box-shadow .18s ease}
+.xa-back:hover{transform:translateY(-2px);box-shadow:0 10px 26px -8px rgba(28,24,17,.55)}
+.xa-back .xa-arrow{transition:transform .18s ease}.xa-back:hover .xa-arrow{transform:translateX(-2px)}
+@media (prefers-reduced-motion: reduce){.xa-back,.xa-back .xa-arrow{transition:none}.sky{animation:none}}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+
+<header id="bar">
+  <div class="wide">
+    <span class="logo" aria-hidden="true"></span>
+    <span class="name">Overlook</span>
+    <span class="tag">a love letter to chat</span>
+    <nav>
+      <a href="#rooms">Rooms</a>
+      <a href="#roster">Roster</a>
+      <a href="#knowledge">Knowledge</a>
+      <a href="#attention">Attention</a>
+      <a href="#orders">Decide once</a>
+      <a href="#graph">The graph</a>
+      <a href="#new">What's new</a>
+      <a href="#survive">Survival</a>
+      <a href="#letter">Dear Slack</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="sky"></div><div class="stars"></div>
+  <svg class="ridges" viewBox="0 0 1440 400" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="r1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1530"/><stop offset="1" stop-color="#06070b"/></linearGradient>
+      <linearGradient id="r2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#110f1f"/><stop offset="1" stop-color="#06070b"/></linearGradient>
+    </defs>
+    <path d="M0 240 L120 190 L210 220 L330 150 L450 200 L560 130 L680 185 L790 120 L900 175 L1020 110 L1140 170 L1260 135 L1440 190 L1440 400 L0 400Z" fill="url(#r1)" opacity=".8"/>
+    <path d="M0 300 L150 255 L290 290 L420 235 L560 280 L720 225 L860 275 L1000 230 L1150 280 L1300 245 L1440 270 L1440 400 L0 400Z" fill="url(#r2)"/>
+  </svg>
+  <div class="wrap">
+    <div class="eyebrow rv"><span class="ind ring"></span> An open love letter to chat interfaces</div>
+    <h1 class="rv">Supervising ten agents should feel as <em>calm</em> as reading one channel.</h1>
+    <p class="lede rv">Overlook is a working sketch of the interface the agent era is missing. Every conversation is a column. Every project is a room. Humans and agents share one roster, knowledge files itself, and only two things ever ask for your attention: <b>what's new</b>, and <b>what needs you</b>. Answer a question once, and it never has to ring again.</p>
+    <p class="try rv">Ten agents are working below. <b>It's all live — click around, approve something, try to break it.</b></p>
+  </div>
+  <div class="wide hero-obj rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — acme corp · 10 agents working</div><span class="sp"></span></div>
+      <div class="demo" data-scn="hero"><img class="fb" src="shots/hero.png" alt="The Overlook strip: org rail, channels, #launch-ops with its project rooms and roster, a Needs-you column with three decisions, and two open conversations." width="1370" height="600"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap">
+      <span><i>Live.</i> Open a room, approve the hero copy, close a pane. The red column is everything that's waiting on you.</span>
+      <span class="counter" data-for="hero"></span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="stats rv">
+      <div><b>10</b><span>agents working</span></div>
+      <div><b>6</b><span>projects open</span></div>
+      <div><b>3</b><span>customers talking</span></div>
+      <div><b>1</b><span>strip to watch</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section class="block" id="problem">
+  <div class="wrap">
+    <div class="kicker rv">Why a love letter needs writing</div>
+    <h2 class="sec rv">We love chat. <em>Chat wasn't built for this.</em></h2>
+    <p class="lede rv">Chat carried us through the remote-work era beautifully. Then the agent era arrived — ten agents, six projects, three customers — and the metaphor started to creak in four places at once.</p>
+    <div class="creaks">
+      <div class="creak rv"><div class="n">/ 01</div><h3>Threads are where decisions go to die</h3><p>The thing that matters is always three replies deep in a thread nobody reopens. Archaeology is not a workflow.</p></div>
+      <div class="creak rv"><div class="n">/ 02</div><h3>Every agent starts stupid</h3><p>Each new agent wakes up knowing nothing, and a human becomes a full-time context courier — pasting the same background into every DM, every day.</p></div>
+      <div class="creak rv"><div class="n">/ 03</div><h3>One room per customer isn't enough</h3><p>A customer channel holds the QBR, the onboarding and the fire drill. Chat gives you one room and wishes you luck.</p></div>
+      <div class="creak hot rv"><div class="n">/ 04</div><h3>Everything glows</h3><p>An unread badge meant "a person wants you." Agents never stop talking, so now it means nothing — and the one message that's blocked on you looks exactly like the other nine hundred.</p></div>
+    </div>
+    <div class="bigstat rv">
+      <div class="num">960</div>
+      <p><b>messages in one working day</b> — ten agents, one update every five minutes, eight hours. Chat draws every one of them with the same bold channel name. The seven that are actually waiting on a human decision get no special treatment at all.<span class="fine">10 agents × 12 per hour × 8 hours = 960. Illustrative, not measured.</span></p>
+    </div>
+    <div class="moves">
+      <a href="#rooms" class="rv"><span class="n">01</span><span class="t">Rooms, not threads</span><span class="d">Persistent project rooms hang off every channel.</span></a>
+      <a href="#roster" class="rv"><span class="n">02</span><span class="t">One roster</span><span class="d">Humans and agents, same roles, same rules — agents get gauges.</span></a>
+      <a href="#knowledge" class="rv"><span class="n">03</span><span class="t">Knowledge distills itself</span><span class="d">Agents file what's worth keeping, with the receipt attached.</span></a>
+      <a href="#attention" class="rv"><span class="n">04</span><span class="t">Two signals</span><span class="d">A dot means new. A ring means you. Nothing else blinks.</span></a>
+      <a href="#orders" class="rv"><span class="n">05</span><span class="t">Decide once</span><span class="d">Every repeatable ring can become a standing order, with a receipt.</span></a>
+      <a href="#screens" class="rv"><span class="n">11</span><span class="t">Every screen</span><span class="d">The nesting never collapses — monitor to phone.</span></a>
+    </div>
+    <a href="#graph" class="omt rv"><span class="n">06–10 · One more thing</span><span class="t">The graph.</span><span class="d">Every output records what it rested on — so Overlook can Recall the past, Fork the future, keep the present Coherent, log what changed in what you believe, and Blame any line.</span><span class="go">See it →</span></a>
+  </div>
+</section>
+
+<!-- ============ THE STRIP ============ -->
+<section class="block" id="strip">
+  <div class="wrap">
+    <div class="kicker rv">The shape of the thing</div>
+    <h2 class="sec rv">Columns, not tabs. <em>Parallel work stays visible.</em></h2>
+    <p class="lede rv">Overlook is one horizontal strip. Each step deeper opens a column to the right instead of replacing the one you were in, so where you are is never a mystery and two conversations can sit side by side. <b>The strip is the navigation.</b> There is no other.</p>
+    <div class="anat">
+      <div class="a rv"><div class="lbl">Rail</div><h4>Orgs</h4><p>Every company you work with, as a stack of tiles.</p><div class="ghost"><i class="on"></i><i></i><i></i></div></div>
+      <div class="a rv"><div class="lbl">Column 1</div><h4>Channels</h4><p>The front doors. Customers, teams, the agent fleet, DMs.</p><div class="ghost"><i class="on"></i><i></i><i></i><i></i></div></div>
+      <div class="a rv"><div class="lbl">Column 2</div><h4>Rooms + roster</h4><p>Inside the door: the project rooms, and everyone (and everything) with access.</p><div class="ghost"><i></i><i class="on"></i><i></i></div></div>
+      <div class="a inbox rv"><span class="tagnew">NEW IN v2</span><div class="lbl">Column 3</div><h4>Needs you</h4><p>Every decision blocked on a human, the standing orders you've granted, and a one-tap brief of everything else. This column is how ten agents become calm.</p><div class="ghost"><i></i><i></i></div></div>
+      <div class="a rv"><div class="lbl">Columns 4…n</div><h4>Conversations</h4><p>Rooms, free chat and DMs open as panes, side by side. Each carries its breadcrumb, its context meter, and the knowledge it's drawing on.</p><div class="ghost"><i></i><i class="on"></i><i></i><i></i></div></div>
+    </div>
+    <div class="rules">
+      <div class="rv"><b>Explicit and adjacent.</b><p>Org › channel › room › conversation is always on screen, left to right. Nothing hides behind a hamburger.</p></div>
+      <div class="rv"><b>Open is a choice.</b><p>Panes stay until you close them. Closing a room's pane doesn't close the room — it just leaves your field of view.</p></div>
+      <div class="rv"><b>Four columns is the budget.</b><p>Past four open panes, a strip becomes a tab bar again. That's why the needs-you column exists: it scales so the panes don't have to.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 ROOMS ============ -->
+<section class="block" id="rooms">
+  <div class="wrap">
+    <div class="kicker rv">01 — Rooms, not threads</div>
+    <h2 class="sec rv">Give every project <em>its own room.</em></h2>
+    <p class="lede rv">In most tools <b>#cust-northwind</b> is a single room where the QBR, the onboarding and the outage shout over each other. Overlook hangs <b>distinct, persistent project rooms</b> off the channel. Open them side by side. Close them when the work is done — a closed room keeps its history and leaves behind what it learned. The channel stays the front door; projects are the rooms inside.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — #cust-northwind</div><span class="sp"></span></div>
+      <div class="demo" data-scn="rooms"><img class="fb" src="shots/rooms.png" alt="#cust-northwind with the 2026-Q4 QBR and Onboarding rooms open side by side and a closed Outage room." width="1370" height="540"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> QBR and Onboarding, side by side under #cust-northwind. Open the closed Outage room — its post-mortem is what the other two are quoting.</span></div>
+  </div>
+</section>
+
+<!-- ============ 02 ROSTER ============ -->
+<section class="block" id="roster">
+  <div class="wrap">
+    <div class="kicker rv">02 — Humans and agents, one roster</div>
+    <h2 class="sec rv">No second-class citizens. <em>No unsupervised ones either.</em></h2>
+    <p class="lede rv">Agents sit in the <b>same list</b> as people, under the <b>same roles</b> — owner, admin, member, scoped. A scoped agent can't add members: it <b>requests</b>, and the request becomes a ring on an owner's screen. Acting-as is explicit and always visible. Same room, same rules.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — #launch-ops · details</div><span class="sp"></span></div>
+      <div class="demo" data-scn="roster"><img class="fb" src="shots/roster.png" alt="Channel details for #launch-ops: acting-as selector, add-party control, the mixed roster of humans and agents, and Scout's gauges expanded." width="1370" height="540"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> Switch the acting identity to Scout and add Dana. Watch the ring appear — then switch back to You and approve it. Click any agent to see its gauges.</span></div>
+  </div>
+  <div class="wrap">
+    <div class="split">
+      <div class="rv">
+        <div class="kicker">Same rules, extra gauges</div>
+        <h3>Agents aren't people. <em>The roster admits it.</em></h3>
+        <p>Symmetric roles keep the permission model honest — but an agent has properties no colleague has. It can run at 3 a.m., spend money by the token, fill its context window, and be cloned. So every agent row carries the things a supervisor actually needs: <b>who it answers to, what it may do, how full it is, what it has spent</b> — and a pause button.</p>
+        <p>When an agent's context runs hot, it doesn't silently degrade. It asks: <b>distill and continue in a fresh window, or raise the budget?</b> That's a ring, and it's yours.</p>
+      </div>
+      <div class="badge rv" aria-label="Agent badge for Scout">
+        <div class="top"><span class="av lg agent" style="--c:#38bdf8">S</span><div><h4>Scout</h4><div class="s">Research agent · scoped · answers to Priya</div></div></div>
+        <div class="gauges">
+          <div><span class="lbl">Context</span><b>61%</b><div class="gauge"><i style="width:61%"></i></div></div>
+          <div><span class="lbl">Spend today</span><b>$3.12</b><div class="gauge"><i style="width:31%"></i></div></div>
+        </div>
+        <ul class="scope">
+          <li><span class="ok">✓</span> Read and write in #launch-ops and its rooms</li>
+          <li><span class="ok">✓</span> Invoke and distill knowledge, with provenance</li>
+          <li><span class="rq">?</span> Add members — by request; an owner approves</li>
+          <li><span class="no">✕</span> Act as anyone else, or leave Acme's data boundary</li>
+        </ul>
+        <div class="ctl"><span>Pause</span><span>Distill &amp; reset</span><span>Audit trail</span><span class="red">Revoke</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 KNOWLEDGE ============ -->
+<section class="block" id="knowledge">
+  <div class="wrap">
+    <div class="kicker rv">03 — Knowledge distills itself</div>
+    <h2 class="sec rv">Nobody copy-pastes <em>context again.</em></h2>
+    <p class="lede rv">When something is worth keeping, an <b>agent</b> distills it into the knowledge base — <b>provenance attached</b>: which room, which messages, who confirmed it, when it's due for review. The next agent invokes it instead of pinging you. No forwarding. No pasting. No "as per my last message." The handoffs below happened with <b>zero human forwarding</b>.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — knowledge in action</div><span class="sp"></span></div>
+      <div class="demo" data-scn="knowledge"><img class="fb" src="shots/knowledge.png" alt="Two panes, each with a green knowledge banner naming who distilled the entry and who invoked it." width="1370" height="540"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> Click a green banner to open its receipt: <b>distilled by Forge · invoked by Scout</b>. That's the whole context-transfer UI — there isn't one.</span></div>
+  </div>
+  <div class="wrap">
+    <div class="lifecycle">
+      <div class="rv" style="--c:var(--know)"><b>Distilled</b><p>An agent writes the entry and cites the messages it came from. Nothing enters without a source.</p></div>
+      <div class="rv" style="--c:var(--sky)"><b>Invoked</b><p>Other agents pull it by name. Every invocation is logged on the entry, so you can see what it's holding up.</p></div>
+      <div class="rv" style="--c:var(--violet)"><b>Confirmed</b><p>A human who was in the room signs it. Unconfirmed entries are marked as such wherever they're quoted.</p></div>
+      <div class="rv" style="--c:var(--new)"><b>Review due</b><p>Every entry carries a date. When it passes, the entry asks its confirmer — with a dot, not a ring.</p></div>
+      <div class="rv" style="--c:var(--faint)"><b>Superseded</b><p>New facts replace old ones explicitly. Agents that invoke a superseded entry are redirected, not misled.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 ATTENTION ============ -->
+<section class="block" id="attention">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--you)">04 — Attention, honestly</div>
+    <h2 class="sec rv">Two signals. <em>Never a third.</em></h2>
+    <p class="lede rv">The first sketch had one rule: a dot means new. It's a good rule, and it isn't enough — at agent volume, everything is new. So Overlook splits attention in two, and promises never to add a third.</p>
+    <div class="signals">
+      <div class="sig d rv">
+        <div class="big"><span class="ind dot"></span><h3>Dot — <em>new</em></h3></div>
+        <p>You haven't seen this. Not "active." Not "working." <b style="color:var(--txt)">New.</b> Open it and it's seen.</p>
+        <ul><li>Fades the moment you look</li><li>Anyone can cause one, human or agent</li><li>Safe to ignore for a day</li></ul>
+      </div>
+      <div class="sig r rv">
+        <div class="big"><span class="ind ring"></span><h3>Ring — <em>needs you</em></h3></div>
+        <p>Something is blocked on a decision only your role can make. Looking at it doesn't clear it. <b style="color:var(--txt)">Deciding</b> does.</p>
+        <ul><li>Clears only on approve, deny or delegate</li><li>Can only be raised through a typed request</li><li>Always outranks a dot, in every list</li></ul>
+      </div>
+    </div>
+
+    <div class="day rv" id="day">
+      <div class="top">
+        <h4>One working day, compressed <span>10 agents · 08:00–16:00 · one cell = 5 min</span></h4>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div class="seg" role="group" aria-label="View"><button class="on" data-v="all">Everything new</button><button data-v="only">Only what needs you</button></div>
+          <button class="btn-sim" id="dayPlay">▶ Replay</button>
+        </div>
+      </div>
+      <div class="lanes" id="lanes"></div>
+      <div class="axis"><span></span><div><span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span></div></div>
+      <div class="tally">
+        <div class="y"><b id="tNew">953</b><span>dots — updates you can read later</span></div>
+        <div class="r"><b id="tYou">7</b><span>rings — decisions waiting on you</span></div>
+        <div class="c"><b id="tPct">0.7%</b><span>of the day that needed you</span></div>
+      </div>
+      <p class="note">Under one signal, those <b>7 decisions</b> hide among <b>953 updates</b> that look exactly like them. Under two, you can read the 953 whenever you like — or never — and still not miss anything that was waiting on you. <b>That's what "calm" means here:</b> not fewer messages, but knowing which ones are yours.</p>
+    </div>
+
+    <div class="rulebook">
+      <div class="rv"><span class="n">RULE 1</span><b>Rings are typed.</b><p>Approval, signature, scope exception, budget. An agent can't ring you to say "update!" — status is only ever a dot.</p></div>
+      <div class="rv"><span class="n">RULE 2</span><b>Rings are addressed to roles.</b><p>A ring lands on whoever holds the role that can decide it. Members never see an owner's ring.</p></div>
+      <div class="rv"><span class="n">RULE 3</span><b>Rings are rate-limited.</b><p>An agent that keeps escalating gets its rings batched and its supervisor told. Crying wolf is visible.</p></div>
+      <div class="rv"><span class="n">RULE 4</span><b>Rings bubble up.</b><p>Room → channel → org tile. You can see from the rail that Meridian needs you before you open it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 DECIDE ONCE ============ -->
+<section class="block" id="orders">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--know)">05 — Decide once</div>
+    <h2 class="sec rv">Every ring is a chance <em>to never see it again.</em></h2>
+    <p class="lede rv">Two signals make the noise legible. They don't make it shrink. What shrinks it is noticing that most of what agents ask is <b>the same question twice</b>. So every repeatable ring carries an <b>Always</b>. Answer it that way once and it becomes a <b>standing order</b>: a rule with a receipt — which decision it came from, who made it, what it allows, how often it has fired, when it expires. The next time, the agent goes ahead and leaves a dot. Irreversible actions — signatures, production pushes, money leaving the building — never get an Always.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — #cust-halcyon · decide once</div><span class="sp"></span></div>
+      <div class="demo" data-scn="orders"><img class="fb" src="shots/orders.png" alt="The Needs-you column with Sable's TTL request offering Always, the irreversible Bramble renewal without it, an empty standing-orders list and a Catch-me-up button." width="1370" height="600"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> Answer Sable's TTL request with <b>Always</b>. Watch the next one handle itself and turn up as a dot. Revoke the order and it rings again. Then hit <b>Catch me up</b>.</span><span class="counter" data-for="orders"></span></div>
+  </div>
+  <div class="wrap">
+    <div class="trio">
+      <div class="rv"><span class="n">RINGS CARRY EVIDENCE</span><b>Decide in one read.</b><p>Every ring states what the agent relied on, whether it can be undone, and what it costs. You never open a thread to find out what you're approving.</p></div>
+      <div class="rv"><span class="n">ORDERS ARE NARROW</span><b>Scoped, expiring, revocable.</b><p>An order names one agent, one kind of action, one place. It expires in 30 days, counts every use, and revoking it brings the ring back on the very next occurrence.</p></div>
+      <div class="rv"><span class="n">DOTS GET A BRIEF</span><b>Catch up in five lines.</b><p>One line per room, newest first, each linked to its source. A brief can hide a dot — never a ring. Rings are never summarized away.</p></div>
+    </div>
+
+    <div class="trend rv">
+      <div class="trh"><h4>Rings per day, as orders accumulate</h4><span>Illustrative — one person, ten agents, four weeks</span></div>
+      <div class="tbars">
+        <i style="--h:100%" data-v="7"></i><i style="--h:100%"></i><i style="--h:86%"></i><i style="--h:71%"></i><i style="--h:71%"></i>
+        <i style="--h:57%"></i><i style="--h:57%"></i><i style="--h:57%"></i><i style="--h:43%"></i><i style="--h:43%"></i>
+        <i style="--h:43%"></i><i style="--h:43%"></i><i style="--h:29%"></i><i style="--h:43%"></i><i style="--h:29%"></i>
+        <i style="--h:29%"></i><i style="--h:29%"></i><i style="--h:29%"></i><i style="--h:29%"></i><i style="--h:29%" data-v="2"></i>
+      </div>
+      <div class="tax"><span>Week 1 · 0 orders</span><span>Week 2 · 4</span><span>Week 3 · 7</span><span>Week 4 · 9 orders</span></div>
+      <p>The floor never reaches zero, and shouldn't: what's left are the calls that are actually yours — signatures, launches, anything irreversible. <b>That's the calm the headline promised:</b> not fewer agents, not fewer messages, but a supervisor whose work shrinks to the decisions only they can make.</p>
+    </div>
+
+    <div class="ledger">
+      <div class="lgh rv"><div class="kicker" style="color:var(--know)">The ledger</div><h3>Two things distill out of conversation. <em>Both carry receipts.</em></h3></div>
+      <div class="lgc rv"><div class="lt"><h4>What the org <em>knows</em></h4><span>Knowledge</span></div>
+        <div class="le"><b>stripe-webhook-retry-policy</b><p>Stripe retries failed webhooks for up to three days; our handler is idempotent on event.id.</p>
+        <dl><dt>distilled</dt><dd>Forge · #launch-ops · 3 messages</dd><dt>confirmed</dt><dd>Marcus</dd><dt>invoked</dt><dd>7× by Scout, Echo, Forge</dd><dt>review</dt><dd>Dec 1</dd></dl></div></div>
+      <div class="lgc o rv"><div class="lt"><h4>What the org <em>allows</em></h4><span>Standing orders</span></div>
+        <div class="le"><b>SO-1</b><p>Sable may allow ≤24h TTLs on staging buckets in #cust-halcyon.</p>
+        <dl><dt>granted</dt><dd>You · 2:53a · Data migration</dd><dt>from</dt><dd>the ring "Allow a 24-hour TTL on contacts staging"</dd><dt>fired</dt><dd>3×</dd><dt>expires</dt><dd>in 30 days · revoke anytime</dd></dl></div></div>
+      <p class="lgf rv">Knowledge and orders can each be invoked, audited, superseded and revoked. Together they form <b>the ledger</b>: a running, receipted record of what your organization knows and what it has allowed its agents to do. It's the one artifact here that grows more valuable every day the strip runs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE GRAPH UNDERNEATH ============ -->
+<section class="block graph-intro" id="graph">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--new)">The graph underneath</div>
+    <h2 class="sec rv">One graph. <em>Five ways to ask it something.</em></h2>
+    <p class="lede rv">Every agent output in Overlook records its <b>basis</b>: the exact versions of the knowledge, orders and decisions it rested on. That single graph is the most valuable thing in the product. Ask it about the past, the future, the present, what's changed, or any single line — and it answers in the strip, as columns, like everything else.</p>
+    <div class="five">
+      <a href="#recall" class="rv"><span class="tense">The past</span><b>Recall</b><p>A fact changed. Fix everything that rested on it.</p></a>
+      <a href="#fork" class="rv"><span class="tense">The future</span><b>Fork</b><p>A decision is pending. See every world it creates.</p></a>
+      <a href="#coherence" class="rv"><span class="tense">The present</span><b>Coherence</b><p>The org believes two things. Catch it before it leaves.</p></a>
+      <a href="#changelog" class="rv"><span class="tense">Since you looked</span><b>Changelog</b><p>Catch up on what the org believes, not what it said.</p></a>
+      <a href="#blame" class="rv"><span class="tense">Any line</span><b>Blame</b><p>Why does this say that? One command.</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 RECALL ============ -->
+<section class="block recall-sec" id="recall">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--new)">06 — Recall</div>
+    <h2 class="sec rv">When a fact turns out wrong, <em>recall everything built on it.</em></h2>
+    <p class="lede rv">Agents rarely invent new ways to be wrong. They spread old ones at machine speed: one bad fact, copied into forty artifacts by six agents across three customers, and no human can find them all. So every agent action in Overlook records its <b>basis</b> — the knowledge entries, orders and decisions it relied on — captured at the moment the agent fetches them, not reported afterwards. When any basis changes, Overlook traces what rested on it, has the agents <b>redo that work</b> against the corrected fact, and brings you <b>one ring with every diff inside</b>.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — #launch-ops · recall</div><span class="sp"></span></div>
+      <div class="demo" data-scn="recall"><img class="fb" src="shots/recall.png" alt="A Recall column tracing one changed fact to five dependents across four places, each with a diff, and a single ring to approve them." width="1370" height="600"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> Play Marcus's correction — or type it yourself in Free chat: <b>“Stripe extended retries to 5 days.”</b> Untick anything you want left alone, then approve once.</span><button class="btn-sim recall-go" data-recall="recall">▶ Play Marcus's correction</button></div>
+  </div>
+  <div class="wrap">
+    <div class="steps4">
+      <div class="rv"><span class="n">1 · CAPTURE</span><b>Basis, recorded at fetch time.</b><p>Agents get knowledge, orders and decisions through Overlook, so every output is stamped with the exact versions it used. Nobody has to remember to cite.</p></div>
+      <div class="rv"><span class="n">2 · TRACE</span><b>Change one node, walk the graph.</b><p>A supersession, a revoked order, or a new message that contradicts a confirmed fact starts a trace across every room, DM and customer.</p></div>
+      <div class="rv"><span class="n">3 · RE-DERIVE</span><b>Agents redo the work, as diffs.</b><p>Each dependent is regenerated against the new version and held as a proposed change. Anything already sent gets a drafted correction, never a silent edit.</p></div>
+      <div class="rv"><span class="n">4 · ONE RING</span><b>Routed to whoever can decide.</b><p>All of it arrives as one ring for the role with authority over the affected scope. Approve all, untick some, or leave items on the old version — flagged stale.</p></div>
+    </div>
+
+    <div class="graph rv" aria-label="Basis graph">
+      <div class="gnode root"><span class="lbl">changed</span><b>stripe-webhook-retry-policy</b><div><s>v1 · up to three days</s></div><div class="nw">v2 · up to five days</div><small>contradicted by Marcus · #launch-ops</small></div>
+      <div class="gedges" aria-hidden="true"></div>
+      <div class="gdeps">
+        <div class="gnode"><span class="ch">#launch-ops</span><b>Scout's answer</b><small>re-derived · text diff</small></div>
+        <div class="gnode"><span class="ch">DM · Forge</span><b>webhooks/config.ts</b><small>re-derived · 72h → 120h</small></div>
+        <div class="gnode"><span class="ch">#agent-fleet</span><b>retry_window.test.ts</b><small>re-derived · 3d → 5d</small></div>
+        <div class="gnode"><span class="ch">#cust-northwind › QBR</span><b>Slide 7</b><small>re-derived · deck diff</small></div>
+        <div class="gnode irr"><span class="ch">#cust-northwind</span><b>2 replies sent to the customer</b><small>irreversible · correction drafted</small></div>
+      </div>
+    </div>
+
+    <div class="rstats rv">
+      <div><b>1</b><span>fact changed</span></div>
+      <div><b>5</b><span>things built on it</span></div>
+      <div><b>4</b><span>places — 3 channels, 1 DM</span></div>
+      <div><b>1</b><span>ring to fix all of it</span></div>
+    </div>
+    <p class="compounds rv"><b>Why it compounds.</b> Every action an agent takes adds edges to the basis graph, so Recall gets more precise the longer an org uses it — and a competitor who copies the interface starts with an empty graph. It's also what makes the ledger matter: knowledge and orders aren't just stored, they're <b>load-bearing</b>, and Overlook knows exactly what each one is holding up.</p>
+  </div>
+</section>
+
+<!-- ============ 07 FORK ============ -->
+<section class="block" id="fork">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--sky)">07 — Fork</div>
+    <h2 class="sec rv">Every decision arrives <em>with its futures attached.</em></h2>
+    <p class="lede rv">Recall runs the graph backward. Fork runs it forward. Open any ring with options as a fork and the strip <b>splits into one column per world</b>. In each, the dependent agents redo their work as if that option had won — inside a sandbox where sends become drafts, deploys become previews and payments become line items. You see what each choice touches before you make it. Merge one world, and the other is kept as <b>the road not taken</b>.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — #launch-ops › pricing v3 · fork</div><span class="sp"></span></div>
+      <div class="demo" data-scn="fork"><img class="fb" src="shots/fork.png" alt="Two world columns, $24 and $29, each listing what the choice changes downstream, with metrics and a merge button." width="1370" height="600"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> Ledger asks <b>“$24 or $29?”</b> Fork it and watch two worlds compute side by side. Merge one — in world A, the margin ring it predicted shows up for real.</span><button class="btn-sim fork-go" data-fork="fork">⑂ Fork Ledger’s question</button></div>
+  </div>
+  <div class="wrap">
+    <div class="steps4">
+      <div class="rv"><span class="n" style="color:var(--sky)">SCOPED</span><b>Only what the decision touches.</b><p>The fork copies just the part of the basis graph downstream of the ring, not the whole org. Cheap enough to be a button.</p></div>
+      <div class="rv"><span class="n" style="color:var(--sky)">SANDBOXED</span><b>Effects become intents.</b><p>Anything that would leave the building — a reply, a deploy, a charge — is captured as an intent with its reversibility, never executed.</p></div>
+      <div class="rv"><span class="n" style="color:var(--sky)">PREDICTIVE</span><b>Flags before they ring.</b><p>World A shows the Bramble margin dipping under policy. Merge it, and that ring arrives — already explained.</p></div>
+      <div class="rv"><span class="n" style="color:var(--sky)">CALIBRATING</span><b>The road not taken is kept.</b><p>Every unmerged world is a recorded prediction. When reality plays out, Overlook shows how well the forecasts held — for you and for each agent.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 COHERENCE ============ -->
+<section class="block" id="coherence">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--violet)">08 — Coherence</div>
+    <h2 class="sec rv">Your org believes two things. <em>Overlook notices first.</em></h2>
+    <p class="lede rv">Knowledge entries don't just hold prose — they declare typed <b>claims</b>, like <code class="ic">launch.date</code> or <code class="ic">northwind.sso</code>. Because every artifact records which entries it rests on, Overlook can compare claims across the whole org continuously, without rereading a word. When two things disagree, the <b>≠</b> chip lights up. A disagreement stays a dot while it's internal; the moment it's about to leave the building, it becomes a ring on the decision that would ship it.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — coherence</div><span class="sp"></span></div>
+      <div class="demo" data-scn="coherence"><img class="fb" src="shots/coherence.png" alt="A Coherence column with two conflicts: launch date Oct 14 vs Oct 21 (about to leave), and Northwind SSO SAML vs OIDC (internal), each with sides, quoters and resolutions." width="1370" height="600"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> Quill’s copy would announce <b>Oct 14</b>; Forge’s build notes say <b>Oct 21</b>. The hero-copy ring is flagged before you approve. Pick a side — the agents on the other side re-derive their work.</span></div>
+  </div>
+  <div class="wrap">
+    <div class="trio">
+      <div class="rv"><span class="n" style="color:var(--violet)">CLAIMS, NOT PROSE</span><b>Compared by key, not by reading.</b><p>Two entries asserting different values for the same claim key is a conflict. Checking is cheap, so it runs all the time.</p></div>
+      <div class="rv"><span class="n" style="color:var(--violet)">GATED BY EXIT</span><b>Dot inside. Ring at the door.</b><p>A conflict escalates only when something that quotes it is about to be sent, signed, published or deployed.</p></div>
+      <div class="rv"><span class="n" style="color:var(--violet)">RESOLVED BY RECALL</span><b>Pick a side; the other re-derives.</b><p>Choosing a value updates the losing entry and sends every artifact built on it back through Recall — as diffs, with one approval.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 CHANGELOG ============ -->
+<section class="block" id="changelog">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--sky)">09 — Belief changelog</div>
+    <h2 class="sec rv">Catch up on what the org <em>believes</em>, <em>not what it said.</em></h2>
+    <p class="lede rv">Nine hundred messages can contain four changes in what's actually true. The <b>Δ</b> chip opens a git-log for beliefs: facts distilled, revised or superseded, orders granted or revoked, conflicts found and resolved, forks merged, rooms closed. Every entry links to where it happened. It's written by the graph itself — no one summarizes anything, so nothing can be summarized away.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — belief changelog</div><span class="sp"></span></div>
+      <div class="demo" data-scn="changelog"><img class="fb" src="shots/changelog.png" alt="The belief changelog column: new entries since you last looked, then earlier ones, each with a glyph and a link." width="1370" height="600"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> Three changes since you last looked. Answer Sable with <b>Always</b> or play Marcus’s correction, and watch new lines land at the top.</span><button class="btn-sim recall-go" data-recall="changelog">▶ Play Marcus’s correction</button></div>
+  </div>
+  <div class="wrap">
+    <div class="glyphs rv">
+      <div><span class="lgg g0">+</span>distilled · granted</div>
+      <div><span class="lgg g1">~</span>revised</div>
+      <div><span class="lgg g2">−</span>superseded · revoked</div>
+      <div><span class="lgg g3">✓</span>confirmed · resolved</div>
+      <div><span class="lgg g4">≠</span>conflict found</div>
+      <div><span class="lgg g5">⑂</span>fork merged</div>
+      <div><span class="lgg">×</span>room closed</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 BLAME ============ -->
+<section class="block" id="blame">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--know)">10 — Overlook blame</div>
+    <h2 class="sec rv"><code class="big">/blame</code> <em>Why does this say that?</em></h2>
+    <p class="lede rv">Nobody thinks <code class="ic">git blame</code> is about blame. It's about getting from a line to its reason in one keystroke. Overlook blame does that for any message, config line, slide or claim: a gutter showing who wrote each line, when, and on what basis — then the chain behind the selected line: the knowledge entry and version, the messages it was distilled from, who confirmed it, and what permission allowed the agent to act. Type <b>/blame</b> or <b>/why</b> in any pane, or click <b>blame</b> on any traced message.</p>
+  </div>
+  <div class="wide demo-wrap rv">
+    <div class="frame">
+      <div class="fbar"><i></i><i></i><i></i><div class="url">overlook.app — DM · Forge · blame</div><span class="sp"></span></div>
+      <div class="demo" data-scn="blame"><img class="fb" src="shots/blame.png" alt="Overlook blame on webhooks/config.ts: a per-line gutter with hashes, authors, times and sources, and the chain for RETRY_WINDOW_HOURS back to Stripe docs and Marcus’s confirmation." width="1370" height="600"><div class="fbnote">Static snapshot — the live demo needs JavaScript.</div></div>
+    </div>
+    <div class="cap"><span><i>Live.</i> Blame on Forge’s <b>webhooks/config.ts</b>. Click any line to see its chain — the retry window traces back through Forge’s entry to Stripe’s docs and Marcus’s confirmation. Type <b>/why</b> in the pane to blame Forge’s newest message instead.</span></div>
+  </div>
+  <div class="wrap">
+    <div class="trio">
+      <div class="rv"><span class="n" style="color:var(--know)">ONE KEYSTROKE</span><b>Invocable everywhere.</b><p><code class="ic">/blame</code>, <code class="ic">/why</code>, the blame link on a message, or “blame” on either side of a conflict. Same answer, same column.</p></div>
+      <div class="rv"><span class="n" style="color:var(--know)">SOURCES, NOT CULPRITS</span><b>Provenance and permission.</b><p>It names what a line rests on and what allowed it — never a “responsible party.” The goal is to fix the basis, not the agent.</p></div>
+      <div class="rv"><span class="n" style="color:var(--know)">COMPLETE BY CONSTRUCTION</span><b>No citations to forget.</b><p>Because basis is captured when context is fetched, every traced line has its chain. Blame never depends on anyone having written a note.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 SCREENS ============ -->
+<section class="block" id="screens">
+  <div class="wrap">
+    <div class="kicker rv">11 — Every screen</div>
+    <h2 class="sec rv">The nesting <em>never collapses.</em></h2>
+    <p class="lede rv">Orgs, channels, rooms, decisions, conversations — <b>explicit and adjacent</b> on a monitor, on a tablet and on a phone. On a small screen the strip doesn't fold into menus; each column becomes a page you swipe through, in the same order.</p>
+    <div class="devices">
+      <div class="rv" style="width:100%;display:flex;flex-direction:column;align-items:center">
+        <div class="tab"><div class="demo" data-scn="tablet"><img class="fb" src="shots/tablet.png" alt="Overlook on a tablet: the full strip, scrollable." width="632" height="460"></div></div>
+        <div class="dcap">Tablet — the full strip, swipeable.</div>
+      </div>
+      <div class="rv">
+        <div class="phone"><div class="demo" data-scn="phone"><img class="fb" src="shots/phone.png" alt="Overlook on a phone: the channels column as one swipe page." width="282" height="560"></div></div>
+        <div class="dcap">Phone — same columns, one per swipe.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT'S NEW ============ -->
+<section class="block" id="new">
+  <div class="wrap">
+    <div class="kicker rv">What's actually new</div>
+    <h2 class="sec rv">Borrowed shapes. <em>One new loop.</em></h2>
+    <p class="lede rv">Most of Overlook's shapes have shipped before, and it should say so. Here's each one, who got there first, and the part that's actually Overlook's.</p>
+    <div class="pa rv" role="table" aria-label="Prior art">
+      <div class="pr ph" role="row"><span role="columnheader">Primitive</span><span role="columnheader">Who got there first</span><span role="columnheader">What Overlook adds</span></div>
+      <div class="pr" role="row"><b role="cell">Columns side by side</b><span role="cell">TweetDeck (2008)</span><span role="cell">Columns as the <em>only</em> navigation, plus a needs-you column that carries the scale so panes don't have to</span></div>
+      <div class="pr" role="row"><b role="cell">Topics inside channels</b><span role="cell">Zulip (2012)</span><span role="cell">Persistent rooms with their own roster and artifacts, which close into knowledge</span></div>
+      <div class="pr" role="row"><b role="cell">Bots in the member list</b><span role="cell">IRC bots, then Slack apps</span><span role="cell">Agents under the same roles as people — with gauges for context, spend, who they answer to, and a pause</span></div>
+      <div class="pr" role="row"><b role="cell">Approval gates</b><span role="cell">Code review, ticketing</span><span role="cell">Approval as a chat-native signal — the ring — typed, addressed to a role, carrying its evidence</span></div>
+      <div class="pr" role="row"><b role="cell">Rules from actions</b><span role="cell">Email's "filter messages like these"</span><span role="cell">Decisions that compile into scoped, expiring standing orders, each with a receipt and a usage count</span></div>
+      <div class="pr hl" role="row"><b role="cell">Recall</b><span role="cell">Truth-maintenance systems (Doyle, 1979), build systems, data lineage</span><span role="cell">Basis captured when agents fetch context; agents re-derive natural-language and code work as diffs; one ring routed to the role with authority</span></div>
+      <div class="pr hl" role="row"><b role="cell">Fork</b><span role="cell">Preview deploys, spreadsheet what-if, git and database branching</span><span role="cell">Branches the basis graph downstream of a decision; agents re-derive each world; effects held as typed intents; unmerged worlds kept as predictions</span></div>
+      <div class="pr hl" role="row"><b role="cell">Coherence</b><span role="cell">Linters, contract tests, consistency checkers</span><span role="cell">Typed claims on knowledge entries compared across every artifact’s basis; escalation gated by whether a quoting artifact is about to leave</span></div>
+      <div class="pr hl" role="row"><b role="cell">Belief changelog</b><span role="cell">git log, release notes, activity feeds</span><span role="cell">A log of changes in what the org holds true, written by the graph — not a feed of what people said</span></div>
+      <div class="pr hl" role="row"><b role="cell">Overlook blame</b><span role="cell">git blame</span><span role="cell">Per-line provenance for prose, slides and config — through knowledge versions, source messages, confirmations and permissions</span></div>
+      <div class="pr" role="row"><b role="cell">Wikis</b><span role="cell">Every wiki ever</span><span role="cell">Knowledge written by agents, cited to source messages, confirmed by humans, dated for review</span></div>
+    </div>
+    <div class="loop rv">
+      <div class="lp"><span class="ind ring"></span><b>Ring</b><small>an agent asks</small></div><i>→</i>
+      <div class="lp"><span class="lpd">✓</span><b>Decision</b><small>you answer, once</small></div><i>→</i>
+      <div class="lp"><span class="lpd" style="color:var(--know)">◆</span><b>Standing order</b><small>scoped, receipted</small></div><i>→</i>
+      <div class="lp"><span class="ind dot"></span><b>Dot</b><small>next time, it just happens</small></div>
+    </div>
+    <p class="lede rv" style="margin-top:28px">That loop is the new idea. <b>The more you supervise, the less you have to.</b> None of the borrowed shapes does it, because none of them treats a human decision as data that can be kept, scoped and revoked.</p>
+  </div>
+</section>
+
+<!-- ============ SURVIVAL ============ -->
+<section class="block" id="survive">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--sky)">If it had to survive</div>
+    <h2 class="sec rv">A letter — <em>and a way to live.</em></h2>
+    <p class="lede rv">The ideas are still free. But "Slack could ship that" only kills Overlook if Overlook has to <b>replace</b> Slack. It doesn't have to.</p>
+    <div class="surv">
+      <div class="sv rv"><span class="n">01</span><h3>An overlay, not a migration.</h3><p>Overlook reads and writes the chat you already use. Channels stay where they are; rooms, rings, orders and the ledger live in a layer above them. Nobody else on the team has to switch for it to work.</p></div>
+      <div class="sv rv"><span class="n">02</span><h3>Useful to one person first.</h3><p>The buyer is one person running ten agents with no time. They get value on day one, alone: the needs-you column and the brief work even if they're the only one using Overlook. Teams come later, by invitation.</p></div>
+      <div class="sv rv"><span class="n">03</span><h3>An open ring format.</h3><p>A ring is a tiny typed request any agent can emit: who's asking, which role decides, what's at stake, whether it can be undone, what it relied on. Publish the format openly — every agent framework that speaks it brings Overlook new users.</p>
+<pre class="ring-json"><code>{
+  "ring": "approval",
+  "from": "agent:sable",
+  "decides": "role:admin",
+  "where": "#cust-halcyon › data-migration",
+  "ask": "Allow a 24-hour TTL on invoices staging",
+  "reversible": true,
+  "evidence": ["kb:pii-retention", "msg:8f21c"],
+  "order_eligible": true
+}</code></pre></div>
+      <div class="sv rv"><span class="n">04</span><h3>The ledger is the moat.</h3><p>Every decision, order and knowledge entry, with receipts, adds up to a record of human oversight of AI agents. Auditors and regulators are starting to ask for exactly that — the EU AI Act, for one, sets human-oversight duties for high-risk systems. The record compounds per org, and the basis graph makes it load-bearing: it's what lets one correction fix forty artifacts, a fork preview a decision, and a single command explain any line. It's the one thing an incumbent can't copy by shipping a feature: it's <b>your</b> history.</p></div>
+    </div>
+    <div class="price rv"><b>Priced per supervised agent, not per seat.</b> The cost grows with the agents creating the work, and stays nearly free for the people who only read it.</div>
+  </div>
+</section>
+
+<!-- ============ HONEST EDGES ============ -->
+<section class="block" id="edges">
+  <div class="wrap">
+    <div class="kicker rv" style="color:var(--dusk)">Honest edges</div>
+    <h2 class="sec rv">What a sketch <em>can't promise.</em></h2>
+    <p class="lede rv">A love letter is allowed to be partial. It isn't allowed to pretend. Here's where this idea would break first, and what the sketch does about it.</p>
+    <div class="edges">
+      <div class="edge rv"><div class="n">Prior art</div><h3>Most of the shapes aren't new.</h3><p>Columns, topics, bots, approvals and wikis have all shipped before.</p><div class="fix">credited above; the new part is the ring → order → dot loop.</div></div>
+      <div class="edge rv"><div class="n">Scale</div><h3>Columns stop scaling around four.</h3><p>A strip of nine panes is a tab bar with extra steps.</p><div class="fix">the needs-you column carries the scale; panes stay few.</div></div>
+      <div class="edge rv"><div class="n">Rot</div><h3>Agent-written knowledge rots quietly.</h3><p>A knowledge base that agents both write and trust is a junk drawer with a confident voice.</p><div class="fix">human confirmation, review dates, explicit supersession.</div></div>
+      <div class="edge rv"><div class="n">Gaming</div><h3>Agents will learn to ring.</h3><p>Any higher-priority channel gets abused by whatever wants a response.</p><div class="fix">typed, role-addressed, rate-limited rings.</div></div>
+      <div class="edge rv"><div class="n">Drift</div><h3>Orders become rubber stamps.</h3><p>An Always clicked in a hurry can quietly grant power for months.</p><div class="fix">narrow scope, 30-day expiry, usage counts, never for irreversible actions.</div></div>
+      <div class="edge rv"><div class="n">Omission</div><h3>Briefs lie by leaving things out.</h3><p>A summary is an agent deciding what you don't need to see.</p><div class="fix">every line links to its source; rings are never summarized.</div></div>
+      <div class="edge rv"><div class="n">Cascade</div><h3>Recall can thrash.</h3><p>Re-deriving everything downstream of a busy fact could churn work faster than anyone can review it.</p><div class="fix">nothing changes without the ring; diffs batched per fact; sent messages get corrections, never edits.</div></div>
+      <div class="edge rv"><div class="n">Cost</div><h3>Forks burn compute.</h3><p>Re-deriving two worlds for every decision would be expensive and slow.</p><div class="fix">opt-in, scoped to the affected subgraph, effects held as intents.</div></div>
+      <div class="edge rv"><div class="n">Precision</div><h3>Claims need keys to compare.</h3><p>Coherence only sees disagreements between claims that were typed; prose-only contradictions slip through.</p><div class="fix">agents propose claim keys when distilling; humans confirm them with the entry.</div></div>
+      <div class="edge rv"><div class="n">Risk</div><h3>Symmetric roles, asymmetric risk.</h3><p>An agent with an admin role can do admin damage at machine speed.</p><div class="fix">gauges, budgets, pause and revoke on every agent row.</div></div>
+      <div class="edge rv"><div class="n">Market</div><h3>Incumbents can ship any one feature.</h3><p>Any single idea here is a quarter's work for a big chat company.</p><div class="fix">overlay, single-player first, open ring format, the ledger as the moat.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE LETTER ============ -->
+<section class="letter-sec" id="letter">
+  <div class="wrap">
+    <article class="paper rv">
+      <div class="stamp">FIRST<br>CLASS<br>· AGENT ·<br>ERA</div>
+      <div class="dl"><span>An open letter</span><span>October 2026</span></div>
+      <h2>Dear Slack — and buzz.xyz,</h2>
+      <p>You taught the world that work happens in channels, and we have loved you since the IRC days. But the agent era broke the metaphor. Ten agents, six projects, three customers — and suddenly everything important lives in a thread nobody opens, a DM nobody sees, or a badge that never goes away.</p>
+      <p>So we sketched the interface we wish existed. <b>Columns instead of tabs</b>, so parallel work stays visible. <b>A room per project</b> instead of a thread per panic. <b>Humans and agents on the same roster</b>, under the same rules — with a gauge on every agent, because they aren't us. <b>Knowledge that files itself</b>, with the receipt attached and a date to check it by.</p>
+      <p>And attention, finally honest about itself: <b>a dot when something is new, a ring when something needs you</b>, and never a third thing that blinks. Then the part we're proudest of — <b>answer a question once</b>, and keep the receipt, so the same ring never has to come twice.</p>
+      <p>It's a sketch, not a product — no backend, no pitch deck. (If you want the moat, it's the ledger; we drew you the map.) The ideas are free. <span class="em">Steal them. All of them.</span> We'll cheer from the front row.</p>
+      <div class="sign">With affection,<br>Chris Kluis<span class="also">&amp; thousands of other people trying to do work in tools designed to talk about work</span><span>— and ten agents, none of whom were asked to proofread this</span></div>
+      <p class="ps">P.S. Every demo on this page is live — we built the thing before writing the letter. If a detail feels wrong, it's a sketch; if an idea feels right, it's yours.</p>
+    </article>
+  </div>
+</section>
+
+<footer>
+  <div class="wide">
+    <span><em>Overlook</em> — a disposable sketch, built with affection.</span>
+    <span>No backend. No tracking. The demos above are the whole product.</span>
+  </div>
+</footer>
+
+<a href="../index.html" class="xa-back" aria-label="Back to all experiments"><span class="xa-arrow">←</span> Experiments</a>
+
+<script>
+(()=>{
+'use strict';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- the world ---------- */
+const P={
+  you:{n:'You',k:'human',role:'owner',c:'#94a3b8'},
+  priya:{n:'Priya',k:'human',role:'admin',c:'#f472b6'},
+  marcus:{n:'Marcus',k:'human',role:'member',c:'#22d3ee'},
+  ren:{n:'Ren',k:'human',role:'member',c:'#a78bfa'},
+  dana:{n:'Dana',k:'human',role:'member',c:'#fdba74',note:'contractor'},
+  scout:{n:'Scout',k:'agent',role:'scoped',c:'#38bdf8',job:'Research',boss:'priya',ctx:61,spend:3.12,cap:10},
+  forge:{n:'Forge',k:'agent',role:'scoped',c:'#f59e0b',job:'Builds & deploys',boss:'ren',ctx:44,spend:6.8,cap:20},
+  quill:{n:'Quill',k:'agent',role:'scoped',c:'#e879f9',job:'Copy',boss:'you',ctx:28,spend:1.05,cap:5},
+  ledger:{n:'Ledger',k:'agent',role:'scoped',c:'#4ade80',job:'Finance models',boss:'priya',ctx:88,spend:4.4,cap:8},
+  atlas:{n:'Atlas',k:'agent',role:'scoped',c:'#60a5fa',job:'Infra',boss:'marcus',ctx:52,spend:5.2,cap:15},
+  echo:{n:'Echo',k:'agent',role:'scoped',c:'#2dd4bf',job:'Support',boss:'marcus',ctx:18,spend:0.9,cap:6},
+  sable:{n:'Sable',k:'agent',role:'scoped',c:'#f87171',job:'Security review',boss:'priya',ctx:35,spend:2.1,cap:8},
+  tally:{n:'Tally',k:'agent',role:'scoped',c:'#a3e635',job:'Analytics',boss:'priya',ctx:47,spend:1.7,cap:6},
+  relay:{n:'Relay',k:'agent',role:'scoped',c:'#fb923c',job:'Customer comms',boss:'priya',ctx:33,spend:2.6,cap:8},
+  recall:{n:'Recall',k:'agent',role:'scoped',c:'#fbbf24',job:'Basis tracking',boss:'you',ctx:0,spend:0,cap:1},
+  harbor:{n:'Harbor',k:'agent',role:'scoped',c:'#818cf8',job:'QA',boss:'ren',ctx:40,spend:1.3,cap:6},
+};
+const RANK={owner:3,admin:2,member:1,scoped:0};
+const ORGS=[{id:'ac',i:'AC',n:'Acme Corp',c:'linear-gradient(135deg,#a78bfa,#7c6cf6)'},{id:'me',i:'ME',n:'Meridian',c:'linear-gradient(135deg,#7dd3fc,#38bdf8)'},{id:'sc',i:'SC',n:'Solace Co',c:'linear-gradient(135deg,#6ee7b7,#10b981)'}];
+const KB={
+  'stripe-webhook-retry-policy':{v:'v1',by:'forge',inv:'scout',from:'#launch-ops',cites:3,conf:'marcus',n:7,review:'Dec 1',st:'confirmed',claims:{'stripe.retry_window':'3 days'},src:[['forge','Tue 4:12p','Stripe docs: failed webhooks retry for up to 3 days with exponential backoff.'],['marcus','Tue 4:14p','And we dedupe on event.id, right?'],['forge','Tue 4:15p','Yes — idempotent on event.id. Never ack before the write commits.']],body:'Stripe retries failed webhooks with backoff for up to three days. Our handler is idempotent on event.id — never ack before the write commits.'},
+  'wr-4821-build-notes':{v:'v3',by:'forge',inv:'scout',from:'#launch-ops › Website relaunch',cites:11,conf:null,n:2,review:'Oct 15',st:'fresh',claims:{'launch.date':'Oct 21'},body:'Build WR-4821: Astro 5, /pricing prerendered. The edge-cache migration needs a week, so go-live slips to Oct 21.',src:[['forge','2:30a','Cache migration benchmarked at 6 days on staging.']]},
+  'launch-plan':{v:'v2',by:'scout',inv:'quill',from:'#launch-ops',cites:5,conf:'ren',n:6,review:'Oct 14',st:'confirmed',claims:{'launch.date':'Oct 14'},body:'Launch Oct 14: pricing page live, announcement in #general, status-page note.',src:[['ren','Sep 29','We go Oct 14. Announcement goes out in #general that morning.'],['priya','Sep 29','Agreed — the QBR can preview it.']]},
+  'northwind-runbook-draft':{v:'v1',by:'atlas',inv:'atlas',from:'#cust-northwind › Onboarding',cites:2,conf:null,n:1,review:'Oct 8',st:'fresh',claims:{'northwind.sso':'OIDC'},body:'Draft onboarding runbook for Northwind. Step 3: create an OIDC client.',src:[['atlas','Sep 2','Copied from the Halcyon runbook as a starting point.']]},
+  'pricing-v3-tiers':{v:'v1',by:'ledger',inv:'ledger',from:'#launch-ops › Pricing v3',cites:4,conf:null,n:2,review:'Oct 10',st:'fresh',claims:{'price.team':'pending'},body:'Team $24 (recommended) or $29 — pending a lock. Business $54. Enterprise custom.',src:[['ledger','2:21a','Team at $24 keeps 91% of accounts whole.']]},
+  'launch-readiness-checklist':{by:'scout',inv:'forge',from:'#launch-ops',cites:6,conf:'ren',n:4,review:'Oct 20',st:'confirmed',body:'Seven gates before launch: copy approved, pricing locked, cache purge, status page, rollback plan, on-call named, announce scheduled.'},
+  'northwind-sso-setup':{v:'v2',claims:{'northwind.sso':'SAML'},src:[['marcus','Sep 3','Their IT lead wants SAML via Okta, not OIDC.'],['priya','Sep 3','Confirmed with their CISO.']],by:'echo',inv:'echo',from:'#cust-northwind › Onboarding',cites:5,conf:'priya',n:3,review:'Jan 10',st:'confirmed',body:'Northwind uses SAML via Okta, not OIDC. Their IT lead owns the IdP; metadata goes to it-ops@ only.'},
+  'northwind-outage-0912-postmortem':{by:'atlas',inv:'relay',from:'#cust-northwind › Outage 09-12',cites:14,conf:'marcus',n:5,review:'Mar 12',st:'confirmed',body:'Expired cert on the edge proxy, 47 minutes. Fix: cert expiry alerts at 30/7/1 days. Credited 2 days of service.'},
+  'pricing-v2-tiers':{by:'ledger',inv:'ledger',from:'#launch-ops › Pricing v3',cites:4,conf:'priya',n:9,review:'—',st:'superseded',sup:'pricing-v3-tiers',body:'Superseded. Old tiers: Starter $12, Team $29, Business $59. Agents invoking this are redirected to pricing-v3-tiers.'},
+};
+const RULES={ttl:'Sable may allow ≤24h TTLs on staging buckets in #cust-halcyon',flaky:'Harbor may quarantine tests that retried green twice — with a ticket',ctx:'Any agent may distill & continue at ≥90% context'};
+function seed(){
+  const ch=[
+    {id:'launch-ops',parties:['you','priya','marcus','ren','scout','forge','quill','tally'],rooms:[{id:'website-relaunch',n:'Website relaunch',art:12},{id:'pricing-v3',n:'Pricing v3',art:5}],closed:[]},
+    {id:'agent-fleet',parties:['you','priya','ren','atlas','harbor','sable','tally','ledger'],rooms:[],closed:[]},
+    {id:'design-review',parties:['you','ren','quill'],rooms:[],closed:[]},
+    {id:'cust-northwind',parties:['you','priya','marcus','relay','echo','atlas'],rooms:[{id:'qbr',n:'2026-Q4 QBR',art:8},{id:'onboarding',n:'Onboarding',art:4}],closed:[{id:'outage-0912',n:'Outage 09-12',art:9}]},
+    {id:'cust-halcyon',parties:['you','marcus','atlas','sable'],rooms:[{id:'data-migration',n:'Data migration',art:6}],closed:[]},
+    {id:'cust-bramble',parties:['you','priya','relay','ledger'],rooms:[{id:'renewal',n:'Renewal',art:3}],closed:[]},
+  ];
+  const T=(f,t,x)=>({f,t,x});
+  const conv={
+    'launch-ops/~free':{ctx:39,kb:'stripe-webhook-retry-policy',m:[
+      {sys:'g',x:'<b>Forge</b> distilled 1 entry · <span class="g">stripe-webhook-retry-policy</span> · from 3 messages'},
+      T('marcus','2:45a','Payments webhook — is that us or Stripe?'),
+      {f:'scout',t:'2:46a',rid:'r-scout',basis:'stripe-webhook-retry-policy',x:'Stripe. I invoked <span class="kw">stripe-webhook-retry-policy</span> — Forge distilled it from this channel on Tuesday. They retry for three days and our handler is idempotent, so nothing is lost. Didn\'t need to chase anyone.'},
+      T('marcus','2:47a','Perfect. Confirming the entry.'),
+      {sys:'g',x:'<b>Marcus</b> confirmed <span class="g">stripe-webhook-retry-policy</span> · review due Dec 1'}]},
+    'launch-ops/website-relaunch':{ctx:61,kb:'wr-4821-build-notes',m:[
+      {f:'tally',t:'2:40a',x:'Preview traffic since the soft launch:',chart:[22,30,26,38,34,46,52,61,58,74,82]},
+      T('scout','2:43a','I invoked <span class="kw">wr-4821-build-notes</span> — Forge distilled them during the build, so I didn\'t have to ask for a status.'),
+      {f:'quill',t:'2:47a',rid:'c-quill',basis:'launch-plan',bv:'v2',x:'Hero copy v3. Approve, or tell me what to change.',card:'d1'},
+      T('ren','2:48a','Engineering starts the moment you approve. Nothing else is waiting on you.')]},
+    'launch-ops/pricing-v3':{ctx:88,kb:'pricing-v2-tiers',m:[
+      T('ledger','2:21a','Modelled three tiers against last quarter\'s usage. Team at $24 keeps 91% of accounts whole.'),
+      {sys:'g',x:'<b>Ledger</b> marked <span class="g">pricing-v2-tiers</span> superseded by <span class="g">pricing-v3-tiers</span>'},
+      T('priya','2:30a','Good. Hold the enterprise number until the QBR.')]},
+    'agent-fleet/~free':{ctx:22,m:[
+      T('harbor','2:10a','Nightly: 212/214 green. Two flaky tests retried green.'),
+      {f:'harbor',t:'2:11a',rid:'r-harbor',basis:'stripe-webhook-retry-policy',x:'Added <span class="kw">retry_window.test.ts</span> — pins the webhook retry window at 3 days.'},
+      T('atlas','2:12a','Replica lag 40ms. Nothing to report.')]},
+    'design-review/~free':{ctx:15,m:[
+      T('quill','1:58a','Three hero variants in the frame. Ren\'s pick is B.'),
+      T('ren','2:02a','B, but warmer.')]},
+    'cust-northwind/~free':{ctx:12,m:[T('relay','1:40a','Northwind\'s renewal is in Q1. Two rooms open: QBR and Onboarding.'),
+      {f:'echo',t:'2:20a',rid:'r-echo',basis:'stripe-webhook-retry-policy',x:'Replied to Northwind tickets #4471 and #4475: a failed payment is retried for three days, so nothing is lost.'}]},
+    'cust-northwind/qbr':{ctx:33,kb:'northwind-outage-0912-postmortem',m:[
+      {f:'relay',t:'2:31a',x:'Pulled usage for the deck: seats 212 → 248, two expansion signals in support tickets.',chart:[40,42,41,47,52,55,60,66]},
+      T('priya','2:36a','Lead with the expansion. The outage is a slide, not the story.'),
+      T('relay','2:38a','Done — that slide quotes <span class="kw">northwind-outage-0912-postmortem</span>. Atlas wrote it when the outage room closed.'),
+      {f:'relay',t:'2:40a',rid:'r-relay',basis:'stripe-webhook-retry-policy',x:'Slide 7: “Failed payments recover within 3 days — zero revenue lost.”'},
+      {f:'relay',t:'2:41a',rid:'c-relay',basis:'launch-plan',bv:'v2',x:'Slide 9: “New pricing goes live Oct 14.”'}]},
+    'cust-northwind/onboarding':{ctx:18,kb:'northwind-sso-setup',m:[
+      T('echo','2:39a','Started this room with 4 entries from the knowledge base — SSO setup, contacts, the outage post-mortem, the launch checklist. Nobody had to brief me.'),
+      T('marcus','2:44a','Their IT lead wants SAML, not OIDC.'),
+      T('echo','2:44a','Already in <span class="kw">northwind-sso-setup</span> — Priya confirmed it Sept 3. Sending the SAML metadata now.'),
+      {f:'atlas',t:'2:46a',rid:'c-atlas',basis:'northwind-runbook-draft',x:'Runbook step 3 is ready: create an OIDC client for Northwind.'}]},
+    'cust-northwind/outage-0912':{ctx:0,closed:true,m:[
+      T('atlas','Sep 12','Root cause: expired cert on the edge proxy, 47 minutes. Alerts now fire at 30, 7 and 1 days.'),
+      {sys:'g',x:'<b>Atlas</b> distilled <span class="g">northwind-outage-0912-postmortem</span> · <b>Marcus</b> confirmed'},
+      {sys:'',x:'Room closed by <b>Marcus</b> · history kept · 5 invocations since'}]},
+    'cust-halcyon/~free':{ctx:10,m:[T('marcus','1:15a','Migration window is tonight. Atlas has it.')]},
+    'cust-halcyon/data-migration':{ctx:57,m:[
+      {f:'atlas',t:'2:50a',x:'Copy in progress.',log:[['03:02:11','copy','orders · 2.1M rows'],['03:04:40','copy','invoices · 880k rows'],['03:05:02','verify','checksums match']],prog:48},
+      T('sable','2:52a','Blocking: the script stages customer emails in a temp bucket with no expiry. Needs an admin to allow a 24-hour TTL — or I patch the script and we lose an hour.')]},
+    'cust-bramble/~free':{ctx:8,m:[T('priya','Yesterday','Bramble wants a three-year term this time.')]},
+    'cust-bramble/renewal':{ctx:22,m:[
+      T('relay','2:20a','Renewal draft ready: 3 years, 12% uplift, same SLA. It needs a human signature before it leaves the building.'),
+      T('ledger','2:22a','Margin at that uplift: 71%. Within policy.')]},
+    'dm/forge':{ctx:44,kb:'launch-readiness-checklist',m:[
+      {f:'forge',t:'2:36a',rid:'r-forge',basis:'stripe-webhook-retry-policy',x:'Set <span class="kw">RETRY_WINDOW_HOURS = 72</span> in webhooks/config.ts, per stripe-webhook-retry-policy.',allow:'Forge’s scope: write webhooks/* · granted by Ren, Sep 30',lines:[
+        {f:'forge',t:'Sep 30',x:"export const WEBHOOK_SECRET = env('STRIPE_SIGNING')",src:{dec:'Ren approved signing-secret rotation · Sep 30 · #launch-ops'}},
+        {f:'forge',t:'2:36a',x:'export const RETRY_WINDOW_HOURS = 72',src:{kb:'stripe-webhook-retry-policy'}},
+        {f:'forge',t:'2:36a',x:"export const IDEMPOTENCY_KEY = 'event.id'",src:{kb:'stripe-webhook-retry-policy'}},
+        {f:'harbor',t:'2:11a',x:'// window pinned by retry_window.test.ts',src:{msg:'agent-fleet/~free'}}]},
+      {f:'forge',t:'2:38a',rid:'c-forge',basis:'wr-4821-build-notes',bv:'v3',x:'Deploy checklist: the edge-cache migration needs a week — go-live Oct 21.'},
+      {f:'forge',t:'2:41a',x:'Building the relaunch.',log:[['02:41:03','install','412 packages in 8.2s'],['02:41:12','build','148 modules transformed'],['02:41:19','build','route /pricing prerendered']],prog:62},
+      T('forge','2:43a','Invoked <span class="kw">launch-readiness-checklist</span> — Scout distilled it from #launch-ops. The cache purge is covered; no need to re-explain.'),
+      T('forge','2:44a','Build\'s at 62%. I\'ll drop the preview link here the second it\'s live.')]},
+    'dm/scout':{ctx:61,m:[T('scout','2:50a','Morning digest: 3 decisions need you, 41 updates don\'t. I\'ve left the 41 alone.')]},
+    'dm/ren':{ctx:0,m:[T('ren','1:12a','Coffee after the QBR?')]},
+    'dm/priya':{ctx:0,m:[T('priya','Yesterday','Renewal is yours to sign — I already read it.')]},
+    'dm/marcus':{ctx:0,m:[T('marcus','2:48a','Webhook mystery solved, ignore my last.')]},
+  };
+  const decisions=[
+    {id:'d1',f:'quill',coh:'C-1',key:'launch-ops/website-relaunch',ti:'Approve hero copy v3',bo:'"Ship it. We\'ll handle the scale." · CTA: Start free trial',need:'owner',yes:'Approve',rev:1,ev:'one-off creative call · invoked wr-4821-build-notes'},
+    {id:'d2',f:'sable',key:'cust-halcyon/data-migration',cat:'ttl',ti:'Allow a 24-hour TTL on contacts staging',bo:'Temp bucket holds customer emails during the copy.',need:'admin',yes:'Allow 24h',rev:1,ev:'no cost · within PII policy',rule:RULES.ttl,autoTxt:'allowed a 24h TTL on contacts staging'},
+    {id:'dF',f:'ledger',key:'launch-ops/pricing-v3',fork:'F-1',ti:'Lock the Team tier: $24 or $29?',bo:'Modelled both. Fork it to see everything each one touches.',need:'owner',yes:'$24',no:'$29',rev:1,ev:'touches 5 things in 4 places'},
+    {id:'d3',f:'relay',key:'cust-bramble/renewal',ti:'Sign the Bramble renewal',bo:'3 years · 12% uplift · same SLA · margin 71%',need:'owner',yes:'Sign',rev:0,ev:'binding once sent · Ledger checked margin'},
+  ];
+  return {ch,conv,decisions,parties:JSON.parse(JSON.stringify(P)),pending:[]};
+}
+const POOL_M=[
+  ['forge','dm/forge',()=>'Build at '+(60+Math.floor(Math.random()*38))+'% — '+(150+Math.floor(Math.random()*40))+' modules transformed.'],
+  ['tally','launch-ops/website-relaunch',()=>'Signups holding at 1,'+(280+Math.floor(Math.random()*60))+'/hr.'],
+  ['atlas','cust-halcyon/data-migration',()=>'Copied '+(2+Math.random()*3).toFixed(1)+'M more rows. Checksums match.'],
+  ['harbor','agent-fleet/~free',()=>'Re-ran the smoke suite: green.'],
+  ['echo','cust-northwind/onboarding',()=>'SAML metadata sent. Waiting on their IdP.'],
+  ['relay','cust-northwind/qbr',()=>'Added slide '+(6+Math.floor(Math.random()*6))+': seat growth by team.'],
+  ['scout','launch-ops/~free',()=>'A competitor changed their pricing page — diff saved, not distilled yet.'],
+  ['ledger','launch-ops/pricing-v3',()=>'Re-ran the model with Q3 churn. Team tier still holds.'],
+  ['quill','design-review/~free',()=>'Variant B, warmer: two adjectives cut.'],
+  ['sable','cust-halcyon/data-migration',()=>'Scanned 3 new dependencies. Nothing to report.'],
+  ['tally','agent-fleet/~free',()=>'Fleet spend today: $'+(28+Math.random()*6).toFixed(2)+' of $96.'],
+  ['echo','cust-northwind/~free',()=>'Answered 2 Northwind tickets from the knowledge base.'],
+];
+
+/* ---------- recall: one fact, everything built on it ---------- */
+const RECALL={fact:'stripe-webhook-retry-policy',was:'up to three days',now:'up to five days',body2:'Stripe retries failed webhooks with backoff for up to five days (changed Oct 1). Our handler is idempotent on event.id — never ack before the write commits.',
+  deps:[
+  {rid:'r-scout',f:'scout',key:'launch-ops/~free',what:'Answer to Marcus',rev:1,diff:[['-','They retry for three days'],['+','They retry for up to five days']],nx:'Stripe. I invoked <span class="kw">stripe-webhook-retry-policy</span> — Forge distilled it from this channel on Tuesday. They retry for up to five days and our handler is idempotent, so nothing is lost.'},
+  {rid:'r-forge',f:'forge',key:'dm/forge',what:'webhooks/config.ts',rev:1,code:1,lineFix:[1,'export const RETRY_WINDOW_HOURS = 120'],diff:[['-','RETRY_WINDOW_HOURS = 72'],['+','RETRY_WINDOW_HOURS = 120']],nx:'Set <span class="kw">RETRY_WINDOW_HOURS = 120</span> in webhooks/config.ts, per stripe-webhook-retry-policy.'},
+  {rid:'r-harbor',f:'harbor',key:'agent-fleet/~free',what:'retry_window.test.ts',rev:1,code:1,diff:[['-',"expect(window).toBe('3d')"],['+',"expect(window).toBe('5d')"]],nx:'Added <span class="kw">retry_window.test.ts</span> — pins the webhook retry window at 5 days.'},
+  {rid:'r-relay',f:'relay',key:'cust-northwind/qbr',what:'QBR deck · slide 7',rev:1,diff:[['-','recover within 3 days'],['+','recover within 5 days']],nx:'Slide 7: “Failed payments recover within 5 days — zero revenue lost.”'},
+  {rid:'r-echo',f:'echo',key:'cust-northwind/~free',what:'2 replies already sent to Northwind',rev:0,diff:[['+','Small correction to my note on #4471 and #4475: Stripe now retries failed payments for up to five days, not three. Nothing changes on your side.']],note:'Sent messages can\'t be unsent. Echo drafted a correction instead.',follow:'Sent Northwind a correction on #4471 and #4475: retries now run up to five days. Nothing changes on their side.'}
+]};
+const FORK={id:'F-1',q:'Lock the Team tier',worlds:[
+  {k:'A',label:'$24 / seat',items:[
+    {f:'quill',key:'launch-ops/website-relaunch',what:'Pricing page hero',diff:[['-','Team — $29 / seat'],['+','Team — $24 / seat']]},
+    {f:'forge',key:'dm/forge',what:'/pricing rebuild',intent:'Preview built · production push held as an intent'},
+    {f:'relay',key:'cust-northwind/qbr',what:'QBR deck · slide 10',diff:[['+','Team drops to $24 — 17% less on 248 seats']]},
+    {f:'ledger',key:'cust-bramble/renewal',what:'Bramble renewal margin',diff:[['-','margin 71%'],['+','margin 64%']],flag:'Crosses the 65% margin floor → would ring Priya'},
+    {f:'echo',key:'cust-northwind/~free',what:'6 open pricing tickets',intent:'6 replies drafted · held, not sent'}],
+   metrics:[['MRR','−$1,240/mo'],['Team churn','−3 pts'],['New rings','1']],kb:'Team $24 · Business $54 · Enterprise custom',ring:1},
+  {k:'B',label:'$29 / seat',items:[
+    {f:'quill',key:'launch-ops/website-relaunch',what:'Pricing page hero',none:1},
+    {f:'tally',key:'agent-fleet/~free',what:'Churn model',diff:[['+','41 Team accounts flagged at-risk']]},
+    {f:'relay',key:'cust-northwind/qbr',what:'QBR deck · slide 10',none:1},
+    {f:'ledger',key:'cust-bramble/renewal',what:'Bramble renewal margin',none:1},
+    {f:'echo',key:'cust-northwind/~free',what:'6 open pricing tickets',intent:'6 replies drafted: “price unchanged” · held'}],
+   metrics:[['MRR','+$0'],['Team churn','+3 pts vs A'],['New rings','0']],kb:'Team $29 · Business $54 · Enterprise custom',ring:0}]};
+const CONFLICTS=[
+  {id:'C-1',claim:'launch.date',topic:'When are we launching?',sev:'ring',gate:'d1',found:'2:39a',
+   sides:[{val:'Oct 14',basis:'launch-plan',quote:[['quill','launch-ops/website-relaunch','c-quill','hero copy · announce date'],['relay','cust-northwind/qbr','c-relay','QBR slide 9']]},
+          {val:'Oct 21',basis:'wr-4821-build-notes',quote:[['forge','dm/forge','c-forge','deploy checklist']]}],
+   opts:[{label:'Oct 14 holds',fix:[['dm/forge','c-forge','Deploy checklist: warm the edge cache from Oct 8 so go-live holds Oct 14.','launch-plan','v2']],kb:['wr-4821-build-notes',{'launch.date':'Oct 14'}],log:'launch stays <b>Oct 14</b> · Forge re-planned the cache migration'},
+         {label:'Move to Oct 21',fix:[['launch-ops/website-relaunch','c-quill',null,'launch-plan','v3','Oct 21, 2026'],['cust-northwind/qbr','c-relay','Slide 9: “New pricing goes live Oct 21.”','launch-plan','v3']],kb:['launch-plan',{'launch.date':'Oct 21'},'v3'],log:'launch moves to <b>Oct 21</b> · copy and QBR re-derived'}]},
+  {id:'C-2',claim:'northwind.sso',topic:'How does Northwind sign in?',sev:'dot',found:'2:46a',
+   sides:[{val:'SAML',basis:'northwind-sso-setup',quote:[['echo','cust-northwind/onboarding',null,'SAML metadata sent']]},
+          {val:'OIDC',basis:'northwind-runbook-draft',quote:[['atlas','cust-northwind/onboarding','c-atlas','runbook step 3']]}],
+   opts:[{label:'SAML (confirmed)',fix:[['cust-northwind/onboarding','c-atlas','Runbook step 3 is ready: create a SAML app in Okta for Northwind.','northwind-sso-setup','v2']],kb:['northwind-runbook-draft',{'northwind.sso':'SAML'},'v2'],log:'Northwind signs in with <b>SAML</b> · Atlas’s runbook re-derived'}]}];
+const LOG0=[
+  ['×','Sep 12','Room <b>Outage 09-12</b> closed · post-mortem distilled and confirmed','marcus','cust-northwind/outage-0912'],
+  ['+','Sep 29','<b>launch-plan</b> v2 confirmed · launch Oct 14','ren','launch-ops/website-relaunch'],
+  ['~','Sep 3','<b>northwind-sso-setup</b> revised · SAML, not OIDC','priya','cust-northwind/onboarding'],
+  ['−','Yest.','<b>pricing-v2-tiers</b> superseded · v3 drafted, not yet locked','ledger','launch-ops/pricing-v3'],
+  ['+','Tue','<b>stripe-webhook-retry-policy</b> distilled from #launch-ops','forge','launch-ops/~free'],
+  ['✓','2:47a','<b>stripe-webhook-retry-policy</b> confirmed','marcus','launch-ops/~free'],
+  ['≠','2:39a','Conflict <b>C-1</b> · launch.date: Oct 14 vs Oct 21','recall','dm/forge'],
+  ['≠','2:46a','Conflict <b>C-2</b> · northwind.sso: SAML vs OIDC','recall','cust-northwind/onboarding']];
+const RECALL_RX=/retr(y|ies)[\s\S]*\b(5|five)\s*days?/i;
+
+/* ---------- a strip instance ---------- */
+function Strip(host,o){
+  const paints=[];
+  const S=Object.assign(seed(),{org:'ac',chan:o.chan,mode:o.mode||'list',panes:o.panes.slice(),acting:'you',inbox:!!o.inbox,unread:new Set(o.unread||[]),open:o.open||null,kbOpen:new Set(),q:'',clock:52,orgDots:{me:'ring',sc:'dot'},sim:false,news:0,rings:0,auto:0,orders:[],soN:0,brief:false,unreadN:{}});
+  (o.unread||[]).forEach(k=>S.unreadN[k]=(o.unreadN&&o.unreadN[k])||1);
+  S.kb=JSON.parse(JSON.stringify(KB));S.recall=null;S.fork=null;S.blame=o.blame||null;S.cohOpen=!!o.coh;S.logOpen=!!o.log;
+  S.conf=JSON.parse(JSON.stringify(CONFLICTS)).map(c=>Object.assign(c,{res:null}));
+  S.log=LOG0.map(r=>({g:r[0],t:r[1],x:r[2],by:r[3],key:r[4]}));S.logSeen=o.logSeen!=null?o.logSeen:5;
+  S.decisions=o.only?S.decisions.filter(d=>o.only.includes(d.id)):S.decisions.filter(d=>!d.fork);
+  host.innerHTML='';
+  const el=document.createElement('div');
+  el.className='strip'+(o.cls?' '+o.cls:'');
+  host.appendChild(el);
+  const par=id=>S.parties[id];
+  const now=()=>{S.clock++;const h=2+Math.floor(S.clock/60),m=S.clock%60;return h+':'+String(m).padStart(2,'0')+'a'};
+  const chOf=k=>k.split('/')[0];
+  const canDecide=d=>RANK[par(S.acting).role]>=RANK[d.need];
+  const roomName=k=>{const[c,r]=k.split('/');if(c==='dm')return par(r).n;if(r==='~free')return 'Free chat';const ch=S.ch.find(x=>x.id===c);const rm=[...ch.rooms,...ch.closed].find(x=>x.id===r);return rm?rm.n:r};
+  const indFor=keys=>{const ks=[].concat(keys);if(S.decisions.some(d=>ks.includes(d.key)||(d.keys&&d.keys.some(k=>ks.includes(k)))))return '<span class="ind ring" title="Needs you"></span>';if(ks.some(k=>S.unread.has(k)))return '<span class="ind dot" title="New"></span>';return ''};
+  const chKeys=c=>{const ch=S.ch.find(x=>x.id===c);return [c+'/~free',...ch.rooms.map(r=>c+'/'+r.id),...ch.closed.map(r=>c+'/'+r.id)]};
+  const logB=(g,x,by,key)=>{S.log.push({g,t:now(),x,by:Object.keys(P).find(k=>P[k].n===by)||by,key})};
+  const openC=()=>S.conf.filter(c=>!c.res);
+  const where=k=>`${k.startsWith('dm/')?'DM':'#'+chOf(k)} › ${esc(roomName(k))}`;
+  const plain=h=>{const t=document.createElement('div');t.innerHTML=h;return t.textContent};
+  const av=(id,lg)=>{const p=par(id);return `<span class="av ${p.k}${lg?' lg':''}" style="--c:${p.c}">${esc(p.n[0])}</span>`};
+
+  function rail(){return `<div class="col rail">${ORGS.map(g=>`<div class="org${g.id===S.org?' on':''}" style="background:${g.c}" title="${g.n}" data-a="org" data-v="${g.id}">${g.i}${g.id!==S.org&&S.orgDots[g.id]?`<span class="ind ${S.orgDots[g.id]}"></span>`:''}</div>`).join('')}</div>`}
+  function chans(){
+    const q=S.q.toLowerCase();
+    const cs=S.ch.filter(c=>!q||c.id.includes(q));
+    const dms=['forge','scout','ren','priya','marcus'].filter(d=>!q||d.includes(q));
+    return `<div class="col c-ch"><div class="hd"><div class="lbl">Channels</div><div class="t">Acme Corp</div><div class="s">${S.panes.length} open</div><div class="chips"><button class="chip coh${openC().length?' hot':''}${S.cohOpen?' on':''}" data-a="coh" title="Coherence: things the org currently believes two ways">≠ ${openC().length}</button><button class="chip lg${S.logOpen?' on':''}" data-a="log" title="Belief changelog: what changed in what the org believes">Δ ${Math.max(0,S.log.length-S.logSeen)}</button></div></div>
+    <input class="search" placeholder="Search channels, people" value="${esc(S.q)}" data-a="q">
+    <div class="sc"><div class="grp"><div class="lbl">Channels</div>${cs.map(c=>`<div class="it${c.id===S.chan?' on':''}" data-a="chan" data-v="${c.id}"><span class="h">#</span><span class="nm">${c.id}</span>${indFor(chKeys(c.id))}</div>`).join('')}</div>
+    <div class="grp"><div class="lbl">Direct messages</div>${dms.map(d=>`<div class="it${S.panes.includes('dm/'+d)?' on':''}" data-a="pane" data-v="dm/${d}">${av(d)}<span class="nm">${par(d).n}</span>${indFor('dm/'+d)}</div>`).join('')}</div></div></div>`;
+  }
+  function chan(){
+    const ch=S.ch.find(x=>x.id===S.chan);
+    const people=ch.parties.filter(p=>par(p).k==='human'),agents=ch.parties.filter(p=>par(p).k==='agent');
+    if(S.mode==='details')return details(ch,people,agents);
+    const room=(r,closed)=>{const k=ch.id+'/'+r.id;const ag=new Set(S.conv[k].m.filter(m=>m.f&&par(m.f).k==='agent').map(m=>m.f)).size;return `<div class="room${S.panes.includes(k)?' on':''}${closed?' closed':''}" data-a="pane" data-v="${k}"><div class="nm">${esc(r.n)}</div><div class="meta">${closed?'closed · history kept':`${ag} agent${ag===1?'':'s'} · ${r.art} artifacts`}</div>${indFor(k)}</div>`};
+    return `<div class="col c-chan"><div class="hd"><div class="lbl">Channel</div><div class="t">#${ch.id}</div><div class="s">${ch.parties.length} parties · <a data-a="details">Details</a></div></div>
+    <div class="sc"><div class="grp"><div class="it${S.panes.includes(ch.id+'/~free')?' on':''}" data-a="pane" data-v="${ch.id}/~free"><span class="h">◌</span><span class="nm">Free chat</span>${indFor(ch.id+'/~free')}</div></div>
+    <div class="grp"><div class="lbl">Projects <a data-a="newroom">+ New</a></div>${ch.rooms.map(r=>room(r)).join('')||'<div class="it" style="cursor:default;color:var(--faint)">No rooms yet</div>'}${ch.closed.map(r=>room(r,1)).join('')}</div>
+    <div class="grp"><div class="lbl">Humans</div>${people.map(p=>`<div class="it" data-a="who" data-v="${p}">${av(p)}<span class="nm">${par(p).n}</span><span class="role">${par(p).role}</span></div>`).join('')}</div>
+    <div class="grp"><div class="lbl">Agents</div>${agents.map(p=>`<div class="it" data-a="who" data-v="${p}">${av(p)}<span class="nm">${par(p).n}</span><span class="mini${par(p).ctx>85?' hot':''}" title="context ${par(p).ctx}%"><i style="width:${par(p).ctx}%"></i></span></div>`).join('')}</div></div></div>`;
+  }
+  function details(ch,people,agents){
+    const actors=['you','priya','marcus','scout','forge'].filter(a=>ch.parties.includes(a));
+    const cands=['dana','harbor','echo'].filter(c=>!ch.parties.includes(c)&&!S.pending.some(p=>p.who===c));
+    const row=p=>{const x=par(p);return `<div class="prow" data-a="who" data-v="${p}">${av(p)}<span style="flex:1">${x.n}${x.note?` <span style="color:var(--faint)">· ${x.note}</span>`:''}</span><span class="role">${x.role}</span><span class="kind ${x.k}">${x.k.toUpperCase()}</span></div>${S.open===p&&x.k==='agent'?gauges(p):''}`};
+    const pend=S.pending.filter(p=>p.ch===ch.id).map(p=>{const d=S.decisions.find(x=>x.id===p.d);const ok=d&&canDecide(d);return `<div class="prow pending">${av(p.who)}<span style="flex:1">${par(p.who).n} <span style="color:var(--faint)">· requested by ${par(p.by).n}</span></span><span class="ind ring"></span></div><div style="display:flex;gap:6px;padding:0 12px 8px 40px"><button class="b you" data-a="decide" data-v="${p.d}" ${ok?'':'disabled title="Only an owner can approve"'}>Approve</button><button class="b" data-a="deny" data-v="${p.d}" ${ok?'':'disabled'}>Deny</button>${ok?'':'<span style="font-size:11px;color:var(--faint);align-self:center">owner only</span>'}</div>`}).join('');
+    return `<div class="col c-chan"><span class="back" data-a="list">← Back to list</span>
+    <div class="chcard"><span class="ico"></span><div><div style="font-weight:700">#${ch.id}</div><div style="font-size:11px;color:var(--faint)">${ch.rooms.length} rooms · ${ch.parties.length} parties</div></div></div>
+    <div class="acting"><span class="lbl">Acting as</span><select data-a="acting">${actors.map(a=>`<option value="${a}"${a===S.acting?' selected':''}>${par(a).n} (${par(a).role})</option>`).join('')}</select></div>
+    <div class="addp">${cands.length?`<select data-a="addpick">${cands.map(c=>`<option value="${c}">${par(c).n}${par(c).note?' ('+par(c).note+')':par(c).k==='agent'?' (agent)':''}</option>`).join('')}</select><button class="b pri" data-a="add">+ Add party</button>`:'<span style="font-size:11.5px;color:var(--faint)">Everyone\'s here.</span>'}</div>
+    <div class="sc">${pend}<div class="grp" style="padding-left:0;padding-right:0"><div class="lbl" style="padding:0 12px 6px">Parties · explicit</div>${[...people,...agents].map(row).join('')}</div></div></div>`;
+  }
+  function gauges(id){
+    const p=par(id);
+    return `<div class="pex"><div class="r"><span>Answers to</span><b>${par(p.boss).n}</b></div><div class="r"><span>Job</span><b>${p.job}</b></div>
+    <div class="r"><span>Context</span><b>${p.ctx}%</b></div><div class="gauge${p.ctx>85?' hot':''}"><i style="width:${p.ctx}%"></i></div>
+    <div class="r"><span>Spend today</span><b>$${p.spend.toFixed(2)} / $${p.cap}</b></div><div class="gauge"><i style="width:${Math.round(p.spend/p.cap*100)}%"></i></div>
+    <div class="r"><span class="ok">✓ read · write · distill</span><span class="no">✕ add members</span></div>
+    <div class="ctl"><button class="b" data-a="pause" data-v="${id}">${p.paused?'Resume':'Pause'}</button><button class="b" data-a="reset" data-v="${id}">Distill &amp; reset</button></div></div>`;
+  }
+  function inbox(){
+    const ds=S.decisions,ok=d=>canDecide(d)?'':'disabled';
+    const card=d=>d.fork?forkCard(d):`<div class="dc${Date.now()-(d.fresh||0)<1300?' fresh':''}"><span class="need">${d.need}</span><div class="who">${av(d.f)}<b>${par(d.f).n}</b></div><div class="where">${where(d.key)}</div><div class="ti">${esc(d.ti)}</div><div class="bo">${esc(d.bo)}</div>${d.ev?`<div class="ev"><span class="rvb${d.rev&&!d.recall?'':' irr'}">${d.recall?'mixed':d.rev?'reversible':'irreversible'}</span>${esc(d.ev)}</div>`:''}<div class="ac"><button class="b you" data-a="decide" data-v="${d.id}" ${ok(d)}>${esc(d.recall&&S.recall?(S.recall.items.every(x=>x.on)?'Approve all '+S.recall.items.length:'Approve '+S.recall.items.filter(x=>x.on).length+' of '+S.recall.items.length):d.yes)}</button>${d.rule?`<button class="b alw" data-a="always" data-v="${d.id}" ${ok(d)} title="${esc(d.yes)}, and grant: ${esc(d.rule)}">Always</button>`:''}<button class="b" data-a="${d.recall?'ropen':'pane'}" data-v="${d.key}">${d.recall?'Diffs':'Open'}</button></div>${d.rev?'':'<div class="nev">Irreversible — never eligible for a standing order.</div>'}${d.coh&&S.conf.find(c=>c.id===d.coh&&!c.res)?`<div class="cw"><span>≠ ${d.coh}</span> Approving schedules a public announcement for Oct 14 — Forge’s build notes say Oct 21. <a data-a="coh">Resolve first</a></div>`:''}</div>`;
+    const forkCard=d=>`<div class="dc${Date.now()-(d.fresh||0)<1300?' fresh':''}"><span class="need">${d.need}</span><div class="who">${av(d.f)}<b>${par(d.f).n}</b></div><div class="where">${where(d.key)}</div><div class="ti">${esc(d.ti)}</div><div class="bo">${esc(d.bo)}</div><div class="ev"><span class="rvb">options</span>${esc(d.ev)}</div><div class="ac"><button class="b fk" data-a="fork" data-v="${d.id}" ${ok(d)}>⑂ Fork it</button><button class="b" data-a="forkpick" data-v="A" ${ok(d)}>${esc(d.yes)}</button><button class="b" data-a="forkpick" data-v="B" ${ok(d)}>${esc(d.no)}</button></div></div>`;
+    const orders=S.orders.map(so=>`<div class="so${Date.now()-(so.fresh||0)<1300?' fresh':''}"><div class="sot"><b>${so.id}</b>${esc(so.rule)}</div><div class="som">from ${esc(so.who)}'s approval · ${so.t} · ${so.where}<br>fired <b>${so.hits}×</b> · expires in 30 days</div><button class="b" data-a="revoke" data-v="${so.id}">Revoke</button></div>`).join('');
+    const keys=[...S.unread].sort((x,y)=>(S.unreadN[y]||1)-(S.unreadN[x]||1));
+    const nU=keys.reduce((n,k)=>n+(S.unreadN[k]||1),0);
+    const brief=S.brief?`<div class="brief"><div class="bh">Brief by Scout · ${nU} message${nU===1?'':'s'} · every line links to its source</div>${keys.map(k=>{const last=[...S.conv[k].m].reverse()[0];const tx=last?plain(last.x):'';return `<div class="bl" data-a="pane" data-v="${k}"><div class="blh"><b>${where(k)}</b><span>${S.unreadN[k]||1} new</span></div><p>${last&&last.f?esc(par(last.f).n)+': ':''}${esc(tx.length>90?tx.slice(0,88)+'…':tx)}</p></div>`}).join('')||'<p class="none">Nothing new. Truly.</p>'}${nU?'<button class="b" data-a="seen">Mark all seen</button>':''}</div>`:'';
+    return `<div class="col c-inbox"><div class="hd"><div class="lbl" style="color:var(--you)">Needs you</div><div class="t">${ds.length} decision${ds.length===1?'':'s'} <span class="ind ring" style="${ds.length?'':'display:none'}"></span></div><div class="s">Rings clear when you decide — not when you look.</div></div>
+    <div class="sc" style="padding-top:10px">${ds.map(card).join('')}
+    <div class="grp2"><div class="lbl">Standing orders · ${S.orders.length}</div>${orders||'<div class="hint">Answer a repeatable ring with <b>Always</b> and it becomes a standing order — a rule with a receipt. The next one handles itself.</div>'}</div>
+    <div class="calm"><b>${ds.length?'Everything else can wait.':'You\'re clear.'}</b>${nU} unread ${nU===1?'is a dot':'are dots'}, not rings${S.auto?` · <span style="color:var(--know)">${S.auto} handled by orders</span>`:''}.<br><button class="b" data-a="brief" style="margin-top:8px">${S.brief?'Hide brief':'Catch me up'}</button></div>${brief}</div></div>`;
+  }
+  function msg(m,k){
+    if(m.sys!==undefined)return `<div class="sys"><span>${m.sys==='y'?'<span class="y">◉</span>':'◆'}</span><span>${m.x}</span></div>`;
+    const p=par(m.f);
+    let extra='';
+    if(m.chart)extra=`<div class="chart"><div class="bars">${m.chart.map((v,i)=>`<i style="height:${v}%" class="${i>=m.chart.length-3?'hi':''}"></i>`).join('')}</div><div class="kv">${m.f==='tally'?'<span><b>1,284</b> signups / hr</span><span><b>+38%</b> vs baseline</span><span>p99 <b>210ms</b></span>':'<span>seats <b>212 → 248</b></span><span><b>2</b> expansion signals</span>'}</div></div>`;
+    if(m.log)extra=`<div class="log">${m.log.map(l=>`<div><span class="t">[${l[0]}]</span> <span class="k">${l[1]}</span> ${esc(l[2])}</div>`).join('')}<div class="prog"><i style="width:${m.prog}%"></i></div></div>`;
+    if(m.card){const d=S.decisions.find(x=>x.id===m.card);const done=!d;
+      extra=`<div class="card${done?' done':''}"><label>Headline</label><input type="text" value="Ship it. We'll handle the scale." ${done?'disabled':''}><label>Primary CTA</label><select ${done?'disabled':''}><option>Start free trial</option><option>Book a demo</option></select><label>Announce date</label><input type="text" value="${esc(m.date||'Oct 14, 2026')}" ${done?'disabled':''}><div class="chk"><input type="checkbox" checked ${done?'disabled':''}> Announce in #general on publish</div>${done?`<div class="stamp">✓ ${esc(m.stamp||'Approved')}</div>`:`<div class="ac"><button class="b you" data-a="decide" data-v="${m.card}" ${canDecide(d)?'':'disabled'}>Approve copy</button><button class="b" data-a="changes" data-v="${m.card}">Request changes</button></div>`}</div>`}
+    return `<div class="msg${m.isNew?' new':''}">${av(m.f)}<div class="mb"><div class="mh"><b>${p.n}</b>${p.k==='agent'?'<span class="ag">AGENT</span>':''}<span>${m.t}</span>${m.rid?`<a class="blk" data-a="blame" data-v="${k}|${m.rid}" title="Overlook blame: why does this say that?">blame</a>`:''}</div><div class="bub">${m.x}${extra}</div>${m.basis?`<div class="basis${m.stale?' stale':''}${m.revised?' revd':''}">◆ basis · ${m.basis} ${m.bv||'v1'}${m.revised?` · revised by Recall ${m.revised}`:''}${m.stale?' · stale — kept on v1':''}</div>`:''}</div></div>`;
+  }
+  function pane(k){
+    const c=S.conv[k];const[ch,r]=k.split('/');
+    const crumb=ch==='dm'?`Acme Corp › <b>${par(r).n}</b>`:`Acme Corp › #${ch} › <b>${esc(roomName(k))}</b>`;
+    const kb=c.kb&&S.kb[c.kb];
+    const kbh=kb?`<div class="kb${S.kbOpen.has(k)?' open':''}" data-a="kb" data-v="${k}"><div class="top">◆ <b>${c.kb}</b>${kb.v?`<span class="kv2">${kb.v}</span>`:''}<span class="st ${kb.st}">${kb.st}</span></div><div class="sub">distilled by ${par(kb.by).n} · invoked by ${par(kb.inv).n}${S.kbOpen.has(k)?'':' · tap for receipt'}</div><div class="rc"><div class="body">${esc(kb.body)}</div><div class="r"><span>source</span><span>${esc(kb.from)} · ${kb.cites} messages</span></div><div class="r"><span>confirmed</span><span>${kb.conf?par(kb.conf).n:'not yet — quoted as unconfirmed'}</span></div><div class="r"><span>invoked</span><span>${kb.n}×</span></div><div class="r"><span>${kb.st==='superseded'?'replaced by':'review due'}</span><span>${kb.sup||kb.review}</span></div></div></div>`:'';
+    const ctx=c.closed?'<span class="ctx">closed</span>':c.ctx?`<span class="ctx"><span class="mini${c.ctx>85?' hot':''}"><i style="width:${c.ctx}%"></i></span>ctx ${c.ctx}%</span>`:'';
+    return `<div class="col pane" data-k="${k}"><div class="ph"><span class="crumb">${crumb}</span>${ctx}<span class="x" data-a="close" data-v="${k}" title="Close pane">×</span></div>${kbh}
+    <div class="sc msgs">${c.m.map(m=>msg(m,k)).join('')}</div>
+    ${c.closed?'<div class="comp"><span class="as" style="margin:auto">Closed room · read-only</span></div>':`<form class="comp" data-k="${k}"><input placeholder="Message ${esc(roomName(k))}…" aria-label="Message"><button class="b pri">Send</button></form>`}</div>`;
+  }
+  function recallCol(){
+    const R=S.recall;if(!R||!R.open)return '';
+    const done=R.stage==='done',ready=R.stage==='ready',d=S.decisions.find(x=>x.id===R.id);
+    const items=R.items.map((it,i)=>`<div class="ri ${it.st}${it.on?'':' off'}"><div class="rih">${ready?`<input type="checkbox" data-a="ritem" data-v="${i}" ${it.on?'checked':''} aria-label="Include">`:''}${av(it.f)}<b>${par(it.f).n}</b><span class="rvb${it.rev?'':' irr'}">${it.rev?'re-derived':'irreversible'}</span></div><div class="rwhat">${where(it.key)} · ${esc(it.what)}</div>${it.st==='wait'?'<div class="rst">queued</div>':it.st==='trace'?'<div class="rst on">re-deriving against v2…</div>':`<div class="diff${it.code?' code':''}">${it.diff.map(l=>`<div class="${l[0]==='+'?'add':'del'}"><span>${l[0]}</span>${esc(l[1])}</div>`).join('')}</div>${it.note?`<div class="rnote">${esc(it.note)}</div>`:''}`}${it.res?`<div class="rdone${it.res==='stale'?' st':''}">${it.res==='stale'?'left on v1 · flagged stale':'✓ applied'}</div>`:''}</div>`).join('');
+    const n=R.items.filter(x=>x.on).length;
+    const foot=done?`<div class="rft"><div class="rsum">${esc(R.summary)}</div><button class="b" data-a="rclose">Close</button></div>`:ready?`<div class="rft"><button class="b you" data-a="decide" data-v="${R.id}" ${d&&canDecide(d)?'':'disabled'}>Approve ${n} of ${R.items.length}</button><button class="b" data-a="rclose">Not now</button></div>`:`<div class="rft"><span class="rst on">tracing · ${R.items.filter(x=>x.st==='ready').length}/${R.items.length}</span></div>`;
+    return `<div class="col c-recall"><div class="hd"><div class="lbl" style="color:var(--new)">Recall ${R.id}</div><div class="t">1 fact → ${R.items.length} things built on it</div><div class="s">${R.places} places · ${R.stage==='trace'?'tracing…':'traced in '+(R.ms/1000).toFixed(1)+'s'} · <span style="color:var(--dim)">nothing changes until you approve</span></div></div>
+    <div class="sc"><div class="rroot"><b>${RECALL.fact}</b><div class="del"><span>v1</span>${esc(RECALL.was)}</div><div class="add"><span>v2</span>${esc(RECALL.now)}</div><div class="rsrc">contradicted by ${esc(R.by)} · ${R.where} · ${R.t}</div></div>${items}</div>${foot}</div>`;
+  }
+  /* ---- fork: one column per world ---- */
+  function forkCols(){
+    const F=S.fork;if(!F||!F.open)return '';
+    return F.worlds.map((w,wi)=>{const merged=F.merged===w.k,lost=F.merged&&!merged;
+      const items=w.items.map(it=>`<div class="fi ${it.st}">${av(it.f)}<div class="fib"><div class="fih"><b>${par(it.f).n}</b><span>${where(it.key)}</span></div><div class="fiw">${esc(it.what)}</div>${it.st!=='ready'?'<div class="rst on">re-deriving in sandbox…</div>':it.none?'<div class="fin">no change</div>':it.intent?`<div class="fint">⧗ intent · ${esc(it.intent)}</div>`:`<div class="diff">${it.diff.map(l=>`<div class="${l[0]==='+'?'add':'del'}"><span>${l[0]}</span>${esc(l[1])}</div>`).join('')}</div>`}${it.st==='ready'&&it.flag?`<div class="fflag"><span class="ind ring"></span>${esc(it.flag)}</div>`:''}</div></div>`).join('');
+      const mets=`<div class="fmet">${w.metrics.map(m=>`<div><span>${m[0]}</span><b>${m[1]}</b></div>`).join('')}</div>`;
+      const d=S.decisions.find(x=>x.id===F.ring);
+      const foot=merged?`<div class="rft"><div class="rsum">✓ Merged. This is reality now.</div></div>`:lost?`<div class="rft"><div class="rsum">Kept as the road not taken — its prediction is logged against what happens.</div></div>`:F.stage==='ready'?`<div class="rft"><button class="b you" data-a="merge" data-v="${w.k}" ${d&&canDecide(d)?'':'disabled'}>Merge world ${w.k}</button>${wi===1?'<button class="b" data-a="fclose">Close fork</button>':''}</div>`:'<div class="rft"><span class="rst on">sandboxed · 0 effects sent</span></div>';
+      return `<div class="col c-fork${merged?' won':''}${lost?' lost':''}"><div class="hd"><div class="lbl" style="color:var(--sky)">Fork ${F.id} · world ${w.k}</div><div class="t">${esc(FORK.q)}: ${esc(w.label)}</div><div class="s">sandboxed · sends are drafts · deploys are previews</div></div>${F.stage==='ready'||F.merged?mets:''}<div class="sc">${items}</div>${foot}</div>`}).join('');
+  }
+  function startFork(id){
+    const d=S.decisions.find(x=>x.id===id);if(!d||S.fork)return;
+    S.fork={id:FORK.id,ring:id,stage:'run',open:true,merged:null,worlds:JSON.parse(JSON.stringify(FORK.worlds)).map(w=>(w.items.forEach(i=>i.st='wait'),w))};
+    S.conv[d.key].m.push({sys:'',x:`<b>${par(S.acting).n}</b> forked <b>${FORK.id}</b> · 2 worlds · sandboxed, nothing leaves until a merge`});
+    render();const c=el.querySelector('.c-fork');if(c)el.scrollLeft=c.offsetLeft-el.querySelector('.c-ch').offsetLeft;
+    const q=[];S.fork.worlds.forEach((w,wi)=>w.items.forEach((it,ii)=>q.push([ii,wi,it])));q.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+    let i=0;const gap=RM?0:300;
+    const tick=()=>{if(i<q.length){q[i][2].st='trace';render();setTimeout(()=>{q[i][2].st='ready';i++;render();tick()},gap)}else{S.fork.stage='ready';render()}};
+    setTimeout(tick,RM?0:400);
+  }
+  function mergeWorld(k,direct){
+    const d=S.decisions.find(x=>x.fork);if(!d||!canDecide(d))return;
+    const W=FORK.worlds.find(w=>w.k===k),other=FORK.worlds.find(w=>w.k!==k),who=par(S.acting).n;
+    if(S.fork)S.fork.merged=k;
+    S.decisions=S.decisions.filter(x=>x!==d);
+    S.conv['launch-ops/pricing-v3'].kb='pricing-v3-tiers';const kb=S.kb['pricing-v3-tiers'];kb.body=W.kb;kb.conf='you';kb.st='confirmed';kb.claims={'price.team':W.label};
+    W.items.filter(i=>!i.none).forEach(i=>post(i.key,{sys:'g',x:`${direct?'Decision':'Fork <b>'+FORK.id+'</b> merged'} · ${par(i.f).n} ${i.intent?'released: '+esc(i.intent.replace(/ · held.*$/,'').replace(/held as an intent/,'queued')):'applied: '+esc(i.what)} · Team ${esc(W.label)}`}));
+    S.conv[d.key].m.push({sys:'g',x:`<b>${who}</b> locked the Team tier at <b>${esc(W.label)}</b>${direct?'':` · world ${other.k} kept as the road not taken`}`});
+    if(W.ring){S.decisions.unshift({id:'dM',f:'ledger',key:'cust-bramble/renewal',ti:'Bramble margin 64% — under the 65% floor',bo:'Predicted by the fork before you merged. Approve the exception or re-price the renewal.',need:'admin',yes:'Allow exception',rev:1,ev:'one renewal · reviewed quarterly',fresh:Date.now()})}
+    logB('⑂',`Team tier locked at <b>${esc(W.label)}</b>${direct?' (decided without a fork)':` · fork ${FORK.id}, world ${k} merged · world ${other.k} kept as the road not taken (predicted Team churn ${esc(other.metrics[1][1])})`}`,who,d.key);
+    render();
+  }
+
+  /* ---- coherence: one claim, two values ---- */
+  function cohCol(){
+    if(!S.cohOpen)return '';
+    const side=(c,sd)=>{const kb=S.kb[sd.basis]||{};return `<div class="cs"><div class="csv">${esc(sd.val)}</div><div class="csb">${sd.basis} ${kb.v||''} · ${kb.conf?'confirmed by '+par(kb.conf).n:'unconfirmed'}</div><div class="csq">${sd.quote.map(q=>`<span>${av(q[0])}${esc(q[3])}${q[2]?` <a data-a="blame" data-v="${q[1]}|${q[2]}">blame</a>`:''}</span>`).join('')}</div></div>`};
+    const cards=S.conf.map(c=>`<div class="cc ${c.sev}${c.res?' res':''}"><div class="cch">${c.res?'<span class="ok">✓</span>':`<span class="ind ${c.sev}"></span>`}<b>${c.id}</b><span class="ck">${c.claim}</span><span class="csev">${c.res?'resolved':c.sev==='ring'?'about to leave':'internal'}</span></div><div class="ct">${esc(c.topic)}</div>${c.res?`<div class="cres">${c.res}</div>`:`<div class="cpair">${side(c,c.sides[0])}<div class="cvs">≠</div>${side(c,c.sides[1])}</div><div class="copts">${c.opts.map((op,i)=>`<button class="b${i===0?' you':''}" data-a="resolve" data-v="${c.id}|${i}">${esc(op.label)} <span>· re-derives ${op.fix.length}</span></button>`).join('')}</div>`}</div>`).join('');
+    const n=openC().length;
+    return `<div class="col c-coh"><div class="hd"><div class="lbl" style="color:var(--violet)">Coherence</div><div class="t">${n?`${n} thing${n===1?'':'s'} the org believes two ways`:'One version of the truth'}</div><div class="s">claims compared across every basis · checked continuously</div></div><div class="sc">${cards}<div class="hint" style="margin:10px">A disagreement is a <b style="color:var(--new)">dot</b> while it stays inside. It becomes a <b>ring</b> the moment it's about to leave the building.</div></div><div class="rft"><button class="b" data-a="coh">Close</button></div></div>`;
+  }
+  function resolve(cid,i){
+    const c=S.conf.find(x=>x.id===cid);if(!c||c.res)return;const op=c.opts[i],who=par(S.acting).n;
+    op.fix.forEach(([key,rid,nx,basis,bv,date])=>{const m=findMsg(key,rid);if(!m)return;if(nx)m.x=nx;if(date)m.date=date;m.basis=basis;m.bv=bv;m.revised=c.id;post(key,{sys:'g',x:`Coherence <b>${c.id}</b> · ${par(m.f).n} re-derived this · ${esc(op.label)} · approved by ${who}`})});
+    const [kid,claims,v]=op.kb;const kb=S.kb[kid];if(kb){kb.claims=claims;if(v)kb.v=v}
+    c.res=`${esc(op.label)} · ${op.fix.length} re-derived by agents · approved by ${esc(who)}`;
+    logB('✓',`Conflict <b>${c.id}</b> resolved · ${op.log}`,who,op.fix[0][0]);
+    render();
+  }
+
+  /* ---- belief changelog ---- */
+  function logCol(){
+    if(!S.logOpen)return '';
+    const rows=S.log.map((r,i)=>({r,i})).reverse();
+    const line=({r,i})=>`<div class="lgl${i>=S.logSeen?' nw':''}" data-a="pane" data-v="${r.key}"><span class="lgg g${'+~−✓≠⑂×'.indexOf(r.g)}">${r.g}</span><div><p>${r.x}</p><small>${r.t} · ${S.parties[r.by]?S.parties[r.by].n:esc(r.by)}</small></div></div>`;
+    const nw=rows.filter(x=>x.i>=S.logSeen),old=rows.filter(x=>x.i<S.logSeen);
+    return `<div class="col c-log"><div class="hd"><div class="lbl" style="color:var(--sky)">Belief changelog</div><div class="t">${nw.length} change${nw.length===1?'':'s'} to what the org believes</div><div class="s">not what it said — what it now holds true</div></div><div class="sc">${nw.length?`<div class="lgs">Since you last looked</div>${nw.map(line).join('')}`:''}<div class="lgs">Earlier</div>${old.map(line).join('')}</div><div class="rft"><button class="b" data-a="logseen" ${nw.length?'':'disabled'}>Mark caught up</button><button class="b" data-a="log">Close</button></div></div>`;
+  }
+
+  /* ---- overlook blame ---- */
+  const hash=s=>{let h=5381;for(const c of s)h=(h*33^c.charCodeAt(0))>>>0;return h.toString(16).slice(-4)};
+  function blameCol(){
+    const B=S.blame;if(!B)return '';
+    const m=findMsg(B.key,B.rid);if(!m)return '';
+    const lines=m.lines||[{f:m.f,t:m.t,x:plain(m.x),src:m.basis?{kb:m.basis}:null}];
+    const sel=Math.min(B.line||0,lines.length-1),L=lines[sel];
+    const srcTag=sr=>!sr?'<span class="bsrc none">no basis — original</span>':sr.kb?`<span class="bsrc kb">${sr.kb} ${(S.kb[sr.kb]||{}).v||''}</span>`:sr.dec?'<span class="bsrc dec">decision</span>':'<span class="bsrc msg">message</span>';
+    const gut=lines.map((l,i)=>`<div class="bln${i===sel?' on':''}" data-a="bline" data-v="${i}"><span class="bh">${hash(B.rid+i+(l.rev||''))}</span>${av(l.f)}<span class="bt">${esc(l.t)}</span><code>${esc(l.x)}</code>${srcTag(l.src)}</div>`).join('');
+    let chain='';const sr=L.src;
+    if(sr&&sr.kb){const kb=S.kb[sr.kb]||{};chain=`
+      <div class="bc"><span class="bk">says</span><div>${esc(L.x)}<small>${par(L.f).n} · ${esc(L.t)}${L.rev||m.revised?` · revised by ${L.rev||m.revised}`:''}</small></div></div>
+      <div class="bc"><span class="bk">because</span><div><b class="g">${sr.kb}</b> ${kb.v||''}${kb.st==='superseded'?' · superseded':''}<small>${esc(kb.body||'')}</small></div></div>
+      <div class="bc"><span class="bk">distilled</span><div>${par(kb.by).n} · ${esc(kb.from)} · from ${kb.cites} messages</div></div>
+      ${(kb.src||[]).map(q=>`<div class="bc q"><span class="bk"></span><div>“${esc(q[2])}”<small>${par(q[0]).n} · ${esc(q[1])}</small></div></div>`).join('')}
+      <div class="bc"><span class="bk">confirmed</span><div>${kb.conf?par(kb.conf).n:'<span style="color:var(--new)">nobody yet — quoted as unconfirmed</span>'}</div></div>
+      <div class="bc"><span class="bk">allowed by</span><div>${esc(m.allow||`${par(m.f).n}’s scope in ${plain(where(B.key))} · granted by ${par(par(m.f).boss||'you').n}`)}</div></div>`}
+    else if(sr&&sr.dec){chain=`<div class="bc"><span class="bk">says</span><div>${esc(L.x)}<small>${par(L.f).n} · ${esc(L.t)}</small></div></div><div class="bc"><span class="bk">because</span><div>${esc(sr.dec)}</div></div>`}
+    else if(sr&&sr.msg){chain=`<div class="bc"><span class="bk">says</span><div>${esc(L.x)}<small>${par(L.f).n} · ${esc(L.t)}</small></div></div><div class="bc"><span class="bk">because</span><div>a message in ${where(sr.msg)} <a data-a="pane" data-v="${sr.msg}">open</a></div></div>`}
+    else chain=`<div class="bc"><span class="bk">says</span><div>${esc(L.x)}<small>${par(L.f).n} · ${esc(L.t)} · written fresh, no recorded basis</small></div></div>`;
+    return `<div class="col c-blame"><div class="hd"><div class="lbl" style="color:var(--know)">Overlook blame</div><div class="t">Why does this say that?</div><div class="s">${par(m.f).n} · ${where(B.key)} · ${lines.length} line${lines.length===1?'':'s'}</div></div><div class="sc"><div class="bgut">${gut}</div><div class="bchain">${chain}</div><div class="hint" style="margin:10px">Blame names sources and permissions, never a culprit. Type <b style="color:var(--know)">/blame</b> or <b style="color:var(--know)">/why</b> in any pane.</div></div><div class="rft"><button class="b" data-a="bclose">Close</button></div></div>`;
+  }
+  const focusCol=sel=>{const c=el.querySelector(sel);if(c){el.scrollLeft=Math.max(0,c.offsetLeft-el.querySelector('.c-ch').offsetLeft);c.classList.add('flash')}};
+
+  function findMsg(key,rid){return S.conv[key]&&S.conv[key].m.find(m=>m.rid===rid)}
+  function startRecall(by,key){
+    if(S.recall||!S.kb[RECALL.fact]||S.kb[RECALL.fact].v!=='v1')return;
+    const t0=performance.now(),t=now();
+    const items=RECALL.deps.filter(d=>findMsg(d.key,d.rid)).map(d=>Object.assign({},d,{st:'wait',on:true}));
+    S.recall={id:'R-1',stage:'trace',open:true,items,by:par(by).n,where:where(key),t,ms:0,places:new Set(items.map(i=>i.key.startsWith('dm/')?i.key:chOf(i.key))).size};
+    S.conv[key].m.push({sys:'y',x:`Contradiction · this conflicts with confirmed entry <span class="g">${RECALL.fact}</span> (“${RECALL.was}”) · tracing what was built on it…`});
+    render();
+    const strip=()=>{const c=el.querySelector('.c-recall');if(c)el.scrollLeft=Math.max(0,c.offsetLeft-el.querySelector('.c-ch').offsetLeft)};
+    strip();
+    const gap=RM?0:520;let i=0;
+    const tick=()=>{
+      if(i<items.length){items[i].st='trace';render();setTimeout(()=>{items[i].st='ready';i++;S.recall.ms=Math.round(performance.now()-t0);render();tick()},gap)}
+      else{
+        S.recall.stage='ready';
+        S.decisions.forEach(x=>x.fresh=0);
+        S.decisions.unshift({id:'R-1',f:'recall',key,keys:items.map(x=>x.key),recall:1,ti:`Recall · 1 fact changed, ${items.length} things built on it`,bo:`${RECALL.fact} v1 → v2 · ${S.recall.places} places`,need:'owner',yes:'Review & approve',rev:1,ev:`${items.filter(x=>x.rev).length} re-derived · ${items.filter(x=>!x.rev).length} correction drafted`,fresh:Date.now()});
+        render();
+      }
+    };
+    setTimeout(tick,RM?0:600);
+  }
+  function applyRecall(){
+    const R=S.recall,who=par(S.acting).n,t=now();
+    const kb=S.kb[RECALL.fact];kb.v='v2';kb.body=RECALL.body2;kb.conf='you';kb.st='confirmed';kb.review='Jan 1';
+    let ap=0,st=0;
+    R.items.forEach(it=>{const m=findMsg(it.key,it.rid);
+      if(!it.on){it.res='stale';st++;if(m)m.stale=true;return}
+      it.res='ok';ap++;
+      if(it.rev&&m){m.x=it.nx;m.bv='v2';m.revised=R.id;if(it.lineFix&&m.lines){const L=m.lines[it.lineFix[0]];L.x=it.lineFix[1];L.t=t;L.rev=R.id}post(it.key,{sys:'g',x:`Recall <b>${R.id}</b> · ${par(it.f).n} re-derived this against <span class="g">${RECALL.fact}</span> v2 · approved by ${who}`})}
+      else{if(m){m.bv='v1';m.revised=R.id}post(it.key,{f:it.f,t,rid:'r-echo2',x:esc(it.follow),basis:RECALL.fact,bv:'v2'})}
+    });
+    S.conv['launch-ops/~free'].m.push({sys:'g',x:`<b>${who}</b> confirmed <span class="g">${RECALL.fact}</span> v2 · v1 superseded · ${ap} dependent${ap===1?'':'s'} updated${st?` · ${st} left stale and flagged`:''}`});
+    S.kb[RECALL.fact].claims={'stripe.retry_window':'5 days'};
+    logB('~',`<b>${RECALL.fact}</b> v1 → v2 · retries now ${RECALL.now} · ${ap} dependent${ap===1?'':'s'} updated (Recall ${R.id})`,who,'launch-ops/~free');
+    R.stage='done';R.summary=`${ap} updated · ${st} left on v1 · 1 decision instead of a week of “wait, which number is right?”`;
+  }
+  function render(){
+    const keep={};el.querySelectorAll('.pane').forEach(p=>{const s=p.querySelector('.sc');keep[p.dataset.k]=s.scrollHeight-s.scrollTop-s.clientHeight<30?'bottom':s.scrollTop});
+    const sx=el.scrollLeft;
+    const focused=document.activeElement&&el.contains(document.activeElement)&&document.activeElement.matches('.search')?'q':null;
+    el.innerHTML=rail()+chans()+chan()+(S.inbox?inbox():'')+recallCol()+forkCols()+cohCol()+logCol()+blameCol()+S.panes.map(pane).join('');
+    el.querySelectorAll('.pane').forEach(p=>{const s=p.querySelector('.sc');const v=keep[p.dataset.k];s.scrollTop=(v===undefined||v==='bottom')?s.scrollHeight:v});
+    el.scrollLeft=sx;
+    if(focused){const i=el.querySelector('.search');i.focus();i.setSelectionRange(i.value.length,i.value.length)}
+    paints.forEach(f=>f(S));
+  }
+  function openPane(k){
+    if(!S.conv[k])return;
+    S.unread.delete(k);delete S.unreadN[k];
+    if(!S.panes.includes(k)){S.panes.push(k);while(S.panes.length>(o.max||2))S.panes.shift()}
+    const c=chOf(k);if(c!=='dm')S.chan=c;
+    render();
+    const p=el.querySelector(`.pane[data-k="${k}"]`);
+    if(p){p.classList.add('flash');const r=p.getBoundingClientRect(),er=el.getBoundingClientRect();if(r.right>er.right||r.left<er.left)el.scrollLeft+=r.left-er.left-(el.clientWidth-p.offsetWidth)+8}
+  }
+  function post(k,m){
+    const c=S.conv[k];c.m.forEach(x=>x.isNew=false);m.isNew=!S.panes.includes(k);c.m.push(m);if(c.m.length>30)c.m.splice(0,c.m.length-30);
+    if(!S.panes.includes(k)){S.unread.add(k);S.unreadN[k]=(S.unreadN[k]||0)+1}
+  }
+  function decide(id,yes,always){
+    const d=S.decisions.find(x=>x.id===id);if(!d||!canDecide(d))return;
+    S.decisions=S.decisions.filter(x=>x.id!==id);
+    const who=par(S.acting).n,t=now();
+    if(id==='d1'){const m=S.conv[d.key].m.find(x=>x.card==='d1');if(m)m.stamp=`Approved by ${who} · ${t}`;S.conv[d.key].m.push({f:'ren',t,x:'On it. Forge has the copy.'})}
+    else if(d.recall){if(S.recall&&S.recall.stage==='ready')applyRecall()}
+    else if(d.cat==='ctx'&&yes){par(d.f).ctx=8;S.conv[d.key].ctx=8;S.conv[d.key].m.push({sys:'g',x:`<b>${par(d.f).n}</b> distilled its working notes and continued in a fresh window · ctx ${d.pct}% → 8%`})}
+    else if(d.addReq){const pr=S.pending.find(p=>p.d===id);S.pending=S.pending.filter(p=>p.d!==id);const ch=S.ch.find(x=>x.id===pr.ch);if(yes){ch.parties.push(pr.who);S.conv[pr.ch+'/~free'].m.push({sys:'g',x:`<b>${who}</b> approved <b>${par(pr.by).n}</b>'s request · <b>${par(pr.who).n}</b> added to #${pr.ch}`})}else S.conv[pr.ch+'/~free'].m.push({sys:'',x:`<b>${who}</b> denied <b>${par(pr.by).n}</b>'s request to add <b>${par(pr.who).n}</b>`})}
+    else S.conv[d.key].m.push({sys:'g',x:`<b>${who}</b> decided: ${esc(d.yes)} · ${t} · ${par(d.f).n} is unblocked`});
+    if(always&&d.rule){
+      S.orders.forEach(x=>x.fresh=0);
+      const so={id:'SO-'+(++S.soN),cat:d.cat,rule:d.rule,who,t,where:where(d.key),key:d.key,hits:0,fresh:Date.now()};S.orders.push(so);logB('+',`Standing order <b>${so.id}</b> granted · ${esc(so.rule)}`,who,d.key);
+      S.conv[d.key].m.push({sys:'g',x:`<b>${who}</b> granted standing order <b>${so.id}</b> · ${esc(so.rule)} · expires in 30 days`});
+      S.decisions.filter(x=>x.cat===d.cat&&x.rule).forEach(x=>autoHandle(x,so));
+      S.decisions=S.decisions.filter(x=>!(x.cat===d.cat&&x.rule));
+    }
+    render();
+  }
+  function autoHandle(d,so){
+    so.hits++;S.auto++;
+    if(d.cat==='ctx'){par(d.f).ctx=8;S.conv[d.key].ctx=8}
+    post(d.key,{sys:'g',x:`<b>${par(d.f).n}</b> ${esc(d.autoTxt)} · handled by standing order <b>${so.id}</b> — from ${esc(so.who)}'s approval at ${so.t}`});
+  }
+  el.addEventListener('click',e=>{
+    const a=e.target.closest('[data-a]');if(!a||!el.contains(a))return;
+    const v=a.dataset.v;
+    switch(a.dataset.a){
+      case 'chan':S.chan=v;S.mode='list';render();break;
+      case 'pane':openPane(v);break;
+      case 'close':S.panes=S.panes.filter(x=>x!==v);render();break;
+      case 'details':S.mode='details';render();break;
+      case 'list':S.mode='list';render();break;
+      case 'who':if(par(v).k==='agent'){S.open=S.open===v?null:v;S.mode='details';render()}break;
+      case 'kb':S.kbOpen.has(v)?S.kbOpen.delete(v):S.kbOpen.add(v);render();break;
+      case 'decide':decide(v,true);break;
+      case 'always':decide(v,true,true);break;
+      case 'revoke':{const so=S.orders.find(x=>x.id===v);if(so){S.orders=S.orders.filter(x=>x!==so);logB('−',`Standing order <b>${so.id}</b> revoked after ${so.hits} use${so.hits===1?'':'s'}`,par(S.acting).n,so.key);S.conv[so.key].m.push({sys:'y',x:`<b>${par(S.acting).n}</b> revoked <b>${so.id}</b> after ${so.hits} use${so.hits===1?'':'s'} · the next one rings again`})}render();break}
+      case 'brief':S.brief=!S.brief;render();break;
+      case 'ropen':if(S.recall){S.recall.open=true;render();const c=el.querySelector('.c-recall');if(c){el.scrollLeft=c.offsetLeft-el.querySelector('.c-ch').offsetLeft;c.classList.add('flash')}}break;
+      case 'rclose':if(S.recall){S.recall.open=false;render()}break;
+      case 'fork':startFork(v);break;
+      case 'forkpick':mergeWorld(v,!S.fork);break;
+      case 'merge':mergeWorld(v,false);break;
+      case 'fclose':if(S.fork){S.fork.open=false;render()}break;
+      case 'coh':S.cohOpen=!S.cohOpen;render();if(S.cohOpen)focusCol('.c-coh');break;
+      case 'resolve':{const[c,i]=v.split('|');resolve(c,+i);break}
+      case 'log':S.logOpen=!S.logOpen;render();if(S.logOpen)focusCol('.c-log');break;
+      case 'logseen':S.logSeen=S.log.length;render();break;
+      case 'blame':{const[k,r]=v.split('|');S.blame={key:k,rid:r,line:0};const m=findMsg(k,r);if(m&&m.lines)S.blame.line=Math.max(0,m.lines.findIndex(l=>l.src&&l.src.kb));render();focusCol('.c-blame');break}
+      case 'bline':if(S.blame){S.blame.line=+v;render()}break;
+      case 'bclose':S.blame=null;render();break;
+      case 'seen':S.unread.clear();S.unreadN={};S.brief=false;render();break;
+      case 'deny':decide(v,false);break;
+      case 'changes':{const d=S.decisions.find(x=>x.id===v);if(d){S.conv[d.key].m.push({f:S.acting,t:now(),x:'Close — make the headline warmer?'});S.conv[d.key].m.push({f:'quill',t:now(),x:'On it. v4 in a few minutes; the ring stays until you approve one.'});render()}break}
+      case 'org':if(v!==S.org){a.animate&&a.animate([{transform:'scale(1)'},{transform:'scale(.9)'},{transform:'scale(1)'}],{duration:220});delete S.orgDots[v];render()}break;
+      case 'newroom':{const ch=S.ch.find(x=>x.id===S.chan);const id='room-'+(ch.rooms.length+ch.closed.length+1);ch.rooms.push({id,n:'New project '+(ch.rooms.length+1),art:0});S.conv[S.chan+'/'+id]={ctx:0,m:[{sys:'',x:`<b>${par(S.acting).n}</b> opened this room · ${ch.parties.length} parties inherited from #${ch.id}`}]};openPane(S.chan+'/'+id);break}
+      case 'add':{const who=el.querySelector('[data-a="addpick"]').value;const ch=S.ch.find(x=>x.id===S.chan);const actor=par(S.acting);
+        if(RANK[actor.role]>=RANK.admin){ch.parties.push(who);S.conv[ch.id+'/~free'].m.push({sys:'g',x:`<b>${actor.n}</b> added <b>${par(who).n}</b> to #${ch.id}`})}
+        else{const id='dr'+Date.now();S.pending.push({ch:ch.id,who,by:S.acting,d:id});S.decisions.unshift({id,f:S.acting,key:ch.id+'/~free',ti:`Add ${par(who).n} to #${ch.id}`,bo:`Requested by ${actor.n} (${actor.role}). ${actor.k==='agent'?'Scoped agents request; owners approve.':'Members request; owners approve.'}`,need:'owner',yes:'Approve',addReq:1,fresh:Date.now()});
+          S.conv[ch.id+'/~free'].m.push({sys:'y',x:`<b>${actor.n}</b> requested to add <b>${par(who).n}</b> · waiting on an owner · ring raised`})}
+        render();break}
+      case 'pause':{const p=par(v);p.paused=!p.paused;render();break}
+      case 'reset':{const p=par(v);const was=p.ctx;p.ctx=6;S.conv[S.chan+'/~free'].m.push({sys:'g',x:`<b>${p.n}</b> distilled its working notes and restarted in a fresh window · ctx ${was}% → 6%`});render();break}
+    }
+  });
+  el.addEventListener('change',e=>{
+    const a=e.target.closest('[data-a]');if(!a)return;
+    if(a.dataset.a==='acting'){S.acting=a.value;render()}
+    if(a.dataset.a==='ritem'&&S.recall){S.recall.items[+a.dataset.v].on=a.checked;render()}
+  });
+  el.addEventListener('input',e=>{if(e.target.dataset.a==='q'){S.q=e.target.value;render()}});
+  el.addEventListener('submit',e=>{
+    e.preventDefault();const f=e.target;const i=f.querySelector('input');const t=i.value.trim();if(!t)return;
+    if(/^\/(blame|why)\b/i.test(t)){const m=[...S.conv[f.dataset.k].m].reverse().find(x=>x.rid);i.value='';if(m){S.blame={key:f.dataset.k,rid:m.rid,line:m.lines?Math.max(0,m.lines.findIndex(l=>l.src&&l.src.kb)):0};render();focusCol('.c-blame')}else{S.conv[f.dataset.k].m.push({sys:'',x:'Nothing traceable here yet — /blame works on messages with a recorded basis.'});render()}return}
+    if(/^\/fork\b/i.test(t)){i.value='';const d=S.decisions.find(x=>x.fork);if(d)startFork(d.id);return}
+    S.conv[f.dataset.k].m.push({f:S.acting,t:now(),x:esc(t)});render();
+    if(RECALL_RX.test(t))startRecall(S.acting,f.dataset.k);
+    const ni=el.querySelector(`form[data-k="${f.dataset.k}"] input`);ni&&ni.focus();
+  });
+
+  /* the simulation: agents keep working whether you watch or not */
+  let timer=null,tick=0,ri=0,seq=0;const rot=o.rot||['ctx','flaky','ttl','deploy','ttl','flaky','ctx'];
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  function make(cat){const id='s'+(++seq);
+    if(cat==='ttl'){const t=pick(['invoices','refunds','tickets','orders','addresses']);return {id,cat,f:'sable',key:'cust-halcyon/data-migration',need:'admin',ti:`Allow a 24-hour TTL on ${t} staging`,bo:'Same shape as last time: temp bucket, customer data, 24 hours.',yes:'Allow 24h',rev:1,ev:'no cost · within PII policy',rule:RULES.ttl,autoTxt:`allowed a 24h TTL on ${t} staging`}}
+    if(cat==='flaky'){const n=2+Math.floor(Math.random()*3);return {id,cat,f:'harbor',key:'agent-fleet/~free',need:'admin',ti:`Quarantine ${n} flaky tests`,bo:'Each retried green twice. Tickets filed.',yes:'Quarantine',rev:1,ev:'tickets filed · suite stays honest',rule:RULES.flaky,autoTxt:`quarantined ${n} flaky tests and filed tickets`}}
+    if(cat==='ctx'){const a=pick([['ledger','launch-ops/pricing-v3'],['forge','dm/forge'],['scout','launch-ops/~free']]);const pct=90+Math.floor(Math.random()*6);return {id,cat,f:a[0],key:a[1],need:'owner',pct,ti:`Context ${pct}% full`,bo:'Distill and continue in a fresh window, or raise the budget?',yes:'Distill & continue',rev:1,ev:'notes go to the knowledge base',rule:RULES.ctx,autoTxt:`hit ${pct}% context, distilled its notes and continued fresh`}}
+    return {id,cat:'deploy',f:'forge',key:'dm/forge',need:'owner',ti:'Promote preview to production',bo:'Build green · 214/214 tests · checklist 7/7',yes:'Promote',rev:0,ev:'users see it at once · rollback plan ready'}
+  }
+  function emit(){
+    const d=make(rot[ri++%rot.length]);
+    const so=d.rule&&S.orders.find(x=>x.cat===d.cat);
+    if(so){S.orders.forEach(x=>x.fresh=0);autoHandle(d,so);return true}
+    if(S.decisions.length>=5)return false;
+    S.decisions.forEach(x=>x.fresh=0);d.fresh=Date.now();S.decisions.unshift(d);S.rings++;
+    if(d.cat==='ctx'){par(d.f).ctx=d.pct;S.conv[d.key].ctx=d.pct}
+    post(d.key,{sys:'y',x:`<b>${par(d.f).n}</b> raised a ring · ${esc(d.ti)} · needs ${d.need}`});
+    return true;
+  }
+  function step(){
+    tick++;
+    if(tick%(o.every||6)===0&&emit()){}
+    else{const[f,k,txt]=POOL_M[Math.floor(Math.random()*POOL_M.length)];const p=par(f);if(p.paused){render();return}
+      S.decisions.forEach(x=>x.fresh=0);post(k,{f,t:now(),x:esc(txt())});S.news++;p.ctx=Math.min(84,p.ctx+1);if(S.conv[k].ctx)S.conv[k].ctx=Math.min(84,S.conv[k].ctx+1);
+      if(Math.random()<.25)S.orgDots.sc='dot';}
+    render();
+  }
+  const api={S,render,onPaint(f){paints.push(f)},
+    fork(){const d=S.decisions.find(x=>x.fork);if(d)startFork(d.id)},
+    recall(){if(S.recall)return;const k='launch-ops/~free';if(!S.panes.includes(k))openPane(k);S.conv[k].m.push({f:'marcus',t:now(),x:'Heads up — Stripe extended webhook retries to 5 days, not 3. Their changelog went out this morning.'});render();startRecall('marcus',k)},
+    play(){if(!timer){timer=setInterval(step,o.ms||2400);S.sim=true}},
+    pause(){clearInterval(timer);timer=null;S.sim=false},
+    get playing(){return !!timer}};
+  render();
+  return api;
+}
+
+/* ---------- mount the demos ---------- */
+const SCN={
+  hero:{chan:'launch-ops',panes:['launch-ops/website-relaunch','dm/forge'],inbox:true,cls:'tall',unread:['cust-northwind/onboarding','design-review/~free','dm/scout'],max:2,sim:1},
+  orders:{chan:'cust-halcyon',panes:['cust-halcyon/data-migration'],inbox:true,cls:'tall',only:['d2','d3'],unread:['cust-northwind/onboarding','launch-ops/website-relaunch','agent-fleet/~free','dm/scout'],unreadN:{'cust-northwind/onboarding':3,'launch-ops/website-relaunch':4,'agent-fleet/~free':2},max:1,sim:1,ms:1700,every:3,rot:['ttl','flaky','ttl','ctx','ttl','flaky']},
+  recall:{chan:'launch-ops',panes:['launch-ops/~free'],inbox:true,cls:'tall',only:[],max:1},
+  fork:{chan:'launch-ops',panes:['launch-ops/pricing-v3'],inbox:true,cls:'tall',only:['dF'],max:1},
+  coherence:{chan:'launch-ops',panes:['launch-ops/website-relaunch'],inbox:true,cls:'tall',only:['d1'],coh:1,max:1},
+  changelog:{chan:'launch-ops',panes:['launch-ops/~free'],inbox:true,cls:'tall',only:['d2'],log:1,logSeen:5,max:1},
+  blame:{chan:'launch-ops',panes:['dm/forge'],cls:'tall',blame:{key:'dm/forge',rid:'r-forge',line:1},max:1},
+  rooms:{chan:'cust-northwind',panes:['cust-northwind/qbr','cust-northwind/onboarding'],max:3},
+  roster:{chan:'launch-ops',mode:'details',open:'scout',panes:['launch-ops/~free'],inbox:true,max:1},
+  knowledge:{chan:'launch-ops',panes:['launch-ops/~free','dm/forge'],max:2},
+  tablet:{chan:'launch-ops',panes:['launch-ops/website-relaunch'],inbox:true,cls:'tablet',max:1},
+  phone:{chan:'launch-ops',panes:['launch-ops/website-relaunch'],inbox:true,cls:'compact',max:1},
+};
+const narrow=matchMedia('(max-width:700px)');
+document.querySelectorAll('.demo[data-scn]').forEach(h=>{
+  const cfg=Object.assign({},SCN[h.dataset.scn]);
+  if(narrow.matches&&!cfg.cls)cfg.cls='compact';
+  else if(narrow.matches&&cfg.cls==='tall')cfg.cls='tall compact';
+  const s=Strip(h,cfg);
+  if(h.dataset.scn==='knowledge'){s.S.kbOpen.add('launch-ops/~free');s.render()}
+  document.querySelectorAll(`[data-recall="${h.dataset.scn}"]`).forEach(b=>b.addEventListener('click',()=>{s.recall();b.disabled=true;b.textContent='✓ Correction played'}));
+  document.querySelectorAll(`[data-fork="${h.dataset.scn}"]`).forEach(b=>b.addEventListener('click',()=>{s.fork();b.disabled=true;b.textContent='✓ Forked'}));
+  if(!cfg.sim)return;
+  /* live counter + play/pause; agents run only while their demo is on screen */
+  const hc=document.querySelector(`.counter[data-for="${h.dataset.scn}"]`);
+  if(hc){
+    hc.innerHTML='<span class="ind dot"></span><span class="cN"></span><span class="ind ring"></span><span class="cR"></span><span class="so-ic">◆</span><span class="cA"></span><button class="btn-sim"></button>';
+    const n=hc.querySelector('.cN'),r=hc.querySelector('.cR'),au=hc.querySelector('.cA'),b=hc.querySelector('button');
+    const paint=()=>{n.textContent=[...s.S.unread].reduce((x,k)=>x+(s.S.unreadN[k]||1),0)+' new';r.textContent=s.S.decisions.length+' need you';au.textContent=s.S.auto+' by orders';b.textContent=s.playing?'❚❚ Pause agents':'▶ Run agents'};
+    s.onPaint(paint);
+    b.addEventListener('click',()=>{if(s.playing){s.pause();s.userPaused=true}else{s.play();s.userPaused=false}paint()});
+    paint();
+  }
+  if(!RM)new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){if(!s.userPaused)s.play()}else s.pause();s.render()}),{threshold:.2}).observe(h);
+});
+
+/* ---------- the compressed day ---------- */
+const lanes=document.getElementById('lanes');
+if(lanes){
+  const AG=['scout','forge','quill','ledger','atlas','echo','sable','tally','relay','harbor'];
+  const RINGS={forge:[52],quill:[20],ledger:[71],atlas:[],echo:[],sable:[33],tally:[],relay:[60],harbor:[88],scout:[44]};
+  lanes.innerHTML=AG.map(a=>`<div class="ln"><i style="--c:${P[a].c}"></i>${P[a].n}</div><div class="cells">${Array.from({length:96},(_,i)=>`<i data-r="${(RINGS[a]||[]).includes(i)?1:0}" data-i="${i}"></i>`).join('')}</div>`).join('');
+  const cells=[...lanes.querySelectorAll('.cells i')];
+  const tNew=document.getElementById('tNew'),tYou=document.getElementById('tYou'),tPct=document.getElementById('tPct');
+  const totalR=cells.filter(c=>c.dataset.r==='1').length;
+  const fill=upto=>{let n=0,r=0;cells.forEach(c=>{const on=+c.dataset.i<upto;c.className=on?(c.dataset.r==='1'?'d':'m'):'';if(on){c.dataset.r==='1'?r++:n++}});tNew.textContent=n;tYou.textContent=r;tPct.textContent=(n+r?(r/(n+r)*100):0).toFixed(1)+'%'};
+  let raf=null;
+  const play=()=>{cancelAnimationFrame(raf);if(RM){fill(96);return}const t0=performance.now(),D=7000;const f=t=>{const p=Math.min(1,(t-t0)/D);fill(Math.round(p*96));if(p<1)raf=requestAnimationFrame(f)};raf=requestAnimationFrame(f)};
+  fill(96);
+  document.getElementById('dayPlay').addEventListener('click',play);
+  const day=document.getElementById('day');
+  day.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{day.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));day.classList.toggle('only',b.dataset.v==='only')}));
+  if(!RM){let ran=false;new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting&&!ran){ran=true;play()}}),{threshold:.35}).observe(day)}
+}
+
+/* ---------- reveals ---------- */
+if(!RM&&'IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(n=>io.observe(n));
+}else document.querySelectorAll('.rv').forEach(n=>n.classList.add('in'));
+})();
+</script>
+</body>
+</html>
