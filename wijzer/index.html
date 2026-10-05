@@ -27,9 +27,9 @@
      Faces are baked, script-free SVGs (widgets/faces/*.svg) drawn from the live
      studies in widgets/. The watch around them is pure CSS, scaled by --k
      (1 = the 364-point study at 1:1). Nothing on this page needs JS to be seen.
-     Keep the document under ~8,000 CSS px tall at 1440 and 390 wide: headless
-     Chromium (SwiftShader) cannot capture a full-page screenshot past 8,192 px,
-     which is why the previous 12.7k/16.4k px version could not be captured.
+     Testing note: headless Chromium with SwiftShader cannot take a single
+     full-page screenshot taller than ~8,192 CSS px. Capture long pages in
+     viewport-sized segments; don't trim content to fit the tool.
      ========================================================================== */
   @property --k{syntax:'<number>';inherits:true;initial-value:1}
   :root{
@@ -340,7 +340,6 @@
     #swipe{padding:56px 0 46px}
     #closer{padding:90px 0 50px}
     .plate-head{margin-bottom:16px}
-    .faces .fn{display:none}
     .faces a{padding:14px 0}
     .ask-top{margin-bottom:30px}
     .asks{gap:0}
@@ -352,7 +351,6 @@
     .sheet h3{margin:34px 0 14px}
     .honest p{font-size:14.5px}
     .revs li{padding:10px 0}
-    .revs .y{display:none}
     .lg-grid{gap:26px}
     .lg-grid h2,.ask-top h2{margin:14px 0 14px}
     .halves{grid-template-columns:1fr 1fr;gap:16px;margin:22px 0 4px}
@@ -364,10 +362,8 @@
     .pto{display:none}
     .sheet-head{margin-bottom:24px}
     .pull{font-size:20px;margin:22px 0;padding:16px 0}
-    .faces a:not(.on) .ds{display:none}
     .faces .nm{font-size:12px}
     .size-note{margin-top:10px}
-    .ask .sz{display:none}
     .ask{background:transparent;box-shadow:none;padding:16px 0 14px;display:grid;grid-template-columns:36px 1fr;column-gap:8px}
     .ask .n{grid-row:span 3;font-size:24px;margin:0}
     .ask h3{font-size:17px;margin-bottom:6px}
@@ -379,10 +375,8 @@
     #closer{padding:70px 0 40px}
     .legend{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}
     .legend li{grid-template-columns:24px 1fr;padding:8px 0}
-    .legend span{display:none}
     .legend b{font-size:9.5px;letter-spacing:.14em;line-height:1.5;padding-top:3px}
     .plate-note{margin-top:18px;font-size:11px}
-    .plate-note{display:none}
     .hero-art{padding:34px 0 26px}
     .hero-in{padding-top:26px;padding-bottom:0}
     .ephem{padding-top:12px;padding-bottom:18px}
@@ -394,9 +388,7 @@
     #closer .btn-line{display:none}
     #closer .body{font-size:16px}
     #closer h2{font-size:38px;margin:16px 0 18px}
-    .lg-grid .lede{display:none}
     .honest{margin-top:0;padding-top:0;border:0}
-    .try .intro{display:none}
     .hero h1{font-size:42px}
     .plate-head p{font-size:16px}
     .letter{padding-left:0;padding-right:0}
