@@ -1,0 +1,37 @@
+{
+ "name": "once-campfire-fSharp",
+ "order": 15,
+ "status": "shipped",
+ "repo": "ckluis/once-campfire-fSharp",
+ "line": "Campfire in F#, faster than the Rust port",
+ "question": "What if an AI-built F# port could match the Rust port of Basecamp's Campfire byte for byte, and then beat it?",
+ "body": "A full port of ONCE Campfire to F# on ASP.NET Core and Falco, translated from the Rust port by phased agent workflows and checked against it: every parity screen identical, golden vectors and differentials passing, a drop-in for existing installs. Then tuned against Rust on the same machine: 1.24-1.33x its throughput on all five benchmarked workloads, at less CPU per request.",
+ "stack": [
+  "F#",
+  ".NET 10",
+  "ASP.NET Core",
+  "Falco",
+  "SQLite"
+ ],
+ "facts": [
+  [
+   "1.2-1.4×",
+   "Rust's throughput"
+  ],
+  [
+   "214/214",
+   "parity cells match Rust"
+  ]
+ ],
+ "links": [
+  {
+   "label": "Live",
+   "href": "https://ckluis.github.io/once-campfire-fSharp/"
+  },
+  {
+   "label": "Code",
+   "href": "https://github.com/ckluis/once-campfire-fSharp"
+  }
+ ],
+ "alt": "once-campfire-fSharp — Campfire in F#, faster than the Rust port"
+}

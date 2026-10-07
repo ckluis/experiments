@@ -54,6 +54,7 @@ folder and its metadata — don't edit it by hand.
 | Agent tools | **senkani** — token compression for coding agents | Swift · macOS · MCP | Archived | [live](https://ckluis.github.io/senkani) · [code](https://github.com/ckluis/senkani) |
 | Agent tools | **workflowForge** — paste a workflow, get a page you can send | Single-file HTML · SVG renderer · Bring your own model · No server | Shipped | [live](https://ckluis.github.io/workflowForge/) · [code](https://github.com/ckluis/workflowForge) |
 | Products | **aiCRO** — a full growth engagement from one URL | Node.js · Claude · Self-contained HTML | Shipped | [live](https://ckluis.github.io/aiCRO/) · [code](https://github.com/ckluis/aiCRO) |
+| Products | **once-campfire-fSharp** — Campfire in F#, faster than the Rust port | F# · .NET 10 · ASP.NET Core · Falco · SQLite | Shipped | [live](https://ckluis.github.io/once-campfire-fSharp/) · [code](https://github.com/ckluis/once-campfire-fSharp) |
 | Products | **terminalHelper** — a searchable terminal command reference | Go · Bubble Tea · SQLite | Shipped | [read the spec](terminalHelper.html) · [code](https://github.com/ckluis/terminalHelper) |
 | Products | **nonprofitEventPlanner** — run a whole youth trip from your phone | Rails 8 · Hotwire · Postgres | Local | [read the spec](nonprofitEventPlanner.html) |
 | Products | **customCMS** — one brain, many book storefronts | Go · SQLite · Claude Code | Local | [read the spec](customCMS.html) |
