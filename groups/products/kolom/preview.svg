@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="Kolom: a Mac screen with a slim rail of app icons on the left, app windows in columns of a sideways strip that runs off the right edge, and an Ask Kolom bar reading 3×2 terminals">
+  <defs>
+    <radialGradient id="glow" cx="78%" cy="8%" r="75%">
+      <stop offset="0" stop-color="#c6f432" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#c6f432" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b2622"/>
+      <stop offset="1" stop-color="#2a1d24"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset=".78" stop-color="#0d0f12" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0d0f12" stop-opacity=".9"/>
+    </linearGradient>
+    <clipPath id="screen"><rect x="40" y="46" width="560" height="300" rx="10"/></clipPath>
+  </defs>
+  <rect width="640" height="400" fill="#0d0f12"/>
+  <rect width="640" height="400" fill="url(#glow)"/>
+  <!-- laptop -->
+  <rect x="32" y="38" width="576" height="316" rx="16" fill="#16191d" stroke="#2a3038"/>
+  <g clip-path="url(#screen)">
+    <rect x="40" y="46" width="560" height="300" fill="url(#desk)"/>
+    <!-- menu bar -->
+    <rect x="40" y="46" width="560" height="14" fill="#0f1214" opacity=".85"/>
+    <circle cx="50" cy="53" r="2.6" fill="#e8ecef"/>
+    <rect x="58" y="51" width="22" height="4" rx="2" fill="#e8ecef"/>
+    <rect x="86" y="51" width="14" height="4" rx="2" fill="#7c8791"/>
+    <rect x="106" y="51" width="14" height="4" rx="2" fill="#7c8791"/>
+    <rect x="548" y="51" width="44" height="4" rx="2" fill="#7c8791"/>
+    <!-- rail -->
+    <rect x="40" y="60" width="26" height="286" fill="#0f1416" opacity=".9"/>
+    <rect x="46" y="70" width="14" height="14" rx="3.5" fill="#4a90e2"/>
+    <rect x="46" y="92" width="14" height="14" rx="3.5" fill="#2b2f3a" stroke="#c6f432" stroke-width="1.3"/>
+    <rect x="46" y="114" width="14" height="14" rx="3.5" fill="#1d2a24"/>
+    <rect x="46" y="136" width="14" height="14" rx="3.5" fill="#f4d35e"/>
+    <rect x="46" y="158" width="14" height="14" rx="3.5" fill="#f25f5c"/>
+    <rect x="46" y="180" width="14" height="14" rx="3.5" fill="#3ec28f"/>
+    <circle cx="53" cy="290" r="4.5" fill="none" stroke="#7c8791" stroke-width="1"/>
+    <rect x="45" y="302" width="16" height="3" rx="1.5" fill="#c6f432" opacity=".8"/>
+    <rect x="45" y="309" width="12" height="3" rx="1.5" fill="#7c8791"/>
+    <rect x="45" y="316" width="14" height="3" rx="1.5" fill="#7c8791"/>
+    <!-- column 1: editor -->
+    <rect x="74" y="68" width="176" height="270" rx="6" fill="#1b2029" stroke="#2c3442"/>
+    <circle cx="83" cy="76" r="2.4" fill="#ff5f57"/><circle cx="91" cy="76" r="2.4" fill="#febc2e"/><circle cx="99" cy="76" r="2.4" fill="#28c840"/>
+    <rect x="82" y="92" width="60" height="4" rx="2" fill="#c792ea"/>
+    <rect x="148" y="92" width="70" height="4" rx="2" fill="#82aaff"/>
+    <rect x="92" y="104" width="96" height="4" rx="2" fill="#7c8791"/>
+    <rect x="92" y="116" width="74" height="4" rx="2" fill="#c3e88d"/>
+    <rect x="102" y="128" width="104" height="4" rx="2" fill="#7c8791"/>
+    <rect x="102" y="140" width="62" height="4" rx="2" fill="#f78c6c"/>
+    <rect x="92" y="152" width="40" height="4" rx="2" fill="#7c8791"/>
+    <rect x="82" y="168" width="84" height="4" rx="2" fill="#c792ea"/>
+    <rect x="92" y="180" width="112" height="4" rx="2" fill="#7c8791"/>
+    <rect x="92" y="192" width="58" height="4" rx="2" fill="#c3e88d"/>
+    <!-- column 2: stacked terminal + notes -->
+    <rect x="258" y="68" width="156" height="131" rx="6" fill="#0c1110" stroke="#24302c"/>
+    <circle cx="267" cy="76" r="2.4" fill="#ff5f57"/><circle cx="275" cy="76" r="2.4" fill="#febc2e"/><circle cx="283" cy="76" r="2.4" fill="#28c840"/>
+    <rect x="266" y="92" width="80" height="4" rx="2" fill="#c6f432"/>
+    <rect x="266" y="104" width="120" height="4" rx="2" fill="#5d6b66"/>
+    <rect x="266" y="116" width="98" height="4" rx="2" fill="#5d6b66"/>
+    <rect x="266" y="128" width="46" height="4" rx="2" fill="#9fd18b"/>
+    <rect x="266" y="140" width="6" height="8" fill="#c6f432"/>
+    <rect x="258" y="207" width="156" height="131" rx="6" fill="#f6f3e8" stroke="#ddd6bf"/>
+    <rect x="258" y="207" width="156" height="16" rx="6" fill="#f4d35e"/>
+    <rect x="268" y="236" width="74" height="6" rx="3" fill="#3a3a30"/>
+    <rect x="268" y="252" width="118" height="4" rx="2" fill="#8d8a78"/>
+    <rect x="268" y="264" width="96" height="4" rx="2" fill="#8d8a78"/>
+    <rect x="268" y="276" width="108" height="4" rx="2" fill="#8d8a78"/>
+    <!-- column 3: browser, running off the edge -->
+    <rect x="422" y="68" width="210" height="270" rx="6" fill="#f2f4f7" stroke="#d9dee5"/>
+    <rect x="422" y="68" width="210" height="18" rx="6" fill="#e3e7ec"/>
+    <rect x="456" y="73" width="110" height="8" rx="4" fill="#ffffff"/>
+    <rect x="434" y="100" width="88" height="8" rx="4" fill="#1d2433"/>
+    <rect x="434" y="118" width="150" height="54" rx="5" fill="#cfe8ff"/>
+    <rect x="434" y="182" width="140" height="4" rx="2" fill="#98a2b3"/>
+    <rect x="434" y="194" width="120" height="4" rx="2" fill="#98a2b3"/>
+    <rect x="434" y="206" width="132" height="4" rx="2" fill="#98a2b3"/>
+    <rect x="40" y="46" width="560" height="300" fill="url(#fade)"/>
+  </g>
+  <!-- base -->
+  <rect x="12" y="354" width="616" height="9" rx="4.5" fill="#2a2f36"/>
+  <rect x="270" y="354" width="100" height="4" rx="2" fill="#1d2126"/>
+  <!-- Ask Kolom bar -->
+  <g>
+    <rect x="148" y="236" width="344" height="46" rx="12" fill="#14181c" stroke="#c6f432" stroke-opacity=".55"/>
+    <path d="M170 251l2.2 5.6 5.6 2.2-5.6 2.2-2.2 5.6-2.2-5.6-5.6-2.2 5.6-2.2z" fill="#c6f432"/>
+    <text x="188" y="265" font-family="-apple-system, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#eef1f4">3×2 terminals on screen 2</text>
+    <rect x="384" y="250" width="96" height="18" rx="9" fill="#c6f432" fill-opacity=".14"/>
+    <text x="432" y="263" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#c6f432">⌥K · on device</text>
+  </g>
+  <!-- headline -->
+  <text x="40" y="26" font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="600" fill="#eef1f4">Kolom</text>
+  <text x="86" y="26" font-family="-apple-system, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#8b95a3">every window, in its column</text>
+  <text x="600" y="26" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#c6f432">MIT · macOS</text>
+</svg>

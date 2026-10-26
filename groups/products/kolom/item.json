@@ -1,0 +1,38 @@
+{
+ "name": "Kolom",
+ "order": 5,
+ "status": "shipped",
+ "repo": "ckluis/kolom",
+ "line": "every Mac window in a column of one scrolling strip",
+ "question": "What if your Mac's windows lined up in a strip you could swipe through, and you could ask for a layout in plain words?",
+ "body": "A native macOS tiling window manager: real windows in columns of a sideways-scrolling strip, one strip per display, stacks of up to three, and a rail with live CPU, memory and network. A display staircase keeps columns sliding cleanly off every edge between monitors. Press ⌥K and type \"3×2 terminals on screen 2\": Apple's on-device model turns it into one checked action, with nothing leaving the Mac. Agent-ready through kolomctl and MCP, and pause, quit or a crash puts every window back.",
+ "stack": [
+  "Swift",
+  "AppKit",
+  "SwiftUI",
+  "Accessibility API",
+  "Foundation Models",
+  "MCP"
+ ],
+ "facts": [
+  [
+   "⌥K",
+   "plain-language layouts, on device"
+  ],
+  [
+   "25",
+   "groups of core checks"
+  ]
+ ],
+ "links": [
+  {
+   "label": "Live demo",
+   "href": "https://ckluis.github.io/kolom/"
+  },
+  {
+   "label": "Code",
+   "href": "https://github.com/ckluis/kolom"
+  }
+ ],
+ "alt": "Kolom: a Mac screen with a slim rail and app windows in columns, and an Ask Kolom bar reading 3×2 terminals"
+}
