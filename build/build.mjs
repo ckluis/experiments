@@ -54,6 +54,8 @@ const groups = dirs(GROUPS).map(slug => {
   for (const k of ['order', 'title', 'line', 'accent']) if (g[k] == null) errors.push(`groups/${slug}/group.json: missing "${k}"`);
   g.slug = slug;
   g.aliases = g.aliases || [];
+  if (g.page && (!g.page.label || !g.page.href)) errors.push(`groups/${slug}/group.json: "page" needs a label and an href`);
+  else if (g.page && !isExternal(g.page.href) && !fs.existsSync(path.join(ROOT, g.page.href.split('#')[0]))) errors.push(`groups/${slug}/group.json: page ${g.page.href} points at a file that does not exist`);
   g.items = dirs(dir).map(islug => {
     const idir = path.join(dir, islug);
     const it = readJSON(path.join(idir, 'item.json'));
@@ -172,10 +174,11 @@ function row(it) {
 function section(g) {
   const aliases = g.aliases.map(a => `<span id="${esc(a)}" class="alias" aria-hidden="true"></span>`).join('');
   return `<section class="tg" id="${g.slug}" style="--g:${g.accent}">${aliases}
-      <header class="tgh">
+      <header class="tgh${g.page ? ' haspage' : ''}">
         <span class="tgn">${g.num}</span>
         <h2>${esc(g.title)}</h2>
-        <p>${esc(g.line)}</p>
+        <p>${esc(g.line)}</p>${g.page ? `
+        <a class="tgp"${linkAttrs(g.page.href)}>${esc(g.page.label)} ${arrow(g.page.href)}</a>` : ''}
         <span class="tgc">${g.items.length}</span>
       </header>
       <ol class="rows">
@@ -207,7 +210,7 @@ const registry = {
   counts,
   stats_fetched: stats.fetched,
   groups: groups.map(g => ({
-    slug: g.slug, folder: `groups/${g.slug}`, number: g.num, title: g.title, ...(g.nav ? { nav: g.nav } : {}), line: g.line, accent: g.accent, aliases: g.aliases,
+    slug: g.slug, folder: `groups/${g.slug}`, number: g.num, title: g.title, ...(g.nav ? { nav: g.nav } : {}), line: g.line, accent: g.accent, aliases: g.aliases, ...(g.page ? { page: g.page } : {}),
     items: g.items.map(it => ({
       slug: it.slug, folder: it.folder, number: it.num, name: it.name, ...(it.version ? { version: it.version } : {}),
       status: it.status, ...(it.repo ? { repo: it.repo, github: it.gh } : {}),

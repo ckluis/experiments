@@ -5,22 +5,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Experiments — Chris Kluis</title>
-<meta name="description" content="A field index of 31 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, bend experiments and design studies. Most built solo in spare hours, all in the open.">
+<meta name="description" content="A field index of 33 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, rewrites, bend experiments and design studies. Most built solo in spare hours, all in the open.">
 <link rel="canonical" href="https://ckluis.github.io/experiments/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ckluis / experiments">
 <meta property="og:url" content="https://ckluis.github.io/experiments/">
 <meta property="og:title" content="Experiments — Chris Kluis">
-<meta property="og:description" content="A field index of 31 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, bend experiments and design studies. Most built solo in spare hours, all in the open.">
+<meta property="og:description" content="A field index of 33 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, rewrites, bend experiments and design studies. Most built solo in spare hours, all in the open.">
 <meta property="og:image" content="https://ckluis.github.io/experiments/previews/social-experiments.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Experiments used to be expensive. Now they cost a weekend. 31 experiments, 10 shipped, 6 groups.">
+<meta property="og:image:alt" content="Experiments used to be expensive. Now they cost a weekend. 33 experiments, 12 shipped, 7 groups.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@ckluis">
 <meta name="twitter:creator" content="@ckluis">
 <meta name="twitter:title" content="Experiments — Chris Kluis">
-<meta name="twitter:description" content="A field index of 31 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, bend experiments and design studies. Most built solo in spare hours, all in the open.">
+<meta name="twitter:description" content="A field index of 33 experiments by Chris Kluis: foundations, platforms &amp; frameworks, agent tools, products, rewrites, bend experiments and design studies. Most built solo in spare hours, all in the open.">
 <meta name="twitter:image" content="https://ckluis.github.io/experiments/previews/social-experiments.png">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -117,6 +117,9 @@ html:not(.js) .filters{display:none}
 .tgh h2::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--g)}
 .tgh p{font-family:var(--display);font-style:italic;font-size:16px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tgc{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.tgh.haspage{grid-template-columns:auto auto minmax(0,1fr) auto auto}
+.tgp{font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;color:color-mix(in srgb,var(--g) 85%,#000);text-decoration:none;white-space:nowrap;border:1px solid color-mix(in srgb,var(--g) 40%,transparent);border-radius:999px;padding:4px 10px;transition:background .2s var(--ease)}
+.tgp:hover,.tgp:focus-visible{background:color-mix(in srgb,var(--g) 12%,transparent);outline:none}
 .tg.empty{display:none}
 
 .rows{list-style:none}
@@ -178,6 +181,8 @@ html:not(.js) .filters{display:none}
   .tgh{grid-template-columns:auto minmax(0,1fr) auto;padding:12px 4px 10px}
   .tgh p{grid-column:1/-1;white-space:normal}
   .tgc{grid-row:1;grid-column:3}
+  .tgh.haspage{grid-template-columns:auto minmax(0,1fr) auto}
+  .tgp{grid-column:1/-1;justify-self:start}
   .rlink{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"proj st" "desc desc";gap:4px 12px;padding:12px 52px 12px 4px;min-height:0}
   .c-proj{grid-area:proj}.c-st{grid-area:st}.c-desc{grid-area:desc;white-space:normal}
   .c-num,.c-go{display:none}
@@ -225,8 +230,8 @@ html:not(.js) .filters{display:none}
 <nav class="top" aria-label="Experiments">
   <div class="wrap">
     <a href="#" class="brand"><b>ckluis</b> / experiments</a>
-    <div class="navlinks"><a href="#foundations" data-nav="foundations" style="--g:#6b4ec2"><span>01</span>Foundations</a><a href="#frameworks" data-nav="frameworks" style="--g:#c56a3a"><span>02</span>Platforms &amp; frameworks</a><a href="#agent-tools" data-nav="agent-tools" style="--g:#2f7d6d"><span>03</span>Agent tools</a><a href="#products" data-nav="products" style="--g:#a87a1f"><span>04</span>Products</a><a href="#field-reports" data-nav="field-reports" style="--g:#3a6ea5"><span>05</span>Bend experiments</a><a href="#design-studies" data-nav="design-studies" style="--g:#b4456a"><span>06</span>Design studies</a></div>
-    <span class="navcount"><b>31</b> experiments</span>
+    <div class="navlinks"><a href="#foundations" data-nav="foundations" style="--g:#6b4ec2"><span>01</span>Foundations</a><a href="#frameworks" data-nav="frameworks" style="--g:#c56a3a"><span>02</span>Platforms &amp; frameworks</a><a href="#agent-tools" data-nav="agent-tools" style="--g:#2f7d6d"><span>03</span>Agent tools</a><a href="#products" data-nav="products" style="--g:#a87a1f"><span>04</span>Products</a><a href="#rewrites" data-nav="rewrites" style="--g:#23819c"><span>05</span>Rewrites</a><a href="#field-reports" data-nav="field-reports" style="--g:#3a6ea5"><span>06</span>Bend experiments</a><a href="#design-studies" data-nav="design-studies" style="--g:#b4456a"><span>07</span>Design studies</a></div>
+    <span class="navcount"><b>33</b> experiments</span>
   </div>
 </nav>
 
@@ -239,9 +244,9 @@ html:not(.js) .filters{display:none}
     <div>
       <p class="lede">So I run a lot of them. Everything here is an idea I gave a night or two, most built solo in spare hours. The barrier to trying something didn't move. <b>It disappeared.</b></p>
       <div class="hstats">
-        <div><b>31</b><span>Experiments</span></div>
-        <div><b>10</b><span>Shipped</span></div>
-        <div><b>6</b><span>Project types</span></div>
+        <div><b>33</b><span>Experiments</span></div>
+        <div><b>12</b><span>Shipped</span></div>
+        <div><b>7</b><span>Project types</span></div>
       </div>
     </div>
   </div>
@@ -264,8 +269,8 @@ html:not(.js) .filters{display:none}
 <main class="ix" id="index" data-show="all">
   <div class="wrap">
     <div class="ixbar">
-      <h2>The index<span>31 projects</span></h2>
-      <div class="filters" role="group" aria-label="Filter by status"><button type="button" data-filter="all" aria-pressed="true">All<span>31</span></button><button type="button" data-filter="shipped" aria-pressed="false">Shipped<span>10</span></button><button type="button" data-filter="progress" aria-pressed="false">Spec & concept<span>14</span></button><button type="button" data-filter="case" aria-pressed="false">Case studies<span>3</span></button><button type="button" data-filter="archived" aria-pressed="false">Archived<span>4</span></button></div>
+      <h2>The index<span>33 projects</span></h2>
+      <div class="filters" role="group" aria-label="Filter by status"><button type="button" data-filter="all" aria-pressed="true">All<span>33</span></button><button type="button" data-filter="shipped" aria-pressed="false">Shipped<span>12</span></button><button type="button" data-filter="progress" aria-pressed="false">Spec & concept<span>14</span></button><button type="button" data-filter="case" aria-pressed="false">Case studies<span>3</span></button><button type="button" data-filter="archived" aria-pressed="false">Archived<span>4</span></button></div>
     </div>
     <div class="thead" aria-hidden="true"><span>Project</span><span>Description</span><span>Status</span><span class="r">Stars</span><span class="r">Forks</span><span></span></div>
     <section class="tg" id="foundations" style="--g:#6b4ec2"><span id="substrate" class="alias" aria-hidden="true"></span><span id="languages" class="alias" aria-hidden="true"></span>
@@ -413,7 +418,7 @@ html:not(.js) .filters{display:none}
             <p class="kq">What if the boring 80% of a SaaS product came preset — and you could support tenants without ever seeing their customers?</p>
             <p class="kdesc">A governed B2B-SaaS foundry that presets the boring 80% — identity, CRM, billing, support, and the product UI — as six governed idioms on one Postgres per product. Support your tenants without ever seeing their customers.</p>
             
-            <div class="ks"><span>Elixir</span><span>Ash</span><span>Oban</span><span>Postgres</span><span class="kd">updated Oct 26, 2026</span></div>
+            <div class="ks"><span>Elixir</span><span>Ash</span><span>Oban</span><span>Postgres</span><span class="kd">updated Oct 30, 2026</span></div>
             <div class="kls"><a class="kb" href="https://ckluis.github.io/samen/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/samen" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
         </div>
@@ -677,7 +682,7 @@ html:not(.js) .filters{display:none}
         <span class="tgn">04</span>
         <h2>Products</h2>
         <p>Built to be used — by someone, this week.</p>
-        <span class="tgc">6</span>
+        <span class="tgc">5</span>
       </header>
       <ol class="rows">
       <li class="row" id="kolom" data-status="shipped">
@@ -685,7 +690,7 @@ html:not(.js) .filters{display:none}
           <span class="c-proj"><b>Kolom</b></span>
           <span class="c-desc">every Mac window in a column of one scrolling strip</span>
           <span class="c-st s-shipped"><i></i>Shipped</span>
-          <span class="c-num zero">0</span>
+          <span class="c-num">4</span>
           <span class="c-num zero">0</span>
           <span class="c-go" aria-hidden="true">↗</span>
         </a>
@@ -697,7 +702,7 @@ html:not(.js) .filters{display:none}
             <p class="kq">What if your Mac&#39;s windows lined up in a strip you could swipe through, and you could ask for a layout in plain words?</p>
             <p class="kdesc">A native macOS tiling window manager: real windows in columns of a sideways-scrolling strip, one strip per display, stacks of up to three, and a rail with live CPU, memory and network. A display staircase keeps columns sliding cleanly off every edge between monitors. Press ⌥K and type &quot;3×2 terminals on screen 2&quot;: Apple&#39;s on-device model turns it into one checked action, with nothing leaving the Mac. Agent-ready through kolomctl and MCP, and pause, quit or a crash puts every window back.</p>
             <div class="kf"><span><b>⌥K</b> plain-language layouts, on device</span><span><b>25</b> groups of core checks</span></div>
-            <div class="ks"><span>Swift</span><span>AppKit</span><span>SwiftUI</span><span>Accessibility API</span><span>Foundation Models</span><span>MCP</span><span class="kd">updated Oct 26, 2026</span></div>
+            <div class="ks"><span>Swift</span><span>AppKit</span><span>SwiftUI</span><span>Accessibility API</span><span>Foundation Models</span><span>MCP</span><span class="kd">updated Oct 27, 2026</span></div>
             <div class="kls"><a class="kb" href="https://ckluis.github.io/kolom/" target="_blank" rel="noopener">Live demo ↗</a><a class="kl" href="https://github.com/ckluis/kolom" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
         </div>
@@ -721,28 +726,6 @@ html:not(.js) .filters{display:none}
             
             <div class="ks"><span>Node.js</span><span>Claude</span><span>Self-contained HTML</span><span class="kd">updated Jul 20, 2026</span></div>
             <div class="kls"><a class="kb" href="https://ckluis.github.io/aiCRO/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/aiCRO" target="_blank" rel="noopener">Code ↗</a></div>
-          </div>
-        </div>
-      </li>
-      <li class="row" id="once-campfire-fSharp" data-status="shipped">
-        <a class="rlink" href="https://ckluis.github.io/once-campfire-fSharp/" target="_blank" rel="noopener">
-          <span class="c-proj"><b>once-campfire-fSharp</b></span>
-          <span class="c-desc">Campfire in F#, faster than the Rust port</span>
-          <span class="c-st s-shipped"><i></i>Shipped</span>
-          <span class="c-num zero">0</span>
-          <span class="c-num zero">0</span>
-          <span class="c-go" aria-hidden="true">↗</span>
-        </a>
-        <details class="more"><summary aria-label="Preview once-campfire-fSharp"><span></span></summary></details>
-        <div class="card" style="--g:#a87a1f">
-          <div class="kimg"><img src="groups/products/once-campfire-fSharp/preview.svg" alt="once-campfire-fSharp — Campfire in F#, faster than the Rust port" loading="lazy" decoding="async" width="640" height="400"></div>
-          <div class="kbody">
-            <div class="kt"><b>once-campfire-fSharp</b><span class="kst s-shipped">Shipped</span></div>
-            <p class="kq">What if an AI-built F# port could match the Rust port of Basecamp&#39;s Campfire byte for byte, and then beat it?</p>
-            <p class="kdesc">A full port of ONCE Campfire to F# on ASP.NET Core and Falco, translated from the Rust port by phased agent workflows and checked against it: every parity screen identical, golden vectors and differentials passing, a drop-in for existing installs. Then tuned against Rust on the same machine: 1.24-1.33x its throughput on all five benchmarked workloads, at less CPU per request.</p>
-            <div class="kf"><span><b>1.2-1.4×</b> Rust&#39;s throughput</span><span><b>214/214</b> parity cells match Rust</span></div>
-            <div class="ks"><span>F#</span><span>.NET 10</span><span>ASP.NET Core</span><span>Falco</span><span>SQLite</span><span class="kd">updated Oct 13, 2026</span></div>
-            <div class="kls"><a class="kb" href="https://ckluis.github.io/once-campfire-fSharp/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/once-campfire-fSharp" target="_blank" rel="noopener">Code ↗</a></div>
           </div>
         </div>
       </li>
@@ -814,9 +797,86 @@ html:not(.js) .filters{display:none}
       </li>
       </ol>
     </section>
+    <section class="tg" id="rewrites" style="--g:#23819c"><span id="campfire" class="alias" aria-hidden="true"></span>
+      <header class="tgh haspage">
+        <span class="tgn">05</span>
+        <h2>Rewrite a product in a new language</h2>
+        <p>Same product, same pixels. What changes when the language and the rules do?</p>
+        <a class="tgp" href="rewrites/index.html">Compare the rewrites →</a>
+        <span class="tgc">3</span>
+      </header>
+      <ol class="rows">
+      <li class="row" id="once-campfire-fSharp" data-status="shipped">
+        <a class="rlink" href="https://ckluis.github.io/once-campfire-fSharp/" target="_blank" rel="noopener">
+          <span class="c-proj"><b>F# port</b></span>
+          <span class="c-desc">Campfire in F#, translated from the Rust port</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
+        </a>
+        <details class="more"><summary aria-label="Preview F# port"><span></span></summary></details>
+        <div class="card" style="--g:#23819c">
+          <div class="kimg"><img src="groups/rewrites/once-campfire-fSharp/preview.svg" alt="F# port: F# throughput climbing past the Rust port it was translated from" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>F# port</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if an AI-built F# port could match the Rust port of Basecamp&#39;s Campfire byte for byte, and then beat it?</p>
+            <p class="kdesc">A full port of ONCE Campfire to F# on ASP.NET Core and Falco, translated from Basecamp&#39;s Rust port by phased agent workflows and checked against it: every parity screen identical, golden vectors and differentials passing, a drop-in for existing installs. Tuned to 1.24-1.33x the throughput of the Rust port it was translated from. Basecamp&#39;s Rust has since added full-page caching and now leads it.</p>
+            <div class="kf"><span><b>214/214</b> parity states match Rust</span><span><b>1.2–1.4×</b> the Rust port it translated</span><span><b>7.2×</b> current Rails, room page</span></div>
+            <div class="ks"><span>F#</span><span>.NET 10</span><span>ASP.NET Core</span><span>Falco</span><span>SQLite</span><span class="kd">updated Oct 13, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/once-campfire-fSharp/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/once-campfire-fSharp" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="rewrites/index.html">Compare the rewrites →</a></div>
+          </div>
+        </div>
+      </li>
+      <li class="row" id="once-campfire-fSharp-onCrack" data-status="shipped">
+        <a class="rlink" href="https://ckluis.github.io/once-campfire-fSharp-onCrack/" target="_blank" rel="noopener">
+          <span class="c-proj"><b>onCrack</b></span>
+          <span class="c-desc">Campfire in F#, every speed trick allowed</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
+        </a>
+        <details class="more"><summary aria-label="Preview onCrack"><span></span></summary></details>
+        <div class="card" style="--g:#23819c">
+          <div class="kimg"><img src="groups/rewrites/once-campfire-fSharp-onCrack/preview.svg" alt="onCrack: room-page requests per second against Rails, Rust and C" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>onCrack</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if the F# port kept Rails&#39; exact pixels and correctness, but could do any work it liked to go fast?</p>
+            <p class="kdesc">A fork of the F# port with one constraint dropped: it no longer has to do the same work per request as Rust. Versioned page caches that re-check authorization on every hit, group commit, cache hits served straight from the front server, gathered Cable writes. Every parity screenshot still equals Rails, and in Basecamp&#39;s 1,000-client Cable test it cut no one. It pays in memory and in code.</p>
+            <div class="kf"><span><b>3.4×</b> current Rust, room page</span><span><b>0</b> Cable clients cut at 1,000</span><span><b>944/944</b> screens equal to Rails</span></div>
+            <div class="ks"><span>F#</span><span>.NET 10</span><span>ASP.NET Core</span><span>Falco</span><span>SQLite</span><span>Native AOT</span><span class="kd">updated Oct 13, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/once-campfire-fSharp-onCrack/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/once-campfire-fSharp-onCrack" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="rewrites/index.html">Compare the rewrites →</a></div>
+          </div>
+        </div>
+      </li>
+      <li class="row" id="once-campfire-fSharp-dotNetWay" data-status="shipped">
+        <a class="rlink" href="https://ckluis.github.io/once-campfire-fSharp-dotNetWay/" target="_blank" rel="noopener">
+          <span class="c-proj"><b>theDotNetWay</b></span>
+          <span class="c-desc">Campfire in F#, the way a .NET team would write it</span>
+          <span class="c-st s-shipped"><i></i>Shipped</span>
+          <span class="c-num zero">0</span>
+          <span class="c-num zero">0</span>
+          <span class="c-go" aria-hidden="true">↗</span>
+        </a>
+        <details class="more"><summary aria-label="Preview theDotNetWay"><span></span></summary></details>
+        <div class="card" style="--g:#23819c">
+          <div class="kimg"><img src="groups/rewrites/once-campfire-fSharp-dotNetWay/preview.svg" alt="theDotNetWay: hand-written layers swapped for .NET framework pieces, code shrinking from 39.2 to 26.5 KLOC" loading="lazy" decoding="async" width="640" height="400"></div>
+          <div class="kbody">
+            <div class="kt"><b>theDotNetWay</b><span class="kst s-shipped">Shipped</span></div>
+            <p class="kq">What if the rewrite leaned on the framework for everything, and came out smaller than the Rust port?</p>
+            <p class="kdesc">A fork of the F# port that swapped each hand-written layer for the standard .NET piece, one layer at a time behind a pixel-parity gate: Kestrel and ASP.NET Core middleware, EF Core with Dapper on the hot reads, Falco.Markup views, AngleSharp, HybridCache. Smaller than Rust and several times Rails on Basecamp&#39;s harness; Rust, C and onCrack are still faster.</p>
+            <div class="kf"><span><b>26.5</b> KLOC, against Rust&#39;s 31.0</span><span><b>6.8–7.8×</b> current Rails</span><span><b>4,918/4,918</b> pixel cells equal</span></div>
+            <div class="ks"><span>F#</span><span>.NET 11</span><span>ASP.NET Core</span><span>EF Core</span><span>Falco.Markup</span><span>AngleSharp</span><span class="kd">updated Oct 30, 2026</span></div>
+            <div class="kls"><a class="kb" href="https://ckluis.github.io/once-campfire-fSharp-dotNetWay/" target="_blank" rel="noopener">Live ↗</a><a class="kl" href="https://github.com/ckluis/once-campfire-fSharp-dotNetWay" target="_blank" rel="noopener">Code ↗</a><a class="kl" href="rewrites/index.html">Compare the rewrites →</a></div>
+          </div>
+        </div>
+      </li>
+      </ol>
+    </section>
     <section class="tg" id="field-reports" style="--g:#3a6ea5">
       <header class="tgh">
-        <span class="tgn">05</span>
+        <span class="tgn">06</span>
         <h2>Experiments in an experimental language</h2>
         <p>An AI writing a whole stack in Bend? Yes, please.</p>
         <span class="tgc">3</span>
@@ -892,7 +952,7 @@ html:not(.js) .filters{display:none}
     </section>
     <section class="tg" id="design-studies" style="--g:#b4456a"><span id="design" class="alias" aria-hidden="true"></span><span id="interfaces" class="alias" aria-hidden="true"></span>
       <header class="tgh">
-        <span class="tgn">06</span>
+        <span class="tgn">07</span>
         <h2>Design studies</h2>
         <p>Designs taken far enough to argue with.</p>
         <span class="tgc">5</span>
@@ -1016,8 +1076,8 @@ html:not(.js) .filters{display:none}
 <section class="built">
   <div class="wrap bgrid">
     <div>
-      <h2>31 folders, one registry, <em>one page.</em></h2>
-      <p>Each project is a folder with an <code style="padding:1px 5px;font-size:12px">item.json</code> and a drawing of its idea. A zero-dependency script writes this page from them. Stars and forks from GitHub, Oct 26, 2026.</p>
+      <h2>33 folders, one registry, <em>one page.</em></h2>
+      <p>Each project is a folder with an <code style="padding:1px 5px;font-size:12px">item.json</code> and a drawing of its idea. A zero-dependency script writes this page from them. Stars and forks from GitHub, Oct 30, 2026.</p>
     </div>
     <code><span>$</span> node build/build.mjs</code>
   </div>

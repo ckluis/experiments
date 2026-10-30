@@ -1,5 +1,5 @@
 {
-  "fetched": "2026-10-26",
+  "fetched": "2026-10-30",
   "repos": {
     "ckluis/aiCRO": {
       "stars": 1,
@@ -32,9 +32,9 @@
       "pushed": "2026-03-17T15:57:23Z"
     },
     "ckluis/kolom": {
-      "stars": 0,
+      "stars": 4,
       "forks": 0,
-      "pushed": "2026-10-26T22:23:45Z"
+      "pushed": "2026-10-27T12:03:11Z"
     },
     "ckluis/luminaryTeam": {
       "stars": 0,
@@ -46,6 +46,16 @@
       "forks": 0,
       "pushed": "2026-10-13T19:21:02Z"
     },
+    "ckluis/once-campfire-fSharp-dotNetWay": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-10-30T18:56:37Z"
+    },
+    "ckluis/once-campfire-fSharp-onCrack": {
+      "stars": 0,
+      "forks": 0,
+      "pushed": "2026-10-13T19:21:26Z"
+    },
     "ckluis/regel": {
       "stars": 0,
       "forks": 0,
@@ -54,7 +64,7 @@
     "ckluis/samen": {
       "stars": 0,
       "forks": 0,
-      "pushed": "2026-10-26T22:18:43Z"
+      "pushed": "2026-10-30T19:07:08Z"
     },
     "ckluis/senkani": {
       "stars": 0,

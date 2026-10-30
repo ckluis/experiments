@@ -16,7 +16,7 @@ and, where one exists, its source repository. Each spec links back to the index.
 `index.html` is generated. Every experiment is a folder:
 
 ```
-groups/<group>/group.json          title, question line, accent colour, order, old anchors
+groups/<group>/group.json          title, question line, accent colour, order, old anchors, optional page link
 groups/<group>/<item>/item.json    name, status, line, question, description, stack, facts, links
 groups/<group>/<item>/preview.*    the card image (or "preview": "/path/in/repo.png" in item.json)
 ```
@@ -55,10 +55,12 @@ folder and its metadata — don't edit it by hand.
 | Agent tools | **workflowForge** — paste a workflow, get a page you can send | Single-file HTML · SVG renderer · Bring your own model · No server | Shipped | [live](https://ckluis.github.io/workflowForge/) · [code](https://github.com/ckluis/workflowForge) |
 | Products | **Kolom** — every Mac window in a column of one scrolling strip | Swift · AppKit · SwiftUI · Accessibility API · Foundation Models · MCP | Shipped | [live demo](https://ckluis.github.io/kolom/) · [code](https://github.com/ckluis/kolom) |
 | Products | **aiCRO** — a full growth engagement from one URL | Node.js · Claude · Self-contained HTML | Shipped | [live](https://ckluis.github.io/aiCRO/) · [code](https://github.com/ckluis/aiCRO) |
-| Products | **once-campfire-fSharp** — Campfire in F#, faster than the Rust port | F# · .NET 10 · ASP.NET Core · Falco · SQLite | Shipped | [live](https://ckluis.github.io/once-campfire-fSharp/) · [code](https://github.com/ckluis/once-campfire-fSharp) |
 | Products | **terminalHelper** — a searchable terminal command reference | Go · Bubble Tea · SQLite | Shipped | [read the spec](terminalHelper.html) · [code](https://github.com/ckluis/terminalHelper) |
 | Products | **nonprofitEventPlanner** — run a whole youth trip from your phone | Rails 8 · Hotwire · Postgres | Local | [read the spec](nonprofitEventPlanner.html) |
 | Products | **customCMS** — one brain, many book storefronts | Go · SQLite · Claude Code | Local | [read the spec](customCMS.html) |
+| Rewrite a product in a new language | **F# port** — Campfire in F#, translated from the Rust port | F# · .NET 10 · ASP.NET Core · Falco · SQLite | Shipped | [live](https://ckluis.github.io/once-campfire-fSharp/) · [code](https://github.com/ckluis/once-campfire-fSharp) · [compare the rewrites](rewrites/index.html) |
+| Rewrite a product in a new language | **onCrack** — Campfire in F#, every speed trick allowed | F# · .NET 10 · ASP.NET Core · Falco · SQLite · Native AOT | Shipped | [live](https://ckluis.github.io/once-campfire-fSharp-onCrack/) · [code](https://github.com/ckluis/once-campfire-fSharp-onCrack) · [compare the rewrites](rewrites/index.html) |
+| Rewrite a product in a new language | **theDotNetWay** — Campfire in F#, the way a .NET team would write it | F# · .NET 11 · ASP.NET Core · EF Core · Falco.Markup · AngleSharp | Shipped | [live](https://ckluis.github.io/once-campfire-fSharp-dotNetWay/) · [code](https://github.com/ckluis/once-campfire-fSharp-dotNetWay) · [compare the rewrites](rewrites/index.html) |
 | Experiments in an experimental language | **bocht** — a whole backend in one Bend binary | Bend · C · WAL · MCP | Case study | [live](https://ckluis.github.io/bocht/) · [code](https://github.com/ckluis/bocht) · [the bend series](bend/index.html) |
 | Experiments in an experimental language | **bochtCMS** — an MCP-only CMS, and the curve its tests missed | Bend · MCP · JSON-RPC · Claude Code | Case study | [live](https://ckluis.github.io/bochtCMS/) · [code](https://github.com/ckluis/bochtCMS) · [the bend series](bend/index.html) |
 | Experiments in an experimental language | **shellOS** — a desktop shell drawn in pure Bend | Bend · PTY · VT100 · Claude Code | Case study | [live](https://ckluis.github.io/shellOS/) · [code](https://github.com/ckluis/shellOS) · [the bend series](bend/index.html) |
@@ -82,6 +84,23 @@ The index's own social card is generated from `previews/_social-experiments-src.
 npx playwright screenshot --viewport-size=1200,630 --wait-for-timeout=3000 \
   previews/_social-experiments-src.html previews/social-experiments.png
 ```
+
+## The rewrites page
+
+[`rewrites/`](rewrites/) is the "Rewrite a product in a new language" group's own page
+([ckluis.github.io/experiments/rewrites](https://ckluis.github.io/experiments/rewrites/)): a card per rewrite and the
+numbers that tell them apart. It is generated from `rewrites/data.json`, and every number on it links to its source:
+
+```sh
+node build/rewrites.mjs          # writes rewrites/index.html and previews/social-rewrites.svg
+node build/rewrites.mjs --check  # exits 1 if either is stale
+rsvg-convert previews/social-rewrites.svg -o previews/social-rewrites.png
+```
+
+To add a rewrite, add its app (with `"rewrite": true`, its KLOC and a source), its median in every row, a card and
+a value in every matrix row to `rewrites/data.json`, plus a card folder under `groups/rewrites/`. The group header links
+to the page through `"page"` in its `group.json`. Lines of code are counted one way for every rewrite;
+[`rewrites/evidence/kloc.md`](rewrites/evidence/kloc.md) has the rule and the output.
 
 `baton.html` is a redirect stub — baton moved to its own repository, and the old
 URL is kept so existing links still land somewhere useful.

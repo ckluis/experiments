@@ -1,0 +1,46 @@
+{
+ "name": "onCrack",
+ "order": 20,
+ "status": "shipped",
+ "repo": "ckluis/once-campfire-fSharp-onCrack",
+ "line": "Campfire in F#, every speed trick allowed",
+ "question": "What if the F# port kept Rails' exact pixels and correctness, but could do any work it liked to go fast?",
+ "body": "A fork of the F# port with one constraint dropped: it no longer has to do the same work per request as Rust. Versioned page caches that re-check authorization on every hit, group commit, cache hits served straight from the front server, gathered Cable writes. Every parity screenshot still equals Rails, and in Basecamp's 1,000-client Cable test it cut no one. It pays in memory and in code.",
+ "stack": [
+  "F#",
+  ".NET 10",
+  "ASP.NET Core",
+  "Falco",
+  "SQLite",
+  "Native AOT"
+ ],
+ "facts": [
+  [
+   "3.4×",
+   "current Rust, room page"
+  ],
+  [
+   "0",
+   "Cable clients cut at 1,000"
+  ],
+  [
+   "944/944",
+   "screens equal to Rails"
+  ]
+ ],
+ "links": [
+  {
+   "label": "Live",
+   "href": "https://ckluis.github.io/once-campfire-fSharp-onCrack/"
+  },
+  {
+   "label": "Code",
+   "href": "https://github.com/ckluis/once-campfire-fSharp-onCrack"
+  },
+  {
+   "label": "Compare the rewrites",
+   "href": "rewrites/index.html"
+  }
+ ],
+ "alt": "onCrack: room-page requests per second against Rails, Rust and C"
+}
