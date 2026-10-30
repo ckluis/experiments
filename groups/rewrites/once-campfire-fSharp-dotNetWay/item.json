@@ -1,0 +1,46 @@
+{
+ "name": "theDotNetWay",
+ "order": 30,
+ "status": "shipped",
+ "repo": "ckluis/once-campfire-fSharp-dotNetWay",
+ "line": "Campfire in F#, the way a .NET team would write it",
+ "question": "What if the rewrite leaned on the framework for everything, and came out smaller than the Rust port?",
+ "body": "A fork of the F# port that swapped each hand-written layer for the standard .NET piece, one layer at a time behind a pixel-parity gate: Kestrel and ASP.NET Core middleware, EF Core with Dapper on the hot reads, Falco.Markup views, AngleSharp, HybridCache. Smaller than Rust and several times Rails on Basecamp's harness; Rust, C and onCrack are still faster.",
+ "stack": [
+  "F#",
+  ".NET 11",
+  "ASP.NET Core",
+  "EF Core",
+  "Falco.Markup",
+  "AngleSharp"
+ ],
+ "facts": [
+  [
+   "26.5",
+   "KLOC, against Rust's 31.0"
+  ],
+  [
+   "6.8–7.8×",
+   "current Rails"
+  ],
+  [
+   "4,918/4,918",
+   "pixel cells equal"
+  ]
+ ],
+ "links": [
+  {
+   "label": "Live",
+   "href": "https://ckluis.github.io/once-campfire-fSharp-dotNetWay/"
+  },
+  {
+   "label": "Code",
+   "href": "https://github.com/ckluis/once-campfire-fSharp-dotNetWay"
+  },
+  {
+   "label": "Compare the rewrites",
+   "href": "rewrites/index.html"
+  }
+ ],
+ "alt": "theDotNetWay: hand-written layers swapped for .NET framework pieces, code shrinking from 39.2 to 26.5 KLOC"
+}

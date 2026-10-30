@@ -1,0 +1,15 @@
+{
+  "order": 5,
+  "title": "Rewrite a product in a new language",
+  "accent": "#23819c",
+  "aliases": [
+    "campfire"
+  ],
+  "line": "Same product, same pixels. What changes when the language and the rules do?",
+  "blurb": "One shipped product, Basecamp's Campfire, rewritten under different rules, each checked pixel for pixel against the original and measured on its makers' own harness.",
+  "nav": "Rewrites",
+  "page": {
+    "label": "Compare the rewrites",
+    "href": "rewrites/index.html"
+  }
+}

@@ -1,0 +1,611 @@
+{
+ "$comment": "Source for rewrites/index.html, built by node build/rewrites.mjs. Medians are copied from theDotNetWay's six-ways table.json; every number on the page links to the source named here.",
+ "sources": {
+  "six": {
+   "label": "theDotNetWay's six-ways benchmark (README, per-round files, table.json)",
+   "href": "https://github.com/ckluis/once-campfire-fSharp-dotNetWay/blob/3a1580f178f788906947dffb3d78673ffed6f726/bench/results/dotnetway-six-ways/README.md"
+  },
+  "sixjson": {
+   "label": "six-ways table.json",
+   "href": "https://github.com/ckluis/once-campfire-fSharp-dotNetWay/blob/3a1580f178f788906947dffb3d78673ffed6f726/bench/results/dotnetway-six-ways/table.json"
+  },
+  "kloc": {
+   "label": "one-rule line count of the three rewrites",
+   "href": "https://github.com/ckluis/experiments/blob/main/rewrites/evidence/kloc.md"
+  },
+  "kloc_up": {
+   "label": "onCrack's count of Rails, Rust and C",
+   "href": "https://github.com/ckluis/once-campfire-fSharp-onCrack/blob/fd5f3c41fad99ee2256a811cd4147eead13add4d/bench/results/oncrack-r5-final/kloc/kloc-table.md"
+  },
+  "port_parity": {
+   "label": "the port's README (parity with the Rust port)",
+   "href": "https://github.com/ckluis/once-campfire-fSharp/blob/a78972fa6038e84b1506f3700920acd9cfd9e955/README.md"
+  },
+  "port_perf": {
+   "label": "the port's final benchmark against the Rust port it translated",
+   "href": "https://github.com/ckluis/once-campfire-fSharp/blob/a78972fa6038e84b1506f3700920acd9cfd9e955/bench/results/phase7-final.md"
+  },
+  "onc_parity": {
+   "label": "onCrack's README (pixel parity, final code)",
+   "href": "https://github.com/ckluis/once-campfire-fSharp-onCrack/blob/fd5f3c41fad99ee2256a811cd4147eead13add4d/README.md"
+  },
+  "onc_cable": {
+   "label": "onCrack's reliability results (PR #6 profiles)",
+   "href": "https://github.com/ckluis/once-campfire-fSharp-onCrack/blob/fd5f3c41fad99ee2256a811cd4147eead13add4d/bench/results/oncrack-r5-final/reliability/RESULTS.md"
+  },
+  "dnw_parity": {
+   "label": "theDotNetWay's README (final full pixel gate)",
+   "href": "https://github.com/ckluis/once-campfire-fSharp-dotNetWay/blob/3a1580f178f788906947dffb3d78673ffed6f726/README.md"
+  },
+  "upstream": {
+   "label": "Basecamp's once-campfire-verification",
+   "href": "https://github.com/basecamp/once-campfire-verification"
+  },
+  "upstream_review": {
+   "label": "Basecamp's performance review",
+   "href": "https://github.com/basecamp/once-campfire-verification/blob/main/docs/performance-review.md"
+  }
+ },
+ "apps": [
+  {
+   "id": "fsharp",
+   "name": "F# port",
+   "short": "port",
+   "rewrite": true,
+   "commit": "9954ad0",
+   "kloc": 39.2,
+   "kloc_src": "kloc",
+   "live": "https://ckluis.github.io/once-campfire-fSharp/",
+   "repo": "https://github.com/ckluis/once-campfire-fSharp",
+   "card": "../groups/rewrites/once-campfire-fSharp/preview.svg"
+  },
+  {
+   "id": "oncrack",
+   "name": "onCrack",
+   "short": "onCrack",
+   "rewrite": true,
+   "commit": "3770dff",
+   "kloc": 43.0,
+   "kloc_src": "kloc",
+   "live": "https://ckluis.github.io/once-campfire-fSharp-onCrack/",
+   "repo": "https://github.com/ckluis/once-campfire-fSharp-onCrack",
+   "card": "../groups/rewrites/once-campfire-fSharp-onCrack/preview.svg"
+  },
+  {
+   "id": "dotnetway",
+   "name": "theDotNetWay",
+   "short": "theDotNetWay",
+   "rewrite": true,
+   "commit": "75487b7",
+   "kloc": 26.5,
+   "kloc_src": "kloc",
+   "live": "https://ckluis.github.io/once-campfire-fSharp-dotNetWay/",
+   "repo": "https://github.com/ckluis/once-campfire-fSharp-dotNetWay",
+   "card": "../groups/rewrites/once-campfire-fSharp-dotNetWay/preview.svg"
+  },
+  {
+   "id": "rails",
+   "name": "Rails",
+   "short": "Rails",
+   "rewrite": false,
+   "commit": "ca9b963",
+   "kloc": 5.5,
+   "kloc_src": "kloc_up",
+   "repo": "https://github.com/basecamp/once-campfire",
+   "note": "the original"
+  },
+  {
+   "id": "rust",
+   "name": "Rust",
+   "short": "Rust",
+   "rewrite": false,
+   "commit": "6dae2fd",
+   "kloc": 31.0,
+   "kloc_src": "kloc_up",
+   "repo": "https://github.com/basecamp/once-campfire-rust",
+   "note": "Basecamp's"
+  },
+  {
+   "id": "c",
+   "name": "C",
+   "short": "C",
+   "rewrite": false,
+   "commit": "873a51f",
+   "kloc": 94.9,
+   "kloc_src": "kloc_up",
+   "repo": "https://github.com/basecamp/once-campfire-c",
+   "note": "Basecamp's"
+  }
+ ],
+ "rows": [
+  {
+   "group": "Each route alone",
+   "route": "Room page",
+   "key": "room_show",
+   "median": {
+    "dotnetway": 34989.1,
+    "oncrack": 169087.5,
+    "fsharp": 35618.8,
+    "rails": 4943.8,
+    "rust": 49902.1,
+    "c": 77134.9
+   },
+   "range": {
+    "dotnetway": [
+     34059.0,
+     35620.2
+    ],
+    "oncrack": [
+     167975.2,
+     170183.9
+    ],
+    "fsharp": [
+     31680.5,
+     36667.2
+    ],
+    "rails": [
+     4685.6,
+     5058.6
+    ],
+    "rust": [
+     47158.0,
+     50205.9
+    ],
+    "c": [
+     74907.4,
+     78851.0
+    ]
+   }
+  },
+  {
+   "group": "Each route alone",
+   "route": "Messages page",
+   "key": "messages_page",
+   "median": {
+    "dotnetway": 33830.8,
+    "oncrack": 179077.2,
+    "fsharp": 42126.2,
+    "rails": 4953.4,
+    "rust": 47112.0,
+    "c": 77086.5
+   },
+   "range": {
+    "dotnetway": [
+     32445.8,
+     34268.7
+    ],
+    "oncrack": [
+     176146.3,
+     179802.1
+    ],
+    "fsharp": [
+     41199.6,
+     42773.9
+    ],
+    "rails": [
+     4737.6,
+     5020.0
+    ],
+    "rust": [
+     45976.1,
+     47600.3
+    ],
+    "c": [
+     74958.3,
+     78652.4
+    ]
+   }
+  },
+  {
+   "group": "Each route alone",
+   "route": "Sidebar",
+   "key": "sidebar",
+   "median": {
+    "dotnetway": 41580.8,
+    "oncrack": 190319.6,
+    "fsharp": 38195.4,
+    "rails": 5425.4,
+    "rust": 55561.0,
+    "c": 83137.1
+   },
+   "range": {
+    "dotnetway": [
+     40389.9,
+     42302.5
+    ],
+    "oncrack": [
+     189060.3,
+     191607.5
+    ],
+    "fsharp": [
+     37952.6,
+     38619.4
+    ],
+    "rails": [
+     5040.8,
+     5566.6
+    ],
+    "rust": [
+     54090.3,
+     56085.6
+    ],
+    "c": [
+     81450.5,
+     84689.0
+    ]
+   }
+  },
+  {
+   "group": "Each route alone",
+   "route": "Search",
+   "key": "search",
+   "median": {
+    "dotnetway": 41325.2,
+    "oncrack": 184644.5,
+    "fsharp": 34009.2,
+    "rails": 5280.1,
+    "rust": 55919.7,
+    "c": 82401.8
+   },
+   "range": {
+    "dotnetway": [
+     40019.0,
+     42399.2
+    ],
+    "oncrack": [
+     183973.9,
+     185593.3
+    ],
+    "fsharp": [
+     33751.0,
+     34482.9
+    ],
+    "rails": [
+     4769.7,
+     5383.2
+    ],
+    "rust": [
+     54801.1,
+     56330.4
+    ],
+    "c": [
+     81559.8,
+     83324.7
+    ]
+   }
+  },
+  {
+   "group": "Each route alone",
+   "route": "Post a message",
+   "key": "post_message",
+   "median": {
+    "dotnetway": 2900.7,
+    "oncrack": 15149.0,
+    "fsharp": 9515.7,
+    "rails": 400.9,
+    "rust": 6498.2,
+    "c": 5858.5
+   },
+   "range": {
+    "dotnetway": [
+     2781.3,
+     2939.7
+    ],
+    "oncrack": [
+     14548.7,
+     15301.5
+    ],
+    "fsharp": [
+     9451.7,
+     9577.7
+    ],
+    "rails": [
+     392.4,
+     406.7
+    ],
+    "rust": [
+     6418.2,
+     6570.2
+    ],
+    "c": [
+     5812.4,
+     5908.8
+    ]
+   }
+  },
+  {
+   "group": "Reads while a writer posts 10/s",
+   "route": "Room page",
+   "key": "room_show",
+   "median": {
+    "dotnetway": 32885.7,
+    "oncrack": 163174.2,
+    "fsharp": 33217.2,
+    "rails": 2799.9,
+    "rust": 47410.8,
+    "c": 71828.7
+   },
+   "range": {
+    "dotnetway": [
+     32344.7,
+     33772.4
+    ],
+    "oncrack": [
+     160988.5,
+     164057.8
+    ],
+    "fsharp": [
+     31721.8,
+     33958.9
+    ],
+    "rails": [
+     2519.5,
+     2876.5
+    ],
+    "rust": [
+     46435.3,
+     48215.7
+    ],
+    "c": [
+     70871.6,
+     71976.1
+    ]
+   }
+  },
+  {
+   "group": "Reads while a writer posts 10/s",
+   "route": "Messages page",
+   "key": "messages_page",
+   "median": {
+    "dotnetway": 33012.5,
+    "oncrack": 178188.4,
+    "fsharp": 41137.2,
+    "rails": 3461.1,
+    "rust": 45001.6,
+    "c": 73843.0
+   },
+   "range": {
+    "dotnetway": [
+     31630.0,
+     33442.2
+    ],
+    "oncrack": [
+     176258.6,
+     181944.2
+    ],
+    "fsharp": [
+     39970.4,
+     41517.1
+    ],
+    "rails": [
+     3060.7,
+     3612.9
+    ],
+    "rust": [
+     43537.3,
+     45751.8
+    ],
+    "c": [
+     72986.2,
+     74742.0
+    ]
+   }
+  },
+  {
+   "group": "Reads while a writer posts 10/s",
+   "route": "Sidebar",
+   "key": "sidebar",
+   "median": {
+    "dotnetway": 40246.2,
+    "oncrack": 187713.3,
+    "fsharp": 37797.6,
+    "rails": 4266.9,
+    "rust": 55627.6,
+    "c": 82395.5
+   },
+   "range": {
+    "dotnetway": [
+     38353.3,
+     40577.7
+    ],
+    "oncrack": [
+     187173.8,
+     189142.7
+    ],
+    "fsharp": [
+     37303.0,
+     38323.7
+    ],
+    "rails": [
+     4196.3,
+     4425.1
+    ],
+    "rust": [
+     53580.7,
+     56233.7
+    ],
+    "c": [
+     81439.2,
+     84034.8
+    ]
+   }
+  },
+  {
+   "group": "Reads while a writer posts 10/s",
+   "route": "Search",
+   "key": "search",
+   "median": {
+    "dotnetway": 39609.8,
+    "oncrack": 182965.3,
+    "fsharp": 34789.8,
+    "rails": 4084.4,
+    "rust": 54140.4,
+    "c": 79869.7
+   },
+   "range": {
+    "dotnetway": [
+     38016.8,
+     40230.3
+    ],
+    "oncrack": [
+     181279.3,
+     184443.8
+    ],
+    "fsharp": [
+     34583.7,
+     35410.3
+    ],
+    "rails": [
+     3846.7,
+     4186.7
+    ],
+    "rust": [
+     50690.4,
+     54722.0
+    ],
+    "c": [
+     78460.5,
+     83297.2
+    ]
+   }
+  }
+ ],
+ "cards": [
+  {
+   "app": "fsharp",
+   "n": "01 · the port",
+   "title": "The F# port",
+   "tagline": "Translate it, <em>byte for byte</em>.",
+   "rule": "Do the same work per request as Basecamp's Rust port, and render every screen byte-identical to it.",
+   "body": "Translated crate by crate from the Rust port by phased agent workflows: its own front server, SQLite layer, HTML writer and HTML5 parser, all in F#. It matched every parity screen byte for byte, then ran {port_vs_pinned} the Rust port it was translated from. Basecamp's Rust has since added full-page caching, so on today's harness the port does {room_x_rust} Rust on the room page.",
+   "pills": [
+    "F#",
+    "ASP.NET Core",
+    "Falco",
+    "Own front server",
+    "Own SQLite layer",
+    "html5ever port"
+   ],
+   "parity": [
+    "214/214",
+    "states byte-identical to Rust",
+    "port_parity"
+   ]
+  },
+  {
+   "app": "oncrack",
+   "n": "02 · onCrack",
+   "title": "onCrack",
+   "tagline": "Same pixels, <em>no speed limit</em>.",
+   "rule": "Do any work you like, as long as every screen stays pixel-identical to Rails and no one ever sees a stale page or someone else's.",
+   "body": "Versioned page caches that re-check the session and room membership on every hit, group commit for concurrent posts, cache hits answered by the front server, gathered Cable writes, and a Cable log that keeps every reader. The fastest of the six in every workload, and in Basecamp's 1,000-client Cable test it cut {onc_cut} clients where Rust cut {rust_cut}. It pays in memory, and it is the largest of the three.",
+   "pills": [
+    "F#",
+    "Versioned page cache",
+    "Group commit",
+    "Front-server hits",
+    "Gathered sendmsg",
+    "Native AOT"
+   ],
+   "parity": [
+    "944/944",
+    "screenshots equal to Rails",
+    "onc_parity"
+   ]
+  },
+  {
+   "app": "dotnetway",
+   "n": "03 · theDotNetWay",
+   "title": "theDotNetWay",
+   "tagline": "Let the <em>framework</em> do it.",
+   "rule": "Write it the way a .NET team would: the standard piece for every layer, hand-written code only where Rails parity demands it.",
+   "body": "Forked from the port and rebuilt one layer at a time behind the pixel gate: Kestrel and ASP.NET Core middleware for the front server, EF Core with Dapper on the hot reads, Falco.Markup views, AngleSharp for HTML, WebSockets with Channel&lt;T&gt; for Cable, HybridCache for pages. The smallest of the three and smaller than Rust; slower than Rust, C and onCrack.",
+   "pills": [
+    "F#",
+    "Kestrel",
+    "EF Core",
+    "Dapper",
+    "Falco.Markup",
+    "AngleSharp",
+    "HybridCache"
+   ],
+   "parity": [
+    "4,918/4,918",
+    "pixel cells equal to Rails",
+    "dnw_parity"
+   ]
+  }
+ ],
+ "facts": {
+  "port_vs_pinned": [
+   "1.24-1.33x",
+   "port_perf"
+  ],
+  "onc_cut": [
+   "0",
+   "onc_cable"
+  ],
+  "rust_cut": [
+   "902-959",
+   "onc_cable"
+  ]
+ },
+ "matrix": [
+  {
+   "label": "The rule",
+   "values": {
+    "fsharp": "Same work as Rust, byte-identical screens",
+    "oncrack": "Any work; pixel-identical and never stale",
+    "dotnetway": "The framework's piece for every layer"
+   }
+  },
+  {
+   "label": "Started from",
+   "values": {
+    "fsharp": "Basecamp's Rust port, translated",
+    "oncrack": "The F# port, forked",
+    "dotnetway": "The F# port, forked"
+   }
+  },
+  {
+   "label": "Front server",
+   "values": {
+    "fsharp": "Hand-written (Thruster's job)",
+    "oncrack": "Hand-written; answers cache hits itself",
+    "dotnetway": "Kestrel + ASP.NET Core middleware"
+   }
+  },
+  {
+   "label": "Data",
+   "values": {
+    "fsharp": "Own SQLite layer, SQL by hand",
+    "oncrack": "Own layer + group commit",
+    "dotnetway": "EF Core; Dapper on hot reads"
+   }
+  },
+  {
+   "label": "Views",
+   "values": {
+    "fsharp": "Own UTF-8 writer, fragment cache",
+    "oncrack": "Same, plus whole-page cache",
+    "dotnetway": "Falco.Markup + HybridCache"
+   }
+  },
+  {
+   "label": "HTML parser",
+   "values": {
+    "fsharp": "Port of html5ever",
+    "oncrack": "Port of html5ever",
+    "dotnetway": "AngleSharp"
+   }
+  },
+  {
+   "label": "Cable",
+   "values": {
+    "fsharp": "Own WebSocket server",
+    "oncrack": "Own; one sendmsg per batch, keeps every reader",
+    "dotnetway": "ASP.NET Core WebSockets + Channel&lt;T&gt;"
+   }
+  }
+ ]
+}
