@@ -1,33 +1,33 @@
 {
   "name": "baton",
-  "version": "v7.5",
+  "version": "v8.0.0",
   "order": 10,
   "status": "shipped",
   "repo": "ckluis/baton",
-  "line": "one thread that never fills up",
-  "question": "What if the orchestrator never read a file, and its thread lasted as long as the work did?",
-  "body": "A Claude Code mod. During a run the prime may only dispatch, ask and use its memory; a guard refuses everything else. Sub-orchestrators run each phase and hand back one line of at most 280 bytes, noted into a memory the prime can zoom into. Rulings you give stick across runs, irreversible commands from any agent wait for you, and every behavior change lands red, green, blue. Underneath is still the router prompt and its record: evidence that cites, verdicts per criterion, gates a person holds, and TEAM: github for a team.",
+  "line": "just a usage line",
+  "question": "What is left of an orchestrator once Claude Code builds in what it added?",
+  "body": "baton spent seven versions as a multi-agent orchestrator for Claude Code: a lead that only hands out work, model ladders, expert reviewers, team runs on GitHub, a mod with a memory. Its own experiments, and Claude Code catching up, cut it down to the one part worth keeping: a status line with your 5-hour, Fable, weekly and context usage, reset times in your own time zone, and n/a instead of a guess. A shell script on macOS and Linux, PowerShell on Windows; no plugin, no Node. Its page tells each version's story and why it went.",
   "stack": [
-    "Claude Code mod",
-    "JavaScript",
-    "Multi-agent"
+    "Claude Code status line",
+    "sh · jq",
+    "PowerShell"
   ],
   "facts": [
     [
+      "4",
+      "numbers on one line"
+    ],
+    [
       "0",
-      "files the prime reads"
+      "plugins or packages"
     ],
     [
-      "≤280 B",
-      "back from a phase"
+      "6",
+      "platforms tested"
     ],
     [
-      "27",
-      "hooks"
-    ],
-    [
-      "30",
-      "rules"
+      "40–200",
+      "columns, always fits"
     ]
   ],
   "links": [
@@ -44,9 +44,9 @@
       "href": "https://github.com/ckluis/baton/blob/main/CHANGELOG.md"
     },
     {
-      "label": "v6",
-      "href": "https://ckluis.github.io/baton/baton-v6.html"
+      "label": "History",
+      "href": "https://ckluis.github.io/baton/#history"
     }
   ],
-  "alt": "baton v7.5 — a prime that only dispatches to three sub-orchestrators, each handing back one line of at most 280 bytes into the prime's memory, while a guard refuses the prime's file reads and commands"
+  "alt": "baton v8 — the four parts of its status line under a Claude Code prompt: 5h at 19% resetting 14:30 EST, fable at 0%, wk at 54% resetting Mon 07:00 EST, and ctx at 5%"
 }
